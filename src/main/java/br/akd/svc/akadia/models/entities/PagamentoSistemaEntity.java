@@ -1,6 +1,7 @@
 package br.akd.svc.akadia.models.entities;
 
 import br.akd.svc.akadia.models.enums.FormaPagamentoSistemaEnum;
+import br.akd.svc.akadia.models.enums.StatusPagamentoSistemaEnum;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -32,6 +33,11 @@ public class PagamentoSistemaEntity {
     @Enumerated(EnumType.STRING)
     private FormaPagamentoSistemaEnum formaPagamentoSistemaEnum;
 
+    @Enumerated(EnumType.STRING)
+    private StatusPagamentoSistemaEnum statusPagamentoSistemaEnum;
+
+    @OneToMany(targetEntity = CartaoEntity.class)
+    @JoinColumn(name = "id_cartao")
     private CartaoEntity cartao;
 
     @OneToOne (targetEntity = ClienteSistemaEntity.class)

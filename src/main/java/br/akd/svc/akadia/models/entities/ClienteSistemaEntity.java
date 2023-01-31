@@ -42,6 +42,7 @@ public class ClienteSistemaEntity {
     @OneToMany(targetEntity = PagamentoSistemaEntity.class, orphanRemoval = true, cascade = CascadeType.ALL)
     private List<PagamentoSistemaEntity> pagamentos = new ArrayList<>();
 
+    @OneToMany(targetEntity = CartaoEntity.class, orphanRemoval = true, cascade = CascadeType.ALL)
     private List<CartaoEntity> cartoes = new ArrayList<>();
 
     @OneToOne(targetEntity = EnderecoEntity.class, orphanRemoval = true, cascade = CascadeType.ALL)
