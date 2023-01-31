@@ -55,5 +55,4 @@ public class ChamadoEntity {
     @OneToMany(targetEntity = MensagemEntity.class, orphanRemoval = true, cascade = CascadeType.ALL)
     private List<MensagemEntity> mensagens = new ArrayList<>();
 
-
 }

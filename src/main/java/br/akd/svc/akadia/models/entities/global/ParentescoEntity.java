@@ -40,6 +40,6 @@ public class ParentescoEntity {
 
     @ManyToOne(targetEntity = ColaboradorInternoEntity.class)
     @JoinColumn(name = "id_colab_interno")
-    private ColaboradorInternoEntity colaboradorInternoEntity;
+    private ColaboradorInternoEntity colaboradorInterno;
 
 }
