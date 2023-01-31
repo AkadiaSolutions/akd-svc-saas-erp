@@ -1,13 +1,18 @@
-package br.akd.svc.akadia.models.entities;
+package br.akd.svc.akadia.models.entities.site;
 
-import br.akd.svc.akadia.models.entities.fiscal.ConfigFiscalEmpresaEntity;
-import br.akd.svc.akadia.models.enums.SegmentoEmpresaEnum;
+import br.akd.svc.akadia.models.entities.bckoff.ChamadoEntity;
+import br.akd.svc.akadia.models.entities.global.EnderecoEntity;
+import br.akd.svc.akadia.models.entities.global.TelefoneEntity;
+import br.akd.svc.akadia.models.entities.site.fiscal.ConfigFiscalEmpresaEntity;
+import br.akd.svc.akadia.models.enums.site.SegmentoEmpresaEnum;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -60,6 +65,7 @@ public class EmpresaEntity {
     @OneToOne(targetEntity = EnderecoEntity.class, orphanRemoval = true, cascade = CascadeType.ALL)
     private EnderecoEntity endereco;
 
-    private List<ChamadoEntity> chamados;
+    @OneToMany(targetEntity = ChamadoEntity.class, orphanRemoval = true, cascade = CascadeType.ALL)
+    private List<ChamadoEntity> chamados = new ArrayList<>();
 
 }

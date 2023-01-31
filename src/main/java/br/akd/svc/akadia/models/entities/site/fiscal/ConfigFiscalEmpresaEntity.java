@@ -1,8 +1,8 @@
-package br.akd.svc.akadia.models.entities.fiscal;
+package br.akd.svc.akadia.models.entities.site.fiscal;
 
-import br.akd.svc.akadia.models.entities.EmpresaEntity;
-import br.akd.svc.akadia.models.enums.OrientacaoDanfeEnum;
-import br.akd.svc.akadia.models.enums.RegimeTributarioEnum;
+import br.akd.svc.akadia.models.entities.site.EmpresaEntity;
+import br.akd.svc.akadia.models.enums.site.fiscal.OrientacaoDanfeEnum;
+import br.akd.svc.akadia.models.enums.site.fiscal.RegimeTributarioEnum;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

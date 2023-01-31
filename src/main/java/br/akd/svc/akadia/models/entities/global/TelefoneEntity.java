@@ -1,6 +1,8 @@
-package br.akd.svc.akadia.models.entities;
+package br.akd.svc.akadia.models.entities.global;
 
-import br.akd.svc.akadia.models.enums.TipoTelefoneEnum;
+import br.akd.svc.akadia.models.entities.site.ClienteSistemaEntity;
+import br.akd.svc.akadia.models.entities.site.EmpresaEntity;
+import br.akd.svc.akadia.models.enums.global.TipoTelefoneEnum;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -34,6 +36,12 @@ public class TelefoneEntity {
     @JoinColumn(name = "id_cli_sistema")
     private ClienteSistemaEntity clienteSistema;
 
+    @OneToOne (targetEntity = ParentescoEntity.class)
+    @JoinColumn(name = "id_parentesco")
+    private ParentescoEntity parentescoEntity;
+
+    @OneToOne (targetEntity = FornecedorEntity.class)
+    @JoinColumn(name = "id_fornecedor")
     private FornecedorEntity fornecedor;
 
     @OneToOne (targetEntity = EmpresaEntity.class)

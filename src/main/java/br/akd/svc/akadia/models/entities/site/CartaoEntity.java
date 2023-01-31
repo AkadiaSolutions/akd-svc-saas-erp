@@ -1,18 +1,20 @@
-package br.akd.svc.akadia.models.entities;
+package br.akd.svc.akadia.models.entities.site;
 
-import br.akd.svc.akadia.models.enums.BandeiraCartaoEnum;
+import br.akd.svc.akadia.models.enums.site.BandeiraCartaoEnum;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Getter @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "tb_cartao")
 public class CartaoEntity {
 
     @Id
@@ -39,6 +41,6 @@ public class CartaoEntity {
     private ClienteSistemaEntity clienteSistema;
 
     @OneToMany(targetEntity = PagamentoSistemaEntity.class)
-    private List<PagamentoSistemaEntity> pagamentos;
+    private List<PagamentoSistemaEntity> pagamentos = new ArrayList<>();
 
 }

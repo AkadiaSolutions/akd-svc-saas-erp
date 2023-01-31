@@ -1,7 +1,7 @@
-package br.akd.svc.akadia.models.entities;
+package br.akd.svc.akadia.models.entities.site;
 
-import br.akd.svc.akadia.models.enums.FormaPagamentoSistemaEnum;
-import br.akd.svc.akadia.models.enums.StatusPagamentoSistemaEnum;
+import br.akd.svc.akadia.models.enums.site.FormaPagamentoSistemaEnum;
+import br.akd.svc.akadia.models.enums.site.StatusPagamentoSistemaEnum;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

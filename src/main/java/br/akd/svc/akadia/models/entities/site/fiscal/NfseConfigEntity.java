@@ -1,4 +1,4 @@
-package br.akd.svc.akadia.models.entities.fiscal;
+package br.akd.svc.akadia.models.entities.site.fiscal;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,8 +12,8 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Getter
 @Setter
-@Table(name = "tb_nfce_config")
-public class NfceConfigEntity {
+@Table(name = "tb_nfse_config")
+public class NfseConfigEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,10 +22,6 @@ public class NfceConfigEntity {
     private Long proximoNumeroHomologacao;
     private Integer serieProducao;
     private Integer serieHomologacao;
-    private String cscProducao;
-    private String cscHomologacao;
-    private Long idTokenProducao;
-    private Long idTokenHomologacao;
 
     @OneToOne(targetEntity = ConfigFiscalEmpresaEntity.class)
     @JoinColumn(name = "id_cfg_fiscal")

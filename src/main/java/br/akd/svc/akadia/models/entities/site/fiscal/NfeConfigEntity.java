@@ -1,4 +1,4 @@
-package br.akd.svc.akadia.models.entities.fiscal;
+package br.akd.svc.akadia.models.entities.site.fiscal;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,8 +12,8 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Getter
 @Setter
-@Table(name = "tb_nfse_config")
-public class NfseConfigEntity {
+@Table(name = "tb_nfe_config")
+public class NfeConfigEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

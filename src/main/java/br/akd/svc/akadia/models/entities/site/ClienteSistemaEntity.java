@@ -1,5 +1,7 @@
-package br.akd.svc.akadia.models.entities;
+package br.akd.svc.akadia.models.entities.site;
 
+import br.akd.svc.akadia.models.entities.global.EnderecoEntity;
+import br.akd.svc.akadia.models.entities.global.TelefoneEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -39,15 +41,15 @@ public class ClienteSistemaEntity {
     @OneToOne(targetEntity = TelefoneEntity.class, orphanRemoval = true, cascade = CascadeType.ALL)
     private TelefoneEntity telefone;
 
+    @OneToOne(targetEntity = EnderecoEntity.class, orphanRemoval = true, cascade = CascadeType.ALL)
+    private EnderecoEntity endereco;
+
     @OneToMany(targetEntity = PagamentoSistemaEntity.class, orphanRemoval = true, cascade = CascadeType.ALL)
     private List<PagamentoSistemaEntity> pagamentos = new ArrayList<>();
 
     @OneToMany(targetEntity = CartaoEntity.class, orphanRemoval = true, cascade = CascadeType.ALL)
     private List<CartaoEntity> cartoes = new ArrayList<>();
 
-    @OneToOne(targetEntity = EnderecoEntity.class, orphanRemoval = true, cascade = CascadeType.ALL)
-    private EnderecoEntity endereco;
-
     @OneToMany(targetEntity = EmpresaEntity.class, orphanRemoval = true, cascade = CascadeType.ALL)
-    private List<EmpresaEntity> empresas;
+    private List<EmpresaEntity> empresas = new ArrayList<>();
 }

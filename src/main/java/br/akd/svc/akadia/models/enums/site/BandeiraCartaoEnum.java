@@ -1,4 +1,4 @@
-package br.akd.svc.akadia.models.enums;
+package br.akd.svc.akadia.models.enums.site;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -1,13 +1,15 @@
-package br.akd.svc.akadia.models.enums;
+package br.akd.svc.akadia.models.enums.site;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public enum SegmentoEmpresaEnum {
+public enum TipoPlanoEnum {
 
-    BATERIA_AUTOMOTIVA (0, "Baterias automotivas");
+    BASIC (0, "Basic"),
+    PRO (1, "Pro"),
+    CUSTOM (2, "Custom");
 
     private final int code;
     private final String desc;
