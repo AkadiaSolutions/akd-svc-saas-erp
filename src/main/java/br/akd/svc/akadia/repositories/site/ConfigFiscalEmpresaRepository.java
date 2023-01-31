@@ -1,4 +1,4 @@
-package br.akd.svc.akadia.repositories.site.fiscal;
+package br.akd.svc.akadia.repositories.site;
 
 import br.akd.svc.akadia.models.entities.site.fiscal.ConfigFiscalEmpresaEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
