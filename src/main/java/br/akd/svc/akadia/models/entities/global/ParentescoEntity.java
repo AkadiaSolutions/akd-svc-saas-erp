@@ -10,7 +10,8 @@ import lombok.Setter;
 import javax.persistence.*;
 
 @Entity
-@Getter @Setter
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "tb_parentesco")
@@ -32,9 +33,10 @@ public class ParentescoEntity {
     @OneToOne(targetEntity = TelefoneEntity.class, cascade = CascadeType.ALL, orphanRemoval = true)
     private TelefoneEntity telefone;
 
-    @ManyToOne(targetEntity = ColaboradorEntity.class)
-    @JoinColumn(name = "id_colaborador")
-    private ColaboradorEntity colaborador;
+// TODO HABILITAR COLABORADOR NO SERVIÇO DO SISTEMA
+//    @ManyToOne(targetEntity = ColaboradorEntity.class)
+//    @JoinColumn(name = "id_colaborador")
+//    private ColaboradorEntity colaborador;
 
     @ManyToOne(targetEntity = ColaboradorInternoEntity.class)
     @JoinColumn(name = "id_colab_interno")

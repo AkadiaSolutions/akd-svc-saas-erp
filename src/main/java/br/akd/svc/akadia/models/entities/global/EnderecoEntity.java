@@ -32,17 +32,19 @@ public class EnderecoEntity {
     @Enumerated(EnumType.STRING)
     private EstadoEnum estadoEnum;
 
-    @OneToOne(targetEntity = ClienteEntity.class)
-    @JoinColumn(name = "id_cliente")
-    private ClienteEntity cliente;
+    //TODO HABILITAR CLIENTE NO SERVIÇO DO SISTEMA
+//    @OneToOne(targetEntity = ClienteEntity.class)
+//    @JoinColumn(name = "id_cliente")
+//    private ClienteEntity cliente;
+
+    //TODO HABILITAR FORNECEDOR NO SERVIÇO DO SISTEMA
+//    @OneToOne(targetEntity = FornecedorEntity.class)
+//    @JoinColumn(name = "id_fornecedor")
+//    private FornecedorEntity fornecedor;
 
     @OneToOne(targetEntity = ClienteSistemaEntity.class)
     @JoinColumn(name = "id_cli_sistema")
     private ClienteSistemaEntity clienteSistema;
-
-    @OneToOne(targetEntity = FornecedorEntity.class)
-    @JoinColumn(name = "id_fornecedor")
-    private FornecedorEntity fornecedor;
 
     @OneToOne(targetEntity = EmpresaEntity.class)
     @JoinColumn(name = "id_empresa")

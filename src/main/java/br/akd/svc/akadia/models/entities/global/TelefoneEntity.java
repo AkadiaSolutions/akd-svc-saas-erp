@@ -11,7 +11,8 @@ import lombok.Setter;
 import javax.persistence.*;
 
 @Entity
-@Getter @Setter
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "tb_empresa")
@@ -28,23 +29,25 @@ public class TelefoneEntity {
     @Enumerated(EnumType.STRING)
     private TipoTelefoneEnum tioTelefoneEnum;
 
-    @OneToOne (targetEntity = ClienteEntity.class)
-    @JoinColumn(name = "id_cliente")
-    private ClienteEntity clienteEntity;
-
-    @OneToOne (targetEntity = ClienteSistemaEntity.class)
+    @OneToOne(targetEntity = ClienteSistemaEntity.class)
     @JoinColumn(name = "id_cli_sistema")
     private ClienteSistemaEntity clienteSistema;
 
-    @OneToOne (targetEntity = ParentescoEntity.class)
+    @OneToOne(targetEntity = ParentescoEntity.class)
     @JoinColumn(name = "id_parentesco")
     private ParentescoEntity parentescoEntity;
 
-    @OneToOne (targetEntity = FornecedorEntity.class)
-    @JoinColumn(name = "id_fornecedor")
-    private FornecedorEntity fornecedor;
+//TODO HABILITAR FORNECEDOR NO SERVIÇO DO SISTEMA
+//    @OneToOne (targetEntity = FornecedorEntity.class)
+//    @JoinColumn(name = "id_fornecedor")
+//    private FornecedorEntity fornecedor;
 
-    @OneToOne (targetEntity = EmpresaEntity.class)
+//TODO HABILITAR CLIENTE NO SERVIÇO DO SISTEMA
+//    @OneToOne (targetEntity = ClienteEntity.class)
+//    @JoinColumn(name = "id_cliente")
+//    private ClienteEntity clienteEntity;
+
+    @OneToOne(targetEntity = EmpresaEntity.class)
     @JoinColumn(name = "id_empresa")
     private EmpresaEntity empresaEntity;
 }

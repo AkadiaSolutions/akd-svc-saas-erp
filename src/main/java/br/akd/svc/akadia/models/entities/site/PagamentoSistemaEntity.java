@@ -36,7 +36,7 @@ public class PagamentoSistemaEntity {
     @Enumerated(EnumType.STRING)
     private StatusPagamentoSistemaEnum statusPagamentoSistemaEnum;
 
-    @OneToMany(targetEntity = CartaoEntity.class)
+    @ManyToOne(targetEntity = CartaoEntity.class)
     @JoinColumn(name = "id_cartao")
     private CartaoEntity cartao;
 
