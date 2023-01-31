@@ -11,9 +11,9 @@ import lombok.Setter;
 import javax.persistence.*;
 
 @Entity
+@Getter @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter @Setter
 @Table(name = "tb_cfg_fiscal")
 public class ConfigFiscalEmpresaEntity {
 

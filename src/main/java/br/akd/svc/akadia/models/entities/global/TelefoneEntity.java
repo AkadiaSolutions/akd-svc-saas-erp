@@ -27,7 +27,7 @@ public class TelefoneEntity {
     private Long numero;
 
     @Enumerated(EnumType.STRING)
-    private TipoTelefoneEnum tioTelefoneEnum;
+    private TipoTelefoneEnum tipoTelefoneEnum;
 
     @OneToOne(targetEntity = ClienteSistemaEntity.class)
     @JoinColumn(name = "id_cli_sistema")
@@ -35,7 +35,7 @@ public class TelefoneEntity {
 
     @OneToOne(targetEntity = ParentescoEntity.class)
     @JoinColumn(name = "id_parentesco")
-    private ParentescoEntity parentescoEntity;
+    private ParentescoEntity parentesco;
 
 //TODO HABILITAR FORNECEDOR NO SERVIÇO DO SISTEMA
 //    @OneToOne (targetEntity = FornecedorEntity.class)
@@ -45,9 +45,9 @@ public class TelefoneEntity {
 //TODO HABILITAR CLIENTE NO SERVIÇO DO SISTEMA
 //    @OneToOne (targetEntity = ClienteEntity.class)
 //    @JoinColumn(name = "id_cliente")
-//    private ClienteEntity clienteEntity;
+//    private ClienteEntity cliente;
 
     @OneToOne(targetEntity = EmpresaEntity.class)
     @JoinColumn(name = "id_empresa")
-    private EmpresaEntity empresaEntity;
+    private EmpresaEntity empresa;
 }
