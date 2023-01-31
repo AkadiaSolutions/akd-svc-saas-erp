@@ -5,4 +5,4 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface AnexoMensagemRepositroy extends JpaRepository<AnexoMensagemEntity, Long> {}
+public interface AnexoMensagemRepository extends JpaRepository<AnexoMensagemEntity, Long> {}
