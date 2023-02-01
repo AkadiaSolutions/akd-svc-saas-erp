@@ -29,7 +29,6 @@ public class ClienteSistemaEntity {
 
     private String nome;
 
-    private String nomeUsuario;
 
     private String senha;
 

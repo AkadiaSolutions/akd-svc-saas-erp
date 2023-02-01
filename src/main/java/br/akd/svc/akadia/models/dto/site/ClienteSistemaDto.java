@@ -21,7 +21,6 @@ public class ClienteSistemaDto {
     private String horaCadastro;
     private String email;
     private String nome;
-    private String nomeUsuario;
     private String senha;
     private String cpf;
     private Double saldo;
