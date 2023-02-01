@@ -2,16 +2,14 @@ package br.akd.svc.akadia.models.entities.site;
 
 import br.akd.svc.akadia.models.entities.global.EnderecoEntity;
 import br.akd.svc.akadia.models.entities.global.TelefoneEntity;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Builder
 @Getter @Setter
 @AllArgsConstructor
 @NoArgsConstructor
@@ -30,6 +28,10 @@ public class ClienteSistemaEntity {
     private String email;
 
     private String nome;
+
+    private String nomeUsuario;
+
+    private String senha;
 
     private String cpf;
 
