@@ -32,8 +32,4 @@ public class PlanoEntity {
     @Enumerated(EnumType.STRING)
     private FormaPagamentoSistemaEnum formaPagamentoSistemaEnum;
 
-    @OneToOne (targetEntity = ClienteSistemaEntity.class)
-    @JoinColumn(name = "id_cli_sistema")
-    private ClienteSistemaEntity clienteSistema;
-
 }

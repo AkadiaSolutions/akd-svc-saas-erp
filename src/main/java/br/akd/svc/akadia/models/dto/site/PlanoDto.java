@@ -19,5 +19,5 @@ public class PlanoDto {
     private TipoPlanoEnum tipoPlanoEnum;
     private StatusPlanoEnum statusPlanoEnum;
     private FormaPagamentoSistemaEnum formaPagamentoSistemaEnum;
-    private ClienteSistemaDto clienteSistema;
+
 }

@@ -15,7 +15,6 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Table(name = "tb_empresa")
 public class TelefoneEntity {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -26,30 +25,4 @@ public class TelefoneEntity {
 
     @Enumerated(EnumType.STRING)
     private TipoTelefoneEnum tipoTelefoneEnum;
-
-    @OneToOne(targetEntity = ClienteSistemaEntity.class)
-    @JoinColumn(name = "id_cli_sistema")
-    private ClienteSistemaEntity clienteSistema;
-
-    @OneToOne(targetEntity = ParentescoEntity.class)
-    @JoinColumn(name = "id_parentesco")
-    private ParentescoEntity parentesco;
-
-//TODO HABILITAR FORNECEDOR NO SERVIÇO DO SISTEMA
-//    @OneToOne (targetEntity = FornecedorEntity.class)
-//    @JoinColumn(name = "id_fornecedor")
-//    private FornecedorEntity fornecedor;
-
-//TODO HABILITAR CLIENTE NO SERVIÇO DO SISTEMA
-//    @OneToOne (targetEntity = ClienteEntity.class)
-//    @JoinColumn(name = "id_cliente")
-//    private ClienteEntity cliente;
-
-    @OneToOne(targetEntity = EmpresaEntity.class)
-    @JoinColumn(name = "id_empresa")
-    private EmpresaEntity empresa;
-
-    @OneToOne(targetEntity = LeadEntity.class)
-    @JoinColumn(name = "id_lead")
-    private LeadEntity lead;
 }

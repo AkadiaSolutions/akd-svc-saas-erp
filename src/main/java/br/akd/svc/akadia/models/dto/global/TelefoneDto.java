@@ -18,15 +18,4 @@ public class TelefoneDto {
     private Integer prefixo;
     private Long numero;
     private TipoTelefoneEnum tipoTelefoneEnum;
-    private ClienteSistemaDto clienteSistema;
-    private ParentescoDto parentesco;
-
-// TODO HABILITAR FORNECEDOR NO SERVIÇO DO SISTEMA
-//    private FornecedorDto fornecedor;
-
-    // TODO HABILITAR CLIENTE NO SERVIÇO DO SISTEMA
-//    private ClienteDto cliente;
-    private EmpresaDto empresa;
-
-    private LeadDto lead;
 }
