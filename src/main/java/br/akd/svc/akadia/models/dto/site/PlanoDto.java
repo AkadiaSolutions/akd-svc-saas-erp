@@ -16,10 +16,6 @@ public class PlanoDto {
     private Long id;
     private String dataContratacao;
     private String horaContratacao;
-    private Double valor;
-    private Integer diasRestantes;
-    private Integer qtdLimiteEmpresasCadastradas;
-    private Boolean ativo;
     private TipoPlanoEnum tipoPlanoEnum;
     private StatusPlanoEnum statusPlanoEnum;
     private FormaPagamentoSistemaEnum formaPagamentoSistemaEnum;

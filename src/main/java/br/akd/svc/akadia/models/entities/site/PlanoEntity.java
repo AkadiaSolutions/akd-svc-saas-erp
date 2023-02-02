@@ -3,14 +3,12 @@ package br.akd.svc.akadia.models.entities.site;
 import br.akd.svc.akadia.models.enums.site.FormaPagamentoSistemaEnum;
 import br.akd.svc.akadia.models.enums.site.StatusPlanoEnum;
 import br.akd.svc.akadia.models.enums.site.TipoPlanoEnum;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
+@Builder
 @Getter @Setter
 @AllArgsConstructor
 @NoArgsConstructor
@@ -24,14 +22,6 @@ public class PlanoEntity {
     private String dataContratacao;
 
     private String horaContratacao;
-
-    private Double valor;
-
-    private Integer diasRestantes;
-
-    private Integer qtdLimiteEmpresasCadastradas;
-
-    private Boolean ativo;
 
     @Enumerated(EnumType.STRING)
     private TipoPlanoEnum tipoPlanoEnum;
