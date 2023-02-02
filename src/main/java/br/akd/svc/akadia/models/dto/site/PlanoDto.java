@@ -14,6 +14,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class PlanoDto {
     private Long id;
+    private String codigoAssinaturaAsaas;
     private String dataContratacao;
     private String horaContratacao;
     private TipoPlanoEnum tipoPlanoEnum;

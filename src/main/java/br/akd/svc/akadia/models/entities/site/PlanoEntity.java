@@ -19,6 +19,8 @@ public class PlanoEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String codigoAssinaturaAsaas;
+
     private String dataContratacao;
 
     private String horaContratacao;
