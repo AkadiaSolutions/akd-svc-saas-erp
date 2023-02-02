@@ -1,5 +1,6 @@
 package br.akd.svc.akadia.models.dto.global;
 
+import br.akd.svc.akadia.models.dto.bckoff.LeadDto;
 import br.akd.svc.akadia.models.dto.site.ClienteSistemaDto;
 import br.akd.svc.akadia.models.dto.site.EmpresaDto;
 import br.akd.svc.akadia.models.enums.global.TipoTelefoneEnum;
@@ -16,14 +17,16 @@ public class TelefoneDto {
     private Long id;
     private Integer prefixo;
     private Long numero;
-    private TipoTelefoneEnum tioTelefoneEnum;
+    private TipoTelefoneEnum tipoTelefoneEnum;
     private ClienteSistemaDto clienteSistema;
     private ParentescoDto parentesco;
 
 // TODO HABILITAR FORNECEDOR NO SERVIÇO DO SISTEMA
 //    private FornecedorDto fornecedor;
 
-// TODO HABILITAR CLIENTE NO SERVIÇO DO SISTEMA
+    // TODO HABILITAR CLIENTE NO SERVIÇO DO SISTEMA
 //    private ClienteDto cliente;
     private EmpresaDto empresa;
+
+    private LeadDto lead;
 }

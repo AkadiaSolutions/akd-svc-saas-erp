@@ -1,18 +1,16 @@
 package br.akd.svc.akadia.models.entities.global;
 
+import br.akd.svc.akadia.models.entities.bckoff.LeadEntity;
 import br.akd.svc.akadia.models.entities.site.ClienteSistemaEntity;
 import br.akd.svc.akadia.models.entities.site.EmpresaEntity;
 import br.akd.svc.akadia.models.enums.global.TipoTelefoneEnum;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
-@Getter
-@Setter
+@Builder
+@Getter @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "tb_empresa")
@@ -50,4 +48,8 @@ public class TelefoneEntity {
     @OneToOne(targetEntity = EmpresaEntity.class)
     @JoinColumn(name = "id_empresa")
     private EmpresaEntity empresa;
+
+    @OneToOne(targetEntity = LeadEntity.class)
+    @JoinColumn(name = "id_lead")
+    private LeadEntity lead;
 }
