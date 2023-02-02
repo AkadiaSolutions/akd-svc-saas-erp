@@ -4,6 +4,7 @@ import br.akd.svc.akadia.models.dto.site.ClienteSistemaDto;
 import br.akd.svc.akadia.models.entities.bckoff.LeadEntity;
 import br.akd.svc.akadia.models.entities.site.ClienteSistemaEntity;
 import br.akd.svc.akadia.services.bckoff.LeadService;
+import br.akd.svc.akadia.services.global.exceptions.FeignConnectionException;
 import br.akd.svc.akadia.services.global.exceptions.InvalidRequestException;
 import br.akd.svc.akadia.services.site.ClienteSistemaService;
 import io.swagger.annotations.Api;
@@ -74,8 +75,10 @@ public class ClienteSistemaController {
             consumes = MediaType.APPLICATION_JSON
     )
     @ApiResponses({
-            @ApiResponse(code = 200, message = "Cliente salvo com sucesso", response = ClienteSistemaEntity.class)
-            //TODO ADICIONAR RESPONSES DE ERRORS
+            @ApiResponse(code = 200, message = "Cliente salvo com sucesso", response = ClienteSistemaEntity.class),
+            @ApiResponse(code = 400, message = "Ocorreu um erro no processo de criação do cliente", response = InvalidRequestException.class),
+            @ApiResponse(code = 400, message = "Ocorreu um erro no processo de criação da assinatura", response = InvalidRequestException.class),
+            @ApiResponse(code = 500, message = "Ocorreu uma falha na conexão com o feign", response = FeignConnectionException.class),
     })
     @PostMapping("cadastro/cria-cliente")
     public ResponseEntity<ClienteSistemaEntity> criaNovoCliente(@RequestBody ClienteSistemaDto clienteSistemaDto) {
