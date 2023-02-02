@@ -25,4 +25,15 @@ public class ExceptionHandler extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(standartError);
     }
 
+    public ResponseEntity<StandartError>  feignConnectionException(HttpServletRequest req,
+                                                                   FeignConnectionException feignConnectionException) {
+        StandartError standartError = StandartError.builder()
+                .localDateTime(LocalDateTime.now())
+                .status(500)
+                .error(feignConnectionException.getMessage())
+                .path(req.getRequestURI())
+                .build();
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(standartError);
+    }
+
 }
