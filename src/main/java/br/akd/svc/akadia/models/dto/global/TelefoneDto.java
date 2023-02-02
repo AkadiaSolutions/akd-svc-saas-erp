@@ -1,8 +1,5 @@
 package br.akd.svc.akadia.models.dto.global;
 
-import br.akd.svc.akadia.models.dto.bckoff.LeadDto;
-import br.akd.svc.akadia.models.dto.site.ClienteSistemaDto;
-import br.akd.svc.akadia.models.dto.site.EmpresaDto;
 import br.akd.svc.akadia.models.enums.global.TipoTelefoneEnum;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
