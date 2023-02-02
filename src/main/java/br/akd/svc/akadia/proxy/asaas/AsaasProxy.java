@@ -7,13 +7,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 
-import java.util.Map;
-
 @FeignClient(name = "ASAAS", url = "${URL_ASAAS}")
 public interface AsaasProxy {
 
     @PostMapping(value="/customers")
     ResponseEntity<?> cadastraCliente(@RequestBody ClienteSistemaRequest clienteSistemaRequest,
-                                      @RequestHeader Map<String, String> headers);
+                                      @RequestHeader(value = "access_token") String access_token);
 
 }
