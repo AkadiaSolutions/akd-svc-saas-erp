@@ -23,4 +23,7 @@ public class AssinaturaResponse {
     private String externalReference;
     private Boolean sendPaymentByPostalService;
     private CreditCardResponse creditCard;
+    private FineResponse fine;
+    private InterestResponse interest;
+    private String split;
 }
