@@ -19,6 +19,7 @@ public class ClienteSistemaDto {
     private String codigoClienteAsaas;
     private String dataCadastro;
     private String horaCadastro;
+    private String dataNascimento;
     private String email;
     private String nome;
     private String senha;
