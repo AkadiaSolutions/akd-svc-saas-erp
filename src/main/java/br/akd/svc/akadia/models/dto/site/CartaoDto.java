@@ -15,9 +15,10 @@ import java.util.List;
 @NoArgsConstructor
 public class CartaoDto {
     private Long id;
+    private String nomePortador;
     private String cpfCnpj;
     private Long numero;
-    private Integer cvv;
+    private Integer ccv;
     private Integer mesExpiracao;
     private Integer anoExpiracao;
     private String tokenCartao;
