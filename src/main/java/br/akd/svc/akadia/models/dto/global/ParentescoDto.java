@@ -1,6 +1,5 @@
 package br.akd.svc.akadia.models.dto.global;
 
-import br.akd.svc.akadia.models.dto.bckoff.ColaboradorInternoDto;
 import br.akd.svc.akadia.models.enums.global.GrauParentescoEnum;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -18,8 +17,5 @@ public class ParentescoDto {
     private String cpf;
     private GrauParentescoEnum grauParentescoEnum;
     private TelefoneDto telefone;
-    // TODO HABILITAR COLABORADOR NO SERVIÇO DO SISTEMA
-//    private ColaboradorDto colaborador;
-    private ColaboradorInternoDto colaboradorInterno;
 
 }

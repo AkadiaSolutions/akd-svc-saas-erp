@@ -1,6 +1,5 @@
 package br.akd.svc.akadia.models.entities.global;
 
-import br.akd.svc.akadia.models.entities.bckoff.ColaboradorInternoEntity;
 import br.akd.svc.akadia.models.enums.global.GrauParentescoEnum;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -32,14 +31,5 @@ public class ParentescoEntity {
 
     @OneToOne(targetEntity = TelefoneEntity.class, cascade = CascadeType.ALL, orphanRemoval = true)
     private TelefoneEntity telefone;
-
-// TODO HABILITAR COLABORADOR NO SERVIÇO DO SISTEMA
-//    @ManyToOne(targetEntity = ColaboradorEntity.class)
-//    @JoinColumn(name = "id_colaborador")
-//    private ColaboradorEntity colaborador;
-
-    @ManyToOne(targetEntity = ColaboradorInternoEntity.class)
-    @JoinColumn(name = "id_colab_interno")
-    private ColaboradorInternoEntity colaboradorInterno;
 
 }

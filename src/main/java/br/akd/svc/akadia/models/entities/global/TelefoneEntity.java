@@ -1,8 +1,5 @@
 package br.akd.svc.akadia.models.entities.global;
 
-import br.akd.svc.akadia.models.entities.bckoff.LeadEntity;
-import br.akd.svc.akadia.models.entities.site.ClienteSistemaEntity;
-import br.akd.svc.akadia.models.entities.site.EmpresaEntity;
 import br.akd.svc.akadia.models.enums.global.TipoTelefoneEnum;
 import lombok.*;
 

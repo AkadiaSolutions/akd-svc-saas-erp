@@ -1,7 +1,5 @@
 package br.akd.svc.akadia.models.dto.global;
 
-import br.akd.svc.akadia.models.dto.site.ClienteSistemaDto;
-import br.akd.svc.akadia.models.dto.site.EmpresaDto;
 import br.akd.svc.akadia.models.enums.global.EstadoEnum;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
