@@ -21,13 +21,4 @@ public class EnderecoDto {
     private String cidade;
     private EstadoEnum estadoEnum;
 
-    //TODO HABILITAR CLIENTE NO SERVIÇO DO SISTEMA
-//    private ClienteDto cliente;
-
-    //TODO HABILITAR FORNECEDOR NO SERVIÇO DO SISTEMA
-//    private FornecedorDto fornecedor;
-
-    private ClienteSistemaDto clienteSistema;
-    private EmpresaDto empresa;
-
 }
