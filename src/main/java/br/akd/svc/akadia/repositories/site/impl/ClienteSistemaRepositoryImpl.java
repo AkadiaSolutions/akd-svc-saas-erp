@@ -5,14 +5,24 @@ import br.akd.svc.akadia.repositories.site.ClienteSistemaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class ClienteSistemaRepositoryImpl {
 
     @Autowired
     ClienteSistemaRepository clienteSistemaRepository;
 
-    public ClienteSistemaEntity salvaNovoCliente(ClienteSistemaEntity clienteSistema) {
+    public ClienteSistemaEntity implementaPersistencia(ClienteSistemaEntity clienteSistema) {
         return clienteSistemaRepository.save(clienteSistema);
+    }
+
+    public Optional<ClienteSistemaEntity> implementaBuscaPorEmail(String email) {
+        return clienteSistemaRepository.findByEmail(email);
+    }
+
+    public Optional<ClienteSistemaEntity> implementaBuscaPorCpf(String cpf) {
+        return clienteSistemaRepository.findByCpf(cpf);
     }
 
 }
