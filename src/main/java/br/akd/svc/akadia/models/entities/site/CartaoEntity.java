@@ -21,6 +21,8 @@ public class CartaoEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String cpfCnpj;
+
     private Long numero;
 
     private Integer cvv;
