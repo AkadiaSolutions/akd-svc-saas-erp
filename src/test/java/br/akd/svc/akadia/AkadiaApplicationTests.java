@@ -6,8 +6,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 class AkadiaApplicationTests {
 
-	@Test
-	void contextLoads() {
-	}
+    @Test
+    void main() {
+        AkadiaApplication.main(new String[]{});
+    }
 
 }
