@@ -13,10 +13,10 @@ public interface AsaasProxy {
 
     @PostMapping(value="/customers")
     ResponseEntity<?> cadastraNovoCliente(@RequestBody ClienteSistemaRequest clienteSistemaRequest,
-                                          @RequestHeader(value = "access_token") String access_token);
+                                          @RequestHeader(value = "access_token") String accessToken);
 
     @PostMapping(value="/subscriptions")
     ResponseEntity<?> cadastraNovoPlano(@RequestBody AssinaturaRequest assinaturaRequest,
-                                        @RequestHeader(value = "access_token") String access_token);
+                                        @RequestHeader(value = "access_token") String accessToken);
 
 }
