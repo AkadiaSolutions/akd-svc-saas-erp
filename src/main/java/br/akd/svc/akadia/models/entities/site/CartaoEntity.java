@@ -1,16 +1,14 @@
 package br.akd.svc.akadia.models.entities.site;
 
 import br.akd.svc.akadia.models.enums.site.BandeiraCartaoEnum;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Builder
 @Getter @Setter
 @AllArgsConstructor
 @NoArgsConstructor
@@ -37,10 +35,6 @@ public class CartaoEntity {
 
     @Enumerated(EnumType.STRING)
     private BandeiraCartaoEnum bandeiraCartaoEnum;
-
-    @ManyToOne(targetEntity = ClienteSistemaEntity.class)
-    @JoinColumn(name = "id_cli_sistema")
-    private ClienteSistemaEntity clienteSistema;
 
     @OneToMany(targetEntity = PagamentoSistemaEntity.class)
     private List<PagamentoSistemaEntity> pagamentos = new ArrayList<>();

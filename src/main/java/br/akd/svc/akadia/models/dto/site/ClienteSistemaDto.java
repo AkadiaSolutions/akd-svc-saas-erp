@@ -28,7 +28,7 @@ public class ClienteSistemaDto {
     private PlanoDto plano;
     private TelefoneDto telefone;
     private EnderecoDto endereco;
+    private CartaoDto cartao;
     private List<PagamentoSistemaDto> pagamentos = new ArrayList<>();
-    private List<CartaoDto> cartoes = new ArrayList<>();
     private List<EmpresaDto> empresas = new ArrayList<>();
 }

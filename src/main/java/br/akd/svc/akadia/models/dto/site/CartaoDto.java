@@ -23,6 +23,5 @@ public class CartaoDto {
     private String tokenCartao;
     private Boolean ativo;
     private BandeiraCartaoEnum bandeiraCartaoEnum;
-    private ClienteSistemaDto clienteSistema;
     private List<PagamentoSistemaDto> pagamentos = new ArrayList<>();
 }
