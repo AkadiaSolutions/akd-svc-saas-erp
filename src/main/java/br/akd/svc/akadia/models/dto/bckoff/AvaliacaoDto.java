@@ -13,5 +13,4 @@ public class AvaliacaoDto {
     private Long id;
     private Integer nota;
     private String descricao;
-    private ChamadoDto chamado;
 }

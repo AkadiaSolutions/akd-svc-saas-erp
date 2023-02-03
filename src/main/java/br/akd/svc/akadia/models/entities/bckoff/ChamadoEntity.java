@@ -3,16 +3,14 @@ package br.akd.svc.akadia.models.entities.bckoff;
 import br.akd.svc.akadia.models.entities.site.EmpresaEntity;
 import br.akd.svc.akadia.models.enums.bckoff.CategoriaChamadoEnum;
 import br.akd.svc.akadia.models.enums.bckoff.StatusChamadoEnum;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@ToString
 @Getter @Setter
 @AllArgsConstructor
 @NoArgsConstructor
@@ -53,6 +51,7 @@ public class ChamadoEntity {
     private AvaliacaoEntity avaliacao;
 
     @OneToMany(targetEntity = MensagemEntity.class, orphanRemoval = true, cascade = CascadeType.ALL)
+    @ToString.Exclude
     private List<MensagemEntity> mensagens = new ArrayList<>();
 
 }

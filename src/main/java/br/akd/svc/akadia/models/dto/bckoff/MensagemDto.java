@@ -22,5 +22,4 @@ public class MensagemDto {
     private String conteudo;
     private CaminhoMensagemEnum caminhoMensagemEnum;
     private List<AnexoMensagemDto> anexos = new ArrayList<>();
-    private ChamadoDto chamado;
 }

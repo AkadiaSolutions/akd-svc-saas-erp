@@ -1,16 +1,13 @@
 package br.akd.svc.akadia.models.entities.global;
 
 import br.akd.svc.akadia.models.enums.global.GrauParentescoEnum;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
-@Getter
-@Setter
+@ToString
+@Getter @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "tb_parentesco")

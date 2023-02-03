@@ -1,4 +1,63 @@
 package br.akd.svc.akadia.models.entities.global;
 
-public class EnderecoEntityTest {
+import br.akd.svc.akadia.models.entities.global.mocks.EnderecoEntityBuilder;
+import br.akd.svc.akadia.models.enums.global.EstadoEnum;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+
+@SpringBootTest
+@DisplayName("Entity: Endereco")
+class EnderecoEntityTest {
+
+    @Test
+    @DisplayName("Deve testar dataBuilder")
+    void deveTestarDataBuilder() {
+        Assertions.assertEquals(
+                "EnderecoEntity(id=1, logradouro=Avenida Coronel Manuel Py, numero=583, " +
+                        "bairro=Lauzane Paulista, codigoPostal=02442-090, cidade=São Paulo, estadoEnum=SP)",
+                EnderecoEntityBuilder.builder().build().toString()
+        );
+    }
+
+    @Test
+    @DisplayName("Deve testar @AllArgsConstructor")
+    void deveTestarAllArgsConstructor() {
+        EnderecoEntity enderecoEntity = new EnderecoEntity(
+                1L,
+                "Rua 9",
+                544,
+                "Lauzane Paulista",
+                "02442-050",
+                "São Paulo",
+                EstadoEnum.SP
+        );
+        Assertions.assertEquals(
+                "EnderecoEntity(id=1, logradouro=Rua 9, numero=544, bairro=Lauzane Paulista, " +
+                        "codigoPostal=02442-050, cidade=São Paulo, estadoEnum=SP)",
+                enderecoEntity.toString()
+        );
+    }
+
+    @Test
+    @DisplayName("Deve testar @Builder")
+    void deveTestarBuilder() {
+        EnderecoEntity enderecoEntity = EnderecoEntity.builder()
+                .id(1L)
+                .logradouro("Rua Said Saad")
+                .numero(145)
+                .bairro("Lauzane Paulista")
+                .codigoPostal("02324-312")
+                .cidade("São Paulo")
+                .estadoEnum(EstadoEnum.SP)
+                .build();
+
+        Assertions.assertEquals(
+                "EnderecoEntity(id=1, logradouro=Rua Said Saad, numero=145, bairro=Lauzane Paulista, " +
+                        "codigoPostal=02324-312, cidade=São Paulo, estadoEnum=SP)",
+                enderecoEntity.toString()
+        );
+    }
+
 }

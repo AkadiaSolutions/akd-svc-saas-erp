@@ -14,5 +14,4 @@ public class AnexoMensagemDto {
     private byte[] dados;
     private String nome;
     private String tipo;
-    private MensagemDto mensagem;
 }
