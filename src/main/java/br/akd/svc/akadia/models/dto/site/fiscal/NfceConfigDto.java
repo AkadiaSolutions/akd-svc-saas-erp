@@ -19,5 +19,4 @@ public class NfceConfigDto {
     private String cscHomologacao;
     private Long idTokenProducao;
     private Long idTokenHomologacao;
-    ConfigFiscalEmpresaDto configFiscalEmpresa;
 }

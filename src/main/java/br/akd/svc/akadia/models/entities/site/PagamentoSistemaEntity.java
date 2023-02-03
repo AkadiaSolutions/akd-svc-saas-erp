@@ -2,14 +2,12 @@ package br.akd.svc.akadia.models.entities.site;
 
 import br.akd.svc.akadia.models.enums.site.FormaPagamentoSistemaEnum;
 import br.akd.svc.akadia.models.enums.site.StatusPagamentoSistemaEnum;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
+@ToString
 @Getter @Setter
 @AllArgsConstructor
 @NoArgsConstructor

@@ -1,16 +1,13 @@
 package br.akd.svc.akadia.models.entities.site.fiscal;
 
-import br.akd.svc.akadia.models.entities.site.EmpresaEntity;
 import br.akd.svc.akadia.models.enums.site.fiscal.OrientacaoDanfeEnum;
 import br.akd.svc.akadia.models.enums.site.fiscal.RegimeTributarioEnum;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
+@ToString
 @Getter @Setter
 @AllArgsConstructor
 @NoArgsConstructor
@@ -40,10 +37,6 @@ public class ConfigFiscalEmpresaEntity {
     private RegimeTributarioEnum regimeTributarioEnum;
 
     private byte[] certificadoDigital;
-
-    @OneToOne(targetEntity = EmpresaEntity.class)
-    @JoinColumn(name = "empresa_id")
-    private EmpresaEntity empresa;
 
     @OneToOne(targetEntity = NfeConfigEntity.class, orphanRemoval = true, cascade = CascadeType.ALL)
     private NfeConfigEntity nfeConfig;

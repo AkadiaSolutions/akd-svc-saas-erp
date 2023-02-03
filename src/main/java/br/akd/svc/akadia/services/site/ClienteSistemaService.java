@@ -76,7 +76,6 @@ public class ClienteSistemaService {
                                 .anoExpiracao(clienteSistemaDto.getCartao().getAnoExpiracao())
                                 .numero(clienteSistemaDto.getCartao().getNumero())
                                 .cpfCnpj(clienteSistemaDto.getCartao().getCpfCnpj())
-                                .pagamentos(new ArrayList<>())
                                 .tokenCartao(null)
                                 .build()
                                 : null)

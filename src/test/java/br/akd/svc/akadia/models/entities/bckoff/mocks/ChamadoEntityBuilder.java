@@ -1,6 +1,7 @@
 package br.akd.svc.akadia.models.entities.bckoff.mocks;
 
 import br.akd.svc.akadia.models.entities.bckoff.ChamadoEntity;
+import br.akd.svc.akadia.models.entities.site.mocks.EmpresaEntityBuilder;
 import br.akd.svc.akadia.models.enums.bckoff.CategoriaChamadoEnum;
 import br.akd.svc.akadia.models.enums.bckoff.StatusChamadoEnum;
 
@@ -25,7 +26,7 @@ public class ChamadoEntityBuilder {
         builder.chamadoEntity.setCategoriaChamadoEnum(CategoriaChamadoEnum.PROBLEMA_TECNICO);
         builder.chamadoEntity.setStatusChamadoEnum(StatusChamadoEnum.FINALIZADO);
         builder.chamadoEntity.setAtendenteResponsavel(ColaboradorInternoEntityBuilder.builder().comParentescos().comChamados().build());
-        builder.chamadoEntity.setEmpresa(null); //TODO MOCKAR EMPRESA
+        builder.chamadoEntity.setEmpresa(EmpresaEntityBuilder.builder().build());
         builder.chamadoEntity.setAvaliacao(AvaliacaoEntityBuilder.builder().build());
         builder.chamadoEntity.setMensagens(new ArrayList<>());
         return builder;

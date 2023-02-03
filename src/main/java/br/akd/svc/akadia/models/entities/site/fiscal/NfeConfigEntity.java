@@ -1,13 +1,11 @@
 package br.akd.svc.akadia.models.entities.site.fiscal;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -22,8 +20,4 @@ public class NfeConfigEntity {
     private Long proximoNumeroHomologacao;
     private Integer serieProducao;
     private Integer serieHomologacao;
-
-    @OneToOne(targetEntity = ConfigFiscalEmpresaEntity.class)
-    @JoinColumn(name = "id_cfg_fiscal")
-    ConfigFiscalEmpresaEntity configFiscalEmpresa;
 }

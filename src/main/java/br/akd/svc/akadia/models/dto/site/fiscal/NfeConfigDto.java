@@ -15,5 +15,4 @@ public class NfeConfigDto {
     private Long proximoNumeroHomologacao;
     private Integer serieProducao;
     private Integer serieHomologacao;
-    ConfigFiscalEmpresaDto configFiscalEmpresa;
 }

@@ -5,10 +5,7 @@ import br.akd.svc.akadia.models.entities.global.EnderecoEntity;
 import br.akd.svc.akadia.models.entities.global.TelefoneEntity;
 import br.akd.svc.akadia.models.entities.site.fiscal.ConfigFiscalEmpresaEntity;
 import br.akd.svc.akadia.models.enums.site.SegmentoEmpresaEnum;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -17,6 +14,7 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "tb_empresa")
@@ -66,6 +64,7 @@ public class EmpresaEntity {
     private EnderecoEntity endereco;
 
     @OneToMany(targetEntity = ChamadoEntity.class, orphanRemoval = true, cascade = CascadeType.ALL)
+    @ToString.Exclude
     private List<ChamadoEntity> chamados = new ArrayList<>();
 
 }

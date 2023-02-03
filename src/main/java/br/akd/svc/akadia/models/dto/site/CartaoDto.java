@@ -6,9 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Getter
 @Setter
 @AllArgsConstructor
@@ -24,5 +21,4 @@ public class CartaoDto {
     private String tokenCartao;
     private Boolean ativo;
     private BandeiraCartaoEnum bandeiraCartaoEnum;
-    private List<PagamentoSistemaDto> pagamentos = new ArrayList<>();
 }

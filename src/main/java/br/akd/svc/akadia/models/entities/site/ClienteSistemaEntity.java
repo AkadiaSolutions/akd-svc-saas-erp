@@ -10,6 +10,7 @@ import java.util.List;
 
 @Entity
 @Builder
+@ToString
 @Getter @Setter
 @AllArgsConstructor
 @NoArgsConstructor
@@ -49,8 +50,10 @@ public class ClienteSistemaEntity {
     private CartaoEntity cartao;
 
     @OneToMany(targetEntity = PagamentoSistemaEntity.class, orphanRemoval = true, cascade = CascadeType.ALL)
+    @ToString.Exclude
     private List<PagamentoSistemaEntity> pagamentos = new ArrayList<>();
 
     @OneToMany(targetEntity = EmpresaEntity.class, orphanRemoval = true, cascade = CascadeType.ALL)
+    @ToString.Exclude
     private List<EmpresaEntity> empresas = new ArrayList<>();
 }

@@ -9,6 +9,7 @@ import javax.persistence.*;
 
 @Entity
 @Builder
+@ToString
 @Getter @Setter
 @AllArgsConstructor
 @NoArgsConstructor

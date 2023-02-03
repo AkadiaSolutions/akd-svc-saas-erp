@@ -4,11 +4,10 @@ import br.akd.svc.akadia.models.enums.site.BandeiraCartaoEnum;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Builder
+@ToString
 @Getter @Setter
 @AllArgsConstructor
 @NoArgsConstructor
@@ -37,8 +36,5 @@ public class CartaoEntity {
 
     @Enumerated(EnumType.STRING)
     private BandeiraCartaoEnum bandeiraCartaoEnum;
-
-    @OneToMany(targetEntity = PagamentoSistemaEntity.class)
-    private List<PagamentoSistemaEntity> pagamentos = new ArrayList<>();
 
 }
