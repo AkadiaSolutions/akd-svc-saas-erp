@@ -2,13 +2,12 @@ package br.akd.svc.akadia.models.dto.bckoff;
 
 import br.akd.svc.akadia.models.dto.global.TelefoneDto;
 import br.akd.svc.akadia.models.enums.bckoff.OrigemLeadEnum;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
+@Builder
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 public class LeadDto {

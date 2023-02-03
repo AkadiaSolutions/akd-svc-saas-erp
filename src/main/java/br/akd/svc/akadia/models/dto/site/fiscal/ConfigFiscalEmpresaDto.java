@@ -2,13 +2,11 @@ package br.akd.svc.akadia.models.dto.site.fiscal;
 
 import br.akd.svc.akadia.models.enums.site.fiscal.OrientacaoDanfeEnum;
 import br.akd.svc.akadia.models.enums.site.fiscal.RegimeTributarioEnum;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 public class ConfigFiscalEmpresaDto {

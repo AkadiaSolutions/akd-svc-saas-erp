@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-@DisplayName("Entity: NfeConfigEntity")
+@DisplayName("Entity: NfeConfig")
 class NfeConfigEntityTest {
 
     @Test

@@ -1,12 +1,10 @@
 package br.akd.svc.akadia.models.dto.site.fiscal;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 @Getter
 @Setter
 public class NfseConfigDto {

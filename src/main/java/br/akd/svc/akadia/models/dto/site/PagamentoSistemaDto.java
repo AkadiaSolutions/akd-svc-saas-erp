@@ -2,13 +2,11 @@ package br.akd.svc.akadia.models.dto.site;
 
 import br.akd.svc.akadia.models.enums.site.FormaPagamentoSistemaEnum;
 import br.akd.svc.akadia.models.enums.site.StatusPagamentoSistemaEnum;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 public class PagamentoSistemaDto {

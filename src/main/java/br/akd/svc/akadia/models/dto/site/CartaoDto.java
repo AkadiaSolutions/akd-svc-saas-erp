@@ -1,13 +1,12 @@
 package br.akd.svc.akadia.models.dto.site;
 
 import br.akd.svc.akadia.models.enums.site.BandeiraCartaoEnum;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
+@ToString
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class CartaoDto {
