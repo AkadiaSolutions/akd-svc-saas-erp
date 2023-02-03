@@ -14,6 +14,6 @@ public enum TipoPlanoEnum {
     private final int code;
     private final String desc;
     private final Double valor;
-    private final Integer qtdLimiteEmpresasCadastradas;
+    private final int qtdLimiteEmpresasCadastradas;
 
 }

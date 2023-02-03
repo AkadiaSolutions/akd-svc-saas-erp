@@ -1,4 +1,19 @@
 package br.akd.svc.akadia.models.enums.site.fiscal;
 
-public class OrientacaoDanfeEnumTest {
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+
+@SpringBootTest
+@DisplayName("Enum: OrientacaoDanfe")
+class OrientacaoDanfeEnumTest {
+    @Test
+    @DisplayName("Deve testar atributos")
+    void shouldTestGetters() {
+        String atributosEmString =
+                OrientacaoDanfeEnum.PORTRAIT.getCode() + " " +
+                        OrientacaoDanfeEnum.PORTRAIT.getDesc();
+        Assertions.assertEquals("0 Retrato", atributosEmString);
+    }
 }

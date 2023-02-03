@@ -1,4 +1,20 @@
 package br.akd.svc.akadia.models.enums.bckoff;
 
-public class CargoInternoEnumTest {
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+
+@SpringBootTest
+@DisplayName("Enum: CargoInterno")
+class CargoInternoEnumTest {
+    @Test
+    @DisplayName("Deve testar atributos")
+    void shouldTestGetters() {
+        String atributosEmString =
+                CargoInternoEnum.SUPORTE.getCode() + " " +
+                        CargoInternoEnum.SUPORTE.getDesc() + " " +
+                        CargoInternoEnum.SUPORTE.getPrivilegio();
+        Assertions.assertEquals("0 Suporte 1", atributosEmString);
+    }
 }
