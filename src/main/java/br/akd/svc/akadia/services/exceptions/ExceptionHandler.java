@@ -1,4 +1,4 @@
-package br.akd.svc.akadia.services.global.exceptions;
+package br.akd.svc.akadia.services.exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,8 +25,9 @@ public class ExceptionHandler extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(standartError);
     }
 
-    public ResponseEntity<StandartError>  feignConnectionException(HttpServletRequest req,
-                                                                   FeignConnectionException feignConnectionException) {
+    @org.springframework.web.bind.annotation.ExceptionHandler(FeignConnectionException.class)
+    public ResponseEntity<StandartError> feignConnectionException(HttpServletRequest req,
+                                                                  FeignConnectionException feignConnectionException) {
         StandartError standartError = StandartError.builder()
                 .localDateTime(LocalDateTime.now())
                 .status(500)
@@ -34,6 +35,18 @@ public class ExceptionHandler extends ResponseEntityExceptionHandler {
                 .path(req.getRequestURI())
                 .build();
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(standartError);
+    }
+
+    @org.springframework.web.bind.annotation.ExceptionHandler(ObjectNotFoundException.class)
+    public ResponseEntity<StandartError> objectNotFoundException(HttpServletRequest req,
+                                                                 ObjectNotFoundException objectNotFoundException) {
+        StandartError standartError = StandartError.builder()
+                .localDateTime(LocalDateTime.now())
+                .status(404)
+                .error(objectNotFoundException.getMessage())
+                .path(req.getRequestURI())
+                .build();
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(standartError);
     }
 
 }

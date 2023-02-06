@@ -1,4 +1,4 @@
-package br.akd.svc.akadia.services.global.exceptions;
+package br.akd.svc.akadia.services.exceptions;
 
 import lombok.*;
 
