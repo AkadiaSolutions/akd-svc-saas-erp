@@ -38,6 +38,11 @@ public class ClienteSistemaDtoBuilder {
         return builder;
     }
 
+    public ClienteSistemaDtoBuilder comPlanoComPagamentoNoCredito() {
+        this.clienteSistemaDto.setPlano(PlanoDtoBuilder.builder().pagamentoNoCredito().build());
+        return this;
+    }
+
     public ClienteSistemaDtoBuilder comPagamento() {
         this.clienteSistemaDto.getPagamentos().add(PagamentoSistemaDtoBuilder.builder().build());
         return this;

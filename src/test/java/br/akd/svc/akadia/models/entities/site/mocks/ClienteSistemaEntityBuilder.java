@@ -38,6 +38,11 @@ public class ClienteSistemaEntityBuilder {
         return builder;
     }
 
+    public ClienteSistemaEntityBuilder comPlanoComPagamentoNoCredito() {
+        this.clienteSistemaEntity.setPlano(PlanoEntityBuilder.builder().pagamentoNoCredito().build());
+        return this;
+    }
+
     public ClienteSistemaEntityBuilder comPagamento() {
         this.clienteSistemaEntity.getPagamentos().add(PagamentoSistemaEntityBuilder.builder().build());
         return this;

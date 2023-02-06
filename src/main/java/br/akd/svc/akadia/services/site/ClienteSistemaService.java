@@ -112,7 +112,7 @@ public class ClienteSistemaService {
         return clienteSistemaRepositoryImpl.implementaPersistencia(clienteSistema);
     }
 
-    private ClienteSistemaResponse realizaCadastroClienteAsaas(ClienteSistemaEntity clienteSistema) {
+    public ClienteSistemaResponse realizaCadastroClienteAsaas(ClienteSistemaEntity clienteSistema) {
 
         ClienteSistemaRequest clienteSistemaRequest = ClienteSistemaRequest.builder()
                 .name(clienteSistema.getNome())
@@ -137,7 +137,7 @@ public class ClienteSistemaService {
         return objectMapper.convertValue(cadastraClienteAsaas.getBody(), ClienteSistemaResponse.class);
     }
 
-    private AssinaturaResponse criaAssinaturaAsaas(ClienteSistemaEntity clienteSistema) {
+    public AssinaturaResponse criaAssinaturaAsaas(ClienteSistemaEntity clienteSistema) {
 
         AssinaturaRequest assinaturaRequest =
                 AssinaturaRequest.builder()

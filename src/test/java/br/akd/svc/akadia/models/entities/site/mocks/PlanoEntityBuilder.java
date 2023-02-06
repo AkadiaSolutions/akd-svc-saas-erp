@@ -27,6 +27,11 @@ public class PlanoEntityBuilder {
         return builder;
     }
 
+    public PlanoEntityBuilder pagamentoNoCredito() {
+        this.planoEntity.setFormaPagamentoSistemaEnum(FormaPagamentoSistemaEnum.CREDIT_CARD);
+        return this;
+    }
+
     public PlanoEntity build() {
         return planoEntity;
     }
