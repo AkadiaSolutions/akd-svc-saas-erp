@@ -16,6 +16,8 @@ public class EnderecoDto {
     private String bairro;
     private String codigoPostal;
     private String cidade;
+
+    private String complemento;
     private EstadoEnum estadoEnum;
 
 }

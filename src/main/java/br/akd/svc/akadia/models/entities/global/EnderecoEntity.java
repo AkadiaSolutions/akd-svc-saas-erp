@@ -25,6 +25,8 @@ public class EnderecoEntity {
     private String codigoPostal;
     private String cidade;
 
+    private String complemento;
+
     @Enumerated(EnumType.STRING)
     private EstadoEnum estadoEnum;
 

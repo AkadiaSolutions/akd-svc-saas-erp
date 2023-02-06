@@ -1,10 +1,7 @@
 package br.akd.svc.akadia.models.entities.site.mocks;
 
 import br.akd.svc.akadia.models.entities.bckoff.mocks.ChamadoEntityBuilder;
-import br.akd.svc.akadia.models.entities.global.mocks.EnderecoEntityBuilder;
-import br.akd.svc.akadia.models.entities.global.mocks.TelefoneEntityBuilder;
 import br.akd.svc.akadia.models.entities.site.EmpresaEntity;
-import br.akd.svc.akadia.models.entities.site.fiscal.mocks.ConfigFiscalEmpresaEntityBuilder;
 import br.akd.svc.akadia.models.enums.site.SegmentoEmpresaEnum;
 
 import java.time.LocalDate;
@@ -13,7 +10,9 @@ import java.util.ArrayList;
 
 public class EmpresaEntityBuilder {
 
-    EmpresaEntityBuilder(){}
+    EmpresaEntityBuilder() {
+    }
+
     EmpresaEntity empresaEntity;
 
     public static EmpresaEntityBuilder builder() {
@@ -34,10 +33,10 @@ public class EmpresaEntityBuilder {
         builder.empresaEntity.setCpfResponsavel("47153427821");
         builder.empresaEntity.setLogo(new byte[]{});
         builder.empresaEntity.setSegmentoEmpresaEnum(SegmentoEmpresaEnum.BATERIA_AUTOMOTIVA);
-        builder.empresaEntity.setTelefone(TelefoneEntityBuilder.builder().build());
-        builder.empresaEntity.setClienteSistema(ClienteSistemaEntityBuilder.builder().build());
-        builder.empresaEntity.setConfigFiscalEmpresa(ConfigFiscalEmpresaEntityBuilder.builder().build());
-        builder.empresaEntity.setEndereco(EnderecoEntityBuilder.builder().build());
+        builder.empresaEntity.setTelefone(null);
+        builder.empresaEntity.setClienteSistema(null);
+        builder.empresaEntity.setConfigFiscalEmpresa(null);
+        builder.empresaEntity.setEndereco(null);
         builder.empresaEntity.setChamados(new ArrayList<>());
 
         return builder;
