@@ -4,8 +4,9 @@ import br.akd.svc.akadia.models.dto.site.ClienteSistemaDto;
 import br.akd.svc.akadia.models.entities.bckoff.LeadEntity;
 import br.akd.svc.akadia.models.entities.site.ClienteSistemaEntity;
 import br.akd.svc.akadia.services.bckoff.LeadService;
-import br.akd.svc.akadia.services.global.exceptions.FeignConnectionException;
-import br.akd.svc.akadia.services.global.exceptions.InvalidRequestException;
+import br.akd.svc.akadia.services.exceptions.FeignConnectionException;
+import br.akd.svc.akadia.services.exceptions.InvalidRequestException;
+import br.akd.svc.akadia.services.exceptions.ObjectNotFoundException;
 import br.akd.svc.akadia.services.site.ClienteSistemaService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -14,10 +15,7 @@ import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
@@ -70,7 +68,8 @@ public class ClienteSistemaController {
 
     @ApiOperation(
             value = "Cadastro de novo cliente",
-            notes = "Esse endpoint tem como objetivo realizar o cadastro de um novo cliente no banco de dados d projeto",
+            notes = "Esse endpoint tem como objetivo realizar o cadastro de um novo cliente no banco de dados do projeto " +
+                    "e na integradora de pagamentos ASAAS",
             produces = MediaType.APPLICATION_JSON,
             consumes = MediaType.APPLICATION_JSON
     )
@@ -85,4 +84,22 @@ public class ClienteSistemaController {
         return ResponseEntity.status(HttpStatus.CREATED).body(clienteSistemaService.cadastraNovoCliente(clienteSistemaDto));
     }
 
+    @ApiOperation(
+            value = "Atualização de dados do cliente",
+            notes = "Esse endpoint tem como objetivo realizar a atualização dos dados do cliente no banco de dados do projeto " +
+                    "e na integradora de pagamentos ASAAS",
+            produces = MediaType.APPLICATION_JSON,
+            consumes = MediaType.APPLICATION_JSON
+    )
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Cliente atualizado com sucesso", response = ClienteSistemaEntity.class),
+            @ApiResponse(code = 400, message = "Ocorreu um erro no processo de atualização do cliente", response = InvalidRequestException.class),
+            @ApiResponse(code = 404, message = "Nenhum cliente foi encontrado com o id informado", response = ObjectNotFoundException.class),
+            @ApiResponse(code = 500, message = "Ocorreu uma falha na conexão com o feign", response = FeignConnectionException.class),
+    })
+    @PutMapping("atualiza-cliente/{id}")
+    public ResponseEntity<ClienteSistemaEntity> atualizaDadosCliente(@PathVariable Long id,
+                                                                     @RequestBody ClienteSistemaDto clienteSistemaDto) {
+        return ResponseEntity.status(HttpStatus.OK).body(clienteSistemaService.atualizaDadosCliente(id, clienteSistemaDto));
+    }
 }

@@ -17,9 +17,9 @@ import br.akd.svc.akadia.proxy.asaas.requests.CreditCardRequest;
 import br.akd.svc.akadia.proxy.asaas.responses.AssinaturaResponse;
 import br.akd.svc.akadia.proxy.asaas.responses.ClienteSistemaResponse;
 import br.akd.svc.akadia.repositories.site.impl.ClienteSistemaRepositoryImpl;
-import br.akd.svc.akadia.services.global.exceptions.FeignConnectionException;
-import br.akd.svc.akadia.services.global.exceptions.InvalidRequestException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import br.akd.svc.akadia.services.exceptions.FeignConnectionException;
+import br.akd.svc.akadia.services.exceptions.InvalidRequestException;
+import br.akd.svc.akadia.services.exceptions.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -27,6 +27,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Optional;
 
 @Service
 public class ClienteSistemaService {
@@ -37,7 +38,9 @@ public class ClienteSistemaService {
     @Autowired
     AsaasProxy asaasProxy;
 
-    ObjectMapper objectMapper = new ObjectMapper();
+    public static final String TOKEN_ASAAS = "TOKEN_ASAAS";
+    public static final String FALHA_COMUNICACAO_ASAAS =
+            "Ocorreu uma falha na comunicação com a integradora de pagamentos: ";
 
     public void validaSeEmailJaExiste(ClienteSistemaDto clienteSistemaDto) {
         if (clienteSistemaRepositoryImpl.implementaBuscaPorEmail(clienteSistemaDto.getEmail()).isPresent())
@@ -95,6 +98,7 @@ public class ClienteSistemaService {
                                 .bairro(clienteSistemaDto.getEndereco().getBairro())
                                 .cidade(clienteSistemaDto.getEndereco().getCidade())
                                 .estadoEnum(clienteSistemaDto.getEndereco().getEstadoEnum())
+                                .complemento(clienteSistemaDto.getEndereco().getComplemento())
                                 .build()
                                 : null)
                         .codigoClienteAsaas(null)
@@ -122,19 +126,19 @@ public class ClienteSistemaService {
                 .cpfCnpj(clienteSistema.getCpf())
                 .build();
 
-        ResponseEntity<?> cadastraClienteAsaas;
+        ResponseEntity<ClienteSistemaResponse> cadastraClienteAsaas;
 
         try {
-            cadastraClienteAsaas = asaasProxy.cadastraNovoCliente(clienteSistemaRequest, System.getenv("TOKEN_ASAAS"));
+            cadastraClienteAsaas = asaasProxy.cadastraNovoCliente(clienteSistemaRequest, System.getenv(TOKEN_ASAAS));
         } catch (Exception e) {
-            throw new FeignConnectionException("Ocorreu uma falha na comunicação com a integradora de pagamentos: " + e.getMessage());
+            throw new FeignConnectionException(FALHA_COMUNICACAO_ASAAS + e.getMessage());
         }
 
         if (cadastraClienteAsaas.getStatusCodeValue() != 200)
             throw new InvalidRequestException("Ocorreu um erro no processo de criação do cliente: "
                     + cadastraClienteAsaas.getBody());
 
-        return objectMapper.convertValue(cadastraClienteAsaas.getBody(), ClienteSistemaResponse.class);
+        return cadastraClienteAsaas.getBody();
     }
 
     public AssinaturaResponse criaAssinaturaAsaas(ClienteSistemaEntity clienteSistema) {
@@ -169,24 +173,25 @@ public class ClienteSistemaService {
                                         .mobilePhone(criaNumeroMobileComObjetoTelefone(clienteSistema.getTelefone()))
                                         .postalCode(clienteSistema.getEndereco().getCodigoPostal())
                                         .addressNumber(clienteSistema.getEndereco().getNumero().toString())
+                                        .addressComplement(clienteSistema.getEndereco().getComplemento())
                                         .build()
                                         : null
                         )
                         .build();
 
-        ResponseEntity<?> cadastraAssinaturaAsaas;
+        ResponseEntity<AssinaturaResponse> cadastraAssinaturaAsaas;
 
         try {
-            cadastraAssinaturaAsaas = asaasProxy.cadastraNovoPlano(assinaturaRequest, System.getenv("TOKEN_ASAAS"));
+            cadastraAssinaturaAsaas = asaasProxy.cadastraNovoPlano(assinaturaRequest, System.getenv(TOKEN_ASAAS));
         } catch (Exception e) {
-            throw new FeignConnectionException("Ocorreu uma falha na comunicação com a integradora de pagamentos: " + e.getMessage());
+            throw new FeignConnectionException(FALHA_COMUNICACAO_ASAAS + e.getMessage());
         }
 
         if (cadastraAssinaturaAsaas.getStatusCodeValue() != 200)
             throw new InvalidRequestException("Ocorreu um erro no processo de criação da assinatura: "
                     + cadastraAssinaturaAsaas.getBody());
 
-        return objectMapper.convertValue(cadastraAssinaturaAsaas.getBody(), AssinaturaResponse.class);
+        return cadastraAssinaturaAsaas.getBody();
     }
 
     private String criaNumeroMobileComObjetoTelefone(TelefoneEntity telefone) {
@@ -194,6 +199,80 @@ public class ClienteSistemaService {
         if (!telefone.getTipoTelefoneEnum().equals(TipoTelefoneEnum.FIXO))
             numeroMobile = telefone.getPrefixo().toString() + telefone.getNumero().toString();
         return numeroMobile;
+    }
+
+    public ClienteSistemaEntity atualizaDadosCliente(Long id, ClienteSistemaDto clienteSistemaDto) {
+        Optional<ClienteSistemaEntity> clienteOptional = clienteSistemaRepositoryImpl.implementaBuscaPorId(id);
+        ClienteSistemaEntity clienteSistema;
+
+        if (clienteOptional.isPresent()) clienteSistema = clienteOptional.get();
+        else throw new ObjectNotFoundException("Nenhum cliente foi encontrado com o id informado");
+
+        if (!clienteSistema.getEmail().equals(clienteSistemaDto.getEmail()))
+            validaSeEmailJaExiste(clienteSistemaDto);
+
+        ClienteSistemaEntity clienteAtualizado = ClienteSistemaEntity.builder()
+                .id(clienteSistema.getId())
+                .codigoClienteAsaas(clienteSistema.getCodigoClienteAsaas())
+                .dataCadastro(clienteSistema.getDataCadastro())
+                .horaCadastro(clienteSistema.getHoraCadastro())
+                .dataNascimento(clienteSistema.getDataNascimento())
+                .email(clienteSistemaDto.getEmail())
+                .nome(clienteSistema.getNome())
+                .senha(clienteSistemaDto.getSenha())
+                .cpf(clienteSistema.getCpf())
+                .saldo(clienteSistema.getSaldo())
+                .plano(clienteSistema.getPlano())
+                .telefone(TelefoneEntity.builder()
+                        .tipoTelefoneEnum(clienteSistemaDto.getTelefone().getTipoTelefoneEnum())
+                        .prefixo(clienteSistemaDto.getTelefone().getPrefixo())
+                        .numero(clienteSistemaDto.getTelefone().getNumero())
+                        .build())
+                .endereco(EnderecoEntity.builder()
+                        .logradouro(clienteSistemaDto.getEndereco().getLogradouro())
+                        .numero(clienteSistemaDto.getEndereco().getNumero())
+                        .bairro(clienteSistemaDto.getEndereco().getBairro())
+                        .codigoPostal(clienteSistemaDto.getEndereco().getCodigoPostal())
+                        .cidade(clienteSistemaDto.getEndereco().getCidade())
+                        .estadoEnum(clienteSistemaDto.getEndereco().getEstadoEnum())
+                        .build())
+                .cartao(clienteSistema.getCartao())
+                .pagamentos(clienteSistema.getPagamentos())
+                .empresas(clienteSistema.getEmpresas())
+                .build();
+
+        clienteSistemaRepositoryImpl.implementaPersistencia(clienteAtualizado);
+        atualizaDadosClienteAsaas(clienteAtualizado);
+
+        return clienteAtualizado;
+    }
+
+    public void atualizaDadosClienteAsaas(ClienteSistemaEntity clienteAtualizado) {
+        ClienteSistemaRequest clienteSistemaRequest = ClienteSistemaRequest.builder()
+                .name(clienteAtualizado.getNome())
+                .email(clienteAtualizado.getEmail())
+                .phone(clienteAtualizado.getTelefone().getPrefixo().toString() + clienteAtualizado.getTelefone().getNumero())
+                .mobilePhone(criaNumeroMobileComObjetoTelefone(clienteAtualizado.getTelefone()))
+                .cpfCnpj(clienteAtualizado.getCpf())
+                .postalCode(clienteAtualizado.getEndereco().getCodigoPostal())
+                .address(clienteAtualizado.getEndereco().getLogradouro())
+                .addressNumber(clienteAtualizado.getEndereco().getNumero().toString())
+                .complement(clienteAtualizado.getEndereco().getComplemento())
+                .province(clienteAtualizado.getEndereco().getBairro())
+                .build();
+
+        ResponseEntity<ClienteSistemaResponse> atualizaClienteAsaas;
+
+        try {
+            atualizaClienteAsaas = asaasProxy.atualizaDadosCliente(clienteAtualizado.getCodigoClienteAsaas(),
+                    clienteSistemaRequest, System.getenv(TOKEN_ASAAS));
+        } catch (Exception e) {
+            throw new FeignConnectionException(FALHA_COMUNICACAO_ASAAS + e.getMessage());
+        }
+
+        if (atualizaClienteAsaas.getStatusCodeValue() != 200)
+            throw new InvalidRequestException("Ocorreu um erro no processo atualização dos dados cadastrais do cliente: "
+                    + atualizaClienteAsaas.getBody());
     }
 
 }
