@@ -23,8 +23,8 @@ public class PagamentoSistemaDtoBuilder {
         builder.pagamentoSistemaDto.setVencimento("2023-02-03");
         builder.pagamentoSistemaDto.setFormaPagamentoSistemaEnum(FormaPagamentoSistemaEnum.CREDIT_CARD);
         builder.pagamentoSistemaDto.setStatusPagamentoSistemaEnum(StatusPagamentoSistemaEnum.APROVADO);
-        builder.pagamentoSistemaDto.setCartao(CartaoDtoBuilder.builder().build());
-        builder.pagamentoSistemaDto.setClienteSistema(ClienteSistemaDtoBuilder.builder().build());
+        builder.pagamentoSistemaDto.setCartao(null);
+        builder.pagamentoSistemaDto.setClienteSistema(null);
         return builder;
     }
 

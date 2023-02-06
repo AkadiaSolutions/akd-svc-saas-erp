@@ -17,6 +17,7 @@ public class EnderecoEntityBuilder {
         builder.enderecoEntity.setCodigoPostal("02442-090");
         builder.enderecoEntity.setBairro("Lauzane Paulista");
         builder.enderecoEntity.setCidade("São Paulo");
+        builder.enderecoEntity.setComplemento("Casa 4");
         builder.enderecoEntity.setEstadoEnum(EstadoEnum.SP);
         return builder;
     }

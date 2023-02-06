@@ -1,7 +1,6 @@
 package br.akd.svc.akadia.models.dto.bckoff.mocks;
 
 import br.akd.svc.akadia.models.dto.bckoff.ChamadoDto;
-import br.akd.svc.akadia.models.dto.site.mocks.EmpresaDtoBuilder;
 import br.akd.svc.akadia.models.enums.bckoff.CategoriaChamadoEnum;
 import br.akd.svc.akadia.models.enums.bckoff.StatusChamadoEnum;
 
@@ -25,16 +24,11 @@ public class ChamadoDtoBuilder {
         builder.chamadoDto.setHoraBaixa(LocalTime.of(14, 25).toString());
         builder.chamadoDto.setCategoriaChamadoEnum(CategoriaChamadoEnum.PROBLEMA_TECNICO);
         builder.chamadoDto.setStatusChamadoEnum(StatusChamadoEnum.FINALIZADO);
-        builder.chamadoDto.setAtendenteResponsavel(ColaboradorInternoDtoBuilder.builder().comParentescos().comChamados().build());
-        builder.chamadoDto.setEmpresa(EmpresaDtoBuilder.builder().build());
-        builder.chamadoDto.setAvaliacao(AvaliacaoDtoBuilder.builder().build());
+        builder.chamadoDto.setAtendenteResponsavel(null);
+        builder.chamadoDto.setEmpresa(null);
+        builder.chamadoDto.setAvaliacao(null);
         builder.chamadoDto.setMensagens(new ArrayList<>());
         return builder;
-    }
-
-    public ChamadoDtoBuilder comMensagens() {
-        this.chamadoDto.getMensagens().add(MensagemDtoBuilder.builder().build());
-        return this;
     }
 
     public ChamadoDto build() {

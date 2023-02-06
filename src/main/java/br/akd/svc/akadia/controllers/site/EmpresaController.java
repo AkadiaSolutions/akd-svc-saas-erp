@@ -2,7 +2,7 @@ package br.akd.svc.akadia.controllers.site;
 
 import br.akd.svc.akadia.models.dto.site.EmpresaDto;
 import br.akd.svc.akadia.models.entities.site.EmpresaEntity;
-import br.akd.svc.akadia.services.global.exceptions.InvalidRequestException;
+import br.akd.svc.akadia.services.exceptions.InvalidRequestException;
 import br.akd.svc.akadia.services.site.EmpresaService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

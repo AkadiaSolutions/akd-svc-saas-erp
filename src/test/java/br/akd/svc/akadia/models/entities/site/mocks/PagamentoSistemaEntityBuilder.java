@@ -23,8 +23,8 @@ public class PagamentoSistemaEntityBuilder {
         builder.pagamentoSistemaEntity.setVencimento("2023-02-03");
         builder.pagamentoSistemaEntity.setFormaPagamentoSistemaEnum(FormaPagamentoSistemaEnum.CREDIT_CARD);
         builder.pagamentoSistemaEntity.setStatusPagamentoSistemaEnum(StatusPagamentoSistemaEnum.APROVADO);
-        builder.pagamentoSistemaEntity.setCartao(CartaoEntityBuilder.builder().build());
-        builder.pagamentoSistemaEntity.setClienteSistema(ClienteSistemaEntityBuilder.builder().build());
+        builder.pagamentoSistemaEntity.setCartao(null);
+        builder.pagamentoSistemaEntity.setClienteSistema(null);
         return builder;
     }
 

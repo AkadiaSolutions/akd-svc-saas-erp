@@ -29,27 +29,33 @@ public class ClienteSistemaEntityBuilder {
         builder.clienteSistemaEntity.setSenha("123");
         builder.clienteSistemaEntity.setCpf("12345678910");
         builder.clienteSistemaEntity.setSaldo(0.00);
-        builder.clienteSistemaEntity.setPlano(PlanoEntityBuilder.builder().build());
-        builder.clienteSistemaEntity.setTelefone(TelefoneEntityBuilder.builder().build());
-        builder.clienteSistemaEntity.setEndereco(EnderecoEntityBuilder.builder().build());
-        builder.clienteSistemaEntity.setCartao(CartaoEntityBuilder.builder().build());
+        builder.clienteSistemaEntity.setPlano(null);
+        builder.clienteSistemaEntity.setTelefone(null);
+        builder.clienteSistemaEntity.setEndereco(null);
+        builder.clienteSistemaEntity.setCartao(null);
         builder.clienteSistemaEntity.setPagamentos(new ArrayList<>());
         builder.clienteSistemaEntity.setEmpresas(new ArrayList<>());
         return builder;
     }
 
+    public ClienteSistemaEntityBuilder comOutroEmail() {
+        this.clienteSistemaEntity.setEmail("ciclano@gmail.com");
+        return this;
+    }
+
+    public ClienteSistemaEntityBuilder comEndereco() {
+        this.clienteSistemaEntity.setEndereco(EnderecoEntityBuilder.builder().build());
+        return this;
+    }
+
+    public ClienteSistemaEntityBuilder comTelefone() {
+        this.clienteSistemaEntity.setTelefone(TelefoneEntityBuilder.builder().build());
+        return this;
+    }
+
     public ClienteSistemaEntityBuilder comPlanoComPagamentoNoCredito() {
         this.clienteSistemaEntity.setPlano(PlanoEntityBuilder.builder().pagamentoNoCredito().build());
-        return this;
-    }
-
-    public ClienteSistemaEntityBuilder comPagamento() {
-        this.clienteSistemaEntity.getPagamentos().add(PagamentoSistemaEntityBuilder.builder().build());
-        return this;
-    }
-
-    public ClienteSistemaEntityBuilder comEmpresa() {
-        this.clienteSistemaEntity.getEmpresas().add(EmpresaEntityBuilder.builder().build());
+        this.clienteSistemaEntity.setCartao(CartaoEntityBuilder.builder().build());
         return this;
     }
 

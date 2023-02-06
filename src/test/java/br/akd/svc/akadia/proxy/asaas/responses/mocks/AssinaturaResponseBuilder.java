@@ -31,6 +31,11 @@ public class AssinaturaResponseBuilder {
         return builder;
     }
 
+    public AssinaturaResponseBuilder comCreditCard() {
+        this.assinaturaResponse.setCreditCard(CreditCardResponseBuilder.builder().build());
+        return this;
+    }
+
     public AssinaturaResponse build() {
         return assinaturaResponse;
     }

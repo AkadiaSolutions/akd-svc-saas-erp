@@ -19,7 +19,10 @@ class PagamentoSistemaDtoTest {
     @DisplayName("Deve testar dataBuilder")
     void deveTestarDataBuilder() {
         Assertions.assertEquals(
-                "PagamentoSistemaDto(id=1, dataCadastro=2023-02-03, horaCadastro=10:57, codigoTransacao=129371283971, valor=650.0, vencimento=2023-02-03, formaPagamentoSistemaEnum=CREDIT_CARD, statusPagamentoSistemaEnum=APROVADO, cartao=CartaoDto(id=1, nomePortador=Gabriel, cpfCnpj=47153427821, numero=5162306219378829, ccv=318, mesExpiracao=8, anoExpiracao=2025, tokenCartao=null, ativo=true, bandeiraCartaoEnum=VISA), clienteSistema=ClienteSistemaDto(id=1, codigoClienteAsaas=cus_000005113026, dataCadastro=2023-02-03, horaCadastro=10:40, dataNascimento=2023-02-03, email=fulano@gmail.com, nome=Fulano, senha=123, cpf=12345678910, saldo=0.0, plano=PlanoDto(id=1, codigoAssinaturaAsaas=sub_jaIvjZ8TMlXZ, dataContratacao=2023-02-03, horaContratacao=09:58, tipoPlanoEnum=BASIC, statusPlanoEnum=ATIVO, formaPagamentoSistemaEnum=BOLETO), telefone=TelefoneDto(id=1, prefixo=11, numero=979815415, tipoTelefoneEnum=MOVEL_WHATSAPP), endereco=EnderecoDto(id=1, logradouro=Avenida Coronel Manuel Py, numero=583, bairro=Lauzane Paulista, codigoPostal=02442-090, cidade=São Paulo, estadoEnum=SP), cartao=CartaoDto(id=1, nomePortador=Gabriel, cpfCnpj=47153427821, numero=5162306219378829, ccv=318, mesExpiracao=8, anoExpiracao=2025, tokenCartao=null, ativo=true, bandeiraCartaoEnum=VISA), pagamentos=[], empresas=[]))",
+                "PagamentoSistemaDto(id=1, dataCadastro=2023-02-03, horaCadastro=10:57, " +
+                        "codigoTransacao=129371283971, valor=650.0, vencimento=2023-02-03, " +
+                        "formaPagamentoSistemaEnum=CREDIT_CARD, statusPagamentoSistemaEnum=APROVADO, cartao=null, " +
+                        "clienteSistema=null)",
                 PagamentoSistemaDtoBuilder.builder().build().toString()
         );
 
@@ -42,7 +45,13 @@ class PagamentoSistemaDtoTest {
         );
 
         Assertions.assertEquals(
-                "PagamentoSistemaDto(id=1, dataCadastro=2023-02-03, horaCadastro=15:50, codigoTransacao=12345678910, valor=650.0, vencimento=2023-02-05, formaPagamentoSistemaEnum=PIX, statusPagamentoSistemaEnum=REPROVADO, cartao=null, clienteSistema=ClienteSistemaDto(id=1, codigoClienteAsaas=cus_000005113026, dataCadastro=2023-02-03, horaCadastro=10:40, dataNascimento=2023-02-03, email=fulano@gmail.com, nome=Fulano, senha=123, cpf=12345678910, saldo=0.0, plano=PlanoDto(id=1, codigoAssinaturaAsaas=sub_jaIvjZ8TMlXZ, dataContratacao=2023-02-03, horaContratacao=09:58, tipoPlanoEnum=BASIC, statusPlanoEnum=ATIVO, formaPagamentoSistemaEnum=BOLETO), telefone=TelefoneDto(id=1, prefixo=11, numero=979815415, tipoTelefoneEnum=MOVEL_WHATSAPP), endereco=EnderecoDto(id=1, logradouro=Avenida Coronel Manuel Py, numero=583, bairro=Lauzane Paulista, codigoPostal=02442-090, cidade=São Paulo, estadoEnum=SP), cartao=CartaoDto(id=1, nomePortador=Gabriel, cpfCnpj=47153427821, numero=5162306219378829, ccv=318, mesExpiracao=8, anoExpiracao=2025, tokenCartao=null, ativo=true, bandeiraCartaoEnum=VISA), pagamentos=[], empresas=[]))",
+                "PagamentoSistemaDto(id=1, dataCadastro=2023-02-03, horaCadastro=15:50, " +
+                        "codigoTransacao=12345678910, valor=650.0, vencimento=2023-02-05, " +
+                        "formaPagamentoSistemaEnum=PIX, statusPagamentoSistemaEnum=REPROVADO, cartao=null, " +
+                        "clienteSistema=ClienteSistemaDto(id=1, codigoClienteAsaas=cus_000005113026, " +
+                        "dataCadastro=2023-02-03, horaCadastro=10:40, dataNascimento=2023-02-03, email=fulano@gmail.com, " +
+                        "nome=Fulano, senha=123, cpf=12345678910, saldo=0.0, plano=null, telefone=null, endereco=null, " +
+                        "cartao=null, pagamentos=[], empresas=[]))",
                 pagamentoSistemaDto.toString()
         );
 

@@ -29,27 +29,28 @@ public class ClienteSistemaDtoBuilder {
         builder.clienteSistemaDto.setSenha("123");
         builder.clienteSistemaDto.setCpf("12345678910");
         builder.clienteSistemaDto.setSaldo(0.00);
-        builder.clienteSistemaDto.setPlano(PlanoDtoBuilder.builder().build());
-        builder.clienteSistemaDto.setTelefone(TelefoneDtoBuilder.builder().build());
-        builder.clienteSistemaDto.setEndereco(EnderecoDtoBuilder.builder().build());
-        builder.clienteSistemaDto.setCartao(CartaoDtoBuilder.builder().build());
+        builder.clienteSistemaDto.setPlano(null);
+        builder.clienteSistemaDto.setTelefone(null);
+        builder.clienteSistemaDto.setEndereco(null);
+        builder.clienteSistemaDto.setCartao(null);
         builder.clienteSistemaDto.setPagamentos(new ArrayList<>());
         builder.clienteSistemaDto.setEmpresas(new ArrayList<>());
         return builder;
     }
 
+    public ClienteSistemaDtoBuilder comTelefone() {
+        this.clienteSistemaDto.setTelefone(TelefoneDtoBuilder.builder().build());
+        return this;
+    }
+
+    public ClienteSistemaDtoBuilder comEndereco() {
+        this.clienteSistemaDto.setEndereco(EnderecoDtoBuilder.builder().build());
+        return this;
+    }
+
     public ClienteSistemaDtoBuilder comPlanoComPagamentoNoCredito() {
         this.clienteSistemaDto.setPlano(PlanoDtoBuilder.builder().pagamentoNoCredito().build());
-        return this;
-    }
-
-    public ClienteSistemaDtoBuilder comPagamento() {
-        this.clienteSistemaDto.getPagamentos().add(PagamentoSistemaDtoBuilder.builder().build());
-        return this;
-    }
-
-    public ClienteSistemaDtoBuilder comEmpresa() {
-        this.clienteSistemaDto.getEmpresas().add(EmpresaDtoBuilder.builder().build());
+        this.clienteSistemaDto.setCartao(CartaoDtoBuilder.builder().build());
         return this;
     }
 

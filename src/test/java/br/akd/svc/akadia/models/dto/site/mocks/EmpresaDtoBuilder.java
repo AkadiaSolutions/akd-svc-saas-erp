@@ -1,10 +1,6 @@
 package br.akd.svc.akadia.models.dto.site.mocks;
 
-import br.akd.svc.akadia.models.dto.bckoff.mocks.ChamadoDtoBuilder;
-import br.akd.svc.akadia.models.dto.global.mocks.EnderecoDtoBuilder;
-import br.akd.svc.akadia.models.dto.global.mocks.TelefoneDtoBuilder;
 import br.akd.svc.akadia.models.dto.site.EmpresaDto;
-import br.akd.svc.akadia.models.dto.site.fiscal.mocks.ConfigFiscalEmpresaDtoBuilder;
 import br.akd.svc.akadia.models.enums.site.SegmentoEmpresaEnum;
 
 import java.time.LocalDate;
@@ -36,18 +32,13 @@ public class EmpresaDtoBuilder {
         builder.empresaDto.setCpfResponsavel("47153427821");
         builder.empresaDto.setLogo(new byte[]{});
         builder.empresaDto.setSegmentoEmpresaEnum(SegmentoEmpresaEnum.BATERIA_AUTOMOTIVA);
-        builder.empresaDto.setTelefone(TelefoneDtoBuilder.builder().build());
-        builder.empresaDto.setClienteSistema(ClienteSistemaDtoBuilder.builder().build());
-        builder.empresaDto.setConfigFiscalEmpresa(ConfigFiscalEmpresaDtoBuilder.builder().build());
-        builder.empresaDto.setEndereco(EnderecoDtoBuilder.builder().build());
+        builder.empresaDto.setTelefone(null);
+        builder.empresaDto.setClienteSistema(null);
+        builder.empresaDto.setConfigFiscalEmpresa(null);
+        builder.empresaDto.setEndereco(null);
         builder.empresaDto.setChamados(new ArrayList<>());
 
         return builder;
-    }
-
-    public EmpresaDtoBuilder comChamado() {
-        this.empresaDto.getChamados().add(ChamadoDtoBuilder.builder().build());
-        return this;
     }
 
     public EmpresaDto build() {

@@ -1,7 +1,6 @@
 package br.akd.svc.akadia.models.entities.bckoff.mocks;
 
 import br.akd.svc.akadia.models.entities.bckoff.ChamadoEntity;
-import br.akd.svc.akadia.models.entities.site.mocks.EmpresaEntityBuilder;
 import br.akd.svc.akadia.models.enums.bckoff.CategoriaChamadoEnum;
 import br.akd.svc.akadia.models.enums.bckoff.StatusChamadoEnum;
 
@@ -11,7 +10,9 @@ import java.util.ArrayList;
 
 public class ChamadoEntityBuilder {
 
-    ChamadoEntityBuilder(){}
+    ChamadoEntityBuilder() {
+    }
+
     ChamadoEntity chamadoEntity;
 
     public static ChamadoEntityBuilder builder() {
@@ -25,16 +26,11 @@ public class ChamadoEntityBuilder {
         builder.chamadoEntity.setHoraBaixa(LocalTime.of(14, 25).toString());
         builder.chamadoEntity.setCategoriaChamadoEnum(CategoriaChamadoEnum.PROBLEMA_TECNICO);
         builder.chamadoEntity.setStatusChamadoEnum(StatusChamadoEnum.FINALIZADO);
-        builder.chamadoEntity.setAtendenteResponsavel(ColaboradorInternoEntityBuilder.builder().comParentescos().comChamados().build());
-        builder.chamadoEntity.setEmpresa(EmpresaEntityBuilder.builder().build());
-        builder.chamadoEntity.setAvaliacao(AvaliacaoEntityBuilder.builder().build());
+        builder.chamadoEntity.setAtendenteResponsavel(null);
+        builder.chamadoEntity.setEmpresa(null);
+        builder.chamadoEntity.setAvaliacao(null);
         builder.chamadoEntity.setMensagens(new ArrayList<>());
         return builder;
-    }
-
-    public ChamadoEntityBuilder comMensagens() {
-        this.chamadoEntity.getMensagens().add(MensagemEntityBuilder.builder().build());
-        return this;
     }
 
     public ChamadoEntity build() {

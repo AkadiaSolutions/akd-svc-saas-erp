@@ -1,10 +1,6 @@
 package br.akd.svc.akadia.models.entities.site;
 
-import br.akd.svc.akadia.models.entities.global.mocks.EnderecoEntityBuilder;
-import br.akd.svc.akadia.models.entities.global.mocks.TelefoneEntityBuilder;
-import br.akd.svc.akadia.models.entities.site.mocks.CartaoEntityBuilder;
 import br.akd.svc.akadia.models.entities.site.mocks.ClienteSistemaEntityBuilder;
-import br.akd.svc.akadia.models.entities.site.mocks.PlanoEntityBuilder;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -23,16 +19,9 @@ class ClienteSistemaEntityTest {
     void deveTestarDataBuilder() {
         Assertions.assertEquals(
                 "ClienteSistemaEntity(id=1, codigoClienteAsaas=cus_000005113026, dataCadastro=2023-02-03, " +
-                        "horaCadastro=10:40, dataNascimento=2023-02-03, email=fulano@gmail.com, nome=Fulano, senha=123, " +
-                        "cpf=12345678910, saldo=0.0, plano=PlanoEntity(id=1, codigoAssinaturaAsaas=sub_jaIvjZ8TMlXZ, " +
-                        "dataContratacao=2023-02-03, horaContratacao=09:58, tipoPlanoEnum=BASIC, statusPlanoEnum=ATIVO, " +
-                        "formaPagamentoSistemaEnum=BOLETO), telefone=TelefoneEntity(id=1, prefixo=11, numero=979815415, " +
-                        "tipoTelefoneEnum=MOVEL_WHATSAPP), endereco=EnderecoEntity(id=1, logradouro=Avenida Coronel " +
-                        "Manuel Py, numero=583, bairro=Lauzane Paulista, codigoPostal=02442-090, cidade=São Paulo, " +
-                        "estadoEnum=SP), cartao=CartaoEntity(id=1, nomePortador=Gabriel, cpfCnpj=47153427821, " +
-                        "numero=5162306219378829, ccv=318, mesExpiracao=8, anoExpiracao=2025, tokenCartao=null, " +
-                        "ativo=true, bandeiraCartaoEnum=VISA))",
-                ClienteSistemaEntityBuilder.builder().comEmpresa().comPagamento().build().toString()
+                        "horaCadastro=10:40, dataNascimento=2023-02-03, email=fulano@gmail.com, nome=Fulano, " +
+                        "senha=123, cpf=12345678910, saldo=0.0, plano=null, telefone=null, endereco=null, cartao=null)",
+                ClienteSistemaEntityBuilder.builder().build().toString()
         );
 
     }
@@ -51,24 +40,17 @@ class ClienteSistemaEntityTest {
                 "123",
                 "12345678910",
                 0.00,
-                PlanoEntityBuilder.builder().build(),
-                TelefoneEntityBuilder.builder().build(),
-                EnderecoEntityBuilder.builder().build(),
-                CartaoEntityBuilder.builder().build(),
+                null,
+                null,
+                null,
+                null,
                 new ArrayList<>(),
                 new ArrayList<>()
         );
         Assertions.assertEquals(
                 "ClienteSistemaEntity(id=1, codigoClienteAsaas=cus_000005113026, dataCadastro=2023-02-03, " +
-                        "horaCadastro=10:40, dataNascimento=2023-02-03, email=fulano@gmail.com, nome=fulano, " +
-                        "senha=123, cpf=12345678910, saldo=0.0, plano=PlanoEntity(id=1, " +
-                        "codigoAssinaturaAsaas=sub_jaIvjZ8TMlXZ, dataContratacao=2023-02-03, horaContratacao=09:58, " +
-                        "tipoPlanoEnum=BASIC, statusPlanoEnum=ATIVO, formaPagamentoSistemaEnum=BOLETO), " +
-                        "telefone=TelefoneEntity(id=1, prefixo=11, numero=979815415, tipoTelefoneEnum=MOVEL_WHATSAPP), " +
-                        "endereco=EnderecoEntity(id=1, logradouro=Avenida Coronel Manuel Py, numero=583, " +
-                        "bairro=Lauzane Paulista, codigoPostal=02442-090, cidade=São Paulo, estadoEnum=SP), " +
-                        "cartao=CartaoEntity(id=1, nomePortador=Gabriel, cpfCnpj=47153427821, numero=5162306219378829, " +
-                        "ccv=318, mesExpiracao=8, anoExpiracao=2025, tokenCartao=null, ativo=true, bandeiraCartaoEnum=VISA))",
+                        "horaCadastro=10:40, dataNascimento=2023-02-03, email=fulano@gmail.com, nome=fulano, senha=123, " +
+                        "cpf=12345678910, saldo=0.0, plano=null, telefone=null, endereco=null, cartao=null)",
                 clienteSistemaEntity.toString()
         );
 
@@ -88,25 +70,18 @@ class ClienteSistemaEntityTest {
                 .senha("123")
                 .cpf("12345678910")
                 .saldo(0.00)
-                .plano(PlanoEntityBuilder.builder().build())
-                .telefone(TelefoneEntityBuilder.builder().build())
-                .endereco(EnderecoEntityBuilder.builder().build())
-                .cartao(CartaoEntityBuilder.builder().build())
+                .plano(null)
+                .telefone(null)
+                .endereco(null)
+                .cartao(null)
                 .pagamentos(new ArrayList<>())
                 .empresas(new ArrayList<>())
                 .build();
 
         Assertions.assertEquals(
                 "ClienteSistemaEntity(id=1, codigoClienteAsaas=cus_000005113026, dataCadastro=2023-02-03, " +
-                        "horaCadastro=10:40, dataNascimento=2023-02-03, email=fulano@gmail.com, nome=fulano, " +
-                        "senha=123, cpf=12345678910, saldo=0.0, plano=PlanoEntity(id=1, " +
-                        "codigoAssinaturaAsaas=sub_jaIvjZ8TMlXZ, dataContratacao=2023-02-03, horaContratacao=09:58, " +
-                        "tipoPlanoEnum=BASIC, statusPlanoEnum=ATIVO, formaPagamentoSistemaEnum=BOLETO), " +
-                        "telefone=TelefoneEntity(id=1, prefixo=11, numero=979815415, tipoTelefoneEnum=MOVEL_WHATSAPP), " +
-                        "endereco=EnderecoEntity(id=1, logradouro=Avenida Coronel Manuel Py, numero=583, " +
-                        "bairro=Lauzane Paulista, codigoPostal=02442-090, cidade=São Paulo, estadoEnum=SP), " +
-                        "cartao=CartaoEntity(id=1, nomePortador=Gabriel, cpfCnpj=47153427821, numero=5162306219378829, " +
-                        "ccv=318, mesExpiracao=8, anoExpiracao=2025, tokenCartao=null, ativo=true, bandeiraCartaoEnum=VISA))",
+                        "horaCadastro=10:40, dataNascimento=2023-02-03, email=fulano@gmail.com, nome=fulano, senha=123, " +
+                        "cpf=12345678910, saldo=0.0, plano=null, telefone=null, endereco=null, cartao=null)",
                 clienteSistemaEntity.toString()
         );
     }
