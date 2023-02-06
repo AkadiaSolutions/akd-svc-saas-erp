@@ -3,15 +3,11 @@ package br.akd.svc.akadia.services.site;
 import br.akd.svc.akadia.models.dto.site.mocks.ClienteSistemaDtoBuilder;
 import br.akd.svc.akadia.models.entities.site.mocks.ClienteSistemaEntityBuilder;
 import br.akd.svc.akadia.proxy.asaas.AsaasProxy;
-import br.akd.svc.akadia.proxy.asaas.responses.AssinaturaResponse;
-import br.akd.svc.akadia.proxy.asaas.responses.ClienteSistemaResponse;
 import br.akd.svc.akadia.proxy.asaas.responses.mocks.AssinaturaResponseBuilder;
 import br.akd.svc.akadia.proxy.asaas.responses.mocks.ClienteSistemaResponseBuilder;
 import br.akd.svc.akadia.repositories.site.impl.ClienteSistemaRepositoryImpl;
-import br.akd.svc.akadia.services.global.exceptions.FeignConnectionException;
-import br.akd.svc.akadia.services.global.exceptions.InvalidRequestException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.var;
+import br.akd.svc.akadia.services.exceptions.FeignConnectionException;
+import br.akd.svc.akadia.services.exceptions.InvalidRequestException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -40,9 +36,6 @@ class ClienteSistemaServiceTest {
 
     @Mock
     ClienteSistemaRepositoryImpl clienteSistemaRepositoryImpl;
-
-    @Mock
-    ObjectMapper objectMapper;
 
     @Mock
     AsaasProxy asaasProxy;
@@ -95,80 +88,46 @@ class ClienteSistemaServiceTest {
     @DisplayName("Deve testar o método de cadastro de um novo cliente")
     void deveTestarCadastroDeNovoCliente() {
 
-        var responseEntityCadastraCliente = new ResponseEntity("{object=customer, id=cus_000005116731, " +
-                "dateCreated=2023-02-05, name=Gabriel Henrique Lagrota, email=gabriellagrota23@gmail.com, company=null, " +
-                "phone=11979815415, mobilePhone=11979815415, address=null, addressNumber=null, complement=null, " +
-                "province=null, postalCode=null, cpfCnpj=47153427821, personType=FISICA, deleted=false, " +
-                "additionalEmails=null, externalReference=null, notificationDisabled=false, observations=null, " +
-                "municipalInscription=null, stateInscription=null, canDelete=true, cannotBeDeletedReason=null, " +
-                "canEdit=true, cannotEditReason=null, foreignCustomer=false, city=null, state=null, country=Brasil}",
-                HttpStatus.OK);
-
-        var responseEntityAssinaPlano = new ResponseEntity("{object=subscription, id=sub_C2rGa18j8cT4, " +
-                "dateCreated=2023-02-06, customer=cus_000005118516, paymentLink=null, value=250.0, " +
-                "nextDueDate=2023-03-13, cycle=MONTHLY, description=Assinatura de plano Basic, billingType=CREDIT_CARD, " +
-                "deleted=false, status=ACTIVE, externalReference=null, creditCard={creditCardNumber=8829, " +
-                "creditCardBrand=MASTERCARD, creditCardToken=c127baad-5943-45dd-a85e-8bbe3fb5c01a}, " +
-                "sendPaymentByPostalService=false, fine={value=0.0, type=FIXED}, interest={value=0.0, type=PERCENTAGE}, " +
-                "split=null}", HttpStatus.OK);
-
-
         when(asaasProxy.cadastraNovoCliente(
                 any(),
                 any()))
-                .thenReturn(responseEntityCadastraCliente);
+                .thenReturn(new ResponseEntity<>(ClienteSistemaResponseBuilder.builder().build(), HttpStatus.OK));
 
         when(asaasProxy.cadastraNovoPlano(
                 any(),
                 any()))
-                .thenReturn(responseEntityAssinaPlano);
-
-        when(objectMapper.convertValue("{object=customer, id=cus_000005116731, dateCreated=2023-02-05, name=Gabriel " +
-                "Henrique Lagrota, email=gabriellagrota23@gmail.com, company=null, phone=11979815415, " +
-                "mobilePhone=11979815415, address=null, addressNumber=null, complement=null, province=null, " +
-                "postalCode=null, cpfCnpj=47153427821, personType=FISICA, deleted=false, additionalEmails=null, " +
-                "externalReference=null, notificationDisabled=false, observations=null, municipalInscription=null, " +
-                "stateInscription=null, canDelete=true, cannotBeDeletedReason=null, canEdit=true, cannotEditReason=null, " +
-                "foreignCustomer=false, city=null, state=null, country=Brasil}", ClienteSistemaResponse.class))
-                .thenReturn(ClienteSistemaResponseBuilder.builder().build());
-
-        when(objectMapper.convertValue("{object=subscription, id=sub_C2rGa18j8cT4, " +
-                "dateCreated=2023-02-06, customer=cus_000005118516, paymentLink=null, value=250.0, " +
-                "nextDueDate=2023-03-13, cycle=MONTHLY, description=Assinatura de plano Basic, billingType=CREDIT_CARD, " +
-                "deleted=false, status=ACTIVE, externalReference=null, creditCard={creditCardNumber=8829, " +
-                "creditCardBrand=MASTERCARD, creditCardToken=c127baad-5943-45dd-a85e-8bbe3fb5c01a}, " +
-                "sendPaymentByPostalService=false, fine={value=0.0, type=FIXED}, interest={value=0.0, type=PERCENTAGE}, " +
-                "split=null}", AssinaturaResponse.class))
-                .thenReturn(AssinaturaResponseBuilder.builder().build());
-
-        when(clienteSistemaService.realizaCadastroClienteAsaas(
-                ClienteSistemaEntityBuilder.builder().build()))
-                .thenReturn(ClienteSistemaResponseBuilder.builder().build());
-
-        when(clienteSistemaService.criaAssinaturaAsaas(
-                ClienteSistemaEntityBuilder.builder().build()))
-                .thenReturn(AssinaturaResponseBuilder.builder().build());
+                .thenReturn(new ResponseEntity<>(AssinaturaResponseBuilder.builder().comCreditCard().build(), HttpStatus.OK));
 
         clienteSistemaService.cadastraNovoCliente(
-                ClienteSistemaDtoBuilder.builder().comPlanoComPagamentoNoCredito().build());
+                ClienteSistemaDtoBuilder.builder()
+                        .comTelefone()
+                        .comEndereco()
+                        .comPlanoComPagamentoNoCredito().build());
+
+        Assertions.assertDoesNotThrow(() -> new Exception());
     }
 
     @Test
     @DisplayName("Deve testar o método de cadastro de um novo cliente no ASAAS")
     void deveTestarCadastroDeClienteAsaas() {
-        var responseEntityCadastraCliente = new ResponseEntity("{object=customer, id=cus_000005116731, " +
-                "dateCreated=2023-02-05, name=Gabriel Henrique Lagrota, email=gabriellagrota23@gmail.com, company=null, " +
-                "phone=11979815415, mobilePhone=11979815415, address=null, addressNumber=null, complement=null, " +
-                "province=null, postalCode=null, cpfCnpj=47153427821, personType=FISICA, deleted=false, " +
-                "additionalEmails=null, externalReference=null, notificationDisabled=false, observations=null, " +
-                "municipalInscription=null, stateInscription=null, canDelete=true, cannotBeDeletedReason=null, " +
-                "canEdit=true, cannotEditReason=null, foreignCustomer=false, city=null, state=null, country=Brasil}",
-                HttpStatus.OK);
 
-        when(asaasProxy.cadastraNovoCliente(any(), any())).thenReturn(responseEntityCadastraCliente);
+        when(asaasProxy.cadastraNovoCliente(
+                any(),
+                any()))
+                .thenReturn(new ResponseEntity<>(ClienteSistemaResponseBuilder.builder().build(), HttpStatus.OK));
 
-        clienteSistemaService.realizaCadastroClienteAsaas(
-                ClienteSistemaEntityBuilder.builder().comPlanoComPagamentoNoCredito().build());
+        Assertions.assertEquals(
+                "ClienteSistemaResponse(object=customer, id=cus_000005105823, dateCreated=2023-02-05, " +
+                        "name=Gabriel Lagrota, email=gabriellagrota23@gmail.com, company=null, phone=979815415, " +
+                        "mobilePhone=979815415, address=Avenida Coronel Manuel Py, addressNumber=583, " +
+                        "complement=Sem complemento, province=Lauzane Paulista, postalCode=02442090, " +
+                        "cpfCnpj=47153427821, personType=FISICA, deleted=false, additionalEmails=null, " +
+                        "externalReference=null, notificationDisabled=true, observations=Sem observações, " +
+                        "municipalInscription=46683695908, stateInscription=646681195275, canDelete=true, " +
+                        "cannotBeDeletedReason=null, canEdit=true, cannotEditReason=null, foreignCustomer=false, " +
+                        "city=12565, state=SP, country=Brasil)",
+                clienteSistemaService.realizaCadastroClienteAsaas(ClienteSistemaEntityBuilder.builder().comTelefone()
+                        .comPlanoComPagamentoNoCredito().build()).toString());
     }
 
     @Test
@@ -176,10 +135,9 @@ class ClienteSistemaServiceTest {
     void deveTestarCadastroDeClienteAsaasComExceptionDeFalhaDeComunicacao() {
         when(asaasProxy.cadastraNovoCliente(any(), any()))
                 .thenThrow(new FeignConnectionException("Teste de exception"));
-
         try {
             clienteSistemaService.realizaCadastroClienteAsaas(
-                    ClienteSistemaEntityBuilder.builder().comPlanoComPagamentoNoCredito().build());
+                    ClienteSistemaEntityBuilder.builder().comTelefone().comPlanoComPagamentoNoCredito().build());
             Assertions.fail();
         } catch (Exception e) {
             Assertions.assertEquals("Ocorreu uma falha na comunicação com a integradora de pagamentos: Teste de exception",
@@ -190,12 +148,13 @@ class ClienteSistemaServiceTest {
     @Test
     @DisplayName("Deve testar o método de cadastro de um novo cliente no ASAAS com exception de status code 404")
     void deveTestarCadastroDeClienteAsaasComExceptionDeStatusCode404() {
-        var responseEntityCadastraCliente = new ResponseEntity(HttpStatus.BAD_REQUEST);
-        when(asaasProxy.cadastraNovoCliente(any(), any()))
-                .thenReturn(responseEntityCadastraCliente);
+        when(asaasProxy.cadastraNovoCliente(
+                any(),
+                any()))
+                .thenReturn(new ResponseEntity<>(HttpStatus.BAD_REQUEST));
         try {
             clienteSistemaService.realizaCadastroClienteAsaas(
-                    ClienteSistemaEntityBuilder.builder().comPlanoComPagamentoNoCredito().build());
+                    ClienteSistemaEntityBuilder.builder().comTelefone().comPlanoComPagamentoNoCredito().build());
             Assertions.fail();
         } catch (Exception e) {
             Assertions.assertEquals("Ocorreu um erro no processo de criação do cliente: null",
@@ -206,18 +165,18 @@ class ClienteSistemaServiceTest {
     @Test
     @DisplayName("Deve testar o método de cadastro de uma nova assinatura no ASAAS")
     void deveTestarCadastroDeAssinaturaAsaas() {
-        var responseEntityAssinaPlano = new ResponseEntity("{object=subscription, id=sub_C2rGa18j8cT4, " +
-                "dateCreated=2023-02-06, customer=cus_000005118516, paymentLink=null, value=250.0, " +
-                "nextDueDate=2023-03-13, cycle=MONTHLY, description=Assinatura de plano Basic, billingType=CREDIT_CARD, " +
-                "deleted=false, status=ACTIVE, externalReference=null, creditCard={creditCardNumber=8829, " +
-                "creditCardBrand=MASTERCARD, creditCardToken=c127baad-5943-45dd-a85e-8bbe3fb5c01a}, " +
-                "sendPaymentByPostalService=false, fine={value=0.0, type=FIXED}, interest={value=0.0, type=PERCENTAGE}, " +
-                "split=null}", HttpStatus.OK);
 
-        when(asaasProxy.cadastraNovoPlano(any(), any())).thenReturn(responseEntityAssinaPlano);
+        when(asaasProxy.cadastraNovoPlano(
+                any(),
+                any()))
+                .thenReturn(new ResponseEntity<>(AssinaturaResponseBuilder.builder().build(), HttpStatus.OK));
 
         clienteSistemaService.criaAssinaturaAsaas(
-                ClienteSistemaEntityBuilder.builder().comPlanoComPagamentoNoCredito().build());
+                ClienteSistemaEntityBuilder.builder()
+                        .comTelefone()
+                        .comEndereco()
+                        .comPlanoComPagamentoNoCredito()
+                        .build());
     }
 
     @Test
@@ -225,10 +184,13 @@ class ClienteSistemaServiceTest {
     void deveTestarCadastroDePlanoDeAssinaturaAsaasComExceptionDeFalhaDeComunicacao() {
         when(asaasProxy.cadastraNovoPlano(any(), any()))
                 .thenThrow(new FeignConnectionException("Teste de exception"));
-
         try {
             clienteSistemaService.criaAssinaturaAsaas(
-                    ClienteSistemaEntityBuilder.builder().comPlanoComPagamentoNoCredito().build());
+                    ClienteSistemaEntityBuilder.builder()
+                            .comEndereco()
+                            .comTelefone()
+                            .comPlanoComPagamentoNoCredito()
+                            .build());
             Assertions.fail();
         } catch (Exception e) {
             Assertions.assertEquals("Ocorreu uma falha na comunicação com a integradora de pagamentos: Teste de exception",
@@ -237,17 +199,138 @@ class ClienteSistemaServiceTest {
     }
 
     @Test
-    @DisplayName("Deve testar o método de cadastro de um novo plano de assinatura no ASAAS com exception de status code 404")
-    void deveTestarCadastroDePlanoDeAssinaturaAsaasComExceptionDeStatusCode404() {
-        var responseEntityAssinaPlano = new ResponseEntity(HttpStatus.BAD_REQUEST);
-        when(asaasProxy.cadastraNovoPlano(any(), any()))
-                .thenReturn(responseEntityAssinaPlano);
+    @DisplayName("Deve testar o método de cadastro de um novo plano de assinatura no ASAAS com exception de status code 400")
+    void deveTestarCadastroDePlanoDeAssinaturaAsaasComBadRequest() {
+        when(asaasProxy.cadastraNovoPlano(
+                any(),
+                any()))
+                .thenReturn(new ResponseEntity<>(HttpStatus.BAD_REQUEST));
         try {
             clienteSistemaService.criaAssinaturaAsaas(
-                    ClienteSistemaEntityBuilder.builder().comPlanoComPagamentoNoCredito().build());
+                    ClienteSistemaEntityBuilder.builder()
+                            .comTelefone()
+                            .comPlanoComPagamentoNoCredito()
+                            .comEndereco()
+                            .build());
             Assertions.fail();
         } catch (Exception e) {
             Assertions.assertEquals("Ocorreu um erro no processo de criação da assinatura: null",
+                    e.getMessage());
+        }
+    }
+
+    @Test
+    @DisplayName("Deve testar atualização de dados do cliente")
+    void deveTestarAtualizacaoDeDadosCliente() {
+        when(clienteSistemaRepositoryImpl.implementaBuscaPorId(
+                any()))
+                .thenReturn(Optional.of(ClienteSistemaEntityBuilder.builder().build()));
+
+        when(clienteSistemaRepositoryImpl.implementaPersistencia(
+                any()))
+                .thenReturn(ClienteSistemaEntityBuilder.builder().build());
+
+        when(asaasProxy.atualizaDadosCliente(
+                any(),
+                any(),
+                any()))
+                .thenReturn(new ResponseEntity<>(ClienteSistemaResponseBuilder.builder().build(), HttpStatus.OK));
+
+        clienteSistemaService.atualizaDadosCliente(1L,
+                ClienteSistemaDtoBuilder.builder().comEndereco().comTelefone().comPlanoComPagamentoNoCredito().build());
+    }
+
+    @Test
+    @DisplayName("Deve testar atualização de dados do cliente com exception de id não encontrado")
+    void deveTestarAtualizacaoDeDadosClienteComObjectNotFoundException() {
+        when(clienteSistemaRepositoryImpl.implementaBuscaPorId(
+                any()))
+                .thenReturn(Optional.empty());
+
+        try {
+            clienteSistemaService.atualizaDadosCliente(1L,
+                    ClienteSistemaDtoBuilder.builder().comEndereco().comTelefone().comPlanoComPagamentoNoCredito().build());
+            Assertions.fail();
+        } catch (Exception exception) {
+            Assertions.assertEquals("Nenhum cliente foi encontrado com o id informado",
+                    exception.getMessage());
+        }
+    }
+
+    @Test
+    @DisplayName("Deve testar atualização de dados do cliente com exception de e-mail já existente")
+    void deveTestarAtualizacaoDeDadosClienteComInvalidRequestException() {
+
+        when(clienteSistemaRepositoryImpl.implementaBuscaPorId(
+                any()))
+                .thenReturn(Optional.of(ClienteSistemaEntityBuilder.builder().comOutroEmail().build()));
+
+        when(clienteSistemaRepositoryImpl.implementaBuscaPorEmail(
+                any()))
+                .thenReturn(Optional.of(ClienteSistemaEntityBuilder.builder().build()));
+
+        try {
+            clienteSistemaService.atualizaDadosCliente(1L,
+                    ClienteSistemaDtoBuilder.builder().comEndereco().comTelefone().comPlanoComPagamentoNoCredito().build());
+            Assertions.fail();
+        } catch (Exception exception) {
+            Assertions.assertEquals("O e-mail informado já existe",
+                    exception.getMessage());
+        }
+
+    }
+
+    @Test
+    @DisplayName("Deve testar atualização de dados do cliente na integradora de pagamentos")
+    void deveTestarAtualizacaoDeDadosClienteNaIntegradoraDePagamentos() {
+        when(asaasProxy.atualizaDadosCliente(
+                any(),
+                any(),
+                any()))
+                .thenReturn(new ResponseEntity<>(ClienteSistemaResponseBuilder.builder().build(), HttpStatus.OK));
+
+        clienteSistemaService.atualizaDadosClienteAsaas(ClienteSistemaEntityBuilder.builder().comTelefone().comEndereco().build());
+
+        Assertions.assertDoesNotThrow(() -> new Exception());
+    }
+
+    @Test
+    @DisplayName("Deve testar atualização de dados do cliente na integradora de pagamentos com falha de comunicação")
+    void deveTestarAtualizacaoDeDadosClienteNaIntegradoraDePagamentosComFeignConnectionException() {
+        when(asaasProxy.atualizaDadosCliente(any(), any(), any()))
+                .thenThrow(new FeignConnectionException("Teste de exception"));
+        try {
+            clienteSistemaService.atualizaDadosClienteAsaas(
+                    ClienteSistemaEntityBuilder.builder()
+                            .comEndereco()
+                            .comTelefone()
+                            .comPlanoComPagamentoNoCredito()
+                            .build());
+            Assertions.fail();
+        } catch (Exception e) {
+            Assertions.assertEquals("Ocorreu uma falha na comunicação com a integradora de pagamentos: Teste de exception",
+                    e.getMessage());
+        }
+    }
+
+    @Test
+    @DisplayName("Deve testar o método de atualização de dados do cliente no ASAAS com exception de status code 400")
+    void deveTestarAtualizacaoDeCadastroClienteAsaasComBadRequest() {
+        when(asaasProxy.atualizaDadosCliente(
+                any(),
+                any(),
+                any()))
+                .thenReturn(new ResponseEntity<>(HttpStatus.BAD_REQUEST));
+        try {
+            clienteSistemaService.atualizaDadosClienteAsaas(
+                    ClienteSistemaEntityBuilder.builder()
+                            .comTelefone()
+                            .comPlanoComPagamentoNoCredito()
+                            .comEndereco()
+                            .build());
+            Assertions.fail();
+        } catch (Exception e) {
+            Assertions.assertEquals("Ocorreu um erro no processo atualização dos dados cadastrais do cliente: null",
                     e.getMessage());
         }
     }
