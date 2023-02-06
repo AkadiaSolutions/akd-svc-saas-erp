@@ -2,9 +2,9 @@ package br.akd.svc.akadia.proxy.asaas.responses;
 
 import lombok.*;
 
-@Builder
 @Getter
 @Setter
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 public class CreditCardResponse {

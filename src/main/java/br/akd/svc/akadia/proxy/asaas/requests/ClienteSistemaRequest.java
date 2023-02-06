@@ -3,6 +3,7 @@ package br.akd.svc.akadia.proxy.asaas.requests;
 import lombok.*;
 
 @Builder
+@ToString
 @Getter @Setter
 @NoArgsConstructor
 @AllArgsConstructor
