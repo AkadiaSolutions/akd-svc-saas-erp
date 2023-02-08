@@ -10,24 +10,27 @@ import br.akd.svc.akadia.models.enums.global.TipoTelefoneEnum;
 import br.akd.svc.akadia.models.enums.site.FormaPagamentoSistemaEnum;
 import br.akd.svc.akadia.models.enums.site.StatusPlanoEnum;
 import br.akd.svc.akadia.proxy.asaas.AsaasProxy;
-import br.akd.svc.akadia.proxy.asaas.requests.*;
+import br.akd.svc.akadia.proxy.asaas.requests.ClienteSistemaRequest;
+import br.akd.svc.akadia.proxy.asaas.requests.CreditCardHolderInfoRequest;
+import br.akd.svc.akadia.proxy.asaas.requests.CreditCardRequest;
 import br.akd.svc.akadia.proxy.asaas.requests.assinatura.AssinaturaRequest;
 import br.akd.svc.akadia.proxy.asaas.requests.assinatura.AtualizaAssinaturaRequest;
-import br.akd.svc.akadia.proxy.asaas.responses.assinatura.AssinaturaResponse;
 import br.akd.svc.akadia.proxy.asaas.responses.ClienteSistemaResponse;
+import br.akd.svc.akadia.proxy.asaas.responses.assinatura.AssinaturaResponse;
+import br.akd.svc.akadia.proxy.asaas.responses.assinatura.CancelamentoAssinaturaResponse;
+import br.akd.svc.akadia.proxy.asaas.responses.assinatura.ConsultaAssinaturaResponse;
 import br.akd.svc.akadia.repositories.site.impl.ClienteSistemaRepositoryImpl;
 import br.akd.svc.akadia.services.exceptions.FeignConnectionException;
 import br.akd.svc.akadia.services.exceptions.InvalidRequestException;
-import br.akd.svc.akadia.services.exceptions.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.Optional;
 
 @Service
 public class ClienteSistemaService {
@@ -203,11 +206,8 @@ public class ClienteSistemaService {
     }
 
     public ClienteSistemaEntity atualizaDadosCliente(Long id, ClienteSistemaDto clienteSistemaDto) {
-        Optional<ClienteSistemaEntity> clienteOptional = clienteSistemaRepositoryImpl.implementaBuscaPorId(id);
-        ClienteSistemaEntity clienteSistema;
 
-        if (clienteOptional.isPresent()) clienteSistema = clienteOptional.get();
-        else throw new ObjectNotFoundException("Nenhum cliente foi encontrado com o id informado");
+        ClienteSistemaEntity clienteSistema = clienteSistemaRepositoryImpl.implementaBuscaPorId(id);
 
         if (!clienteSistema.getEmail().equals(clienteSistemaDto.getEmail()))
             validaSeEmailJaExiste(clienteSistemaDto);
@@ -242,10 +242,8 @@ public class ClienteSistemaService {
                 .empresas(clienteSistema.getEmpresas())
                 .build();
 
-        clienteSistemaRepositoryImpl.implementaPersistencia(clienteAtualizado);
         atualizaDadosClienteAsaas(clienteAtualizado);
-
-        return clienteAtualizado;
+        return clienteSistemaRepositoryImpl.implementaPersistencia(clienteAtualizado);
     }
 
     public void atualizaDadosClienteAsaas(ClienteSistemaEntity clienteAtualizado) {
@@ -277,11 +275,8 @@ public class ClienteSistemaService {
     }
 
     public ClienteSistemaEntity atualizaDadosAssinaturaCliente(Long idCliente, ClienteSistemaDto clienteSistemaDto) {
-        Optional<ClienteSistemaEntity> clienteOptional = clienteSistemaRepositoryImpl.implementaBuscaPorId(idCliente);
-        ClienteSistemaEntity clienteSistema;
 
-        if (clienteOptional.isPresent()) clienteSistema = clienteOptional.get();
-        else throw new ObjectNotFoundException("Nenhum cliente foi encontrado com o id informado");
+        ClienteSistemaEntity clienteSistema = clienteSistemaRepositoryImpl.implementaBuscaPorId(idCliente);
 
         PlanoEntity planoAtualizado = PlanoEntity.builder()
                 .id(clienteSistema.getPlano().getId())
@@ -313,9 +308,9 @@ public class ClienteSistemaService {
                 clienteSistema.getPlano().getCodigoAssinaturaAsaas(), atualizaAssinaturaRequest, System.getenv(TOKEN_ASAAS));
     }
 
-    public AssinaturaResponse consultaAssinaturaAsaas(String id) {
+    public ConsultaAssinaturaResponse consultaAssinaturaAsaas(String id) {
 
-        ResponseEntity<AssinaturaResponse> assinaturaAsaas;
+        ResponseEntity<ConsultaAssinaturaResponse> assinaturaAsaas;
         try {
             assinaturaAsaas =
                     asaasProxy.consultaAssinatura(id, System.getenv(TOKEN_ASAAS));
@@ -324,20 +319,42 @@ public class ClienteSistemaService {
         }
 
         if (assinaturaAsaas.getStatusCodeValue() != 200)
-            throw new InvalidRequestException("Ocorreu um erro no processo consulta de assinatura com a integradora: "
+            throw new InvalidRequestException("Ocorreu um erro no processo de consulta de assinatura com a integradora: "
                     + assinaturaAsaas.getBody());
 
         return assinaturaAsaas.getBody();
     }
 
-    public ClienteSistemaEntity cancelaAssinaturaAsaas(Long idCliente) {
-        //TODO CRIAR LÓGICA DE CANCELAMENTO
-        Optional<ClienteSistemaEntity> clienteOptional = clienteSistemaRepositoryImpl.implementaBuscaPorId(idCliente);
-        ClienteSistemaEntity clienteSistema;
+    public ClienteSistemaEntity cancelaAssinatura(Long idCliente) {
+        ClienteSistemaEntity clienteSistema = clienteSistemaRepositoryImpl.implementaBuscaPorId(idCliente);
+        PlanoEntity plano = clienteSistema.getPlano();
 
-        if (clienteOptional.isPresent()) clienteSistema = clienteOptional.get();
-        else throw new ObjectNotFoundException("Nenhum cliente foi encontrado com o id informado");
+        if (LocalDate.parse(plano.getDataVencimento()).isBefore(LocalDate.now()))
+            plano.setStatusPlanoEnum(StatusPlanoEnum.INATIVO);
 
-        return clienteSistema;
+        clienteSistema.setPlano(plano);
+        cancelaAssinaturaAsaas(clienteSistema);
+        return clienteSistemaRepositoryImpl.implementaPersistencia(clienteSistema);
     }
+
+    public void cancelaAssinaturaAsaas(ClienteSistemaEntity clienteSistema) {
+
+        ResponseEntity<CancelamentoAssinaturaResponse> cancelamentoAssinaturaAsaas;
+        try {
+            cancelamentoAssinaturaAsaas = asaasProxy
+                    .cancelaAssinatura(clienteSistema.getPlano().getCodigoAssinaturaAsaas(), System.getenv(TOKEN_ASAAS));
+        } catch (Exception e) {
+            throw new FeignConnectionException(FALHA_COMUNICACAO_ASAAS + e.getMessage());
+        }
+
+        if (cancelamentoAssinaturaAsaas.getStatusCodeValue() != 200)
+            throw new InvalidRequestException("Ocorreu um erro no processo de cancelamento de assinatura com a integradora: "
+                    + cancelamentoAssinaturaAsaas.getBody());
+    }
+
+    @Scheduled(cron = "0 1 1 * * ?", zone = "America/Sao_Paulo")
+    public void verificaDiariamenteSeExistemPlanosVencidosAtivos() {
+        clienteSistemaRepositoryImpl.implementaBuscaPorPlanosVencidosAtivos();
+    }
+
 }

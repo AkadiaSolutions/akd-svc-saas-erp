@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -28,8 +30,15 @@ public class ClienteSistemaRepositoryImpl {
         return clienteSistemaRepository.findByCpf(cpf);
     }
 
-    public Optional<ClienteSistemaEntity> implementaBuscaPorId(Long id) {
-        return clienteSistemaRepository.findById(id);
+    public ClienteSistemaEntity implementaBuscaPorId(Long id) {
+        Optional<ClienteSistemaEntity> clienteOptional =
+                clienteSistemaRepository.findById(id);
+
+        ClienteSistemaEntity clienteSistema;
+        if (clienteOptional.isPresent()) clienteSistema = clienteOptional.get();
+        else throw new ObjectNotFoundException("Nenhum cliente foi encontrado com o id informado");
+
+        return clienteSistema;
     }
 
     public ClienteSistemaEntity implementaBuscaPorCodigoClienteAsaas(String codigoClienteAsaas) {
@@ -41,6 +50,11 @@ public class ClienteSistemaRepositoryImpl {
         else throw new ObjectNotFoundException("Nenhum cliente foi encontrado com o codigo Asaas informado");
 
         return clienteSistema;
+    }
+
+    public List<ClienteSistemaEntity> implementaBuscaPorPlanosVencidosAtivos() {
+        return clienteSistemaRepository
+                .buscaPorClientesComPlanosVencidosAtivos("ATIVO", LocalDate.now().toString());
     }
 
 }
