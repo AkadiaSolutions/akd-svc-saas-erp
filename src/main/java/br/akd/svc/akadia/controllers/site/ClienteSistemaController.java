@@ -94,7 +94,7 @@ public class ClienteSistemaController {
     @ApiResponses({
             @ApiResponse(code = 200, message = "Cliente atualizado com sucesso", response = ClienteSistemaEntity.class),
             @ApiResponse(code = 400, message = "Ocorreu um erro no processo de atualização do cliente", response = InvalidRequestException.class),
-            @ApiResponse(code = 404, message = "Nenhum cliente foi encontrado com o id informado", response = ObjectNotFoundException.class),
+            @ApiResponse(code = 400, message = "Nenhum cliente foi encontrado com o id informado", response = ObjectNotFoundException.class),
             @ApiResponse(code = 500, message = "Ocorreu uma falha na conexão com o feign", response = FeignConnectionException.class),
     })
     @PutMapping("atualiza-cliente/{idCliente}")
@@ -103,11 +103,49 @@ public class ClienteSistemaController {
         return ResponseEntity.status(HttpStatus.OK).body(clienteSistemaService.atualizaDadosCliente(idCliente, clienteSistemaDto));
     }
 
-    //TODO ADICIONAR ANNOTATIONS
+    @ApiOperation(
+            value = "Atualização de dados da assinatura do cliente",
+            notes = "Esse endpoint tem como objetivo realizar a atualização dos dados da assinatura do cliente no " +
+                    "banco de dados do projeto e na integradora de pagamentos ASAAS",
+            produces = MediaType.APPLICATION_JSON,
+            consumes = MediaType.APPLICATION_JSON
+    )
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Assinatura do cliente atualizada com sucesso",
+                    response = ClienteSistemaEntity.class),
+            @ApiResponse(code = 400, message = "Ocorreu um erro no processo de atualização da assinatura do cliente",
+                    response = InvalidRequestException.class),
+            @ApiResponse(code = 400, message = "Nenhum cliente foi encontrado com o id informado",
+                    response = ObjectNotFoundException.class),
+            @ApiResponse(code = 500, message = "Ocorreu uma falha na conexão com o feign",
+                    response = FeignConnectionException.class),
+    })
     @PutMapping("atualiza-assinatura/{idCliente}")
     public ResponseEntity<ClienteSistemaEntity> atualizaDadosAssinaturaCliente(@PathVariable Long idCliente,
                                                                                @RequestBody ClienteSistemaDto clienteSistemaDto) {
         return ResponseEntity.status(HttpStatus.OK).body(clienteSistemaService.atualizaDadosAssinaturaCliente(idCliente, clienteSistemaDto));
+    }
+
+    @ApiOperation(
+            value = "Cancelamento da assinatura do cliente",
+            notes = "Esse endpoint tem como objetivo realizar o cancelammento da assinatura do cliente no " +
+                    "banco de dados do projeto e na integradora de pagamentos ASAAS",
+            produces = MediaType.APPLICATION_JSON,
+            consumes = MediaType.APPLICATION_JSON
+    )
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Assinatura do cliente cancelada com sucesso",
+                    response = ClienteSistemaEntity.class),
+            @ApiResponse(code = 400, message = "Ocorreu um erro no processo de cancelamento da assinatura do cliente",
+                    response = InvalidRequestException.class),
+            @ApiResponse(code = 400, message = "Nenhum cliente foi encontrado com o id informado",
+                    response = ObjectNotFoundException.class),
+            @ApiResponse(code = 500, message = "Ocorreu uma falha na conexão com o feign",
+                    response = FeignConnectionException.class),
+    })
+    @DeleteMapping("cancela-assinatura/{idCliente}")
+    public ResponseEntity<ClienteSistemaEntity> cancelaAssinaturaCliente(@PathVariable Long idCliente) {
+        return ResponseEntity.status(HttpStatus.OK).body(clienteSistemaService.cancelaAssinatura(idCliente));
     }
 
 }
