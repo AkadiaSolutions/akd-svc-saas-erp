@@ -18,9 +18,13 @@ public class PagamentoSistemaDtoBuilder {
         builder.pagamentoSistemaDto.setId(1L);
         builder.pagamentoSistemaDto.setDataCadastro(LocalDate.of(2023, 2, 3).toString());
         builder.pagamentoSistemaDto.setHoraCadastro(LocalTime.of(10, 57).toString());
-        builder.pagamentoSistemaDto.setCodigoTransacao(129371283971L);
+        builder.pagamentoSistemaDto.setDataPagamento(LocalDate.of(2023, 2, 3).toString());
+        builder.pagamentoSistemaDto.setHoraPagamento(LocalTime.of(10, 57).toString());
+        builder.pagamentoSistemaDto.setCodigoPagamentoAsaas("pay_5498745402963061");
         builder.pagamentoSistemaDto.setValor(650.0);
-        builder.pagamentoSistemaDto.setVencimento("2023-02-03");
+        builder.pagamentoSistemaDto.setValorLiquido(640.0);
+        builder.pagamentoSistemaDto.setDescricao("Assinatura de plano Basic");
+        builder.pagamentoSistemaDto.setDataVencimento("2023-02-03");
         builder.pagamentoSistemaDto.setFormaPagamentoSistemaEnum(FormaPagamentoSistemaEnum.CREDIT_CARD);
         builder.pagamentoSistemaDto.setStatusPagamentoSistemaEnum(StatusPagamentoSistemaEnum.APROVADO);
         builder.pagamentoSistemaDto.setCartao(null);

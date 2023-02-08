@@ -10,11 +10,10 @@ import br.akd.svc.akadia.models.enums.global.TipoTelefoneEnum;
 import br.akd.svc.akadia.models.enums.site.FormaPagamentoSistemaEnum;
 import br.akd.svc.akadia.models.enums.site.StatusPlanoEnum;
 import br.akd.svc.akadia.proxy.asaas.AsaasProxy;
-import br.akd.svc.akadia.proxy.asaas.requests.AssinaturaRequest;
-import br.akd.svc.akadia.proxy.asaas.requests.ClienteSistemaRequest;
-import br.akd.svc.akadia.proxy.asaas.requests.CreditCardHolderInfoRequest;
-import br.akd.svc.akadia.proxy.asaas.requests.CreditCardRequest;
-import br.akd.svc.akadia.proxy.asaas.responses.AssinaturaResponse;
+import br.akd.svc.akadia.proxy.asaas.requests.*;
+import br.akd.svc.akadia.proxy.asaas.requests.assinatura.AssinaturaRequest;
+import br.akd.svc.akadia.proxy.asaas.requests.assinatura.AtualizaAssinaturaRequest;
+import br.akd.svc.akadia.proxy.asaas.responses.assinatura.AssinaturaResponse;
 import br.akd.svc.akadia.proxy.asaas.responses.ClienteSistemaResponse;
 import br.akd.svc.akadia.repositories.site.impl.ClienteSistemaRepositoryImpl;
 import br.akd.svc.akadia.services.exceptions.FeignConnectionException;
@@ -25,6 +24,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Optional;
@@ -85,6 +85,7 @@ public class ClienteSistemaService {
                         .plano(PlanoEntity.builder()
                                 .dataContratacao(LocalDate.now().toString())
                                 .horaContratacao(LocalTime.now().toString())
+                                .dataVencimento(LocalDateTime.now().plusDays(7L).toString())
                                 .tipoPlanoEnum(clienteSistemaDto.getPlano().getTipoPlanoEnum())
                                 .formaPagamentoSistemaEnum(clienteSistemaDto.getPlano().getFormaPagamentoSistemaEnum())
                                 .statusPlanoEnum(StatusPlanoEnum.PERIODO_DE_TESTES)
@@ -182,7 +183,7 @@ public class ClienteSistemaService {
         ResponseEntity<AssinaturaResponse> cadastraAssinaturaAsaas;
 
         try {
-            cadastraAssinaturaAsaas = asaasProxy.cadastraNovoPlano(assinaturaRequest, System.getenv(TOKEN_ASAAS));
+            cadastraAssinaturaAsaas = asaasProxy.cadastraNovaAssinatura(assinaturaRequest, System.getenv(TOKEN_ASAAS));
         } catch (Exception e) {
             throw new FeignConnectionException(FALHA_COMUNICACAO_ASAAS + e.getMessage());
         }
@@ -275,4 +276,51 @@ public class ClienteSistemaService {
                     + atualizaClienteAsaas.getBody());
     }
 
+    public ClienteSistemaEntity atualizaDadosAssinaturaCliente(Long idCliente, ClienteSistemaDto clienteSistemaDto) {
+        Optional<ClienteSistemaEntity> clienteOptional = clienteSistemaRepositoryImpl.implementaBuscaPorId(idCliente);
+        ClienteSistemaEntity clienteSistema;
+
+        if (clienteOptional.isPresent()) clienteSistema = clienteOptional.get();
+        else throw new ObjectNotFoundException("Nenhum cliente foi encontrado com o id informado");
+
+        PlanoEntity planoAtualizado = PlanoEntity.builder()
+                .id(clienteSistema.getPlano().getId())
+                .codigoAssinaturaAsaas(clienteSistema.getPlano().getCodigoAssinaturaAsaas())
+                .dataContratacao(clienteSistema.getPlano().getDataContratacao())
+                .horaContratacao(clienteSistema.getPlano().getHoraContratacao())
+                .dataVencimento(clienteSistema.getPlano().getDataVencimento())
+                .tipoPlanoEnum(clienteSistemaDto.getPlano().getTipoPlanoEnum())
+                .statusPlanoEnum(clienteSistema.getPlano().getStatusPlanoEnum())
+                .formaPagamentoSistemaEnum(clienteSistemaDto.getPlano().getFormaPagamentoSistemaEnum())
+                .build();
+
+        clienteSistema.setPlano(planoAtualizado);
+        ClienteSistemaEntity clienteAtualizado = clienteSistemaRepositoryImpl.implementaPersistencia(clienteSistema);
+        atualizaDadosAssinaturaAsaas(clienteAtualizado);
+        return clienteAtualizado;
+    }
+
+    public void atualizaDadosAssinaturaAsaas(ClienteSistemaEntity clienteSistema) {
+        AtualizaAssinaturaRequest atualizaAssinaturaRequest = AtualizaAssinaturaRequest.builder()
+                .billingType(clienteSistema.getPlano().getFormaPagamentoSistemaEnum().toString())
+                .value(clienteSistema.getPlano().getTipoPlanoEnum().getValor())
+                .cycle("MONTHLY")
+                .description("Assinatura do plano " + clienteSistema.getPlano().getTipoPlanoEnum().getDesc())
+                .updatePendingPayments("true")
+                .build();
+
+        asaasProxy.atualizaAssinatura(
+                clienteSistema.getPlano().getCodigoAssinaturaAsaas(), atualizaAssinaturaRequest, System.getenv(TOKEN_ASAAS));
+    }
+
+    public ClienteSistemaEntity cancelaAssinaturaAsaas(Long idCliente) {
+        //TODO CRIAR LÓGICA DE CANCELAMENTO
+        Optional<ClienteSistemaEntity> clienteOptional = clienteSistemaRepositoryImpl.implementaBuscaPorId(idCliente);
+        ClienteSistemaEntity clienteSistema;
+
+        if (clienteOptional.isPresent()) clienteSistema = clienteOptional.get();
+        else throw new ObjectNotFoundException("Nenhum cliente foi encontrado com o id informado");
+
+        return clienteSistema;
+    }
 }

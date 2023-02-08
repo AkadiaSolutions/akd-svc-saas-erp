@@ -2,11 +2,13 @@ package br.akd.svc.akadia.models.entities.site;
 
 import br.akd.svc.akadia.models.enums.site.FormaPagamentoSistemaEnum;
 import br.akd.svc.akadia.models.enums.site.StatusPagamentoSistemaEnum;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
+@Builder
 @ToString
 @Getter @Setter
 @AllArgsConstructor
@@ -19,14 +21,14 @@ public class PagamentoSistemaEntity {
     private Long id;
 
     private String dataCadastro;
-
     private String horaCadastro;
-
-    private Long codigoTransacao;
-
+    private String dataPagamento;
+    private String horaPagamento;
+    private String codigoPagamentoAsaas;
     private Double valor;
-
-    private String vencimento;
+    private Double valorLiquido;
+    private String descricao;
+    private String dataVencimento;
 
     @Enumerated(EnumType.STRING)
     private FormaPagamentoSistemaEnum formaPagamentoSistemaEnum;
@@ -38,6 +40,7 @@ public class PagamentoSistemaEntity {
     @JoinColumn(name = "id_cartao")
     private CartaoEntity cartao;
 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @OneToOne (targetEntity = ClienteSistemaEntity.class)
     @JoinColumn(name = "id_cli_sistema")
     private ClienteSistemaEntity clienteSistema;
