@@ -1,6 +1,7 @@
-package br.akd.svc.akadia.proxy.asaas.responses.mocks;
+package br.akd.svc.akadia.proxy.asaas.responses.assinatura.mocks;
 
 import br.akd.svc.akadia.proxy.asaas.responses.assinatura.AssinaturaResponse;
+import br.akd.svc.akadia.proxy.asaas.responses.mocks.CreditCardResponseBuilder;
 
 import java.time.LocalDate;
 

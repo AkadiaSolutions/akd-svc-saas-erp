@@ -1,5 +1,6 @@
 package br.akd.svc.akadia.proxy.asaas.responses;
 
+import br.akd.svc.akadia.proxy.asaas.responses.CreditCardResponse;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

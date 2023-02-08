@@ -1,12 +1,16 @@
-package br.akd.svc.akadia.proxy.asaas.requests.mocks;
+package br.akd.svc.akadia.proxy.asaas.requests.assinatura.mocks;
 
 import br.akd.svc.akadia.proxy.asaas.requests.assinatura.AssinaturaRequest;
+import br.akd.svc.akadia.proxy.asaas.requests.mocks.CreditCardHolderInfoRequestBuilder;
+import br.akd.svc.akadia.proxy.asaas.requests.mocks.CreditCardRequestBuilder;
 
 import java.time.LocalDate;
 
 public class AssinaturaRequestBuilder {
 
-    AssinaturaRequestBuilder assinaturaRequestBuilder;
+    AssinaturaRequestBuilder() {
+    }
+
     AssinaturaRequest assinaturaRequest;
 
     public static AssinaturaRequestBuilder builder() {

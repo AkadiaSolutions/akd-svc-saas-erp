@@ -1,4 +1,4 @@
-package br.akd.svc.akadia.proxy.asaas.responses;
+package br.akd.svc.akadia.proxy.asaas.responses.assinatura;
 
 import br.akd.svc.akadia.proxy.asaas.responses.assinatura.InterestResponse;
 import org.junit.jupiter.api.Assertions;

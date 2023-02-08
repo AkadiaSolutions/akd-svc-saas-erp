@@ -1,10 +1,9 @@
-package br.akd.svc.akadia.proxy.asaas.responses;
+package br.akd.svc.akadia.proxy.asaas.responses.assinatura;
 
-import br.akd.svc.akadia.proxy.asaas.responses.assinatura.AssinaturaResponse;
-import br.akd.svc.akadia.proxy.asaas.responses.mocks.AssinaturaResponseBuilder;
+import br.akd.svc.akadia.proxy.asaas.responses.assinatura.mocks.AssinaturaResponseBuilder;
 import br.akd.svc.akadia.proxy.asaas.responses.mocks.CreditCardResponseBuilder;
-import br.akd.svc.akadia.proxy.asaas.responses.mocks.FineResponseBuilder;
-import br.akd.svc.akadia.proxy.asaas.responses.mocks.InterestResponseBuilder;
+import br.akd.svc.akadia.proxy.asaas.responses.assinatura.mocks.FineResponseBuilder;
+import br.akd.svc.akadia.proxy.asaas.responses.assinatura.mocks.InterestResponseBuilder;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

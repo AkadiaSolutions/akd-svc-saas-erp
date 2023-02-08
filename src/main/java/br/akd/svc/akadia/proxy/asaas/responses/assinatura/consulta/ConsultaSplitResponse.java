@@ -1,4 +1,4 @@
-package br.akd.svc.akadia.proxy.asaas.responses.assinatura;
+package br.akd.svc.akadia.proxy.asaas.responses.assinatura.consulta;
 
 import lombok.*;
 
@@ -7,10 +7,11 @@ import lombok.*;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class AtualizaAssinaturaSplitResponse {
+public class ConsultaSplitResponse {
     private String walletId;
     private Double fixedValue;
-    private Double percentualValue;
+    private Integer percentualValue;
     private String status;
     private String refusalReason;
+
 }

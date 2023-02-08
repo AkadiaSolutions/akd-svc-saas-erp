@@ -3,7 +3,7 @@ package br.akd.svc.akadia.services.site;
 import br.akd.svc.akadia.models.dto.site.mocks.ClienteSistemaDtoBuilder;
 import br.akd.svc.akadia.models.entities.site.mocks.ClienteSistemaEntityBuilder;
 import br.akd.svc.akadia.proxy.asaas.AsaasProxy;
-import br.akd.svc.akadia.proxy.asaas.responses.mocks.AssinaturaResponseBuilder;
+import br.akd.svc.akadia.proxy.asaas.responses.assinatura.mocks.AssinaturaResponseBuilder;
 import br.akd.svc.akadia.proxy.asaas.responses.mocks.ClienteSistemaResponseBuilder;
 import br.akd.svc.akadia.repositories.site.impl.ClienteSistemaRepositoryImpl;
 import br.akd.svc.akadia.services.exceptions.FeignConnectionException;

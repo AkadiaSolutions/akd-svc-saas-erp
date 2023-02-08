@@ -1,6 +1,6 @@
-package br.akd.svc.akadia.proxy.asaas.requests;
+package br.akd.svc.akadia.proxy.asaas.requests.assinatura;
 
-import br.akd.svc.akadia.proxy.asaas.requests.mocks.AssinaturaRequestBuilder;
+import br.akd.svc.akadia.proxy.asaas.requests.assinatura.mocks.AssinaturaRequestBuilder;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

@@ -5,9 +5,9 @@ import br.akd.svc.akadia.proxy.asaas.requests.assinatura.AtualizaAssinaturaReque
 import br.akd.svc.akadia.proxy.asaas.requests.ClienteSistemaRequest;
 import br.akd.svc.akadia.proxy.asaas.responses.assinatura.AssinaturaResponse;
 import br.akd.svc.akadia.proxy.asaas.responses.ClienteSistemaResponse;
-import br.akd.svc.akadia.proxy.asaas.responses.assinatura.AtualizaAssinaturaResponse;
-import br.akd.svc.akadia.proxy.asaas.responses.assinatura.CancelamentoAssinaturaResponse;
-import br.akd.svc.akadia.proxy.asaas.responses.assinatura.ConsultaAssinaturaResponse;
+import br.akd.svc.akadia.proxy.asaas.responses.assinatura.atualiza.AtualizaAssinaturaResponse;
+import br.akd.svc.akadia.proxy.asaas.responses.assinatura.cancela.CancelamentoAssinaturaResponse;
+import br.akd.svc.akadia.proxy.asaas.responses.assinatura.consulta.ConsultaAssinaturaResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

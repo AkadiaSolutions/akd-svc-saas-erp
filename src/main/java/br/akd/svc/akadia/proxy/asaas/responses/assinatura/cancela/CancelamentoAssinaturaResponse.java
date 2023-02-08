@@ -1,4 +1,4 @@
-package br.akd.svc.akadia.proxy.asaas.responses.assinatura;
+package br.akd.svc.akadia.proxy.asaas.responses.assinatura.cancela;
 
 import lombok.*;
 
