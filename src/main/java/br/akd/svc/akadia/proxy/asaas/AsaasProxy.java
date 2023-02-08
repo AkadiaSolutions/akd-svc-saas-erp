@@ -7,6 +7,7 @@ import br.akd.svc.akadia.proxy.asaas.responses.assinatura.AssinaturaResponse;
 import br.akd.svc.akadia.proxy.asaas.responses.ClienteSistemaResponse;
 import br.akd.svc.akadia.proxy.asaas.responses.assinatura.AtualizaAssinaturaResponse;
 import br.akd.svc.akadia.proxy.asaas.responses.assinatura.CancelamentoAssinaturaResponse;
+import br.akd.svc.akadia.proxy.asaas.responses.assinatura.ConsultaAssinaturaResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,9 +28,9 @@ public interface AsaasProxy {
     ResponseEntity<AssinaturaResponse> cadastraNovaAssinatura(@RequestBody AssinaturaRequest assinaturaRequest,
                                                               @RequestHeader(value = "access_token") String accessToken);
 
-    @GetMapping(value = "/subscription/{idAssinatura}")
-    ResponseEntity<AssinaturaResponse> consultaAssinatura(@PathVariable String idAssinatura,
-                                                          @RequestHeader(value = "access_token") String accessToken);
+    @GetMapping(value = "/subscriptions/{idAssinatura}")
+    ResponseEntity<ConsultaAssinaturaResponse> consultaAssinatura(@PathVariable String idAssinatura,
+                                                                  @RequestHeader(value = "access_token") String accessToken);
 
     @PostMapping(value = "/subscriptions/{idAssinatura}")
     ResponseEntity<AtualizaAssinaturaResponse> atualizaAssinatura(@PathVariable String idAssinatura,
