@@ -20,7 +20,10 @@ class PagamentoSistemaEntityTest {
     void deveTestarDataBuilder() {
         Assertions.assertEquals(
                 "PagamentoSistemaEntity(id=1, dataCadastro=2023-02-03, horaCadastro=10:57, " +
-                        "codigoTransacao=129371283971, valor=650.0, vencimento=2023-02-03, formaPagamentoSistemaEnum=CREDIT_CARD, statusPagamentoSistemaEnum=APROVADO, cartao=null, clienteSistema=null)",
+                        "dataPagamento=2023-02-03, horaPagamento=10:57, codigoPagamentoAsaas=pay_5498745402963061, " +
+                        "valor=650.0, valorLiquido=640.0, descricao=Assinatura de plano Basic, " +
+                        "dataVencimento=2023-02-03, formaPagamentoSistemaEnum=CREDIT_CARD, " +
+                        "statusPagamentoSistemaEnum=APROVADO, cartao=null, clienteSistema=null)",
                 PagamentoSistemaEntityBuilder.builder().build().toString()
         );
 
@@ -33,8 +36,12 @@ class PagamentoSistemaEntityTest {
                 1L,
                 LocalDate.of(2023, 2, 3).toString(),
                 LocalTime.of(15, 50).toString(),
-                12345678910L,
+                LocalDate.of(2023, 2, 3).toString(),
+                LocalTime.of(15, 50).toString(),
+                "pay_5874803025986658",
                 650.0,
+                640.0,
+                "Assinatura de plano Pro",
                 LocalDate.of(2023, 2, 5).toString(),
                 FormaPagamentoSistemaEnum.PIX,
                 StatusPagamentoSistemaEnum.REPROVADO,
@@ -44,8 +51,10 @@ class PagamentoSistemaEntityTest {
 
         Assertions.assertEquals(
                 "PagamentoSistemaEntity(id=1, dataCadastro=2023-02-03, horaCadastro=15:50, " +
-                        "codigoTransacao=12345678910, valor=650.0, vencimento=2023-02-05, formaPagamentoSistemaEnum=PIX, " +
-                        "statusPagamentoSistemaEnum=REPROVADO, cartao=null, clienteSistema=null)",
+                        "dataPagamento=2023-02-03, horaPagamento=15:50, codigoPagamentoAsaas=pay_5874803025986658, " +
+                        "valor=650.0, valorLiquido=640.0, descricao=Assinatura de plano Pro, dataVencimento=2023-02-05, " +
+                        "formaPagamentoSistemaEnum=PIX, statusPagamentoSistemaEnum=REPROVADO, cartao=null, " +
+                        "clienteSistema=null)",
                 pagamentoSistemaEntity.toString()
         );
 

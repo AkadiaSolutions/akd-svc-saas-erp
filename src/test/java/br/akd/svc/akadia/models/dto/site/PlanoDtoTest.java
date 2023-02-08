@@ -21,7 +21,7 @@ class PlanoDtoTest {
     void deveTestarDataBuilder() {
         Assertions.assertEquals(
                 "PlanoDto(id=1, codigoAssinaturaAsaas=sub_jaIvjZ8TMlXZ, dataContratacao=2023-02-03, " +
-                        "horaContratacao=09:58, tipoPlanoEnum=BASIC, statusPlanoEnum=ATIVO, " +
+                        "horaContratacao=09:58, dataVencimento=null, tipoPlanoEnum=BASIC, statusPlanoEnum=ATIVO, " +
                         "formaPagamentoSistemaEnum=BOLETO)",
                 PlanoDtoBuilder.builder().build().toString()
         );
@@ -35,14 +35,15 @@ class PlanoDtoTest {
                 "sub_jaIvjZ8TMlXZ",
                 LocalDate.of(2023, 2, 3).toString(),
                 LocalTime.of(10, 2).toString(),
+                LocalDate.of(2023, 2, 3).toString(),
                 TipoPlanoEnum.STANDART,
                 StatusPlanoEnum.INATIVO,
                 FormaPagamentoSistemaEnum.PIX
         );
         Assertions.assertEquals(
                 "PlanoDto(id=1, codigoAssinaturaAsaas=sub_jaIvjZ8TMlXZ, dataContratacao=2023-02-03, " +
-                        "horaContratacao=10:02, tipoPlanoEnum=STANDART, statusPlanoEnum=INATIVO, " +
-                        "formaPagamentoSistemaEnum=PIX)",
+                        "horaContratacao=10:02, dataVencimento=2023-02-03, tipoPlanoEnum=STANDART, " +
+                        "statusPlanoEnum=INATIVO, formaPagamentoSistemaEnum=PIX)",
                 planoDto.toString()
         );
     }
@@ -61,8 +62,8 @@ class PlanoDtoTest {
                 .build();
         Assertions.assertEquals(
                 "PlanoDto(id=1, codigoAssinaturaAsaas=sub_jaIvjZ8TMlXZ, dataContratacao=2023-02-03, " +
-                        "horaContratacao=10:03, tipoPlanoEnum=PRO, statusPlanoEnum=PERIODO_DE_TESTES, " +
-                        "formaPagamentoSistemaEnum=CREDIT_CARD)",
+                        "horaContratacao=10:03, dataVencimento=null, tipoPlanoEnum=PRO, " +
+                        "statusPlanoEnum=PERIODO_DE_TESTES, formaPagamentoSistemaEnum=CREDIT_CARD)",
                 planoDto.toString()
         );
     }

@@ -21,7 +21,7 @@ class PlanoEntityTest {
     void deveTestarDataBuilder() {
         Assertions.assertEquals(
                 "PlanoEntity(id=1, codigoAssinaturaAsaas=sub_jaIvjZ8TMlXZ, dataContratacao=2023-02-03, " +
-                        "horaContratacao=09:58, tipoPlanoEnum=BASIC, statusPlanoEnum=ATIVO, " +
+                        "horaContratacao=09:58, dataVencimento=null, tipoPlanoEnum=BASIC, statusPlanoEnum=ATIVO, " +
                         "formaPagamentoSistemaEnum=BOLETO)",
                 PlanoEntityBuilder.builder().build().toString()
         );
@@ -35,14 +35,15 @@ class PlanoEntityTest {
                 "sub_jaIvjZ8TMlXZ",
                 LocalDate.of(2023, 2, 3).toString(),
                 LocalTime.of(10, 2).toString(),
+                LocalDate.of(2023, 2, 3).toString(),
                 TipoPlanoEnum.STANDART,
                 StatusPlanoEnum.INATIVO,
                 FormaPagamentoSistemaEnum.PIX
         );
         Assertions.assertEquals(
                 "PlanoEntity(id=1, codigoAssinaturaAsaas=sub_jaIvjZ8TMlXZ, dataContratacao=2023-02-03, " +
-                        "horaContratacao=10:02, tipoPlanoEnum=STANDART, statusPlanoEnum=INATIVO, " +
-                        "formaPagamentoSistemaEnum=PIX)",
+                        "horaContratacao=10:02, dataVencimento=2023-02-03, tipoPlanoEnum=STANDART, " +
+                        "statusPlanoEnum=INATIVO, formaPagamentoSistemaEnum=PIX)",
                 planoEntity.toString()
         );
     }
@@ -61,8 +62,8 @@ class PlanoEntityTest {
                 .build();
         Assertions.assertEquals(
                 "PlanoEntity(id=1, codigoAssinaturaAsaas=sub_jaIvjZ8TMlXZ, dataContratacao=2023-02-03, " +
-                        "horaContratacao=10:03, tipoPlanoEnum=PRO, statusPlanoEnum=PERIODO_DE_TESTES, " +
-                        "formaPagamentoSistemaEnum=CREDIT_CARD)",
+                        "horaContratacao=10:03, dataVencimento=null, tipoPlanoEnum=PRO, " +
+                        "statusPlanoEnum=PERIODO_DE_TESTES, formaPagamentoSistemaEnum=CREDIT_CARD)",
                 planoEntity.toString()
         );
     }

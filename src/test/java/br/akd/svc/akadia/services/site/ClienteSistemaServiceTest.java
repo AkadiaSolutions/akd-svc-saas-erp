@@ -224,7 +224,7 @@ class ClienteSistemaServiceTest {
     void deveTestarAtualizacaoDeDadosCliente() {
         when(clienteSistemaRepositoryImpl.implementaBuscaPorId(
                 any()))
-                .thenReturn(Optional.of(ClienteSistemaEntityBuilder.builder().build()));
+                .thenReturn(ClienteSistemaEntityBuilder.builder().build());
 
         when(clienteSistemaRepositoryImpl.implementaPersistencia(
                 any()))
@@ -241,29 +241,12 @@ class ClienteSistemaServiceTest {
     }
 
     @Test
-    @DisplayName("Deve testar atualização de dados do cliente com exception de id não encontrado")
-    void deveTestarAtualizacaoDeDadosClienteComObjectNotFoundException() {
-        when(clienteSistemaRepositoryImpl.implementaBuscaPorId(
-                any()))
-                .thenReturn(Optional.empty());
-
-        try {
-            clienteSistemaService.atualizaDadosCliente(1L,
-                    ClienteSistemaDtoBuilder.builder().comEndereco().comTelefone().comPlanoComPagamentoNoCredito().build());
-            Assertions.fail();
-        } catch (Exception exception) {
-            Assertions.assertEquals("Nenhum cliente foi encontrado com o id informado",
-                    exception.getMessage());
-        }
-    }
-
-    @Test
     @DisplayName("Deve testar atualização de dados do cliente com exception de e-mail já existente")
     void deveTestarAtualizacaoDeDadosClienteComInvalidRequestException() {
 
         when(clienteSistemaRepositoryImpl.implementaBuscaPorId(
                 any()))
-                .thenReturn(Optional.of(ClienteSistemaEntityBuilder.builder().comOutroEmail().build()));
+                .thenReturn(ClienteSistemaEntityBuilder.builder().comOutroEmail().build());
 
         when(clienteSistemaRepositoryImpl.implementaBuscaPorEmail(
                 any()))
