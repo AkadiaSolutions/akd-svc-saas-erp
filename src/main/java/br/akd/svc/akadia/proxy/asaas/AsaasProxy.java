@@ -18,14 +18,18 @@ public interface AsaasProxy {
     ResponseEntity<ClienteSistemaResponse> cadastraNovoCliente(@RequestBody ClienteSistemaRequest clienteSistemaRequest,
                                           @RequestHeader(value = "access_token") String accessToken);
 
-    @PostMapping(value = "/subscriptions")
-    ResponseEntity<AssinaturaResponse> cadastraNovaAssinatura(@RequestBody AssinaturaRequest assinaturaRequest,
-                                                              @RequestHeader(value = "access_token") String accessToken);
-
     @PostMapping(value = "/customers/{idCliente}")
     ResponseEntity<ClienteSistemaResponse> atualizaDadosCliente(@PathVariable String idCliente,
                                                 @RequestBody ClienteSistemaRequest clienteSistemaRequest,
                                                 @RequestHeader(value = "access_token") String accessToken);
+
+    @PostMapping(value = "/subscriptions")
+    ResponseEntity<AssinaturaResponse> cadastraNovaAssinatura(@RequestBody AssinaturaRequest assinaturaRequest,
+                                                              @RequestHeader(value = "access_token") String accessToken);
+
+    @GetMapping(value = "/subscription/{idAssinatura}")
+    ResponseEntity<AssinaturaResponse> consultaAssinatura(@PathVariable String idAssinatura,
+                                                          @RequestHeader(value = "access_token") String accessToken);
 
     @PostMapping(value = "/subscriptions/{idAssinatura}")
     ResponseEntity<AtualizaAssinaturaResponse> atualizaAssinatura(@PathVariable String idAssinatura,

@@ -313,6 +313,23 @@ public class ClienteSistemaService {
                 clienteSistema.getPlano().getCodigoAssinaturaAsaas(), atualizaAssinaturaRequest, System.getenv(TOKEN_ASAAS));
     }
 
+    public AssinaturaResponse consultaAssinaturaAsaas(String id) {
+
+        ResponseEntity<AssinaturaResponse> assinaturaAsaas;
+        try {
+            assinaturaAsaas =
+                    asaasProxy.consultaAssinatura(id, System.getenv(TOKEN_ASAAS));
+        } catch (Exception e) {
+            throw new FeignConnectionException(FALHA_COMUNICACAO_ASAAS + e.getMessage());
+        }
+
+        if (assinaturaAsaas.getStatusCodeValue() != 200)
+            throw new InvalidRequestException("Ocorreu um erro no processo consulta de assinatura com a integradora: "
+                    + assinaturaAsaas.getBody());
+
+        return assinaturaAsaas.getBody();
+    }
+
     public ClienteSistemaEntity cancelaAssinaturaAsaas(Long idCliente) {
         //TODO CRIAR LÓGICA DE CANCELAMENTO
         Optional<ClienteSistemaEntity> clienteOptional = clienteSistemaRepositoryImpl.implementaBuscaPorId(idCliente);
