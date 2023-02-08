@@ -16,6 +16,7 @@ public class PlanoDto {
     private String codigoAssinaturaAsaas;
     private String dataContratacao;
     private String horaContratacao;
+    private String dataVencimento;
     private TipoPlanoEnum tipoPlanoEnum;
     private StatusPlanoEnum statusPlanoEnum;
     private FormaPagamentoSistemaEnum formaPagamentoSistemaEnum;

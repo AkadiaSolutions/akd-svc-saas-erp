@@ -26,6 +26,8 @@ public class PlanoEntity {
 
     private String horaContratacao;
 
+    private String dataVencimento;
+
     @Enumerated(EnumType.STRING)
     private TipoPlanoEnum tipoPlanoEnum;
 
