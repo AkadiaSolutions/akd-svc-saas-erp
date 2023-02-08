@@ -45,7 +45,7 @@ public class ExceptionHandler extends ResponseEntityExceptionHandler {
                                                                  ObjectNotFoundException objectNotFoundException) {
         StandartError standartError = StandartError.builder()
                 .localDateTime(LocalDateTime.now())
-                .status(404)
+                .status(400)
                 .error(objectNotFoundException.getMessage())
                 .path(req.getRequestURI())
                 .build();
