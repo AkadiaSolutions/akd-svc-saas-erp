@@ -1,10 +1,10 @@
 package br.akd.svc.akadia.proxy.asaas.webhooks;
 
+import br.akd.svc.akadia.proxy.asaas.webhooks.enums.BillingTypeEnum;
 import lombok.*;
 
 import java.util.List;
 
-@Builder
 @ToString
 @Getter
 @Setter

@@ -6,7 +6,7 @@ import br.akd.svc.akadia.models.enums.site.FormaPagamentoSistemaEnum;
 import br.akd.svc.akadia.models.enums.site.StatusPagamentoSistemaEnum;
 import br.akd.svc.akadia.models.enums.site.StatusPlanoEnum;
 import br.akd.svc.akadia.proxy.asaas.webhooks.AtualizacaoCobrancaWebHook;
-import br.akd.svc.akadia.proxy.asaas.webhooks.BillingTypeEnum;
+import br.akd.svc.akadia.proxy.asaas.webhooks.enums.BillingTypeEnum;
 import br.akd.svc.akadia.repositories.site.impl.ClienteSistemaRepositoryImpl;
 import br.akd.svc.akadia.repositories.site.impl.PagamentoSistemaRepositoryImpl;
 import org.springframework.beans.factory.annotation.Autowired;

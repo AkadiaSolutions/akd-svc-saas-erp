@@ -1,8 +1,8 @@
 package br.akd.svc.akadia.proxy.asaas.webhooks;
 
+import br.akd.svc.akadia.proxy.asaas.webhooks.enums.EventEnum;
 import lombok.*;
 
-@Builder
 @ToString
 @Getter
 @Setter
