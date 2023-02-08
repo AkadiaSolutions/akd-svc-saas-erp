@@ -1,6 +1,6 @@
 package br.akd.svc.akadia.proxy.asaas.responses.mocks;
 
-import br.akd.svc.akadia.proxy.asaas.responses.AssinaturaResponse;
+import br.akd.svc.akadia.proxy.asaas.responses.assinatura.AssinaturaResponse;
 
 import java.time.LocalDate;
 

@@ -1,5 +1,7 @@
-package br.akd.svc.akadia.proxy.asaas.requests;
+package br.akd.svc.akadia.proxy.asaas.requests.assinatura;
 
+import br.akd.svc.akadia.proxy.asaas.requests.CreditCardHolderInfoRequest;
+import br.akd.svc.akadia.proxy.asaas.requests.CreditCardRequest;
 import lombok.*;
 
 @Builder

@@ -1,6 +1,6 @@
 package br.akd.svc.akadia.proxy.asaas.requests.mocks;
 
-import br.akd.svc.akadia.proxy.asaas.requests.AssinaturaRequest;
+import br.akd.svc.akadia.proxy.asaas.requests.assinatura.AssinaturaRequest;
 
 import java.time.LocalDate;
 
