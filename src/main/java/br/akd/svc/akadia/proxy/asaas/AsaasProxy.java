@@ -1,15 +1,15 @@
 package br.akd.svc.akadia.proxy.asaas;
 
-import br.akd.svc.akadia.proxy.asaas.requests.AssinaturaRequest;
+import br.akd.svc.akadia.proxy.asaas.requests.assinatura.AssinaturaRequest;
+import br.akd.svc.akadia.proxy.asaas.requests.assinatura.AtualizaAssinaturaRequest;
 import br.akd.svc.akadia.proxy.asaas.requests.ClienteSistemaRequest;
-import br.akd.svc.akadia.proxy.asaas.responses.AssinaturaResponse;
+import br.akd.svc.akadia.proxy.asaas.responses.assinatura.AssinaturaResponse;
 import br.akd.svc.akadia.proxy.asaas.responses.ClienteSistemaResponse;
+import br.akd.svc.akadia.proxy.asaas.responses.assinatura.AtualizaAssinaturaResponse;
+import br.akd.svc.akadia.proxy.asaas.responses.assinatura.CancelamentoAssinaturaResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.*;
 
 @FeignClient(name = "ASAAS", url = "${URL_ASAAS}")
 public interface AsaasProxy {
@@ -19,11 +19,20 @@ public interface AsaasProxy {
                                           @RequestHeader(value = "access_token") String accessToken);
 
     @PostMapping(value = "/subscriptions")
-    ResponseEntity<AssinaturaResponse> cadastraNovoPlano(@RequestBody AssinaturaRequest assinaturaRequest,
-                                                         @RequestHeader(value = "access_token") String accessToken);
+    ResponseEntity<AssinaturaResponse> cadastraNovaAssinatura(@RequestBody AssinaturaRequest assinaturaRequest,
+                                                              @RequestHeader(value = "access_token") String accessToken);
 
     @PostMapping(value = "/customers/{idCliente}")
     ResponseEntity<ClienteSistemaResponse> atualizaDadosCliente(@PathVariable String idCliente,
                                                 @RequestBody ClienteSistemaRequest clienteSistemaRequest,
                                                 @RequestHeader(value = "access_token") String accessToken);
+
+    @PostMapping(value = "/subscriptions/{idAssinatura}")
+    ResponseEntity<AtualizaAssinaturaResponse> atualizaAssinatura(@PathVariable String idAssinatura,
+                                                                  @RequestBody AtualizaAssinaturaRequest atualizaAssinaturaRequest,
+                                                                  @RequestHeader(value = "access_token") String accessToken);
+
+    @DeleteMapping(value = "/subscriptions/{idAssinatura}")
+    ResponseEntity<CancelamentoAssinaturaResponse> cancelaAssinatura(@PathVariable String idAssinatura,
+                                                                     @RequestHeader(value = "access_token") String accessToken);
 }
