@@ -22,6 +22,9 @@ public class PagamentoSistemaService {
     ClienteSistemaRepositoryImpl clienteSistemaRepositoryImpl;
 
     @Autowired
+    ClienteSistemaService clienteSistemaService;
+
+    @Autowired
     PagamentoSistemaRepositoryImpl pagamentoSistemaRepositoryImpl;
 
     public void realizaTratamentoWebhook(AtualizacaoCobrancaWebHook atualizacaoCobrancaWebHook) {
@@ -37,12 +40,16 @@ public class PagamentoSistemaService {
             case PAYMENT_CONFIRMED:
                 realizaAtualizacaoDePagamentoRealizado(atualizacaoCobrancaWebHook, clienteSistema);
                 break;
+            case PAYMENT_UPDATED:
+                realizaAtualizacaoDePagamentoAlterado(atualizacaoCobrancaWebHook, clienteSistema);
+                break;
+            case PAYMENT_OVERDUE:
+                realizaAtualizacaoDePlanoPagaPagamentoVencido(clienteSistema);
+                break;
+            case PAYMENT_ANTICIPATED:
             case PAYMENT_AWAITING_RISK_ANALYSIS:
             case PAYMENT_APPROVED_BY_RISK_ANALYSIS:
             case PAYMENT_REPROVED_BY_RISK_ANALYSIS:
-            case PAYMENT_UPDATED: //TODO TRATAR PAYMENT UPDATED
-            case PAYMENT_ANTICIPATED:
-            case PAYMENT_OVERDUE:
             case PAYMENT_DELETED:
             case PAYMENT_RESTORED:
             case PAYMENT_REFUNDED:
@@ -87,12 +94,13 @@ public class PagamentoSistemaService {
                                                        ClienteSistemaEntity clienteSistema) {
 
         PagamentoSistemaEntity pagamentoSistemaEntity = pagamentoSistemaRepositoryImpl
-                .implementaBuscaPorCodigoClienteAsaas(atualizacaoCobrancaWebHook.getPayment().getId());
+                .implementaBuscaPorCodigoPagamentoAsaas(atualizacaoCobrancaWebHook.getPayment().getId());
 
         clienteSistema.getPagamentos().remove(pagamentoSistemaEntity);
 
-        //TODO Validar lógica de nextDueDate (IDEIA: PEGAR DO SUBSCRIBE DO ASAAS)
-        clienteSistema.getPlano().setDataVencimento(LocalDate.now().plusDays(30L).toString());
+        clienteSistema.getPlano().setDataVencimento(clienteSistemaService
+                .consultaAssinaturaAsaas(atualizacaoCobrancaWebHook.getPayment().getSubscription()).getNextDueDate());
+
         clienteSistema.getPlano().setStatusPlanoEnum(StatusPlanoEnum.ATIVO);
 
         pagamentoSistemaEntity.setDataPagamento(LocalDate.now().toString());
@@ -109,6 +117,33 @@ public class PagamentoSistemaService {
         pagamentoSistemaEntity.setStatusPagamentoSistemaEnum(StatusPagamentoSistemaEnum.APROVADO);
 
         clienteSistema.getPagamentos().add(pagamentoSistemaEntity);
+        clienteSistemaRepositoryImpl.implementaPersistencia(clienteSistema);
+    }
+
+    public void realizaAtualizacaoDePlanoPagaPagamentoVencido(ClienteSistemaEntity clienteSistema) {
+        clienteSistema.getPlano().setStatusPlanoEnum(StatusPlanoEnum.INATIVO);
+        clienteSistemaRepositoryImpl.implementaPersistencia(clienteSistema);
+    }
+
+    public void realizaAtualizacaoDePagamentoAlterado(AtualizacaoCobrancaWebHook atualizacaoCobrancaWebHook,
+                                                      ClienteSistemaEntity clienteSistema) {
+        PagamentoSistemaEntity pagamentoSistemaEntity = pagamentoSistemaRepositoryImpl
+                .implementaBuscaPorCodigoPagamentoAsaas(atualizacaoCobrancaWebHook.getPayment().getId());
+
+        clienteSistema.getPagamentos().remove(pagamentoSistemaEntity);
+
+        pagamentoSistemaEntity.setDescricao(atualizacaoCobrancaWebHook.getPayment().getDescription());
+        pagamentoSistemaEntity.setFormaPagamentoSistemaEnum(FormaPagamentoSistemaEnum.valueOf(atualizacaoCobrancaWebHook
+                .getPayment().getBillingType().getFormaPagamentoResumida()));
+        pagamentoSistemaEntity.setCartao(atualizacaoCobrancaWebHook.getPayment().getBillingType()
+                .equals(BillingTypeEnum.CREDIT_CARD) && clienteSistema.getCartao() != null
+                ? clienteSistema.getCartao()
+                : null);
+
+        pagamentoSistemaEntity.setClienteSistema(clienteSistema);
+
+        clienteSistema.getPagamentos().add(pagamentoSistemaEntity);
+
         clienteSistemaRepositoryImpl.implementaPersistencia(clienteSistema);
     }
 

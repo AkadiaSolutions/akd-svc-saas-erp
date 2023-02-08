@@ -14,7 +14,7 @@ public class PagamentoSistemaRepositoryImpl {
     @Autowired
     PagamentoSistemaRepository pagamentoSistemaRepository;
 
-    public PagamentoSistemaEntity implementaBuscaPorCodigoClienteAsaas(String codigoPagamentoAsaas) {
+    public PagamentoSistemaEntity implementaBuscaPorCodigoPagamentoAsaas(String codigoPagamentoAsaas) {
         Optional<PagamentoSistemaEntity> pagamentoOptional =
                 pagamentoSistemaRepository.findByCodigoPagamentoAsaas(codigoPagamentoAsaas);
 
