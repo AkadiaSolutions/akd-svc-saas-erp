@@ -44,13 +44,13 @@ public class PagamentoSistemaService {
                 realizaAtualizacaoDePagamentoAlterado(atualizacaoCobrancaWebHook, clienteSistema);
                 break;
             case PAYMENT_OVERDUE:
-                realizaAtualizacaoDePlanoPagaPagamentoVencido(clienteSistema);
+                realizaAtualizacaoDePlanoParaPagamentoVencido(clienteSistema);
                 break;
+            case PAYMENT_DELETED:
             case PAYMENT_ANTICIPATED:
             case PAYMENT_AWAITING_RISK_ANALYSIS:
             case PAYMENT_APPROVED_BY_RISK_ANALYSIS:
             case PAYMENT_REPROVED_BY_RISK_ANALYSIS:
-            case PAYMENT_DELETED:
             case PAYMENT_RESTORED:
             case PAYMENT_REFUNDED:
             case PAYMENT_RECEIVED_IN_CASH_UNDONE:
@@ -120,8 +120,12 @@ public class PagamentoSistemaService {
         clienteSistemaRepositoryImpl.implementaPersistencia(clienteSistema);
     }
 
-    public void realizaAtualizacaoDePlanoPagaPagamentoVencido(ClienteSistemaEntity clienteSistema) {
+    public void realizaAtualizacaoDePlanoParaPagamentoVencido(ClienteSistemaEntity clienteSistema) {
         clienteSistema.getPlano().setStatusPlanoEnum(StatusPlanoEnum.INATIVO);
+
+        if (LocalDate.now().compareTo(LocalDate.parse(clienteSistema.getPlano().getDataVencimento())) >= 5)
+            clienteSistemaService.cancelaAssinatura(clienteSistema.getId());
+
         clienteSistemaRepositoryImpl.implementaPersistencia(clienteSistema);
     }
 
