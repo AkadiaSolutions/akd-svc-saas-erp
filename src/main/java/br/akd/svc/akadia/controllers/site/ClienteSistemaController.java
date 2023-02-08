@@ -97,9 +97,17 @@ public class ClienteSistemaController {
             @ApiResponse(code = 404, message = "Nenhum cliente foi encontrado com o id informado", response = ObjectNotFoundException.class),
             @ApiResponse(code = 500, message = "Ocorreu uma falha na conexão com o feign", response = FeignConnectionException.class),
     })
-    @PutMapping("atualiza-cliente/{id}")
-    public ResponseEntity<ClienteSistemaEntity> atualizaDadosCliente(@PathVariable Long id,
+    @PutMapping("atualiza-cliente/{idCliente}")
+    public ResponseEntity<ClienteSistemaEntity> atualizaDadosCliente(@PathVariable Long idCliente,
                                                                      @RequestBody ClienteSistemaDto clienteSistemaDto) {
-        return ResponseEntity.status(HttpStatus.OK).body(clienteSistemaService.atualizaDadosCliente(id, clienteSistemaDto));
+        return ResponseEntity.status(HttpStatus.OK).body(clienteSistemaService.atualizaDadosCliente(idCliente, clienteSistemaDto));
     }
+
+    //TODO ADICIONAR ANNOTATIONS
+    @PutMapping("atualiza-assinatura/{idCliente}")
+    public ResponseEntity<ClienteSistemaEntity> atualizaDadosAssinaturaCliente(@PathVariable Long idCliente,
+                                                                               @RequestBody ClienteSistemaDto clienteSistemaDto) {
+        return ResponseEntity.status(HttpStatus.OK).body(clienteSistemaService.atualizaDadosAssinaturaCliente(idCliente, clienteSistemaDto));
+    }
+
 }
