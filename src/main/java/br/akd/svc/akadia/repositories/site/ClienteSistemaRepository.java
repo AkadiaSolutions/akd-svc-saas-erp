@@ -13,4 +13,6 @@ public interface ClienteSistemaRepository extends JpaRepository<ClienteSistemaEn
 
     Optional<ClienteSistemaEntity> findByCpf(String cpf);
 
+    Optional<ClienteSistemaEntity> findByCodigoClienteAsaas(String codigoClienteAsaas);
+
 }

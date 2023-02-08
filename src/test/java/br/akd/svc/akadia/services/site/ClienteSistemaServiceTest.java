@@ -93,7 +93,7 @@ class ClienteSistemaServiceTest {
                 any()))
                 .thenReturn(new ResponseEntity<>(ClienteSistemaResponseBuilder.builder().build(), HttpStatus.OK));
 
-        when(asaasProxy.cadastraNovoPlano(
+        when(asaasProxy.cadastraNovaAssinatura(
                 any(),
                 any()))
                 .thenReturn(new ResponseEntity<>(AssinaturaResponseBuilder.builder().comCreditCard().build(), HttpStatus.OK));
@@ -166,7 +166,7 @@ class ClienteSistemaServiceTest {
     @DisplayName("Deve testar o método de cadastro de uma nova assinatura no ASAAS")
     void deveTestarCadastroDeAssinaturaAsaas() {
 
-        when(asaasProxy.cadastraNovoPlano(
+        when(asaasProxy.cadastraNovaAssinatura(
                 any(),
                 any()))
                 .thenReturn(new ResponseEntity<>(AssinaturaResponseBuilder.builder().build(), HttpStatus.OK));
@@ -182,7 +182,7 @@ class ClienteSistemaServiceTest {
     @Test
     @DisplayName("Deve testar o método de cadastro de um novo plano de assinatura no ASAAS com exception de falha de comunicação")
     void deveTestarCadastroDePlanoDeAssinaturaAsaasComExceptionDeFalhaDeComunicacao() {
-        when(asaasProxy.cadastraNovoPlano(any(), any()))
+        when(asaasProxy.cadastraNovaAssinatura(any(), any()))
                 .thenThrow(new FeignConnectionException("Teste de exception"));
         try {
             clienteSistemaService.criaAssinaturaAsaas(
@@ -201,7 +201,7 @@ class ClienteSistemaServiceTest {
     @Test
     @DisplayName("Deve testar o método de cadastro de um novo plano de assinatura no ASAAS com exception de status code 400")
     void deveTestarCadastroDePlanoDeAssinaturaAsaasComBadRequest() {
-        when(asaasProxy.cadastraNovoPlano(
+        when(asaasProxy.cadastraNovaAssinatura(
                 any(),
                 any()))
                 .thenReturn(new ResponseEntity<>(HttpStatus.BAD_REQUEST));
