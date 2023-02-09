@@ -25,6 +25,7 @@ public class EmpresaEntityBuilder {
         builder.empresaEntity.setNome("Akadia Solutions");
         builder.empresaEntity.setRazaoSocial("AKADIA LTDA");
         builder.empresaEntity.setCnpj("12345678000112");
+        builder.empresaEntity.setEndpoint("akadiasolutions");
         builder.empresaEntity.setEmail("akadia@gmail.com");
         builder.empresaEntity.setNomeFantasia("Akadia Solutions");
         builder.empresaEntity.setInscricaoEstadual("12345667787867");
@@ -34,7 +35,6 @@ public class EmpresaEntityBuilder {
         builder.empresaEntity.setLogo(new byte[]{});
         builder.empresaEntity.setSegmentoEmpresaEnum(SegmentoEmpresaEnum.BATERIA_AUTOMOTIVA);
         builder.empresaEntity.setTelefone(null);
-        builder.empresaEntity.setClienteSistema(null);
         builder.empresaEntity.setConfigFiscalEmpresa(null);
         builder.empresaEntity.setEndereco(null);
         builder.empresaEntity.setChamados(new ArrayList<>());
