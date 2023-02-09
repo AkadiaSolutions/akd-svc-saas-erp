@@ -11,5 +11,6 @@ public interface EmpresaRepository extends JpaRepository<EmpresaEntity, Long> {
 
     Optional<EmpresaEntity> findByCnpj(String cnpj);
     Optional<EmpresaEntity> findByEndpoint(String endpoint);
+    Optional<EmpresaEntity> findByRazaoSocial(String razaoSocial);
 
 }

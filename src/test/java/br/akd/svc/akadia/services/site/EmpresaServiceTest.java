@@ -32,6 +32,24 @@ class EmpresaServiceTest {
     ClienteSistemaRepositoryImpl clienteSistemaRepositoryImpl;
 
     @Test
+    @DisplayName("Deve testar validação de razão social com sucesso")
+    void deveTestarValidacaoDeRazaoSocialComSucesso() {
+        when(empresaRepositoryImpl.implementaBuscaPorRazaoSocial(any()))
+                .thenReturn(Optional.empty());
+        empresaService.validaSeRazaoSocialJaExiste("KG DIMOPOULOS NOVA ERA LTDA");
+        Assertions.assertDoesNotThrow(() -> new Exception());
+    }
+
+    @Test
+    @DisplayName("Deve testar validação de endpoint com sucesso")
+    void deveTestarValidacaoDeEndpointComSucesso() {
+        when(empresaRepositoryImpl.implementaBuscaPorEndpoint(any()))
+                .thenReturn(Optional.empty());
+        empresaService.validaSeEndpointJaExiste("twobrothers");
+        Assertions.assertDoesNotThrow(() -> new Exception());
+    }
+
+    @Test
     @DisplayName("Deve testar validação de cnpj com sucesso")
     void deveTestarValidacaoDeCnpjComSucesso() {
         when(empresaRepositoryImpl.implementaBuscaPorCnpj(any()))
@@ -55,12 +73,17 @@ class EmpresaServiceTest {
     }
 
     @Test
-    @DisplayName("Deve testar validação de endpoint com sucesso")
-    void deveTestarValidacaoDeEndpointComSucesso() {
-        when(empresaRepositoryImpl.implementaBuscaPorEndpoint(any()))
-                .thenReturn(Optional.empty());
-        empresaService.validaSeEndpointJaExiste("twobrothers");
-        Assertions.assertDoesNotThrow(() -> new Exception());
+    @DisplayName("Deve testar validação de razão social que já existe")
+    void deveTestarValidacaoDeRazaoSocialQueJaExiste() {
+        when(empresaRepositoryImpl.implementaBuscaPorRazaoSocial(any()))
+                .thenReturn(Optional.of(EmpresaEntityBuilder.builder().build()));
+        try {
+            empresaService.validaSeRazaoSocialJaExiste("KG DIMOPOULOS NOVA ERA LTDA");
+            Assertions.fail();
+        } catch (InvalidRequestException e) {
+            Assertions.assertEquals("A razão social informada já existe",
+                    e.getMessage());
+        }
     }
 
     @Test
