@@ -21,10 +21,16 @@ public class PlanoEntityBuilder {
         builder.planoEntity.setCodigoAssinaturaAsaas("sub_jaIvjZ8TMlXZ");
         builder.planoEntity.setDataContratacao(LocalDate.of(2023, 2, 3).toString());
         builder.planoEntity.setHoraContratacao(LocalTime.of(9, 58).toString());
+        builder.planoEntity.setDataVencimento(LocalDate.of(2023, 2, 3).toString());
         builder.planoEntity.setTipoPlanoEnum(TipoPlanoEnum.BASIC);
         builder.planoEntity.setStatusPlanoEnum(StatusPlanoEnum.ATIVO);
         builder.planoEntity.setFormaPagamentoSistemaEnum(FormaPagamentoSistemaEnum.BOLETO);
         return builder;
+    }
+
+    public PlanoEntityBuilder planoVencido(Long diasVencido) {
+        this.planoEntity.setDataVencimento(LocalDate.now().minusDays(diasVencido).toString());
+        return this;
     }
 
     public PlanoEntityBuilder pagamentoNoCredito() {

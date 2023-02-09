@@ -59,6 +59,11 @@ public class ClienteSistemaEntityBuilder {
         return this;
     }
 
+    public ClienteSistemaEntityBuilder comPlanoVencido() {
+        this.clienteSistemaEntity.setPlano(PlanoEntityBuilder.builder().planoVencido(7L).build());
+        return this;
+    }
+
     public ClienteSistemaEntity build() {
         return clienteSistemaEntity;
     }

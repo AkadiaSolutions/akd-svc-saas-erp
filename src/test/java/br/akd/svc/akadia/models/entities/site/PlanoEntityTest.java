@@ -21,7 +21,7 @@ class PlanoEntityTest {
     void deveTestarDataBuilder() {
         Assertions.assertEquals(
                 "PlanoEntity(id=1, codigoAssinaturaAsaas=sub_jaIvjZ8TMlXZ, dataContratacao=2023-02-03, " +
-                        "horaContratacao=09:58, dataVencimento=null, tipoPlanoEnum=BASIC, statusPlanoEnum=ATIVO, " +
+                        "horaContratacao=09:58, dataVencimento=2023-02-03, tipoPlanoEnum=BASIC, statusPlanoEnum=ATIVO, " +
                         "formaPagamentoSistemaEnum=BOLETO)",
                 PlanoEntityBuilder.builder().build().toString()
         );

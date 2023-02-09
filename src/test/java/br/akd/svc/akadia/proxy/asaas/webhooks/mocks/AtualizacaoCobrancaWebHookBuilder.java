@@ -1,23 +1,34 @@
 package br.akd.svc.akadia.proxy.asaas.webhooks.mocks;
 
-import br.akd.svc.akadia.proxy.asaas.webhooks.ChargeBackWebHook;
+import br.akd.svc.akadia.proxy.asaas.webhooks.AtualizacaoCobrancaWebHook;
+import br.akd.svc.akadia.proxy.asaas.webhooks.enums.EventEnum;
 
 public class AtualizacaoCobrancaWebHookBuilder {
     AtualizacaoCobrancaWebHookBuilder() {
     }
 
-    ChargeBackWebHook chargeBackWebHook;
+    AtualizacaoCobrancaWebHook atualizacaoCobrancaWebHook;
 
     public static AtualizacaoCobrancaWebHookBuilder builder() {
         AtualizacaoCobrancaWebHookBuilder builder = new AtualizacaoCobrancaWebHookBuilder();
-        builder.chargeBackWebHook = new ChargeBackWebHook();
-        builder.chargeBackWebHook.setStatus(null);
-        builder.chargeBackWebHook.setReason(null);
+        builder.atualizacaoCobrancaWebHook = new AtualizacaoCobrancaWebHook();
+        builder.atualizacaoCobrancaWebHook.setEvent(null);
+        builder.atualizacaoCobrancaWebHook.setPayment(null);
         return builder;
     }
 
-    public ChargeBackWebHook build() {
-        return chargeBackWebHook;
+    public AtualizacaoCobrancaWebHookBuilder comEnumEvento(EventEnum evento) {
+        atualizacaoCobrancaWebHook.setEvent(evento);
+        return this;
+    }
+
+    public AtualizacaoCobrancaWebHookBuilder comPagamento() {
+        atualizacaoCobrancaWebHook.setPayment(PagamentoWebHookBuilder.builder().build());
+        return this;
+    }
+
+    public AtualizacaoCobrancaWebHook build() {
+        return atualizacaoCobrancaWebHook;
     }
 
 }

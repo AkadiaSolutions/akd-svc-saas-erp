@@ -17,6 +17,7 @@ import br.akd.svc.akadia.proxy.asaas.requests.assinatura.AssinaturaRequest;
 import br.akd.svc.akadia.proxy.asaas.requests.assinatura.AtualizaAssinaturaRequest;
 import br.akd.svc.akadia.proxy.asaas.responses.ClienteSistemaResponse;
 import br.akd.svc.akadia.proxy.asaas.responses.assinatura.AssinaturaResponse;
+import br.akd.svc.akadia.proxy.asaas.responses.assinatura.atualiza.AtualizaAssinaturaResponse;
 import br.akd.svc.akadia.proxy.asaas.responses.assinatura.cancela.CancelamentoAssinaturaResponse;
 import br.akd.svc.akadia.proxy.asaas.responses.assinatura.consulta.ConsultaAssinaturaResponse;
 import br.akd.svc.akadia.repositories.site.impl.ClienteSistemaRepositoryImpl;
@@ -304,8 +305,17 @@ public class ClienteSistemaService {
                 .updatePendingPayments("true")
                 .build();
 
-        asaasProxy.atualizaAssinatura(
-                clienteSistema.getPlano().getCodigoAssinaturaAsaas(), atualizaAssinaturaRequest, System.getenv(TOKEN_ASAAS));
+        ResponseEntity<AtualizaAssinaturaResponse> atualizaAssinaturaResponse;
+        try {
+            atualizaAssinaturaResponse = asaasProxy.atualizaAssinatura(
+                    clienteSistema.getPlano().getCodigoAssinaturaAsaas(), atualizaAssinaturaRequest, System.getenv(TOKEN_ASAAS));
+        } catch (Exception e) {
+            throw new FeignConnectionException(FALHA_COMUNICACAO_ASAAS + e.getMessage());
+        }
+
+        if (atualizaAssinaturaResponse.getStatusCodeValue() != 200)
+            throw new InvalidRequestException("Ocorreu um erro no processo de atualização de assinatura com a integradora: "
+                    + atualizaAssinaturaResponse.getBody());
     }
 
     public ConsultaAssinaturaResponse consultaAssinaturaAsaas(String id) {
