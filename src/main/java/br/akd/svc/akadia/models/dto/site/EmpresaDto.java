@@ -22,6 +22,7 @@ public class EmpresaDto {
     private String nome;
     private String razaoSocial;
     private String cnpj;
+    private String endpoint;
     private String email;
     private String nomeFantasia;
     private String inscricaoEstadual;
@@ -31,7 +32,6 @@ public class EmpresaDto {
     private byte[] logo;
     private SegmentoEmpresaEnum segmentoEmpresaEnum;
     private TelefoneDto telefone;
-    private ClienteSistemaDto clienteSistema;
     private ConfigFiscalEmpresaDto configFiscalEmpresa;
     private EnderecoDto endereco;
     private List<ChamadoDto> chamados = new ArrayList<>();

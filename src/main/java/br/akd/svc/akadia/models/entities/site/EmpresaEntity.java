@@ -15,6 +15,7 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "tb_empresa")
@@ -32,6 +33,7 @@ public class EmpresaEntity {
     private String razaoSocial;
 
     private String cnpj;
+    private String endpoint;
 
     private String email;
 
@@ -52,10 +54,6 @@ public class EmpresaEntity {
 
     @OneToOne(targetEntity = TelefoneEntity.class, orphanRemoval = true, cascade = CascadeType.ALL)
     private TelefoneEntity telefone;
-
-    @ManyToOne(targetEntity = ClienteSistemaEntity.class)
-    @JoinColumn(name = "cli_sistema_id")
-    private ClienteSistemaEntity clienteSistema;
 
     @OneToOne(targetEntity = ConfigFiscalEmpresaEntity.class, orphanRemoval = true, cascade = CascadeType.ALL)
     private ConfigFiscalEmpresaEntity configFiscalEmpresa;
