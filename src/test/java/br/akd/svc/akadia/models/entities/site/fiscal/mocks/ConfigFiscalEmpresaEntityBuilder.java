@@ -6,7 +6,9 @@ import br.akd.svc.akadia.models.enums.site.fiscal.RegimeTributarioEnum;
 
 public class ConfigFiscalEmpresaEntityBuilder {
 
-    ConfigFiscalEmpresaEntityBuilder(){}
+    ConfigFiscalEmpresaEntityBuilder() {
+    }
+
     ConfigFiscalEmpresaEntity configFiscalEmpresaEntity;
 
     public static ConfigFiscalEmpresaEntityBuilder builder() {
@@ -28,6 +30,24 @@ public class ConfigFiscalEmpresaEntityBuilder {
         builder.configFiscalEmpresaEntity.setNfceConfig(NfceConfigEntityBuilder.builder().build());
         builder.configFiscalEmpresaEntity.setNfseConfig(NfseConfigEntityBuilder.builder().build());
         return builder;
+    }
+
+    public ConfigFiscalEmpresaEntityBuilder comNfe() {
+        this.configFiscalEmpresaEntity.setNfeConfig(NfeConfigEntityBuilder.builder().build());
+        this.configFiscalEmpresaEntity.setHabilitaNfe(true);
+        return this;
+    }
+
+    public ConfigFiscalEmpresaEntityBuilder comNfce() {
+        this.configFiscalEmpresaEntity.setNfceConfig(NfceConfigEntityBuilder.builder().build());
+        this.configFiscalEmpresaEntity.setHabilitaNfce(true);
+        return this;
+    }
+
+    public ConfigFiscalEmpresaEntityBuilder comNfse() {
+        this.configFiscalEmpresaEntity.setNfseConfig(NfseConfigEntityBuilder.builder().build());
+        this.configFiscalEmpresaEntity.setHabilitaNfse(true);
+        return this;
     }
 
     public ConfigFiscalEmpresaEntity build() {
