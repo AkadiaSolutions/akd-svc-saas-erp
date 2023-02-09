@@ -27,14 +27,57 @@ public class EmpresaService {
     @Autowired
     ClienteSistemaRepositoryImpl clienteSistemaRepositoryImpl;
 
+
     public void validaSeCnpjJaExiste(String cnpj) {
-        if (empresaRepositoryImpl.implementaBuscaPorCnpj(cnpj).isPresent())
+        if (empresaRepositoryImpl.implementaBuscaPorCnpj(cnpj).isPresent()) {
             throw new InvalidRequestException("O cnpj informado já existe");
+        }
     }
 
     public void validaSeEndpointJaExiste(String endpoint) {
-        if (empresaRepositoryImpl.implementaBuscaPorEndpoint(endpoint).isPresent())
+        if (empresaRepositoryImpl.implementaBuscaPorEndpoint(endpoint).isPresent()) {
             throw new InvalidRequestException("O endpoint informado já existe");
+        }
+    }
+
+    public void validaSeRazaoSocialJaExiste(String razaoSocial) {
+        if (empresaRepositoryImpl.implementaBuscaPorRazaoSocial(razaoSocial).isPresent()) {
+            throw new InvalidRequestException("A razão social informada já existe");
+        }
+    }
+
+    public void validaSeInscricaoEstadualJaExiste(String inscricaoEstadual) {
+        if (empresaRepositoryImpl.implementaBuscaPorInscricaoEstadual(inscricaoEstadual).isPresent()) {
+            throw new InvalidRequestException("A inscrição estadual informada já existe");
+        }
+    }
+
+    public void validaSeInscricaoMunicipalJaExiste(String inscricaoMunicipal) {
+        if (empresaRepositoryImpl.implementaBuscaPorInscricaoMunicipal(inscricaoMunicipal).isPresent()) {
+            throw new InvalidRequestException("A inscrição municipal informada já existe");
+        }
+    }
+
+    public void validacaoDeChaveUnicaParaNovaEmpresa(EmpresaDto empresaDto) {
+        if (empresaDto.getCnpj() != null) validaSeCnpjJaExiste(empresaDto.getCnpj());
+        if (empresaDto.getRazaoSocial() != null) validaSeRazaoSocialJaExiste(empresaDto.getRazaoSocial());
+        if (empresaDto.getEndpoint() != null) validaSeEndpointJaExiste(empresaDto.getEndpoint());
+        if (empresaDto.getInscricaoEstadual() != null) validaSeInscricaoEstadualJaExiste(empresaDto.getInscricaoEstadual());
+        if (empresaDto.getInscricaoMunicipal() != null) validaSeInscricaoEstadualJaExiste(empresaDto.getInscricaoMunicipal());
+    }
+
+    public void validacaoDeChaveUnicaParaAtualizacaoDeEmpresa(EmpresaDto empresaDto,
+                                                              EmpresaEntity empresaEditada) {
+        if (empresaDto.getCnpj() != null && !empresaEditada.getCnpj().equals(empresaDto.getCnpj()))
+            validaSeCnpjJaExiste(empresaDto.getCnpj());
+        if (empresaDto.getEndpoint() != null && !empresaEditada.getEndpoint().equalsIgnoreCase(empresaDto.getEndpoint()))
+            validaSeEndpointJaExiste(empresaDto.getEndpoint());
+        if (empresaDto.getRazaoSocial() != null && !empresaEditada.getRazaoSocial().equalsIgnoreCase(empresaDto.getRazaoSocial()))
+            validaSeRazaoSocialJaExiste(empresaDto.getRazaoSocial());
+        if (empresaDto.getInscricaoEstadual() != null && !empresaEditada.getInscricaoEstadual().equalsIgnoreCase(empresaDto.getInscricaoEstadual()))
+            validaSeInscricaoEstadualJaExiste(empresaDto.getInscricaoEstadual());
+        if (empresaDto.getInscricaoMunicipal() != null && !empresaEditada.getInscricaoMunicipal().equalsIgnoreCase(empresaDto.getInscricaoMunicipal()))
+            validaSeInscricaoMunicipalJaExiste(empresaDto.getInscricaoMunicipal());
     }
 
     public ClienteSistemaEntity criaNovaEmpresa(Long idCliente, EmpresaDto empresaDto) {
@@ -46,8 +89,7 @@ public class EmpresaService {
                     + clienteSistema.getPlano().getTipoPlanoEnum().getQtdLimiteEmpresasCadastradas() + " (max) com "
                     + clienteSistema.getEmpresas().size() + " empresas cadastradas");
 
-        validaSeCnpjJaExiste(empresaDto.getCnpj());
-        validaSeEndpointJaExiste(empresaDto.getEndpoint());
+        validacaoDeChaveUnicaParaNovaEmpresa(empresaDto);
 
         EmpresaEntity empresaEntity = EmpresaEntity.builder()
                 .dataCadastro(LocalDate.now().toString())
@@ -129,6 +171,65 @@ public class EmpresaService {
 
         clienteSistema.getEmpresas().add(empresaEntity);
         return clienteSistemaRepositoryImpl.implementaPersistencia(clienteSistema);
+    }
+
+    public EmpresaEntity atualizaEmpresa(Long idEmpresa, EmpresaDto empresaDto) {
+
+        EmpresaEntity empresa = empresaRepositoryImpl.implementaBuscaPorId(idEmpresa);
+
+        validacaoDeChaveUnicaParaAtualizacaoDeEmpresa(empresaDto, empresa);
+
+        empresa.setNome(empresaDto.getNome());
+        empresa.setRazaoSocial(empresaDto.getRazaoSocial());
+        empresa.setCnpj(empresaDto.getCnpj());
+        empresa.setEndpoint(empresaDto.getEndpoint());
+        empresa.setEmail(empresaDto.getEmail());
+        empresa.setNomeFantasia(empresaDto.getNomeFantasia());
+        empresa.setInscricaoEstadual(empresaDto.getInscricaoEstadual());
+        empresa.setInscricaoMunicipal(empresaDto.getInscricaoMunicipal());
+        empresa.setNomeResponsavel(empresaDto.getNomeResponsavel());
+        empresa.setCpfResponsavel(empresaDto.getCpfResponsavel());
+        empresa.setLogo(empresaDto.getLogo());
+        empresa.getTelefone().setPrefixo(empresaDto.getTelefone().getPrefixo());
+        empresa.getTelefone().setNumero(empresaDto.getTelefone().getNumero());
+        empresa.getTelefone().setTipoTelefoneEnum(empresaDto.getTelefone().getTipoTelefoneEnum());
+        empresa.getEndereco().setLogradouro(empresaDto.getEndereco().getLogradouro());
+        empresa.getEndereco().setNumero(empresaDto.getEndereco().getNumero());
+        empresa.getEndereco().setBairro(empresaDto.getEndereco().getBairro());
+        empresa.getEndereco().setCidade(empresaDto.getEndereco().getCidade());
+        empresa.getEndereco().setEstadoEnum(empresaDto.getEndereco().getEstadoEnum());
+        empresa.getEndereco().setCodigoPostal(empresaDto.getEndereco().getCodigoPostal());
+        empresa.getEndereco().setComplemento(empresaDto.getEndereco().getComplemento());
+        empresa.getConfigFiscalEmpresa().setDiscriminaImpostos(empresaDto.getConfigFiscalEmpresa().getDiscriminaImpostos());
+        empresa.getConfigFiscalEmpresa().setHabilitaNfe(empresaDto.getConfigFiscalEmpresa().getHabilitaNfe());
+        empresa.getConfigFiscalEmpresa().setHabilitaNfce(empresaDto.getConfigFiscalEmpresa().getHabilitaNfce());
+        empresa.getConfigFiscalEmpresa().setHabilitaNfse(empresaDto.getConfigFiscalEmpresa().getHabilitaNfse());
+        empresa.getConfigFiscalEmpresa().setHabilitaEnvioEmailDestinatario(empresaDto.getConfigFiscalEmpresa().getHabilitaEnvioEmailDestinatario());
+        empresa.getConfigFiscalEmpresa().setExibeReciboNaDanfe(empresaDto.getConfigFiscalEmpresa().getExibeReciboNaDanfe());
+        empresa.getConfigFiscalEmpresa().setCnpjContabilidade(empresaDto.getConfigFiscalEmpresa().getCnpjContabilidade());
+        empresa.getConfigFiscalEmpresa().setSenhaCertificadoDigital(empresaDto.getConfigFiscalEmpresa().getSenhaCertificadoDigital());
+        empresa.getConfigFiscalEmpresa().setOrientacaoDanfeEnum(empresaDto.getConfigFiscalEmpresa().getOrientacaoDanfeEnum());
+        empresa.getConfigFiscalEmpresa().setRegimeTributarioEnum(empresaDto.getConfigFiscalEmpresa().getRegimeTributarioEnum());
+        empresa.getConfigFiscalEmpresa().setCertificadoDigital(empresaDto.getConfigFiscalEmpresa().getCertificadoDigital());
+        empresa.getConfigFiscalEmpresa().getNfeConfig().setProximoNumeroProducao(empresaDto.getConfigFiscalEmpresa().getNfeConfig().getProximoNumeroProducao());
+        empresa.getConfigFiscalEmpresa().getNfeConfig().setProximoNumeroHomologacao(empresaDto.getConfigFiscalEmpresa().getNfeConfig().getProximoNumeroProducao());
+        empresa.getConfigFiscalEmpresa().getNfeConfig().setSerieProducao(empresaDto.getConfigFiscalEmpresa().getNfeConfig().getSerieProducao());
+        empresa.getConfigFiscalEmpresa().getNfeConfig().setSerieHomologacao(empresaDto.getConfigFiscalEmpresa().getNfeConfig().getSerieHomologacao());
+        empresa.getConfigFiscalEmpresa().getNfceConfig().setProximoNumeroProducao(empresaDto.getConfigFiscalEmpresa().getNfceConfig().getProximoNumeroProducao());
+        empresa.getConfigFiscalEmpresa().getNfceConfig().setProximoNumeroHomologacao(empresaDto.getConfigFiscalEmpresa().getNfceConfig().getProximoNumeroProducao());
+        empresa.getConfigFiscalEmpresa().getNfceConfig().setSerieProducao(empresaDto.getConfigFiscalEmpresa().getNfceConfig().getSerieProducao());
+        empresa.getConfigFiscalEmpresa().getNfceConfig().setSerieHomologacao(empresaDto.getConfigFiscalEmpresa().getNfceConfig().getSerieHomologacao());
+        empresa.getConfigFiscalEmpresa().getNfceConfig().setCscProducao(empresaDto.getConfigFiscalEmpresa().getNfceConfig().getCscProducao());
+        empresa.getConfigFiscalEmpresa().getNfceConfig().setCscHomologacao(empresaDto.getConfigFiscalEmpresa().getNfceConfig().getCscHomologacao());
+        empresa.getConfigFiscalEmpresa().getNfceConfig().setIdTokenProducao(empresaDto.getConfigFiscalEmpresa().getNfceConfig().getIdTokenProducao());
+        empresa.getConfigFiscalEmpresa().getNfceConfig().setIdTokenHomologacao(empresaDto.getConfigFiscalEmpresa().getNfceConfig().getIdTokenHomologacao());
+        empresa.getConfigFiscalEmpresa().getNfseConfig().setProximoNumeroProducao(empresaDto.getConfigFiscalEmpresa().getNfseConfig().getProximoNumeroProducao());
+        empresa.getConfigFiscalEmpresa().getNfseConfig().setProximoNumeroHomologacao(empresaDto.getConfigFiscalEmpresa().getNfseConfig().getProximoNumeroProducao());
+        empresa.getConfigFiscalEmpresa().getNfseConfig().setSerieProducao(empresaDto.getConfigFiscalEmpresa().getNfseConfig().getSerieProducao());
+        empresa.getConfigFiscalEmpresa().getNfseConfig().setSerieHomologacao(empresaDto.getConfigFiscalEmpresa().getNfseConfig().getSerieHomologacao());
+
+        return empresaRepositoryImpl.implementaPersistencia(empresa);
+
     }
 
 }
