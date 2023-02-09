@@ -21,6 +21,7 @@ public class ClienteSistemaEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(unique = true)
     private String codigoClienteAsaas;
 
     private String dataCadastro;

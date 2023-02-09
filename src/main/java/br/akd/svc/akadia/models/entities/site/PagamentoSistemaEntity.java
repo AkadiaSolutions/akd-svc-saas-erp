@@ -24,6 +24,7 @@ public class PagamentoSistemaEntity {
     private String horaCadastro;
     private String dataPagamento;
     private String horaPagamento;
+    @Column(unique = true)
     private String codigoPagamentoAsaas;
     private Double valor;
     private Double valorLiquido;
