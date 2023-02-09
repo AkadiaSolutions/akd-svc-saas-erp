@@ -59,6 +59,33 @@ class EmpresaServiceTest {
     }
 
     @Test
+    @DisplayName("Deve testar validação de inscrição estadual com sucesso")
+    void deveTestarValidacaoDeInscricaoEstadualomSucesso() {
+        when(empresaRepositoryImpl.implementaBuscaPorInscricaoEstadual(any()))
+                .thenReturn(Optional.empty());
+        empresaService.validaSeInscricaoEstadualJaExiste("145574080114");
+        Assertions.assertDoesNotThrow(() -> new Exception());
+    }
+
+    @Test
+    @DisplayName("Deve testar validação de chave única para atualização de empresa")
+    void deveTestarValidacaoDeChaveUnicaParaAtualizacaoDeEmpresa() {
+        empresaService.validacaoDeChaveUnicaParaAtualizacaoDeEmpresa(
+                EmpresaDtoBuilder.builder().build(),
+                EmpresaEntityBuilder.builder().build());
+        Assertions.assertDoesNotThrow(() -> new Exception());
+    }
+
+    @Test
+    @DisplayName("Deve testar validação de inscrição municipal com sucesso")
+    void deveTestarValidacaoDeInscricaoMunicipalComSucesso() {
+        when(empresaRepositoryImpl.implementaBuscaPorInscricaoMunicipal(any()))
+                .thenReturn(Optional.empty());
+        empresaService.validaSeInscricaoMunicipalJaExiste("145574080114");
+        Assertions.assertDoesNotThrow(() -> new Exception());
+    }
+
+    @Test
     @DisplayName("Deve testar validação de endpoint com endpoint que já existe")
     void deveTestarValidacaoDeEndpointComEndpointQueJaExiste() {
         when(empresaRepositoryImpl.implementaBuscaPorEndpoint(any()))
@@ -119,12 +146,46 @@ class EmpresaServiceTest {
                         .comEmpresa()
                         .build());
 
-        System.err.println(empresaService.criaNovaEmpresa(1L,
-                EmpresaDtoBuilder.builder()
+        Assertions.assertEquals("ClienteSistemaEntity(id=1, codigoClienteAsaas=cus_000005113026, " +
+                        "dataCadastro=2023-02-03, horaCadastro=10:40, dataNascimento=2023-02-03, email=fulano@gmail.com, " +
+                        "nome=Fulano, senha=123, cpf=12345678910, saldo=0.0, plano=PlanoEntity(id=1, " +
+                        "codigoAssinaturaAsaas=sub_jaIvjZ8TMlXZ, dataContratacao=2023-02-03, horaContratacao=09:58, " +
+                        "dataVencimento=2023-02-03, tipoPlanoEnum=BASIC, statusPlanoEnum=ATIVO, " +
+                        "formaPagamentoSistemaEnum=CREDIT_CARD), telefone=TelefoneEntity(id=1, prefixo=11, " +
+                        "numero=979815415, tipoTelefoneEnum=MOVEL_WHATSAPP), endereco=EnderecoEntity(id=1, logradouro=Avenida " +
+                        "Coronel Manuel Py, numero=583, bairro=Lauzane Paulista, codigoPostal=02442-090, cidade=São Paulo, " +
+                        "complemento=Casa 4, estadoEnum=SP), cartao=CartaoEntity(id=1, nomePortador=Gabriel, " +
+                        "cpfCnpj=47153427821, numero=5162306219378829, ccv=318, mesExpiracao=8, anoExpiracao=2025, " +
+                        "tokenCartao=null, ativo=true, bandeiraCartaoEnum=VISA))",
+                empresaService.criaNovaEmpresa(1L, EmpresaDtoBuilder.builder()
                         .comConfigFiscalComTodasNf()
                         .comEndereco()
                         .comTelefone()
-                        .build()));
+                        .build()).toString());
+    }
+
+    @Test
+    @DisplayName("Deve testar atualização de empresa")
+    void deveTestarAtualizacaoDeEmpresa() {
+
+        when(empresaRepositoryImpl.implementaBuscaPorId(any()))
+                .thenReturn(EmpresaEntityBuilder.builder()
+                        .comConfigFiscalComTodasNf()
+                        .comEndereco()
+                        .comTelefone().build());
+
+        when(empresaRepositoryImpl.implementaPersistencia(any()))
+                .thenReturn(EmpresaEntityBuilder.builder()
+                        .comConfigFiscalComTodasNf()
+                        .comEndereco()
+                        .comTelefone().build());
+
+        System.err.println(empresaService.atualizaEmpresa(1L, EmpresaDtoBuilder.builder()
+                .comEndereco()
+                .comConfigFiscalComTodasNf()
+                .comTelefone()
+                .comEndereco()
+                .build()));
     }
 
 }
