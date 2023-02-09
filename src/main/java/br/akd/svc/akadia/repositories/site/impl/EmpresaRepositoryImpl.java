@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -14,6 +15,10 @@ public class EmpresaRepositoryImpl {
 
     @Autowired
     EmpresaRepository empresaRepository;
+
+    public List<EmpresaEntity> buscaTodasEmpresas() {
+        return empresaRepository.findAll();
+    }
 
     @Transactional
     public EmpresaEntity implementaPersistencia(EmpresaEntity empresaEntity) {
@@ -30,6 +35,14 @@ public class EmpresaRepositoryImpl {
 
     public Optional<EmpresaEntity> implementaBuscaPorRazaoSocial(String razaoSocial) {
         return empresaRepository.findByRazaoSocial(razaoSocial);
+    }
+
+    public Optional<EmpresaEntity> implementaBuscaPorInscricaoEstadual(String inscricaoEstadual) {
+        return empresaRepository.findByInscricaoEstadual(inscricaoEstadual);
+    }
+
+    public Optional<EmpresaEntity> implementaBuscaPorInscricaoMunicipal(String inscricaoMunicipal) {
+        return empresaRepository.findByInscricaoMunicipal(inscricaoMunicipal);
     }
 
     public EmpresaEntity implementaBuscaPorId(Long id) {

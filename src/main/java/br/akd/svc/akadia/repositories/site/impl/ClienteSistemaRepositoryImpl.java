@@ -17,6 +17,10 @@ public class ClienteSistemaRepositoryImpl {
     @Autowired
     ClienteSistemaRepository clienteSistemaRepository;
 
+    public List<ClienteSistemaEntity> buscaTodosClientes() {
+        return clienteSistemaRepository.findAll();
+    }
+
     @Transactional
     public ClienteSistemaEntity implementaPersistencia(ClienteSistemaEntity clienteSistema) {
         return clienteSistemaRepository.save(clienteSistema);

@@ -30,6 +30,7 @@ public class EmpresaEntity {
 
     private String nome;
 
+    @Column(unique = true)
     private String razaoSocial;
 
     @Column(unique = true)
@@ -42,8 +43,10 @@ public class EmpresaEntity {
 
     private String nomeFantasia;
 
+    @Column(unique = true)
     private String inscricaoEstadual;
 
+    @Column(unique = true)
     private String inscricaoMunicipal;
 
     private String nomeResponsavel;
