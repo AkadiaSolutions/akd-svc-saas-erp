@@ -58,6 +58,9 @@ public class ClienteSistemaService {
 
     public ClienteSistemaEntity cadastraNovoCliente(ClienteSistemaDto clienteSistemaDto) {
 
+        validaSeEmailJaExiste(clienteSistemaDto);
+        validaSeCpfJaExiste(clienteSistemaDto);
+
         ClienteSistemaEntity clienteSistema =
                 ClienteSistemaEntity.builder()
                         .dataCadastro(LocalDate.now().toString())
