@@ -3,6 +3,7 @@ package br.akd.svc.akadia.controllers.site;
 import br.akd.svc.akadia.models.dto.site.ClienteSistemaDto;
 import br.akd.svc.akadia.models.entities.bckoff.LeadEntity;
 import br.akd.svc.akadia.models.entities.site.ClienteSistemaEntity;
+import br.akd.svc.akadia.repositories.site.impl.ClienteSistemaRepositoryImpl;
 import br.akd.svc.akadia.services.bckoff.LeadService;
 import br.akd.svc.akadia.services.exceptions.FeignConnectionException;
 import br.akd.svc.akadia.services.exceptions.InvalidRequestException;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import java.util.List;
 
 @RestController
 @Api(value = "Essa API disponibiliza os endpoints de CRUD da entidade ClienteSistema")
@@ -32,7 +34,15 @@ public class ClienteSistemaController {
     ClienteSistemaService clienteSistemaService;
 
     @Autowired
+    ClienteSistemaRepositoryImpl clienteSistemaRepositoryImpl;
+
+    @Autowired
     LeadService leadService;
+
+    @GetMapping
+    public ResponseEntity<List<ClienteSistemaEntity>> listaTodosClientes() {
+        return ResponseEntity.status(HttpStatus.OK).body(clienteSistemaRepositoryImpl.buscaTodosClientes());
+    }
 
     @ApiOperation(
             value = "Captação de lead da criação de novo cliente",
