@@ -27,12 +27,14 @@ public class ClienteSistemaEntity {
     private String horaCadastro;
     private String dataNascimento;
 
+    @Column(unique = true)
     private String email;
 
     private String nome;
 
     private String senha;
 
+    @Column(unique = true)
     private String cpf;
 
     private Double saldo;

@@ -32,7 +32,10 @@ public class EmpresaEntity {
 
     private String razaoSocial;
 
+    @Column(unique = true)
     private String cnpj;
+
+    @Column(unique = true)
     private String endpoint;
 
     private String email;
