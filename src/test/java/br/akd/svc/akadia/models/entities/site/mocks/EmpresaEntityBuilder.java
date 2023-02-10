@@ -36,6 +36,8 @@ public class EmpresaEntityBuilder {
         builder.empresaEntity.setNomeResponsavel("Gabriel Lagrota");
         builder.empresaEntity.setCpfResponsavel("47153427821");
         builder.empresaEntity.setLogo(new byte[]{});
+        builder.empresaEntity.setDeletada(false);
+        builder.empresaEntity.setDadosEmpresaDeletada(null);
         builder.empresaEntity.setSegmentoEmpresaEnum(SegmentoEmpresaEnum.BATERIA_AUTOMOTIVA);
         builder.empresaEntity.setTelefone(null);
         builder.empresaEntity.setConfigFiscalEmpresa(null);

@@ -35,6 +35,8 @@ public class EmpresaDtoBuilder {
         builder.empresaDto.setNomeResponsavel("Gabriel Lagrota");
         builder.empresaDto.setCpfResponsavel("47153427821");
         builder.empresaDto.setLogo(new byte[]{});
+        builder.empresaDto.setDeletada(false);
+        builder.empresaDto.setDadosEmpresaDeletada(null);
         builder.empresaDto.setSegmentoEmpresaEnum(SegmentoEmpresaEnum.BATERIA_AUTOMOTIVA);
         builder.empresaDto.setTelefone(null);
         builder.empresaDto.setConfigFiscalEmpresa(null);

@@ -22,8 +22,9 @@ class EmpresaDtoTest {
                         "razaoSocial=AKADIA LTDA, cnpj=12345678000112, endpoint=akadiasolutions, " +
                         "email=akadia@gmail.com, nomeFantasia=Akadia Solutions, inscricaoEstadual=12345667787867, " +
                         "inscricaoMunicipal=12345667787867, nomeResponsavel=Gabriel Lagrota, " +
-                        "cpfResponsavel=47153427821, logo=[], segmentoEmpresaEnum=BATERIA_AUTOMOTIVA, telefone=null, " +
-                        "configFiscalEmpresa=null, endereco=null, chamados=[])",
+                        "cpfResponsavel=47153427821, logo=[], deletada=false, dadosEmpresaDeletada=null, " +
+                        "segmentoEmpresaEnum=BATERIA_AUTOMOTIVA, telefone=null, configFiscalEmpresa=null, " +
+                        "endereco=null, chamados=[])",
                 EmpresaDtoBuilder.builder().build().toString()
         );
 
@@ -47,6 +48,8 @@ class EmpresaDtoTest {
                 "Augustinho Carrara",
                 "98756432140",
                 new byte[]{},
+                false,
+                null,
                 SegmentoEmpresaEnum.BATERIA_AUTOMOTIVA,
                 null,
                 null,
@@ -59,9 +62,9 @@ class EmpresaDtoTest {
                         "razaoSocial=Tabajara LTDA, cnpj=12345678000150, endpoint=org-tabajara, " +
                         "email=tabajara@gmail.com, nomeFantasia=Organizações Tabajara, " +
                         "inscricaoEstadual=821397182936178236, inscricaoMunicipal=821397182936178236, " +
-                        "nomeResponsavel=Augustinho Carrara, cpfResponsavel=98756432140, logo=[], " +
-                        "segmentoEmpresaEnum=BATERIA_AUTOMOTIVA, telefone=null, configFiscalEmpresa=null, " +
-                        "endereco=null, chamados=[])",
+                        "nomeResponsavel=Augustinho Carrara, cpfResponsavel=98756432140, logo=[], deletada=false, " +
+                        "dadosEmpresaDeletada=null, segmentoEmpresaEnum=BATERIA_AUTOMOTIVA, telefone=null, " +
+                        "configFiscalEmpresa=null, endereco=null, chamados=[])",
                 empresaDto.toString()
         );
 
