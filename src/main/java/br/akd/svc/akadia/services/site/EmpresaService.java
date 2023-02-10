@@ -197,7 +197,7 @@ public class EmpresaService {
 
         EmpresaEntity empresa = empresaRepositoryImpl.implementaBuscaPorId(idEmpresa);
 
-        if (empresa.getDeletada())
+        if (Boolean.TRUE.equals(empresa.getDeletada()))
             throw new InvalidRequestException("Não é possível realizar alterações em uma empresa que foi removida");
 
         validacaoDeChaveUnicaParaAtualizacaoDeEmpresa(empresaDto, empresa);
@@ -261,7 +261,8 @@ public class EmpresaService {
         empresa.setDeletada(true);
 
         empresa.getDadosEmpresaDeletada().setDataRemocao(LocalDate.now().toString());
-        empresa.getDadosEmpresaDeletada().setDataRemocao(LocalTime.now().toString());
+        empresa.getDadosEmpresaDeletada().setHoraRemocao(LocalTime.now().toString());
+
         empresa.getDadosEmpresaDeletada().setCnpj(empresa.getCnpj());
         empresa.getDadosEmpresaDeletada().setInscricaoEstadual(empresa.getInscricaoEstadual());
         empresa.getDadosEmpresaDeletada().setInscricaoMunicipal(empresa.getInscricaoMunicipal());
