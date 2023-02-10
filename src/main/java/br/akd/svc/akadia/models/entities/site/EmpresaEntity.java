@@ -55,6 +55,11 @@ public class EmpresaEntity {
 
     private byte[] logo;
 
+    private Boolean deletada;
+
+    @OneToOne(targetEntity = DadosEmpresaDeletadaEntity.class, orphanRemoval = true, cascade = CascadeType.ALL)
+    private DadosEmpresaDeletadaEntity dadosEmpresaDeletada;
+
     @Enumerated(EnumType.STRING)
     private SegmentoEmpresaEnum segmentoEmpresaEnum;
 

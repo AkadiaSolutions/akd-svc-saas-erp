@@ -30,6 +30,8 @@ public class EmpresaDto {
     private String nomeResponsavel;
     private String cpfResponsavel;
     private byte[] logo;
+    private Boolean deletada;
+    private DadosEmpresaDeletadaDto dadosEmpresaDeletada;
     private SegmentoEmpresaEnum segmentoEmpresaEnum;
     private TelefoneDto telefone;
     private ConfigFiscalEmpresaDto configFiscalEmpresa;
