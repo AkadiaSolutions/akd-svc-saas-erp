@@ -4,6 +4,7 @@ import br.akd.svc.akadia.models.dto.site.EmpresaDto;
 import br.akd.svc.akadia.models.entities.global.EnderecoEntity;
 import br.akd.svc.akadia.models.entities.global.TelefoneEntity;
 import br.akd.svc.akadia.models.entities.site.ClienteSistemaEntity;
+import br.akd.svc.akadia.models.entities.site.DadosEmpresaDeletadaEntity;
 import br.akd.svc.akadia.models.entities.site.EmpresaEntity;
 import br.akd.svc.akadia.models.entities.site.fiscal.ConfigFiscalEmpresaEntity;
 import br.akd.svc.akadia.models.entities.site.fiscal.NfceConfigEntity;
@@ -17,6 +18,8 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class EmpresaService {
@@ -62,8 +65,10 @@ public class EmpresaService {
         if (empresaDto.getCnpj() != null) validaSeCnpjJaExiste(empresaDto.getCnpj());
         if (empresaDto.getRazaoSocial() != null) validaSeRazaoSocialJaExiste(empresaDto.getRazaoSocial());
         if (empresaDto.getEndpoint() != null) validaSeEndpointJaExiste(empresaDto.getEndpoint());
-        if (empresaDto.getInscricaoEstadual() != null) validaSeInscricaoEstadualJaExiste(empresaDto.getInscricaoEstadual());
-        if (empresaDto.getInscricaoMunicipal() != null) validaSeInscricaoEstadualJaExiste(empresaDto.getInscricaoMunicipal());
+        if (empresaDto.getInscricaoEstadual() != null)
+            validaSeInscricaoEstadualJaExiste(empresaDto.getInscricaoEstadual());
+        if (empresaDto.getInscricaoMunicipal() != null)
+            validaSeInscricaoEstadualJaExiste(empresaDto.getInscricaoMunicipal());
     }
 
     public void validacaoDeChaveUnicaParaAtualizacaoDeEmpresa(EmpresaDto empresaDto,
@@ -84,10 +89,16 @@ public class EmpresaService {
 
         ClienteSistemaEntity clienteSistema = clienteSistemaRepositoryImpl.implementaBuscaPorId(idCliente);
 
-        if (clienteSistema.getPlano().getTipoPlanoEnum().getQtdLimiteEmpresasCadastradas() <= clienteSistema.getEmpresas().size())
+        List<EmpresaEntity> empresasAtivasCliente =
+                clienteSistema.getEmpresas().stream()
+                        .filter((EmpresaEntity filtroEmpresa) -> !filtroEmpresa.getDeletada())
+                        .collect(Collectors.toList());
+
+        if (clienteSistema.getPlano().getTipoPlanoEnum().getQtdLimiteEmpresasCadastradas()
+                <= clienteSistema.getEmpresas().size())
             throw new InvalidRequestException("Este cliente já possui o número máximo de empresas cadastradas em seu plano: "
                     + clienteSistema.getPlano().getTipoPlanoEnum().getQtdLimiteEmpresasCadastradas() + " (max) com "
-                    + clienteSistema.getEmpresas().size() + " empresas cadastradas");
+                    + empresasAtivasCliente.size() + " empresas cadastradas");
 
         validacaoDeChaveUnicaParaNovaEmpresa(empresaDto);
 
@@ -109,6 +120,15 @@ public class EmpresaService {
                 .nomeResponsavel(empresaDto.getNomeResponsavel())
                 .cpfResponsavel(empresaDto.getCpfResponsavel())
                 .logo(empresaDto.getLogo())
+                .deletada(false)
+                .dadosEmpresaDeletada(DadosEmpresaDeletadaEntity.builder()
+                        .dataRemocao(null)
+                        .horaRemocao(null)
+                        .cnpj(null)
+                        .inscricaoMunicipal(null)
+                        .inscricaoEstadual(null)
+                        .razaoSocial(null)
+                        .build())
                 .segmentoEmpresaEnum(empresaDto.getSegmentoEmpresaEnum())
                 .telefone(TelefoneEntity.builder()
                         .tipoTelefoneEnum(empresaDto.getTelefone().getTipoTelefoneEnum())
@@ -177,6 +197,9 @@ public class EmpresaService {
 
         EmpresaEntity empresa = empresaRepositoryImpl.implementaBuscaPorId(idEmpresa);
 
+        if (empresa.getDeletada())
+            throw new InvalidRequestException("Não é possível realizar alterações em uma empresa que foi removida");
+
         validacaoDeChaveUnicaParaAtualizacaoDeEmpresa(empresaDto, empresa);
 
         empresa.setNome(empresaDto.getNome());
@@ -230,6 +253,26 @@ public class EmpresaService {
 
         return empresaRepositoryImpl.implementaPersistencia(empresa);
 
+    }
+
+    public EmpresaEntity removeEmpresa(Long id) {
+        EmpresaEntity empresa = empresaRepositoryImpl.implementaBuscaPorId(id);
+
+        empresa.setDeletada(true);
+
+        empresa.getDadosEmpresaDeletada().setDataRemocao(LocalDate.now().toString());
+        empresa.getDadosEmpresaDeletada().setDataRemocao(LocalTime.now().toString());
+        empresa.getDadosEmpresaDeletada().setCnpj(empresa.getCnpj());
+        empresa.getDadosEmpresaDeletada().setInscricaoEstadual(empresa.getInscricaoEstadual());
+        empresa.getDadosEmpresaDeletada().setInscricaoMunicipal(empresa.getInscricaoMunicipal());
+        empresa.getDadosEmpresaDeletada().setRazaoSocial(empresa.getRazaoSocial());
+
+        empresa.setCnpj(null);
+        empresa.setInscricaoMunicipal(null);
+        empresa.setInscricaoEstadual(null);
+        empresa.setRazaoSocial(null);
+
+        return empresaRepositoryImpl.implementaPersistencia(empresa);
     }
 
 }

@@ -49,7 +49,7 @@ public class EmpresaController {
             @ApiResponse(code = 400, message = "Falha na criação da empresa", response = InvalidRequestException.class),
             @ApiResponse(code = 401, message = "Falha de autenticação"),
     })
-    @PostMapping(value = "{idCliente}/cria-nova")
+    @PostMapping(value = "{idCliente}")
     public ResponseEntity<ClienteSistemaEntity> criaEmpresa(@PathVariable Long idCliente,
                                                             @RequestBody EmpresaDto empresaDto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(empresaService.criaNovaEmpresa(idCliente, empresaDto));
@@ -66,10 +66,15 @@ public class EmpresaController {
             @ApiResponse(code = 400, message = "Falha na atualização da empresa", response = InvalidRequestException.class),
             @ApiResponse(code = 401, message = "Falha de autenticação"),
     })
-    @PutMapping(value = "atualiza/{idEmpresa}")
+    @PutMapping(value = "{idEmpresa}")
     public ResponseEntity<EmpresaEntity> atualizaEmpresa(@PathVariable Long idEmpresa,
                                                          @RequestBody EmpresaDto empresaDto) {
         return ResponseEntity.ok().body(empresaService.atualizaEmpresa(idEmpresa, empresaDto));
+    }
+
+    @DeleteMapping(value = "{idEmpresa}")
+    public ResponseEntity<EmpresaEntity> removeEmpresa(@PathVariable Long idEmpresa) {
+        return ResponseEntity.ok().body(empresaService.removeEmpresa(idEmpresa));
     }
 
 }
