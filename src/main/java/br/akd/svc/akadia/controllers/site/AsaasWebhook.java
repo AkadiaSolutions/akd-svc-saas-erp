@@ -1,6 +1,7 @@
 package br.akd.svc.akadia.controllers.site;
 
-import br.akd.svc.akadia.proxy.asaas.webhooks.AtualizacaoCobrancaWebHook;
+import br.akd.svc.akadia.proxy.asaas.webhooks.cobranca.AtualizacaoCobrancaWebHook;
+import br.akd.svc.akadia.proxy.asaas.webhooks.fiscal.AtualizacaoFiscalWebHook;
 import br.akd.svc.akadia.services.exceptions.FeignConnectionException;
 import br.akd.svc.akadia.services.exceptions.ObjectNotFoundException;
 import br.akd.svc.akadia.services.site.PagamentoSistemaService;
@@ -21,7 +22,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 @RestController
-@RequestMapping("/hook/v1/pagamento")
+@RequestMapping("/hook/v1")
 @Api(value = "Essa API disponibiliza os endpoints de recebimento de webhooks por parte da integradora de pagamentos")
 @Produces({MediaType.APPLICATION_JSON, "application/json"})
 @Consumes({MediaType.APPLICATION_JSON, "application/json"})
@@ -44,9 +45,15 @@ public class AsaasWebhook {
             @ApiResponse(code = 500, message = "Ocorreu uma falha na comunicação com a integradora de pagamentos",
                     response = FeignConnectionException.class),
     })
-    @PostMapping
+    @PostMapping(value="/pagamento")
     public ResponseEntity<HttpStatus> recebeStatusPagamento(@RequestBody AtualizacaoCobrancaWebHook atualizacaoCobrancaWebHook) {
-        pagamentoSistemaService.realizaTratamentoWebhook(atualizacaoCobrancaWebHook);
+        pagamentoSistemaService.realizaTratamentoWebhookCobranca(atualizacaoCobrancaWebHook);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    @PostMapping(value="/fiscal")
+    public ResponseEntity<HttpStatus> recebeStatusPagamento(@RequestBody AtualizacaoFiscalWebHook atualizacaoFiscalWebHook) {
+        pagamentoSistemaService.realizaTratamentoWebhookFiscal(atualizacaoFiscalWebHook);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 

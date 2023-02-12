@@ -3,11 +3,13 @@ package br.akd.svc.akadia.proxy.asaas;
 import br.akd.svc.akadia.proxy.asaas.requests.assinatura.AssinaturaRequest;
 import br.akd.svc.akadia.proxy.asaas.requests.assinatura.AtualizaAssinaturaRequest;
 import br.akd.svc.akadia.proxy.asaas.requests.ClienteSistemaRequest;
+import br.akd.svc.akadia.proxy.asaas.requests.fiscal.CriaConfigFiscalRequest;
 import br.akd.svc.akadia.proxy.asaas.responses.assinatura.AssinaturaResponse;
 import br.akd.svc.akadia.proxy.asaas.responses.ClienteSistemaResponse;
 import br.akd.svc.akadia.proxy.asaas.responses.assinatura.atualiza.AtualizaAssinaturaResponse;
 import br.akd.svc.akadia.proxy.asaas.responses.assinatura.cancela.CancelamentoAssinaturaResponse;
 import br.akd.svc.akadia.proxy.asaas.responses.assinatura.consulta.ConsultaAssinaturaResponse;
+import br.akd.svc.akadia.proxy.asaas.responses.fiscal.CriaConfigFiscalResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -40,4 +42,9 @@ public interface AsaasProxy {
     @DeleteMapping(value = "/subscriptions/{idAssinatura}")
     ResponseEntity<CancelamentoAssinaturaResponse> cancelaAssinatura(@PathVariable String idAssinatura,
                                                                      @RequestHeader(value = "access_token") String accessToken);
+
+    @PostMapping(value = "/subscriptions/{idAssinatura}/invoiceSettings")
+    ResponseEntity<CriaConfigFiscalResponse> criaConfiguracaoFiscalDaAssinatura(@PathVariable String idAssinatura,
+                                                                                @RequestBody CriaConfigFiscalRequest criaConfigFiscalRequest,
+                                                                                @RequestHeader(value = "access_token") String accessToken);
 }
