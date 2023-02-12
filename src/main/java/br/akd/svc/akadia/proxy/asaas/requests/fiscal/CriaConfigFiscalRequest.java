@@ -10,7 +10,6 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CriaConfigFiscalRequest {
-
     private String municipalServiceId;
     private String municipalServiceCode;
     private String municipalServiceName;
@@ -21,5 +20,4 @@ public class CriaConfigFiscalRequest {
     private Integer daysBeforeDueDate;
     private String observations;
     private Taxes taxes;
-
 }

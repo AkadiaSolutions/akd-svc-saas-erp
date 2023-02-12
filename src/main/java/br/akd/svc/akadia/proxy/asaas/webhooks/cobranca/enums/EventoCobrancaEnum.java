@@ -1,11 +1,11 @@
-package br.akd.svc.akadia.proxy.asaas.webhooks.enums;
+package br.akd.svc.akadia.proxy.asaas.webhooks.cobranca.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public enum EventEnum {
+public enum EventoCobrancaEnum {
     PAYMENT_CREATED("Geração de nova cobrança"),
     PAYMENT_AWAITING_RISK_ANALYSIS("Pagamento em cartão aguardando aprovação pela análise manual de risco"),
     PAYMENT_APPROVED_BY_RISK_ANALYSIS("Pagamento em cartão aprovado pela análise manual de risco"),

@@ -1,7 +1,7 @@
-package br.akd.svc.akadia.proxy.asaas.webhooks;
+package br.akd.svc.akadia.proxy.asaas.webhooks.cobranca;
 
-import br.akd.svc.akadia.proxy.asaas.webhooks.enums.EventEnum;
-import br.akd.svc.akadia.proxy.asaas.webhooks.mocks.AtualizacaoCobrancaWebHookBuilder;
+import br.akd.svc.akadia.proxy.asaas.webhooks.cobranca.enums.EventoCobrancaEnum;
+import br.akd.svc.akadia.proxy.asaas.webhooks.cobranca.mocks.AtualizacaoCobrancaWebHookBuilder;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -24,7 +24,7 @@ class AtualizacaoCobrancaWebHookTest {
     @DisplayName("Deve testar @AllArgsConstructor")
     void deveTestarAllArgsConstructor() {
         AtualizacaoCobrancaWebHook atualizacaoCobrancaWebHook = new AtualizacaoCobrancaWebHook(
-                EventEnum.PAYMENT_CONFIRMED,
+                EventoCobrancaEnum.PAYMENT_CONFIRMED,
                 null
         );
         Assertions.assertEquals(

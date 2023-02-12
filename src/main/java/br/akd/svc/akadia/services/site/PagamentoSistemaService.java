@@ -5,8 +5,9 @@ import br.akd.svc.akadia.models.entities.site.PagamentoSistemaEntity;
 import br.akd.svc.akadia.models.enums.site.FormaPagamentoSistemaEnum;
 import br.akd.svc.akadia.models.enums.site.StatusPagamentoSistemaEnum;
 import br.akd.svc.akadia.models.enums.site.StatusPlanoEnum;
-import br.akd.svc.akadia.proxy.asaas.webhooks.AtualizacaoCobrancaWebHook;
-import br.akd.svc.akadia.proxy.asaas.webhooks.enums.BillingTypeEnum;
+import br.akd.svc.akadia.proxy.asaas.webhooks.cobranca.AtualizacaoCobrancaWebHook;
+import br.akd.svc.akadia.proxy.asaas.webhooks.cobranca.enums.BillingTypeEnum;
+import br.akd.svc.akadia.proxy.asaas.webhooks.fiscal.AtualizacaoFiscalWebHook;
 import br.akd.svc.akadia.repositories.site.impl.ClienteSistemaRepositoryImpl;
 import br.akd.svc.akadia.repositories.site.impl.PagamentoSistemaRepositoryImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,12 +23,12 @@ public class PagamentoSistemaService {
     ClienteSistemaRepositoryImpl clienteSistemaRepositoryImpl;
 
     @Autowired
-    ClienteSistemaService clienteSistemaService;
+    AssinaturaService assinaturaService;
 
     @Autowired
     PagamentoSistemaRepositoryImpl pagamentoSistemaRepositoryImpl;
 
-    public void realizaTratamentoWebhook(AtualizacaoCobrancaWebHook atualizacaoCobrancaWebHook) {
+    public void realizaTratamentoWebhookCobranca(AtualizacaoCobrancaWebHook atualizacaoCobrancaWebHook) {
 
         ClienteSistemaEntity clienteSistema = clienteSistemaRepositoryImpl
                 .implementaBuscaPorCodigoClienteAsaas(atualizacaoCobrancaWebHook.getPayment().getCustomer());
@@ -52,7 +53,7 @@ public class PagamentoSistemaService {
             case PAYMENT_APPROVED_BY_RISK_ANALYSIS:
             case PAYMENT_REPROVED_BY_RISK_ANALYSIS:
             case PAYMENT_RESTORED:
-            case PAYMENT_REFUNDED:
+            case PAYMENT_REFUNDED: //TODO Implantar lógica para estorno
             case PAYMENT_RECEIVED_IN_CASH_UNDONE:
             case PAYMENT_CHARGEBACK_REQUESTED:
             case PAYMENT_CHARGEBACK_DISPUTE:
@@ -60,7 +61,7 @@ public class PagamentoSistemaService {
             case PAYMENT_DUNNING_RECEIVED:
             case PAYMENT_DUNNING_REQUESTED:
             case PAYMENT_BANK_SLIP_VIEWED:
-            case PAYMENT_CHECKOUT_VIEWED:
+            case PAYMENT_CHECKOUT_VIEWED: //TODO Implantar lógica para fatura visualizada
                 break;
         }
     }
@@ -98,7 +99,7 @@ public class PagamentoSistemaService {
 
         clienteSistema.getPagamentos().remove(pagamentoSistemaEntity);
 
-        clienteSistema.getPlano().setDataVencimento(clienteSistemaService
+        clienteSistema.getPlano().setDataVencimento(assinaturaService
                 .consultaAssinaturaAsaas(atualizacaoCobrancaWebHook.getPayment().getSubscription()).getNextDueDate());
 
         clienteSistema.getPlano().setStatusPlanoEnum(StatusPlanoEnum.ATIVO);
@@ -124,7 +125,7 @@ public class PagamentoSistemaService {
         clienteSistema.getPlano().setStatusPlanoEnum(StatusPlanoEnum.INATIVO);
 
         if (LocalDate.now().compareTo(LocalDate.parse(clienteSistema.getPlano().getDataVencimento())) >= 5)
-            clienteSistemaService.cancelaAssinatura(clienteSistema.getId());
+            assinaturaService.cancelaAssinatura(clienteSistema.getId());
 
         clienteSistemaRepositoryImpl.implementaPersistencia(clienteSistema);
     }
@@ -149,6 +150,11 @@ public class PagamentoSistemaService {
         clienteSistema.getPagamentos().add(pagamentoSistemaEntity);
 
         clienteSistemaRepositoryImpl.implementaPersistencia(clienteSistema);
+    }
+
+    public void realizaTratamentoWebhookFiscal(AtualizacaoFiscalWebHook atualizacaoFiscalWebHook) {
+        System.err.println("Atualização status fiscal recebida:");
+        System.err.println(atualizacaoFiscalWebHook);
     }
 
 }

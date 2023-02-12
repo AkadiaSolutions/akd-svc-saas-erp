@@ -3,7 +3,7 @@ package br.akd.svc.akadia.models.entities.site.mocks;
 import br.akd.svc.akadia.models.entities.global.mocks.EnderecoEntityBuilder;
 import br.akd.svc.akadia.models.entities.global.mocks.TelefoneEntityBuilder;
 import br.akd.svc.akadia.models.entities.site.ClienteSistemaEntity;
-import br.akd.svc.akadia.models.entities.site.empresa.EmpresaEntity;
+import br.akd.svc.akadia.models.entities.site.empresa.mocks.EmpresaEntityBuilder;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -40,7 +40,7 @@ public class ClienteSistemaEntityBuilder {
     }
 
     public ClienteSistemaEntityBuilder comEmpresa() {
-        this.clienteSistemaEntity.getEmpresas().add(EmpresaEntity.builder().build());
+        this.clienteSistemaEntity.getEmpresas().add(EmpresaEntityBuilder.builder().build());
         return this;
     }
 

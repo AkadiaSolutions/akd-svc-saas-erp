@@ -1,4 +1,4 @@
-package br.akd.svc.akadia.proxy.asaas.webhooks;
+package br.akd.svc.akadia.proxy.asaas.webhooks.cobranca;
 
 import lombok.*;
 
@@ -7,7 +7,7 @@ import lombok.*;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class InterestWebHook {
+public class FineWebHook {
     private Double value;
     private String type;
 }

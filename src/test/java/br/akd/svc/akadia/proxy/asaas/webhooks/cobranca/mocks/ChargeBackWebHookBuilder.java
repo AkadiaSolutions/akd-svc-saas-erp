@@ -1,7 +1,7 @@
-package br.akd.svc.akadia.proxy.asaas.webhooks.mocks;
+package br.akd.svc.akadia.proxy.asaas.webhooks.cobranca.mocks;
 
-import br.akd.svc.akadia.proxy.asaas.webhooks.AtualizacaoCobrancaWebHook;
-import br.akd.svc.akadia.proxy.asaas.webhooks.enums.EventEnum;
+import br.akd.svc.akadia.proxy.asaas.webhooks.cobranca.AtualizacaoCobrancaWebHook;
+import br.akd.svc.akadia.proxy.asaas.webhooks.cobranca.enums.EventoCobrancaEnum;
 
 public class ChargeBackWebHookBuilder {
 
@@ -13,7 +13,7 @@ public class ChargeBackWebHookBuilder {
     public static ChargeBackWebHookBuilder builder() {
         ChargeBackWebHookBuilder builder = new ChargeBackWebHookBuilder();
         builder.atualizacaoCobrancaWebHook = new AtualizacaoCobrancaWebHook();
-        builder.atualizacaoCobrancaWebHook.setEvent(EventEnum.PAYMENT_CONFIRMED);
+        builder.atualizacaoCobrancaWebHook.setEvent(EventoCobrancaEnum.PAYMENT_CONFIRMED);
         builder.atualizacaoCobrancaWebHook.setPayment(null);
         return builder;
     }

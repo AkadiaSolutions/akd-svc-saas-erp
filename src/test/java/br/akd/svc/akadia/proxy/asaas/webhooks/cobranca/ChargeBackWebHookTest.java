@@ -1,6 +1,6 @@
-package br.akd.svc.akadia.proxy.asaas.webhooks;
+package br.akd.svc.akadia.proxy.asaas.webhooks.cobranca;
 
-import br.akd.svc.akadia.proxy.asaas.webhooks.mocks.ChargeBackWebHookBuilder;
+import br.akd.svc.akadia.proxy.asaas.webhooks.cobranca.mocks.ChargeBackWebHookBuilder;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

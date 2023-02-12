@@ -1,4 +1,4 @@
-package br.akd.svc.akadia.proxy.asaas.webhooks.enums;
+package br.akd.svc.akadia.proxy.asaas.webhooks.cobranca.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

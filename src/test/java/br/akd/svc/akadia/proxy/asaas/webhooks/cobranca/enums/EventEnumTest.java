@@ -1,4 +1,4 @@
-package br.akd.svc.akadia.proxy.asaas.webhooks.enums;
+package br.akd.svc.akadia.proxy.asaas.webhooks.cobranca.enums;
 
 import org.junit.jupiter.api.DisplayName;
 import org.springframework.boot.test.context.SpringBootTest;

@@ -1,4 +1,4 @@
-package br.akd.svc.akadia.proxy.asaas.webhooks;
+package br.akd.svc.akadia.proxy.asaas.webhooks.cobranca;
 
 import lombok.*;
 

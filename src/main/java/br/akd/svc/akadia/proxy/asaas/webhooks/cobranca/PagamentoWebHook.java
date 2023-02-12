@@ -1,6 +1,6 @@
-package br.akd.svc.akadia.proxy.asaas.webhooks;
+package br.akd.svc.akadia.proxy.asaas.webhooks.cobranca;
 
-import br.akd.svc.akadia.proxy.asaas.webhooks.enums.BillingTypeEnum;
+import br.akd.svc.akadia.proxy.asaas.webhooks.cobranca.enums.BillingTypeEnum;
 import lombok.*;
 
 import java.util.List;

@@ -3,8 +3,8 @@ package br.akd.svc.akadia.services.site;
 import br.akd.svc.akadia.models.entities.site.mocks.ClienteSistemaEntityBuilder;
 import br.akd.svc.akadia.models.entities.site.mocks.PagamentoSistemaEntityBuilder;
 import br.akd.svc.akadia.proxy.asaas.responses.assinatura.consulta.mocks.ConsultaAssinaturaResponseBuilder;
-import br.akd.svc.akadia.proxy.asaas.webhooks.enums.EventEnum;
-import br.akd.svc.akadia.proxy.asaas.webhooks.mocks.AtualizacaoCobrancaWebHookBuilder;
+import br.akd.svc.akadia.proxy.asaas.webhooks.cobranca.enums.EventoCobrancaEnum;
+import br.akd.svc.akadia.proxy.asaas.webhooks.cobranca.mocks.AtualizacaoCobrancaWebHookBuilder;
 import br.akd.svc.akadia.repositories.site.impl.ClienteSistemaRepositoryImpl;
 import br.akd.svc.akadia.repositories.site.impl.PagamentoSistemaRepositoryImpl;
 import org.junit.jupiter.api.Assertions;
@@ -23,6 +23,9 @@ class PagamentoSistemaServiceTest {
 
     @InjectMocks
     PagamentoSistemaService pagamentoSistemaService;
+
+    @InjectMocks
+    AssinaturaService assinaturaService;
 
     @Mock
     PagamentoSistemaRepositoryImpl pagamentoSistemaRepositoryImpl;
@@ -43,7 +46,7 @@ class PagamentoSistemaServiceTest {
                 .thenReturn(ClienteSistemaEntityBuilder.builder().comPlanoComPagamentoNoCredito().build());
 
         pagamentoSistemaService.realizaAtualizacaoDePagamentoAlterado(
-                AtualizacaoCobrancaWebHookBuilder.builder().comEnumEvento(EventEnum.PAYMENT_UPDATED).comPagamento().build(),
+                AtualizacaoCobrancaWebHookBuilder.builder().comEnumEvento(EventoCobrancaEnum.PAYMENT_UPDATED).comPagamento().build(),
                 ClienteSistemaEntityBuilder.builder().build());
 
         Assertions.assertDoesNotThrow(() -> new Exception());
@@ -53,7 +56,7 @@ class PagamentoSistemaServiceTest {
     @DisplayName("Deve testar método de atualização de pagamento vencido")
     void deveTestarMetodoDeAtualizacaoDePagamentoVencido() {
 
-        when(clienteSistemaService.cancelaAssinatura(any()))
+        when(assinaturaService.cancelaAssinatura(any()))
                 .thenReturn(ClienteSistemaEntityBuilder.builder().build());
 
         when(clienteSistemaRepositoryImpl.implementaPersistencia(any()))
@@ -71,14 +74,14 @@ class PagamentoSistemaServiceTest {
         when(pagamentoSistemaRepositoryImpl.implementaBuscaPorCodigoPagamentoAsaas(any()))
                 .thenReturn(PagamentoSistemaEntityBuilder.builder().build());
 
-        when(clienteSistemaService.consultaAssinaturaAsaas(any()))
+        when(assinaturaService.consultaAssinaturaAsaas(any()))
                 .thenReturn(ConsultaAssinaturaResponseBuilder.builder().build());
 
         when(clienteSistemaRepositoryImpl.implementaPersistencia(any()))
                 .thenReturn(ClienteSistemaEntityBuilder.builder().comPlanoComPagamentoNoCredito().build());
 
         pagamentoSistemaService.realizaAtualizacaoDePagamentoRealizado(
-                AtualizacaoCobrancaWebHookBuilder.builder().comEnumEvento(EventEnum.PAYMENT_CONFIRMED).comPagamento().build(),
+                AtualizacaoCobrancaWebHookBuilder.builder().comEnumEvento(EventoCobrancaEnum.PAYMENT_CONFIRMED).comPagamento().build(),
                 ClienteSistemaEntityBuilder.builder().comPlanoComPagamentoNoCredito().build());
 
         Assertions.assertDoesNotThrow(() -> new Exception());
@@ -91,7 +94,7 @@ class PagamentoSistemaServiceTest {
                 .thenReturn(ClienteSistemaEntityBuilder.builder().comPlanoComPagamentoNoCredito().build());
 
         pagamentoSistemaService.realizaCriacaoDeNovoPagamento(
-                AtualizacaoCobrancaWebHookBuilder.builder().comPagamento().comEnumEvento(EventEnum.PAYMENT_CREATED).build(),
+                AtualizacaoCobrancaWebHookBuilder.builder().comPagamento().comEnumEvento(EventoCobrancaEnum.PAYMENT_CREATED).build(),
                 ClienteSistemaEntityBuilder.builder().comPlanoVencido().build());
 
         Assertions.assertDoesNotThrow(() -> new Exception());

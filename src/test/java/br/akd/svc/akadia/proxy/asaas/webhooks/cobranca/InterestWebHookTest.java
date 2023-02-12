@@ -1,34 +1,34 @@
-package br.akd.svc.akadia.proxy.asaas.webhooks;
+package br.akd.svc.akadia.proxy.asaas.webhooks.cobranca;
 
-import br.akd.svc.akadia.proxy.asaas.webhooks.mocks.FineWebHookBuilder;
+import br.akd.svc.akadia.proxy.asaas.webhooks.cobranca.mocks.InterestWebHookBuilder;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-@DisplayName("Webhook: Fine")
-class FineWebHookTest {
+@DisplayName("Webhook: Interest")
+class InterestWebHookTest {
 
     @Test
     @DisplayName("Deve testar dataBuilder")
     void deveTestarDataBuilder() {
         Assertions.assertEquals(
-                "FineWebHook(value=0.0, type=PERCENTAGE)",
-                FineWebHookBuilder.builder().build().toString()
+                "InterestWebHook(value=0.0, type=PERCENTAGE)",
+                InterestWebHookBuilder.builder().build().toString()
         );
     }
 
     @Test
     @DisplayName("Deve testar @AllArgsConstructor")
     void deveTestarAllArgsConstructor() {
-        FineWebHook fineWebHook = new FineWebHook(
+        InterestWebHook interestWebHook = new InterestWebHook(
                 0.0,
                 "PERCENTAGE"
         );
         Assertions.assertEquals(
-                "FineWebHook(value=0.0, type=PERCENTAGE)",
-                fineWebHook.toString()
+                "InterestWebHook(value=0.0, type=PERCENTAGE)",
+                interestWebHook.toString()
         );
 
     }

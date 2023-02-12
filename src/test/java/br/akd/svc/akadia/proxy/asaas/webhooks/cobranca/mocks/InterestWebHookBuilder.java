@@ -1,6 +1,6 @@
-package br.akd.svc.akadia.proxy.asaas.webhooks.mocks;
+package br.akd.svc.akadia.proxy.asaas.webhooks.cobranca.mocks;
 
-import br.akd.svc.akadia.proxy.asaas.webhooks.InterestWebHook;
+import br.akd.svc.akadia.proxy.asaas.webhooks.cobranca.InterestWebHook;
 
 public class InterestWebHookBuilder {
 

@@ -8,6 +8,7 @@ import br.akd.svc.akadia.services.bckoff.LeadService;
 import br.akd.svc.akadia.services.exceptions.FeignConnectionException;
 import br.akd.svc.akadia.services.exceptions.InvalidRequestException;
 import br.akd.svc.akadia.services.exceptions.ObjectNotFoundException;
+import br.akd.svc.akadia.services.site.AssinaturaService;
 import br.akd.svc.akadia.services.site.ClienteSistemaService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -32,6 +33,9 @@ public class ClienteSistemaController {
 
     @Autowired
     ClienteSistemaService clienteSistemaService;
+
+    @Autowired
+    AssinaturaService assinaturaService;
 
     @Autowired
     ClienteSistemaRepositoryImpl clienteSistemaRepositoryImpl;
@@ -134,7 +138,7 @@ public class ClienteSistemaController {
     @PutMapping("atualiza-assinatura/{idCliente}")
     public ResponseEntity<ClienteSistemaEntity> atualizaDadosAssinaturaCliente(@PathVariable Long idCliente,
                                                                                @RequestBody ClienteSistemaDto clienteSistemaDto) {
-        return ResponseEntity.status(HttpStatus.OK).body(clienteSistemaService.atualizaDadosAssinaturaCliente(idCliente, clienteSistemaDto));
+        return ResponseEntity.status(HttpStatus.OK).body(assinaturaService.atualizaDadosAssinatura(idCliente, clienteSistemaDto));
     }
 
     @ApiOperation(
@@ -156,7 +160,7 @@ public class ClienteSistemaController {
     })
     @DeleteMapping("cancela-assinatura/{idCliente}")
     public ResponseEntity<ClienteSistemaEntity> cancelaAssinaturaCliente(@PathVariable Long idCliente) {
-        return ResponseEntity.status(HttpStatus.OK).body(clienteSistemaService.cancelaAssinatura(idCliente));
+        return ResponseEntity.status(HttpStatus.OK).body(assinaturaService.cancelaAssinatura(idCliente));
     }
 
 }

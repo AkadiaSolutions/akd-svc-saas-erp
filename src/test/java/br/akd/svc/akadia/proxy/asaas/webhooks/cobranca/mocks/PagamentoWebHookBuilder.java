@@ -1,7 +1,7 @@
-package br.akd.svc.akadia.proxy.asaas.webhooks.mocks;
+package br.akd.svc.akadia.proxy.asaas.webhooks.cobranca.mocks;
 
-import br.akd.svc.akadia.proxy.asaas.webhooks.PagamentoWebHook;
-import br.akd.svc.akadia.proxy.asaas.webhooks.enums.BillingTypeEnum;
+import br.akd.svc.akadia.proxy.asaas.webhooks.cobranca.PagamentoWebHook;
+import br.akd.svc.akadia.proxy.asaas.webhooks.cobranca.enums.BillingTypeEnum;
 
 import java.time.LocalDate;
 
