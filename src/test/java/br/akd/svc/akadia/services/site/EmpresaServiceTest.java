@@ -1,8 +1,8 @@
 package br.akd.svc.akadia.services.site;
 
-import br.akd.svc.akadia.models.dto.site.mocks.EmpresaDtoBuilder;
+import br.akd.svc.akadia.models.dto.site.empresa.mocks.EmpresaDtoBuilder;
+import br.akd.svc.akadia.models.entities.site.empresa.mocks.EmpresaEntityBuilder;
 import br.akd.svc.akadia.models.entities.site.mocks.ClienteSistemaEntityBuilder;
-import br.akd.svc.akadia.models.entities.site.mocks.EmpresaEntityBuilder;
 import br.akd.svc.akadia.repositories.site.impl.ClienteSistemaRepositoryImpl;
 import br.akd.svc.akadia.repositories.site.impl.EmpresaRepositoryImpl;
 import br.akd.svc.akadia.services.exceptions.InvalidRequestException;

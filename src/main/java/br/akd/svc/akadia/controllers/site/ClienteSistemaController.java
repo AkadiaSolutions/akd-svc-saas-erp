@@ -27,7 +27,7 @@ import java.util.List;
 @Api(value = "Essa API disponibiliza os endpoints de CRUD da entidade ClienteSistema")
 @Produces({MediaType.APPLICATION_JSON, "application/json"})
 @Consumes({MediaType.APPLICATION_JSON, "application/json"})
-@RequestMapping("/api/v1/cliente-sistema")
+@RequestMapping("/api/site/v1/cliente-sistema")
 public class ClienteSistemaController {
 
     @Autowired
@@ -39,6 +39,7 @@ public class ClienteSistemaController {
     @Autowired
     LeadService leadService;
 
+    //TODO Adicionar annotations
     @GetMapping
     public ResponseEntity<List<ClienteSistemaEntity>> listaTodosClientes() {
         return ResponseEntity.status(HttpStatus.OK).body(clienteSistemaRepositoryImpl.buscaTodosClientes());

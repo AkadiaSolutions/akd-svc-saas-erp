@@ -3,7 +3,7 @@ package br.akd.svc.akadia.models.entities.site.mocks;
 import br.akd.svc.akadia.models.entities.global.mocks.EnderecoEntityBuilder;
 import br.akd.svc.akadia.models.entities.global.mocks.TelefoneEntityBuilder;
 import br.akd.svc.akadia.models.entities.site.ClienteSistemaEntity;
-import br.akd.svc.akadia.models.entities.site.EmpresaEntity;
+import br.akd.svc.akadia.models.entities.site.empresa.EmpresaEntity;
 
 import java.time.LocalDate;
 import java.time.LocalTime;

@@ -2,6 +2,7 @@ package br.akd.svc.akadia.models.entities.site;
 
 import br.akd.svc.akadia.models.entities.global.EnderecoEntity;
 import br.akd.svc.akadia.models.entities.global.TelefoneEntity;
+import br.akd.svc.akadia.models.entities.site.empresa.EmpresaEntity;
 import lombok.*;
 
 import javax.persistence.*;

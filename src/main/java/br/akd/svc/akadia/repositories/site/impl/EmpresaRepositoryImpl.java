@@ -1,6 +1,6 @@
 package br.akd.svc.akadia.repositories.site.impl;
 
-import br.akd.svc.akadia.models.entities.site.EmpresaEntity;
+import br.akd.svc.akadia.models.entities.site.empresa.EmpresaEntity;
 import br.akd.svc.akadia.repositories.site.EmpresaRepository;
 import br.akd.svc.akadia.services.exceptions.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,8 +1,8 @@
 package br.akd.svc.akadia.controllers.site;
 
-import br.akd.svc.akadia.models.dto.site.EmpresaDto;
-import br.akd.svc.akadia.models.entities.site.ClienteSistemaEntity;
-import br.akd.svc.akadia.models.entities.site.EmpresaEntity;
+import br.akd.svc.akadia.models.dto.site.empresa.EmpresaDto;
+import br.akd.svc.akadia.models.entities.site.empresa.CriaEmpresaResponse;
+import br.akd.svc.akadia.models.entities.site.empresa.EmpresaEntity;
 import br.akd.svc.akadia.repositories.site.impl.EmpresaRepositoryImpl;
 import br.akd.svc.akadia.services.exceptions.InvalidRequestException;
 import br.akd.svc.akadia.services.site.EmpresaService;
@@ -24,7 +24,7 @@ import java.util.List;
 @Api(value = "Essa API disponibiliza os endpoints de CRUD da entidade Empresa")
 @Produces({MediaType.APPLICATION_JSON, "application/json"})
 @Consumes({MediaType.APPLICATION_JSON, "application/json"})
-@RequestMapping("/api/v1/empresa")
+@RequestMapping("/api/site/v1/empresa")
 public class EmpresaController {
 
     @Autowired
@@ -33,6 +33,7 @@ public class EmpresaController {
     @Autowired
     EmpresaRepositoryImpl empresaRepositoryImpl;
 
+    //TODO Adicionar annotations
     @GetMapping
     public ResponseEntity<List<EmpresaEntity>> listaTodasEmpresas() {
         return ResponseEntity.status(HttpStatus.OK).body(empresaRepositoryImpl.buscaTodasEmpresas());
@@ -50,8 +51,8 @@ public class EmpresaController {
             @ApiResponse(code = 401, message = "Falha de autenticação"),
     })
     @PostMapping(value = "{idCliente}")
-    public ResponseEntity<ClienteSistemaEntity> criaEmpresa(@PathVariable Long idCliente,
-                                                            @RequestBody EmpresaDto empresaDto) {
+    public ResponseEntity<CriaEmpresaResponse> criaEmpresa(@PathVariable Long idCliente,
+                                                           @RequestBody EmpresaDto empresaDto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(empresaService.criaNovaEmpresa(idCliente, empresaDto));
     }
 

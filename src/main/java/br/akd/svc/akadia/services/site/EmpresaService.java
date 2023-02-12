@@ -1,23 +1,35 @@
 package br.akd.svc.akadia.services.site;
 
-import br.akd.svc.akadia.models.dto.site.EmpresaDto;
+import br.akd.svc.akadia.models.dto.site.empresa.EmpresaDto;
 import br.akd.svc.akadia.models.entities.global.EnderecoEntity;
 import br.akd.svc.akadia.models.entities.global.TelefoneEntity;
+import br.akd.svc.akadia.models.entities.sistema.colaboradores.AcessoSistemaEntity;
+import br.akd.svc.akadia.models.entities.sistema.colaboradores.ColaboradorEntity;
+import br.akd.svc.akadia.models.entities.sistema.colaboradores.ConfiguracaoPerfilEntity;
 import br.akd.svc.akadia.models.entities.site.ClienteSistemaEntity;
-import br.akd.svc.akadia.models.entities.site.DadosEmpresaDeletadaEntity;
-import br.akd.svc.akadia.models.entities.site.EmpresaEntity;
-import br.akd.svc.akadia.models.entities.site.fiscal.ConfigFiscalEmpresaEntity;
-import br.akd.svc.akadia.models.entities.site.fiscal.NfceConfigEntity;
-import br.akd.svc.akadia.models.entities.site.fiscal.NfeConfigEntity;
-import br.akd.svc.akadia.models.entities.site.fiscal.NfseConfigEntity;
+import br.akd.svc.akadia.models.entities.site.empresa.CriaEmpresaResponse;
+import br.akd.svc.akadia.models.entities.site.empresa.DadosEmpresaDeletadaEntity;
+import br.akd.svc.akadia.models.entities.site.empresa.EmpresaEntity;
+import br.akd.svc.akadia.models.entities.site.empresa.fiscal.ConfigFiscalEmpresaEntity;
+import br.akd.svc.akadia.models.entities.site.empresa.fiscal.NfceConfigEntity;
+import br.akd.svc.akadia.models.entities.site.empresa.fiscal.NfeConfigEntity;
+import br.akd.svc.akadia.models.entities.site.empresa.fiscal.NfseConfigEntity;
+import br.akd.svc.akadia.models.enums.sistema.colaboradores.ModeloTrabalhoEnum;
+import br.akd.svc.akadia.models.enums.sistema.colaboradores.StatusColaboradorEnum;
+import br.akd.svc.akadia.models.enums.sistema.colaboradores.TemaTelaEnum;
+import br.akd.svc.akadia.models.enums.sistema.colaboradores.TipoOcupacaoEnum;
+import br.akd.svc.akadia.repositories.sistema.colaboradores.impl.ColaboradorRepositoryImpl;
 import br.akd.svc.akadia.repositories.site.impl.ClienteSistemaRepositoryImpl;
 import br.akd.svc.akadia.repositories.site.impl.EmpresaRepositoryImpl;
 import br.akd.svc.akadia.services.exceptions.InvalidRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,6 +41,9 @@ public class EmpresaService {
 
     @Autowired
     ClienteSistemaRepositoryImpl clienteSistemaRepositoryImpl;
+
+    @Autowired
+    ColaboradorRepositoryImpl colaboradorRepositoryImpl;
 
 
     public void validaSeCnpjJaExiste(String cnpj) {
@@ -85,7 +100,8 @@ public class EmpresaService {
             validaSeInscricaoMunicipalJaExiste(empresaDto.getInscricaoMunicipal());
     }
 
-    public ClienteSistemaEntity criaNovaEmpresa(Long idCliente, EmpresaDto empresaDto) {
+    @Transactional
+    public CriaEmpresaResponse criaNovaEmpresa(Long idCliente, EmpresaDto empresaDto) {
 
         ClienteSistemaEntity clienteSistema = clienteSistemaRepositoryImpl.implementaBuscaPorId(idCliente);
 
@@ -190,7 +206,74 @@ public class EmpresaService {
                 .build();
 
         clienteSistema.getEmpresas().add(empresaEntity);
-        return clienteSistemaRepositoryImpl.implementaPersistencia(clienteSistema);
+
+        ClienteSistemaEntity clienteSistemaEntity = clienteSistemaRepositoryImpl.implementaPersistencia(clienteSistema);
+
+        EmpresaEntity empresaCriada = clienteSistemaEntity.getEmpresas().stream()
+                .filter(empresaFiltrada -> empresaFiltrada.getRazaoSocial().equals(empresaDto.getRazaoSocial()))
+                .collect(Collectors.toList()).get(0);
+
+        ColaboradorEntity colaborador = criaColaboradorAdminParaNovaEmpresa(empresaCriada);
+
+        return CriaEmpresaResponse.builder()
+                .idClienteEmpresa(clienteSistemaEntity.getId())
+                .colaboradorCriado(colaborador)
+                .build();
+    }
+
+    public ColaboradorEntity criaColaboradorAdminParaNovaEmpresa(EmpresaEntity empresaEntity) {
+        String senha = geraSenhaAleatoriaParaNovoLogin(empresaEntity);
+        return colaboradorRepositoryImpl.implementaPersistencia(ColaboradorEntity.builder()
+                .dataCadastro(LocalDate.now().toString())
+                .horaCadastro(LocalTime.now().toString())
+                .fotoPerfil(null)
+                .nome("admin")
+                .dataNascimento(null)
+                .email(null)
+                .cpfCnpj(null)
+                .ativo(true)
+                .excluido(false)
+                .salario(0.0)
+                .entradaEmpresa(null)
+                .saidaEmpresa(null)
+                .contratoContratacao(null)
+                .ocupacao("Administrador do sistema")
+                .tipoOcupacaoEnum(TipoOcupacaoEnum.ADMINISTRADOR)
+                .modeloTrabalhoEnum(ModeloTrabalhoEnum.PRESENCIAL)
+                .statusColaboradorEnum(StatusColaboradorEnum.ATIVO)
+                .acessoSistema(AcessoSistemaEntity.builder()
+                        .acessoSistemaAtivo(true)
+                        .nomeUsuario("admin")
+                        .senha(senha)
+                        .senhaCriptografada(new BCryptPasswordEncoder().encode(senha))
+                        .build())
+                .configuracaoPerfil(ConfiguracaoPerfilEntity.builder()
+                        .dataUltimaAtualizacao(LocalDate.now().toString())
+                        .horaUltimaAtualizacao(LocalTime.now().toString())
+                        .temaTelaEnum(TemaTelaEnum.TELA_CLARA)
+                        .build())
+                .endereco(null)
+                .telefone(null)
+                .expediente(null)
+                .dispensa(null)
+                .pontos(new ArrayList<>())
+                .historicoFerias(new ArrayList<>())
+                .advertencias(new ArrayList<>())
+                .parentescos(new ArrayList<>())
+                .empresa(empresaEntity)
+                .build()
+        );
+    }
+
+    public String geraSenhaAleatoriaParaNovoLogin(EmpresaEntity empresaEntity) {
+        return "@" + empresaEntity.getNome().replace(" ", "").substring(0, 2).toUpperCase() +
+                empresaEntity.getCnpj()
+                        .replace("-", ".")
+                        .replace(".", "")
+                        .replace("/", "")
+                        .substring(0, 2) +
+                empresaEntity.getDataCadastro().substring(0, 2) +
+                empresaEntity.getSegmentoEmpresaEnum().getDesc().substring(0, 2).toUpperCase();
     }
 
     public EmpresaEntity atualizaEmpresa(Long idEmpresa, EmpresaDto empresaDto) {

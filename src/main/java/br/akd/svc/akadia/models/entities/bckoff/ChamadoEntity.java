@@ -1,6 +1,6 @@
 package br.akd.svc.akadia.models.entities.bckoff;
 
-import br.akd.svc.akadia.models.entities.site.EmpresaEntity;
+import br.akd.svc.akadia.models.entities.site.empresa.EmpresaEntity;
 import br.akd.svc.akadia.models.enums.bckoff.CategoriaChamadoEnum;
 import br.akd.svc.akadia.models.enums.bckoff.StatusChamadoEnum;
 import lombok.*;

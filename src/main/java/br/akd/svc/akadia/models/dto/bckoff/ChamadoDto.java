@@ -1,6 +1,6 @@
 package br.akd.svc.akadia.models.dto.bckoff;
 
-import br.akd.svc.akadia.models.dto.site.EmpresaDto;
+import br.akd.svc.akadia.models.dto.site.empresa.EmpresaDto;
 import br.akd.svc.akadia.models.enums.bckoff.CategoriaChamadoEnum;
 import br.akd.svc.akadia.models.enums.bckoff.StatusChamadoEnum;
 import lombok.*;

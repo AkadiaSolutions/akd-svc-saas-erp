@@ -2,6 +2,7 @@ package br.akd.svc.akadia.models.dto.site;
 
 import br.akd.svc.akadia.models.dto.global.EnderecoDto;
 import br.akd.svc.akadia.models.dto.global.TelefoneDto;
+import br.akd.svc.akadia.models.dto.site.empresa.EmpresaDto;
 import lombok.*;
 
 import java.util.ArrayList;
