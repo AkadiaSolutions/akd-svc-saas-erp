@@ -5,7 +5,7 @@ import br.akd.svc.akadia.models.dto.sistema.colaboradores.AdvertenciaDto;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-class AdvertenciaDtoBuilder {
+public class AdvertenciaDtoBuilder {
 
     AdvertenciaDtoBuilder() {
     }

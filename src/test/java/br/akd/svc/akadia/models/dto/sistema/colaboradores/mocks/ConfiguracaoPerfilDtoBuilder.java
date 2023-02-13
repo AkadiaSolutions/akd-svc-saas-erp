@@ -6,7 +6,7 @@ import br.akd.svc.akadia.models.enums.sistema.colaboradores.TemaTelaEnum;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-class ConfiguracaoPerfilDtoBuilder {
+public class ConfiguracaoPerfilDtoBuilder {
 
     ConfiguracaoPerfilDtoBuilder() {
     }

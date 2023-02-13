@@ -4,7 +4,7 @@ import br.akd.svc.akadia.models.dto.sistema.colaboradores.ExpedienteDto;
 
 import java.time.LocalTime;
 
-class ExpedienteDtoBuilder {
+public class ExpedienteDtoBuilder {
 
     ExpedienteDtoBuilder() {
     }

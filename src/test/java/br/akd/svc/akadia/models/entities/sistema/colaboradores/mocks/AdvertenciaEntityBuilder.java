@@ -5,7 +5,7 @@ import br.akd.svc.akadia.models.entities.sistema.colaboradores.AdvertenciaEntity
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-class AdvertenciaEntityBuilder {
+public class AdvertenciaEntityBuilder {
 
     AdvertenciaEntityBuilder() {
     }

@@ -8,9 +8,8 @@ import br.akd.svc.akadia.models.enums.sistema.colaboradores.TipoOcupacaoEnum;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
 
-class ColaboradorEntityBuilder {
+public class ColaboradorEntityBuilder {
 
     ColaboradorEntityBuilder() {
     }
@@ -45,10 +44,10 @@ class ColaboradorEntityBuilder {
         builder.colaboradorEntity.setTelefone(null);
         builder.colaboradorEntity.setExpediente(null);
         builder.colaboradorEntity.setDispensa(null);
-        builder.colaboradorEntity.setPontos(new ArrayList<>());
-        builder.colaboradorEntity.setHistoricoFerias(new ArrayList<>());
-        builder.colaboradorEntity.setAdvertencias(new ArrayList<>());
-        builder.colaboradorEntity.setParentescos(new ArrayList<>());
+        builder.colaboradorEntity.setPontos(null);
+        builder.colaboradorEntity.setHistoricoFerias(null);
+        builder.colaboradorEntity.setAdvertencias(null);
+        builder.colaboradorEntity.setParentescos(null);
         builder.colaboradorEntity.setEmpresa(null);
         return builder;
     }

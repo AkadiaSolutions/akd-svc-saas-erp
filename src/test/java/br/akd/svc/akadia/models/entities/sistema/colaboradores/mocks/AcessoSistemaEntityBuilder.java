@@ -2,7 +2,7 @@ package br.akd.svc.akadia.models.entities.sistema.colaboradores.mocks;
 
 import br.akd.svc.akadia.models.entities.sistema.colaboradores.AcessoSistemaEntity;
 
-class AcessoSistemaEntityBuilder {
+public class AcessoSistemaEntityBuilder {
 
     AcessoSistemaEntityBuilder() {
     }

@@ -2,7 +2,7 @@ package br.akd.svc.akadia.models.dto.sistema.colaboradores.mocks;
 
 import br.akd.svc.akadia.models.dto.sistema.colaboradores.AcessoSistemaDto;
 
-class AcessoSistemaDtoBuilder {
+public class AcessoSistemaDtoBuilder {
 
     AcessoSistemaDtoBuilder() {
     }

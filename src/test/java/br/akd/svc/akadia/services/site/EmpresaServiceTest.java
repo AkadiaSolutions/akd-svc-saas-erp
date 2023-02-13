@@ -1,8 +1,10 @@
 package br.akd.svc.akadia.services.site;
 
 import br.akd.svc.akadia.models.dto.site.empresa.mocks.EmpresaDtoBuilder;
+import br.akd.svc.akadia.models.entities.sistema.colaboradores.mocks.ColaboradorEntityBuilder;
 import br.akd.svc.akadia.models.entities.site.empresa.mocks.EmpresaEntityBuilder;
 import br.akd.svc.akadia.models.entities.site.mocks.ClienteSistemaEntityBuilder;
+import br.akd.svc.akadia.repositories.sistema.colaboradores.impl.ColaboradorRepositoryImpl;
 import br.akd.svc.akadia.repositories.site.impl.ClienteSistemaRepositoryImpl;
 import br.akd.svc.akadia.repositories.site.impl.EmpresaRepositoryImpl;
 import br.akd.svc.akadia.services.exceptions.InvalidRequestException;
@@ -27,6 +29,9 @@ class EmpresaServiceTest {
 
     @Mock
     EmpresaRepositoryImpl empresaRepositoryImpl;
+
+    @Mock
+    ColaboradorRepositoryImpl colaboradorRepositoryImpl;
 
     @Mock
     ClienteSistemaRepositoryImpl clienteSistemaRepositoryImpl;
@@ -146,17 +151,17 @@ class EmpresaServiceTest {
                         .comEmpresa()
                         .build());
 
-        Assertions.assertEquals("ClienteSistemaEntity(id=1, codigoClienteAsaas=cus_000005113026, " +
-                        "dataCadastro=2023-02-03, horaCadastro=10:40, dataNascimento=2023-02-03, email=fulano@gmail.com, " +
-                        "nome=Fulano, senha=123, cpf=12345678910, saldo=0.0, plano=PlanoEntity(id=1, " +
-                        "codigoAssinaturaAsaas=sub_jaIvjZ8TMlXZ, dataContratacao=2023-02-03, horaContratacao=09:58, " +
-                        "dataVencimento=2023-02-03, tipoPlanoEnum=BASIC, statusPlanoEnum=ATIVO, " +
-                        "formaPagamentoSistemaEnum=CREDIT_CARD), telefone=TelefoneEntity(id=1, prefixo=11, " +
-                        "numero=979815415, tipoTelefoneEnum=MOVEL_WHATSAPP), endereco=EnderecoEntity(id=1, logradouro=Avenida " +
-                        "Coronel Manuel Py, numero=583, bairro=Lauzane Paulista, codigoPostal=02442-090, cidade=São Paulo, " +
-                        "complemento=Casa 4, estadoEnum=SP), cartao=CartaoEntity(id=1, nomePortador=Gabriel, " +
-                        "cpfCnpj=47153427821, numero=5162306219378829, ccv=318, mesExpiracao=8, anoExpiracao=2025, " +
-                        "tokenCartao=null, ativo=true, bandeiraCartaoEnum=VISA))",
+        when(colaboradorRepositoryImpl.implementaPersistencia(any()))
+                .thenReturn(ColaboradorEntityBuilder.builder().build());
+
+        Assertions.assertEquals("CriaEmpresaResponse(idClienteEmpresa=1, " +
+                        "colaboradorCriado=ColaboradorEntity(id=1, dataCadastro=2023-02-13, horaCadastro=10:44, " +
+                        "fotoPerfil=[], nome=João da Silva, dataNascimento=2021-04-11, email=joaosilva@gmail.com, " +
+                        "cpfCnpj=12345678910, ativo=true, excluido=false, salario=2000.0, entradaEmpresa=2023-02-13, " +
+                        "saidaEmpresa=null, contratoContratacao=[], ocupacao=Técnico Interno, " +
+                        "tipoOcupacaoEnum=TECNICO_INTERNO, modeloContratacaoEnum=CLT, modeloTrabalhoEnum=PRESENCIAL, " +
+                        "statusColaboradorEnum=ATIVO, acessoSistema=null, configuracaoPerfil=null, endereco=null, " +
+                        "telefone=null, expediente=null, dispensa=null, empresa=null))",
                 empresaService.criaNovaEmpresa(1L, EmpresaDtoBuilder.builder()
                         .comConfigFiscalComTodasNf()
                         .comEndereco()

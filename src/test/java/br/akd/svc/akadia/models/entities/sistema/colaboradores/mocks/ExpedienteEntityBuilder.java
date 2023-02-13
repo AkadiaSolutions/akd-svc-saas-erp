@@ -4,7 +4,7 @@ import br.akd.svc.akadia.models.entities.sistema.colaboradores.ExpedienteEntity;
 
 import java.time.LocalTime;
 
-class ExpedienteEntityBuilder {
+public class ExpedienteEntityBuilder {
 
     ExpedienteEntityBuilder() {
     }
