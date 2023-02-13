@@ -2,6 +2,8 @@ package br.akd.svc.akadia.services.site;
 
 import br.akd.svc.akadia.models.entities.site.mocks.ClienteSistemaEntityBuilder;
 import br.akd.svc.akadia.models.entities.site.mocks.PagamentoSistemaEntityBuilder;
+import br.akd.svc.akadia.proxy.asaas.AsaasProxy;
+import br.akd.svc.akadia.proxy.asaas.responses.assinatura.cancela.mocks.CancelamentoAssinaturaResponseBuilder;
 import br.akd.svc.akadia.proxy.asaas.responses.assinatura.consulta.mocks.ConsultaAssinaturaResponseBuilder;
 import br.akd.svc.akadia.proxy.asaas.webhooks.cobranca.enums.EventoCobrancaEnum;
 import br.akd.svc.akadia.proxy.asaas.webhooks.cobranca.mocks.AtualizacaoCobrancaWebHookBuilder;
@@ -13,6 +15,8 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -24,7 +28,7 @@ class PagamentoSistemaServiceTest {
     @InjectMocks
     PagamentoSistemaService pagamentoSistemaService;
 
-    @InjectMocks
+    @Mock
     AssinaturaService assinaturaService;
 
     @Mock
@@ -34,7 +38,7 @@ class PagamentoSistemaServiceTest {
     ClienteSistemaRepositoryImpl clienteSistemaRepositoryImpl;
 
     @Mock
-    ClienteSistemaService clienteSistemaService;
+    AsaasProxy asaasProxy;
 
     @Test
     @DisplayName("Deve testar método de atualização de pagamento alterado")
@@ -56,6 +60,12 @@ class PagamentoSistemaServiceTest {
     @DisplayName("Deve testar método de atualização de pagamento vencido")
     void deveTestarMetodoDeAtualizacaoDePagamentoVencido() {
 
+        when(clienteSistemaRepositoryImpl.implementaBuscaPorId(any()))
+                .thenReturn(ClienteSistemaEntityBuilder.builder().comPlanoVencido().build());
+
+        when(asaasProxy.cancelaAssinatura(any(), any()))
+                .thenReturn(new ResponseEntity<>(CancelamentoAssinaturaResponseBuilder.builder().build(), HttpStatus.OK));
+
         when(assinaturaService.cancelaAssinatura(any()))
                 .thenReturn(ClienteSistemaEntityBuilder.builder().build());
 
@@ -73,6 +83,9 @@ class PagamentoSistemaServiceTest {
     void deveTestarMetodoDeAtualizacaoDePagamentoAprovado() {
         when(pagamentoSistemaRepositoryImpl.implementaBuscaPorCodigoPagamentoAsaas(any()))
                 .thenReturn(PagamentoSistemaEntityBuilder.builder().build());
+
+        when(asaasProxy.consultaAssinatura(any(), any()))
+                .thenReturn(new ResponseEntity<>(ConsultaAssinaturaResponseBuilder.builder().build(), HttpStatus.OK));
 
         when(assinaturaService.consultaAssinaturaAsaas(any()))
                 .thenReturn(ConsultaAssinaturaResponseBuilder.builder().build());

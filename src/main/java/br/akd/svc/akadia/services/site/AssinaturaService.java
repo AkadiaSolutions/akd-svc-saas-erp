@@ -28,9 +28,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.Objects;
 
-import static br.akd.svc.akadia.services.site.ClienteSistemaService.FALHA_COMUNICACAO_ASAAS;
-import static br.akd.svc.akadia.services.site.ClienteSistemaService.TOKEN_ASAAS;
-
 @Service
 public class AssinaturaService {
 
@@ -42,6 +39,10 @@ public class AssinaturaService {
 
     @Autowired
     AsaasProxy asaasProxy;
+
+    public static final String TOKEN_ASAAS = "TOKEN_ASAAS";
+    public static final String FALHA_COMUNICACAO_ASAAS =
+            "Ocorreu uma falha na comunicação com a integradora de pagamentos: ";
 
     public AssinaturaResponse criaAssinaturaAsaas(ClienteSistemaEntity clienteSistema) {
 
@@ -185,11 +186,6 @@ public class AssinaturaService {
                     + cancelamentoAssinaturaAsaas.getBody());
     }
 
-    @Scheduled(cron = "0 1 1 * * ?", zone = "America/Sao_Paulo")
-    public void verificaDiariamenteSeExistemPlanosVencidosAtivos() {
-        clienteSistemaRepositoryImpl.implementaBuscaPorPlanosVencidosAtivos();
-    }
-
     //TODO Verificar informações fiscais com contador
     public void criaConfigFiscalAssinaturaAsaas(AssinaturaResponse assinatura) {
 
@@ -215,4 +211,8 @@ public class AssinaturaService {
         asaasProxy.criaConfiguracaoFiscalDaAssinatura(assinatura.getId(), criaConfigFiscalRequest, System.getenv(TOKEN_ASAAS));
     }
 
+    @Scheduled(cron = "0 1 1 * * ?", zone = "America/Sao_Paulo")
+    public void verificaDiariamenteSeExistemPlanosVencidosAtivos() {
+        clienteSistemaRepositoryImpl.implementaBuscaPorPlanosVencidosAtivos();
+    }
 }
