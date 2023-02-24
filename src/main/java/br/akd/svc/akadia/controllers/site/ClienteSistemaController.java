@@ -43,7 +43,15 @@ public class ClienteSistemaController {
     @Autowired
     LeadService leadService;
 
-    //TODO Adicionar annotations
+    @ApiOperation(
+            value = "Busca de todos os clientes cadastrados",
+            notes = "Esse endpoint tem como objetivo realizar a busca de todos os clientes cadastrados no banco de dados",
+            produces = MediaType.APPLICATION_JSON,
+            consumes = MediaType.APPLICATION_JSON
+    )
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Requisição realizada com sucesso", response = ClienteSistemaEntity.class),
+    })
     @GetMapping
     public ResponseEntity<List<ClienteSistemaEntity>> listaTodosClientes() {
         return ResponseEntity.status(HttpStatus.OK).body(clienteSistemaRepositoryImpl.buscaTodosClientes());

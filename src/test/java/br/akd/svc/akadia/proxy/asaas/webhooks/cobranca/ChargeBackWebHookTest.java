@@ -14,7 +14,7 @@ class ChargeBackWebHookTest {
     @DisplayName("Deve testar dataBuilder")
     void deveTestarDataBuilder() {
         Assertions.assertEquals(
-                "AtualizacaoCobrancaWebHook(event=PAYMENT_CONFIRMED, payment=null)",
+                "ChargeBackWebHook(status=null, reason=null)",
                 ChargeBackWebHookBuilder.builder().build().toString()
         );
     }

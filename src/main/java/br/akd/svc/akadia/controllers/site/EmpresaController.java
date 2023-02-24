@@ -33,7 +33,15 @@ public class EmpresaController {
     @Autowired
     EmpresaRepositoryImpl empresaRepositoryImpl;
 
-    //TODO Adicionar annotations
+    @ApiOperation(
+            value = "Busca de todas as empresas cadastradas",
+            notes = "Esse endpoint tem como objetivo realizar a busca de todas as empresas cadastradas no banco de dados",
+            produces = MediaType.APPLICATION_JSON,
+            consumes = MediaType.APPLICATION_JSON
+    )
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Requisição realizada com sucesso", response = EmpresaEntity.class),
+    })
     @GetMapping
     public ResponseEntity<List<EmpresaEntity>> listaTodasEmpresas() {
         return ResponseEntity.status(HttpStatus.OK).body(empresaRepositoryImpl.buscaTodasEmpresas());

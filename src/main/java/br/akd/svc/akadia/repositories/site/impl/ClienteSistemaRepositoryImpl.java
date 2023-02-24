@@ -56,8 +56,8 @@ public class ClienteSistemaRepositoryImpl {
         return clienteSistema;
     }
 
-    public List<ClienteSistemaEntity> implementaBuscaPorPlanosVencidosAtivos() {
-        return clienteSistemaRepository
+    public void implementaBuscaPorPlanosVencidosAtivos() {
+        clienteSistemaRepository
                 .buscaPorClientesComPlanosVencidosAtivos("ATIVO", LocalDate.now().toString());
     }
 
