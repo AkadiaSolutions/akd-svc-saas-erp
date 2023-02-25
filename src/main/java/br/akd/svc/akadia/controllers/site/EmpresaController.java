@@ -10,6 +10,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +21,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
 
+@Slf4j
 @RestController
 @Api(value = "Essa API disponibiliza os endpoints de CRUD da entidade Empresa")
 @Produces({MediaType.APPLICATION_JSON, "application/json"})
@@ -44,6 +46,7 @@ public class EmpresaController {
     })
     @GetMapping
     public ResponseEntity<List<EmpresaEntity>> listaTodasEmpresas() {
+        log.info("Método controlador de listagem de todas as empresas cadastradas acessado");
         return ResponseEntity.status(HttpStatus.OK).body(empresaRepositoryImpl.buscaTodasEmpresas());
     }
 
@@ -61,12 +64,13 @@ public class EmpresaController {
     @PostMapping(value = "{idCliente}")
     public ResponseEntity<CriaEmpresaResponse> criaEmpresa(@PathVariable Long idCliente,
                                                            @RequestBody EmpresaDto empresaDto) {
+        log.info("Método controlador de criação de nova empresa acessado");
         return ResponseEntity.status(HttpStatus.CREATED).body(empresaService.criaNovaEmpresa(idCliente, empresaDto));
     }
 
     @ApiOperation(
-            value = "Criação",
-            notes = "Essa requisição tem como objetivo realizar a persistência de uma nova empresa no banco de dados",
+            value = "Atualização",
+            notes = "Essa requisição tem como objetivo atualizar os dados de uma empresa já existente no banco de dados",
             produces = MediaType.APPLICATION_JSON,
             consumes = MediaType.APPLICATION_JSON
     )
@@ -78,11 +82,13 @@ public class EmpresaController {
     @PutMapping(value = "{idEmpresa}")
     public ResponseEntity<EmpresaEntity> atualizaEmpresa(@PathVariable Long idEmpresa,
                                                          @RequestBody EmpresaDto empresaDto) {
+        log.info("Método controlador de atualização de empresa acessado");
         return ResponseEntity.ok().body(empresaService.atualizaEmpresa(idEmpresa, empresaDto));
     }
 
     @DeleteMapping(value = "{idEmpresa}")
     public ResponseEntity<EmpresaEntity> removeEmpresa(@PathVariable Long idEmpresa) {
+        log.info("Método controlador de remoção de empresa acessado");
         return ResponseEntity.ok().body(empresaService.removeEmpresa(idEmpresa));
     }
 

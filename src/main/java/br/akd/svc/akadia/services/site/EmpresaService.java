@@ -22,6 +22,7 @@ import br.akd.svc.akadia.repositories.sistema.colaboradores.impl.ColaboradorRepo
 import br.akd.svc.akadia.repositories.site.impl.ClienteSistemaRepositoryImpl;
 import br.akd.svc.akadia.repositories.site.impl.EmpresaRepositoryImpl;
 import br.akd.svc.akadia.services.exceptions.InvalidRequestException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -33,6 +34,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 public class EmpresaService {
 
@@ -47,36 +49,54 @@ public class EmpresaService {
 
 
     public void validaSeCnpjJaExiste(String cnpj) {
+        log.debug("Método de validação de chave única de CNPJ acessado");
         if (empresaRepositoryImpl.implementaBuscaPorCnpj(cnpj).isPresent()) {
+            log.warn("O cnpj informado já existe");
             throw new InvalidRequestException("O cnpj informado já existe");
         }
+        log.debug("Validação de chave única de CNPJ... OK");
     }
 
     public void validaSeEndpointJaExiste(String endpoint) {
+        log.debug("Método de validação de chave única de endpoint acessado");
         if (empresaRepositoryImpl.implementaBuscaPorEndpoint(endpoint).isPresent()) {
+            log.warn("O endpoint informado já existe");
             throw new InvalidRequestException("O endpoint informado já existe");
         }
+        log.debug("Validação de chave única de endpoint... OK");
     }
 
     public void validaSeRazaoSocialJaExiste(String razaoSocial) {
+        log.debug("Método de validação de chave única de Razão Social acessado");
         if (empresaRepositoryImpl.implementaBuscaPorRazaoSocial(razaoSocial).isPresent()) {
+            log.warn("A razão social informada já existe");
             throw new InvalidRequestException("A razão social informada já existe");
         }
+        log.debug("Validação de chave única de Razão social... OK");
     }
 
     public void validaSeInscricaoEstadualJaExiste(String inscricaoEstadual) {
+        log.debug("Método de validação de chave única de Inscrição estadual acessado");
         if (empresaRepositoryImpl.implementaBuscaPorInscricaoEstadual(inscricaoEstadual).isPresent()) {
+            log.warn("A inscrição estadual informada já existe");
             throw new InvalidRequestException("A inscrição estadual informada já existe");
         }
+        log.debug("Validação de chave única de inscrição estadual... OK");
     }
 
     public void validaSeInscricaoMunicipalJaExiste(String inscricaoMunicipal) {
+        log.debug("Método de validação de chave única de Inscrição municipal acessado");
         if (empresaRepositoryImpl.implementaBuscaPorInscricaoMunicipal(inscricaoMunicipal).isPresent()) {
+            log.warn("A inscrição municipal informada já existe");
             throw new InvalidRequestException("A inscrição municipal informada já existe");
         }
+        log.debug("Validação de chave única de inscrição municipal... OK");
     }
 
     public void validacaoDeChaveUnicaParaNovaEmpresa(EmpresaDto empresaDto) {
+
+        log.debug("Método de validação de chave única para criação de nova empresa acessado...");
+
         if (empresaDto.getCnpj() != null) validaSeCnpjJaExiste(empresaDto.getCnpj());
         if (empresaDto.getRazaoSocial() != null) validaSeRazaoSocialJaExiste(empresaDto.getRazaoSocial());
         if (empresaDto.getEndpoint() != null) validaSeEndpointJaExiste(empresaDto.getEndpoint());
@@ -88,6 +108,7 @@ public class EmpresaService {
 
     public void validacaoDeChaveUnicaParaAtualizacaoDeEmpresa(EmpresaDto empresaDto,
                                                               EmpresaEntity empresaEditada) {
+        log.debug("Método de validação de chave única para atualização de empresa acessado...");
         if (empresaDto.getCnpj() != null && !empresaEditada.getCnpj().equals(empresaDto.getCnpj()))
             validaSeCnpjJaExiste(empresaDto.getCnpj());
         if (empresaDto.getEndpoint() != null && !empresaEditada.getEndpoint().equalsIgnoreCase(empresaDto.getEndpoint()))
@@ -103,21 +124,34 @@ public class EmpresaService {
     @Transactional
     public CriaEmpresaResponse criaNovaEmpresa(Long idCliente, EmpresaDto empresaDto) {
 
+        log.debug("Método de serviço responsável pelo tratamento do objeto recebido e criação de nova empresa acessado");
+        log.debug("Empresa recebida: {} | Id do cliente: {}", empresaDto, idCliente);
+
+        log.debug("Iniciando acesso ao método de implementação de busca de cliente por id...");
         ClienteSistemaEntity clienteSistema = clienteSistemaRepositoryImpl.implementaBuscaPorId(idCliente);
 
+        log.debug("Realizando filtro por empresas ativas do cliente...");
         List<EmpresaEntity> empresasAtivasCliente =
                 clienteSistema.getEmpresas().stream()
                         .filter((EmpresaEntity filtroEmpresa) -> !filtroEmpresa.getDeletada())
                         .collect(Collectors.toList());
 
+        log.debug("Empresas ativas do cliente: {}", empresasAtivasCliente);
+
+        log.debug("Verificando se cliente já possui quantidade limite de empresas cadastradas para o seu plano...");
         if (clienteSistema.getPlano().getTipoPlanoEnum().getQtdLimiteEmpresasCadastradas()
-                <= clienteSistema.getEmpresas().size())
+                <= clienteSistema.getEmpresas().size()) {
+            log.warn("O cliente já possui o número máximo de empresas cadastradas: {}. O permitido é: {}",
+                    empresasAtivasCliente.size(), clienteSistema.getPlano().getTipoPlanoEnum().getQtdLimiteEmpresasCadastradas());
             throw new InvalidRequestException("Este cliente já possui o número máximo de empresas cadastradas em seu plano: "
                     + clienteSistema.getPlano().getTipoPlanoEnum().getQtdLimiteEmpresasCadastradas() + " (max) com "
                     + empresasAtivasCliente.size() + " empresas cadastradas");
+        }
 
+        log.debug("Iniciando acesso ao método de validação de variáveis de chave única para empresa...");
         validacaoDeChaveUnicaParaNovaEmpresa(empresaDto);
 
+        log.debug("Iniciando construção do objeto EmpresaEntity...");
         EmpresaEntity empresaEntity = EmpresaEntity.builder()
                 .dataCadastro(LocalDate.now().toString())
                 .horaCadastro(LocalTime.now().toString())
@@ -204,17 +238,23 @@ public class EmpresaService {
                         .build()
                         : null)
                 .build();
+        log.debug("Construção de objeto EmpresaEntity realizado com sucesso");
 
+        log.debug("Adicionando a empresa à lista de empresas do cliente...");
         clienteSistema.getEmpresas().add(empresaEntity);
 
+        log.debug("Iniciando acesso ao método de implementação de persistência do cliente...");
         ClienteSistemaEntity clienteSistemaEntity = clienteSistemaRepositoryImpl.implementaPersistencia(clienteSistema);
 
+        log.debug("Obtendo empresa criada da lista das empresas do cliente persistido...");
         EmpresaEntity empresaCriada = clienteSistemaEntity.getEmpresas().stream()
                 .filter(empresaFiltrada -> empresaFiltrada.getRazaoSocial().equals(empresaDto.getRazaoSocial()))
                 .collect(Collectors.toList()).get(0);
 
+        log.debug("Iniciando acesso ao método de criação de novo colaborador admin para empresa...");
         ColaboradorEntity colaborador = criaColaboradorAdminParaNovaEmpresa(empresaCriada);
 
+        log.info("Empresa criada com sucesso");
         return CriaEmpresaResponse.builder()
                 .idClienteEmpresa(clienteSistemaEntity.getId())
                 .colaboradorCriado(colaborador)
@@ -222,7 +262,14 @@ public class EmpresaService {
     }
 
     public ColaboradorEntity criaColaboradorAdminParaNovaEmpresa(EmpresaEntity empresaEntity) {
+
+        log.debug("Método de criação de colaborador ADMIN DEFAULT para nova empresa acessado");
+
+        log.debug("Iniciando acesso ao método de geração de senha aleatória...");
         String senha = geraSenhaAleatoriaParaNovoLogin(empresaEntity);
+        log.debug("Senha criada com sucesso");
+
+        log.debug("Construindo objeto e iniciando método de implementação de persistência de colaborador...");
         return colaboradorRepositoryImpl.implementaPersistencia(ColaboradorEntity.builder()
                 .dataCadastro(LocalDate.now().toString())
                 .horaCadastro(LocalTime.now().toString())
@@ -266,6 +313,7 @@ public class EmpresaService {
     }
 
     public String geraSenhaAleatoriaParaNovoLogin(EmpresaEntity empresaEntity) {
+        log.debug("Método de criação de senha aleatória acessado");
         return "@" + empresaEntity.getNome().replace(" ", "").substring(0, 2).toUpperCase() +
                 empresaEntity.getCnpj()
                         .replace("-", ".")
@@ -278,13 +326,22 @@ public class EmpresaService {
 
     public EmpresaEntity atualizaEmpresa(Long idEmpresa, EmpresaDto empresaDto) {
 
+        log.debug("Método de serviço de atualização de empresa acessado");
+        log.debug("Id da empresa: {} | Objeto recebido: {}", idEmpresa, empresaDto);
+
+        log.debug("Iniciando acesso ao método de implementação de busca de empresa por id...");
         EmpresaEntity empresa = empresaRepositoryImpl.implementaBuscaPorId(idEmpresa);
 
-        if (Boolean.TRUE.equals(empresa.getDeletada()))
+        log.debug("Iniciando validação se empresa a ser alterada foi deletada anteriormente...");
+        if (Boolean.TRUE.equals(empresa.getDeletada())) {
+            log.warn("A empresa não pode ser alterada pois foi deletada. Empresa: {}", empresa);
             throw new InvalidRequestException("Não é possível realizar alterações em uma empresa que foi removida");
+        }
 
+        log.debug("Iniciando acesso ao método de validação de chaves únicas para a atualização da empresa...");
         validacaoDeChaveUnicaParaAtualizacaoDeEmpresa(empresaDto, empresa);
 
+        log.debug("Iniciando setagem de atributos atualizados da empresa...");
         empresa.setNome(empresaDto.getNome());
         empresa.setRazaoSocial(empresaDto.getRazaoSocial());
         empresa.setCnpj(empresaDto.getCnpj());
@@ -333,30 +390,42 @@ public class EmpresaService {
         empresa.getConfigFiscalEmpresa().getNfseConfig().setProximoNumeroHomologacao(empresaDto.getConfigFiscalEmpresa().getNfseConfig().getProximoNumeroProducao());
         empresa.getConfigFiscalEmpresa().getNfseConfig().setSerieProducao(empresaDto.getConfigFiscalEmpresa().getNfseConfig().getSerieProducao());
         empresa.getConfigFiscalEmpresa().getNfseConfig().setSerieHomologacao(empresaDto.getConfigFiscalEmpresa().getNfseConfig().getSerieHomologacao());
+        log.debug("Setagem de atributos finalizada com sucesso");
 
-        return empresaRepositoryImpl.implementaPersistencia(empresa);
+        log.debug("Iniciando acesso ao método de implementação de persistência de empresa...");
+        EmpresaEntity empresaAtualizada = empresaRepositoryImpl.implementaPersistencia(empresa);
+
+        log.info("A empresa foi atualizada com sucesso");
+        return empresaAtualizada;
 
     }
 
     public EmpresaEntity removeEmpresa(Long id) {
+
+        log.debug("Método de serviço de remoção de empresa acessado. Id recebido: {}", id);
+
+        log.debug("Iniciando acesso ao método de implementação de busca de empresa por id...");
         EmpresaEntity empresa = empresaRepositoryImpl.implementaBuscaPorId(id);
 
+        log.debug("Setando atributos de remoção da empresa ao objeto empresa...");
         empresa.setDeletada(true);
-
         empresa.getDadosEmpresaDeletada().setDataRemocao(LocalDate.now().toString());
         empresa.getDadosEmpresaDeletada().setHoraRemocao(LocalTime.now().toString());
-
         empresa.getDadosEmpresaDeletada().setCnpj(empresa.getCnpj());
         empresa.getDadosEmpresaDeletada().setInscricaoEstadual(empresa.getInscricaoEstadual());
         empresa.getDadosEmpresaDeletada().setInscricaoMunicipal(empresa.getInscricaoMunicipal());
         empresa.getDadosEmpresaDeletada().setRazaoSocial(empresa.getRazaoSocial());
-
         empresa.setCnpj(null);
         empresa.setInscricaoMunicipal(null);
         empresa.setInscricaoEstadual(null);
         empresa.setRazaoSocial(null);
+        log.debug("Setagem de atributos de remoção da empresa finalizados");
 
-        return empresaRepositoryImpl.implementaPersistencia(empresa);
+        log.debug("Iniciando acesso ao método de implementação de persistência de empresa...");
+        EmpresaEntity empresaDeletada = empresaRepositoryImpl.implementaPersistencia(empresa);
+
+        log.info("A empresa foi deletada com sucesso");
+        return empresaDeletada;
     }
 
 }
