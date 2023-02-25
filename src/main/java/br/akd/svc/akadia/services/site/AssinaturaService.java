@@ -20,6 +20,7 @@ import br.akd.svc.akadia.proxy.asaas.responses.assinatura.consulta.ConsultaAssin
 import br.akd.svc.akadia.repositories.site.impl.ClienteSistemaRepositoryImpl;
 import br.akd.svc.akadia.services.exceptions.FeignConnectionException;
 import br.akd.svc.akadia.services.exceptions.InvalidRequestException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -28,6 +29,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.Objects;
 
+@Slf4j
 @Service
 public class AssinaturaService {
 
@@ -143,47 +145,66 @@ public class AssinaturaService {
     }
 
     public ConsultaAssinaturaResponse consultaAssinaturaAsaas(String id) {
-
+        log.debug("Método de consulta de assinatura ASAAS por ID ({}) acessado", id);
         ResponseEntity<ConsultaAssinaturaResponse> assinaturaAsaas;
         try {
             assinaturaAsaas =
                     asaasProxy.consultaAssinatura(id, System.getenv(TOKEN_ASAAS));
+            log.debug("Assinatura encontrada: {}", assinaturaAsaas);
         } catch (Exception e) {
+            log.error("Houve uma falha de comunicação com a integradora de pagamentos: {}", e.getMessage());
             throw new FeignConnectionException(FALHA_COMUNICACAO_ASAAS + e.getMessage());
         }
 
-        if (assinaturaAsaas.getStatusCodeValue() != 200)
+        if (assinaturaAsaas.getStatusCodeValue() != 200) {
+            log.error("Houve uma falha no processo de consulta da assinatura com a integradora de pagamentos: {}",
+                    assinaturaAsaas.getBody());
             throw new InvalidRequestException("Ocorreu um erro no processo de consulta de assinatura com a integradora: "
                     + assinaturaAsaas.getBody());
+        }
 
+        log.debug("Retornando assinatura...");
         return assinaturaAsaas.getBody();
     }
 
     public ClienteSistemaEntity cancelaAssinatura(Long idCliente) {
+        log.debug("Iniciando acesso ao método de busca de cliente por id...");
         ClienteSistemaEntity clienteSistema = clienteSistemaRepositoryImpl.implementaBuscaPorId(idCliente);
+
         PlanoEntity plano = clienteSistema.getPlano();
 
-        if (LocalDate.parse(plano.getDataVencimento()).isBefore(LocalDate.now()))
+        log.debug("Verificando se data de vencimento do plano já passou...");
+        if (LocalDate.parse(plano.getDataVencimento()).isBefore(LocalDate.now())) {
+            log.debug("A data de vencimento do plano já passou. Setando status do plano do cliente como INATIVO...");
             plano.setStatusPlanoEnum(StatusPlanoEnum.INATIVO);
+        }
 
+        log.debug("Setando plano atualizado ao cliente...");
         clienteSistema.setPlano(plano);
+
+        log.debug("Iniciando acesso ao método de cancelamento de assinatura na integradora de pagamentos...");
         cancelaAssinaturaAsaas(clienteSistema);
         return clienteSistemaRepositoryImpl.implementaPersistencia(clienteSistema);
     }
 
     public void cancelaAssinaturaAsaas(ClienteSistemaEntity clienteSistema) {
-
+        log.debug("Método de cancelamento de assinatura acessado");
         ResponseEntity<CancelamentoAssinaturaResponse> cancelamentoAssinaturaAsaas;
         try {
             cancelamentoAssinaturaAsaas = asaasProxy
                     .cancelaAssinatura(clienteSistema.getPlano().getCodigoAssinaturaAsaas(), System.getenv(TOKEN_ASAAS));
+            log.info("A assinatura do cliente foi cancelada com sucesso");
         } catch (Exception e) {
+            log.error("Houve uma falha de comunicação com a integradora de pagamentos: {}", e.getMessage());
             throw new FeignConnectionException(FALHA_COMUNICACAO_ASAAS + e.getMessage());
         }
 
-        if (cancelamentoAssinaturaAsaas.getStatusCodeValue() != 200)
+        if (cancelamentoAssinaturaAsaas.getStatusCodeValue() != 200) {
+            log.error("Ocorreu um erro no processo de cancelamento de assinatura com a integradora: {}",
+                    cancelamentoAssinaturaAsaas.getBody());
             throw new InvalidRequestException("Ocorreu um erro no processo de cancelamento de assinatura com a integradora: "
                     + cancelamentoAssinaturaAsaas.getBody());
+        }
     }
 
     //TODO Verificar informações fiscais com contador
@@ -213,6 +234,7 @@ public class AssinaturaService {
 
     @Scheduled(cron = "0 1 1 * * ?", zone = "America/Sao_Paulo")
     public void verificaDiariamenteSeExistemPlanosVencidosAtivos() {
+        //TODO Revisar lógica
         clienteSistemaRepositoryImpl.implementaBuscaPorPlanosVencidosAtivos();
     }
 }

@@ -6,6 +6,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +19,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
 
+@Slf4j
 @RestController
 @Api(value = "Essa API disponibiliza os endpoints de CRUD da entidade Colaborador")
 @Produces({MediaType.APPLICATION_JSON, "application/json"})
@@ -39,6 +41,7 @@ public class ColaboradorController {
     })
     @GetMapping
     public ResponseEntity<List<ColaboradorEntity>> listaTodosColaboradores() {
+        log.info("Método controlador de listagem de todos os colaboradores (GET) acessado");
         return ResponseEntity.status(HttpStatus.OK).body(colaboradorRepositoryImpl.buscaTodosOsColaboradores());
     }
 

@@ -10,12 +10,17 @@ import br.akd.svc.akadia.proxy.asaas.webhooks.cobranca.enums.BillingTypeEnum;
 import br.akd.svc.akadia.proxy.asaas.webhooks.fiscal.AtualizacaoFiscalWebHook;
 import br.akd.svc.akadia.repositories.site.impl.ClienteSistemaRepositoryImpl;
 import br.akd.svc.akadia.repositories.site.impl.PagamentoSistemaRepositoryImpl;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+import static br.akd.svc.akadia.utils.Constantes.INICIANDO_IMPL_PERSISTENCIA_CLIENTE;
+import static br.akd.svc.akadia.utils.Constantes.OBJETO_PAGAMENTO_CRIADO;
+
+@Slf4j
 @Service
 public class PagamentoSistemaService {
 
@@ -30,22 +35,32 @@ public class PagamentoSistemaService {
 
     public void realizaTratamentoWebhookCobranca(AtualizacaoCobrancaWebHook atualizacaoCobrancaWebHook) {
 
+        log.debug("Método 'motor de distruição' de Webhook de atualização de cobrança acessado");
+
         ClienteSistemaEntity clienteSistema = clienteSistemaRepositoryImpl
                 .implementaBuscaPorCodigoClienteAsaas(atualizacaoCobrancaWebHook.getPayment().getCustomer());
 
         switch (atualizacaoCobrancaWebHook.getEvent()) {
             case PAYMENT_CREATED:
+                log.debug("Condicional para novo pagamento CRIADO acessada");
                 realizaCriacaoDeNovoPagamento(atualizacaoCobrancaWebHook, clienteSistema);
+                log.info("Cobrança CRIADA com sucesso");
                 break;
             case PAYMENT_RECEIVED:
             case PAYMENT_CONFIRMED:
+                log.debug("Condicional de pagamento CONFIRMADO acessada");
                 realizaAtualizacaoDePagamentoRealizado(atualizacaoCobrancaWebHook, clienteSistema);
+                log.info("Cobrança CONFIRMADA sucesso");
                 break;
             case PAYMENT_UPDATED:
+                log.debug("Condicional de pagamento ALTERADO acessada");
                 realizaAtualizacaoDePagamentoAlterado(atualizacaoCobrancaWebHook, clienteSistema);
+                log.info("Cobrança ALTERADA com sucesso");
                 break;
             case PAYMENT_OVERDUE:
+                log.debug("Condicional de pagamento VENCIDO acessada");
                 realizaAtualizacaoDePlanoParaPagamentoVencido(clienteSistema);
+                log.info("Atualização de plano para pagamento VENCIDO realizada com sucesso");
                 break;
             case PAYMENT_DELETED:
             case PAYMENT_ANTICIPATED:
@@ -68,6 +83,7 @@ public class PagamentoSistemaService {
 
     public void realizaCriacaoDeNovoPagamento(AtualizacaoCobrancaWebHook atualizacaoCobrancaWebHook,
                                               ClienteSistemaEntity clienteSistema) {
+        log.debug("Iniciando construção do objeto PagamentoSistemaEntity com valores recebidos pelo ASAAS...");
         PagamentoSistemaEntity pagamentoSistemaEntity = PagamentoSistemaEntity.builder()
                 .dataCadastro(LocalDate.now().toString())
                 .horaCadastro(LocalDate.now().toString())
@@ -86,24 +102,33 @@ public class PagamentoSistemaService {
                         : null)
                 .clienteSistema(clienteSistema)
                 .build();
+        log.debug(OBJETO_PAGAMENTO_CRIADO, pagamentoSistemaEntity);
 
+        log.debug("Adicionando objeto pagamento criado à lista de pagamentos do cliente...");
         clienteSistema.getPagamentos().add(pagamentoSistemaEntity);
+
+        log.debug("Iniciando acesso ao método de implementação de persistência do cliente para o persistir com sua lista " +
+                "de pagamentos atualizada...");
         clienteSistemaRepositoryImpl.implementaPersistencia(clienteSistema);
     }
 
     public void realizaAtualizacaoDePagamentoRealizado(AtualizacaoCobrancaWebHook atualizacaoCobrancaWebHook,
                                                        ClienteSistemaEntity clienteSistema) {
-
+        log.debug("Iniciando acesso ao método de implementação de busca de pagamento por código ASAAS...");
         PagamentoSistemaEntity pagamentoSistemaEntity = pagamentoSistemaRepositoryImpl
                 .implementaBuscaPorCodigoPagamentoAsaas(atualizacaoCobrancaWebHook.getPayment().getId());
 
+        log.debug("Removendo pagamento encontrado do objeto cliente: {}", pagamentoSistemaEntity);
         clienteSistema.getPagamentos().remove(pagamentoSistemaEntity);
 
+        log.debug("Iniciando setagem da data de vencimento do plano do cliente para o próximo vencimento...");
         clienteSistema.getPlano().setDataVencimento(assinaturaService
                 .consultaAssinaturaAsaas(atualizacaoCobrancaWebHook.getPayment().getSubscription()).getNextDueDate());
 
+        log.debug("Setando plano do cliente como ATIVO...");
         clienteSistema.getPlano().setStatusPlanoEnum(StatusPlanoEnum.ATIVO);
 
+        log.debug("Atualizando variáveis do objeto pagamento...");
         pagamentoSistemaEntity.setDataPagamento(LocalDate.now().toString());
         pagamentoSistemaEntity.setHoraPagamento(LocalTime.now().toString());
         pagamentoSistemaEntity.setValor(atualizacaoCobrancaWebHook.getPayment().getValue());
@@ -116,27 +141,38 @@ public class PagamentoSistemaService {
                 : null);
         pagamentoSistemaEntity.setClienteSistema(clienteSistema);
         pagamentoSistemaEntity.setStatusPagamentoSistemaEnum(StatusPagamentoSistemaEnum.APROVADO);
+        log.debug(OBJETO_PAGAMENTO_CRIADO, pagamentoSistemaEntity);
 
+        log.debug("Setando pagamento à lista de pagamentos do cliente...");
         clienteSistema.getPagamentos().add(pagamentoSistemaEntity);
+
+        log.debug(INICIANDO_IMPL_PERSISTENCIA_CLIENTE);
         clienteSistemaRepositoryImpl.implementaPersistencia(clienteSistema);
     }
 
     public void realizaAtualizacaoDePlanoParaPagamentoVencido(ClienteSistemaEntity clienteSistema) {
+        log.debug("Setando plano do cliente como INATIVO...");
         clienteSistema.getPlano().setStatusPlanoEnum(StatusPlanoEnum.INATIVO);
 
-        if (LocalDate.now().compareTo(LocalDate.parse(clienteSistema.getPlano().getDataVencimento())) >= 5)
+        if (LocalDate.now().compareTo(LocalDate.parse(clienteSistema.getPlano().getDataVencimento())) >= 5) {
+            log.debug("Condicional de plano vencido a 5 dias ou mais acessada: {}", clienteSistema.getPlano());
+            log.debug("Iniciando acesso ao método de cancelamento de assinatura...");
             assinaturaService.cancelaAssinatura(clienteSistema.getId());
-
+        }
+        log.debug(INICIANDO_IMPL_PERSISTENCIA_CLIENTE);
         clienteSistemaRepositoryImpl.implementaPersistencia(clienteSistema);
     }
 
     public void realizaAtualizacaoDePagamentoAlterado(AtualizacaoCobrancaWebHook atualizacaoCobrancaWebHook,
                                                       ClienteSistemaEntity clienteSistema) {
+        log.debug("Iniciando acesso ao método de implementação de busca de pagamento por código ASAAS...");
         PagamentoSistemaEntity pagamentoSistemaEntity = pagamentoSistemaRepositoryImpl
                 .implementaBuscaPorCodigoPagamentoAsaas(atualizacaoCobrancaWebHook.getPayment().getId());
 
+        log.debug("Removendo pagamento encontrado do objeto cliente: {}", pagamentoSistemaEntity);
         clienteSistema.getPagamentos().remove(pagamentoSistemaEntity);
 
+        log.debug("Atualizando variáveis do objeto pagamento...");
         pagamentoSistemaEntity.setDescricao(atualizacaoCobrancaWebHook.getPayment().getDescription());
         pagamentoSistemaEntity.setFormaPagamentoSistemaEnum(FormaPagamentoSistemaEnum.valueOf(atualizacaoCobrancaWebHook
                 .getPayment().getBillingType().getFormaPagamentoResumida()));
@@ -144,17 +180,21 @@ public class PagamentoSistemaService {
                 .equals(BillingTypeEnum.CREDIT_CARD) && clienteSistema.getCartao() != null
                 ? clienteSistema.getCartao()
                 : null);
+        log.debug(OBJETO_PAGAMENTO_CRIADO, pagamentoSistemaEntity);
 
+        log.debug("Setando cliente ao pagamento...");
         pagamentoSistemaEntity.setClienteSistema(clienteSistema);
 
+        log.debug("Setando pagamento à lista de pagamentos do cliente...");
         clienteSistema.getPagamentos().add(pagamentoSistemaEntity);
 
+        log.debug(INICIANDO_IMPL_PERSISTENCIA_CLIENTE);
         clienteSistemaRepositoryImpl.implementaPersistencia(clienteSistema);
     }
 
     public void realizaTratamentoWebhookFiscal(AtualizacaoFiscalWebHook atualizacaoFiscalWebHook) {
-        System.err.println("Atualização status fiscal recebida:");
-        System.err.println(atualizacaoFiscalWebHook);
+        log.debug("Atualização status fiscal recebida: {}", atualizacaoFiscalWebHook);
+        //TODO Construir lógica (Necessário: CNPJ, certificado digital e consultoria com contador)
     }
 
 }

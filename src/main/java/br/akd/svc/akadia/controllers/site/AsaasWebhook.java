@@ -9,6 +9,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +22,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+@Slf4j
 @RestController
 @RequestMapping("/hook/v1")
 @Api(value = "Essa API disponibiliza os endpoints de recebimento de webhooks por parte da integradora de pagamentos")
@@ -45,14 +47,16 @@ public class AsaasWebhook {
             @ApiResponse(code = 500, message = "Ocorreu uma falha na comunicação com a integradora de pagamentos",
                     response = FeignConnectionException.class),
     })
-    @PostMapping(value="/pagamento")
+    @PostMapping(value = "/pagamento")
     public ResponseEntity<HttpStatus> recebeStatusPagamento(@RequestBody AtualizacaoCobrancaWebHook atualizacaoCobrancaWebHook) {
+        log.info("Webhook ASAAS de atualização do status de cobrança recebido: {}", atualizacaoCobrancaWebHook);
         pagamentoSistemaService.realizaTratamentoWebhookCobranca(atualizacaoCobrancaWebHook);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
-    @PostMapping(value="/fiscal")
-    public ResponseEntity<HttpStatus> recebeStatusPagamento(@RequestBody AtualizacaoFiscalWebHook atualizacaoFiscalWebHook) {
+    @PostMapping(value = "/fiscal")
+    public ResponseEntity<HttpStatus> recebeStatusFiscal(@RequestBody AtualizacaoFiscalWebHook atualizacaoFiscalWebHook) {
+        log.info("Webhook ASAAS de atualização do status de fiscal de uma cobrança recebido: {}", atualizacaoFiscalWebHook);
         pagamentoSistemaService.realizaTratamentoWebhookFiscal(atualizacaoFiscalWebHook);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
