@@ -14,6 +14,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +25,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
 
+@Slf4j
 @RestController
 @Api(value = "Essa API disponibiliza os endpoints de CRUD da entidade ClienteSistema")
 @Produces({MediaType.APPLICATION_JSON, "application/json"})
@@ -54,6 +56,7 @@ public class ClienteSistemaController {
     })
     @GetMapping
     public ResponseEntity<List<ClienteSistemaEntity>> listaTodosClientes() {
+        log.info("Método controlador de listagem de todos os clientes do Akadion acessado");
         return ResponseEntity.status(HttpStatus.OK).body(clienteSistemaRepositoryImpl.buscaTodosClientes());
     }
 
@@ -70,6 +73,7 @@ public class ClienteSistemaController {
     })
     @PostMapping("cadastro/verifica-email")
     public ResponseEntity<LeadEntity> captaLeadsPreCadastro(@RequestBody ClienteSistemaDto clienteSistemaDto) {
+        log.info("Método controlador de captação de leads pré-cadastro acessado");
         return ResponseEntity.status(HttpStatus.CREATED).body(leadService.encaminhaLeadParaPersistencia(clienteSistemaDto));
     }
 
@@ -85,7 +89,9 @@ public class ClienteSistemaController {
     })
     @PostMapping("cadastro/verifica-cpf")
     public ResponseEntity<ClienteSistemaEntity> verificaSeCpfJaExiste(@RequestBody ClienteSistemaDto clienteSistemaDto) {
+        log.info("Método controlador de validação se cpf acessado");
         clienteSistemaService.validaSeCpfJaExiste(clienteSistemaDto);
+        log.info("Validação de cpf realizada com sucesso. O cpf informado está disponível");
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
@@ -104,6 +110,7 @@ public class ClienteSistemaController {
     })
     @PostMapping("cadastro/cria-cliente")
     public ResponseEntity<ClienteSistemaEntity> criaNovoCliente(@RequestBody ClienteSistemaDto clienteSistemaDto) {
+        log.info("Método controlador de criação de novo cliente acessado");
         return ResponseEntity.status(HttpStatus.CREATED).body(clienteSistemaService.cadastraNovoCliente(clienteSistemaDto));
     }
 
@@ -123,6 +130,7 @@ public class ClienteSistemaController {
     @PutMapping("atualiza-cliente/{idCliente}")
     public ResponseEntity<ClienteSistemaEntity> atualizaDadosCliente(@PathVariable Long idCliente,
                                                                      @RequestBody ClienteSistemaDto clienteSistemaDto) {
+        log.info("Método controlador de atualização de dados do cliente de id {} acessado", idCliente);
         return ResponseEntity.status(HttpStatus.OK).body(clienteSistemaService.atualizaDadosCliente(idCliente, clienteSistemaDto));
     }
 
@@ -146,6 +154,7 @@ public class ClienteSistemaController {
     @PutMapping("atualiza-assinatura/{idCliente}")
     public ResponseEntity<ClienteSistemaEntity> atualizaDadosAssinaturaCliente(@PathVariable Long idCliente,
                                                                                @RequestBody ClienteSistemaDto clienteSistemaDto) {
+        log.info("Método controlador de atualização de dados da assinatura do cliente de id {} acessado", idCliente);
         return ResponseEntity.status(HttpStatus.OK).body(assinaturaService.atualizaDadosAssinatura(idCliente, clienteSistemaDto));
     }
 
@@ -168,6 +177,7 @@ public class ClienteSistemaController {
     })
     @DeleteMapping("cancela-assinatura/{idCliente}")
     public ResponseEntity<ClienteSistemaEntity> cancelaAssinaturaCliente(@PathVariable Long idCliente) {
+        log.info("Método controlador de cancelamento de assinatura do cliente acessado");
         return ResponseEntity.status(HttpStatus.OK).body(assinaturaService.cancelaAssinatura(idCliente));
     }
 

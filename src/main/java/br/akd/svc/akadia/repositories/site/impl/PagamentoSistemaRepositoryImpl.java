@@ -27,7 +27,7 @@ public class PagamentoSistemaRepositoryImpl {
             log.debug("Pagamento encontrado: {}", pagamento);
         }
         else {
-            log.error("Nenhum pagamento foi encontrado com o código ASAAS informado: {}", codigoPagamentoAsaas);
+            log.warn("Nenhum pagamento foi encontrado com o código ASAAS informado: {}", codigoPagamentoAsaas);
             throw new ObjectNotFoundException("Nenhum pagamento foi encontrado com o codigo Asaas informado");
         }
 

@@ -23,6 +23,7 @@ public class ColaboradorRepositoryImpl {
 
     @Transactional
     public ColaboradorEntity implementaPersistencia(ColaboradorEntity colaborador) {
+        log.debug("Método de serviço que implementa persistência do colaborador acessado");
         return colaboradorRepository.save(colaborador);
     }
 

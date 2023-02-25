@@ -48,6 +48,9 @@ public class AssinaturaService {
 
     public AssinaturaResponse criaAssinaturaAsaas(ClienteSistemaEntity clienteSistema) {
 
+        log.debug("Método de criação de nova assinatura na integradora de pagamentos acessado");
+
+        log.debug("Iniciando criação de objeto AssinaturaRequest...");
         AssinaturaRequest assinaturaRequest =
                 AssinaturaRequest.builder()
                         .customer(clienteSistema.getCodigoClienteAsaas())
@@ -83,28 +86,43 @@ public class AssinaturaService {
                                         : null
                         )
                         .build();
+        log.debug("Objeto AssinaturaRequest construído com sucesso: {}", assinaturaRequest);
 
         ResponseEntity<AssinaturaResponse> cadastraAssinaturaAsaas;
 
         try {
             cadastraAssinaturaAsaas = asaasProxy.cadastraNovaAssinatura(assinaturaRequest, System.getenv(TOKEN_ASAAS));
+            log.info("Assinatura do cliente cadastrada na integradora de pagamentos com sucesso");
+            log.debug("Assinatura ASAAS: {}", cadastraAssinaturaAsaas.getBody());
         } catch (Exception e) {
+            log.error(FALHA_COMUNICACAO_ASAAS + e.getMessage());
             throw new FeignConnectionException(FALHA_COMUNICACAO_ASAAS + e.getMessage());
         }
 
-        if (cadastraAssinaturaAsaas.getStatusCodeValue() != 200)
+        if (cadastraAssinaturaAsaas.getStatusCodeValue() != 200) {
+            log.error("Ocorreu um erro no processo de criação da assinatura na integradora de pagamentos: {}",
+                    cadastraAssinaturaAsaas.getBody());
             throw new InvalidRequestException("Ocorreu um erro no processo de criação da assinatura: "
                     + cadastraAssinaturaAsaas.getBody());
+        }
 
+        log.debug("Iniciando acesso ao método de criação de configuração de emissão de NFSE para a assinatura criada...");
         criaConfigFiscalAssinaturaAsaas(Objects.requireNonNull(cadastraAssinaturaAsaas.getBody()));
+
+        log.debug("Retornando corpo da assinatura criada...");
         return cadastraAssinaturaAsaas.getBody();
     }
 
 
     public ClienteSistemaEntity atualizaDadosAssinatura(Long idCliente, ClienteSistemaDto clienteSistemaDto) {
 
+        log.debug("Método de atualização de dados de assinatura do cliente acessado. Cliente recebido: {} | ID do cliente: {}",
+                clienteSistemaDto, idCliente);
+
+        log.debug("Iniciando acesso ao método de implementação de busca por id do cliente de id {}", idCliente);
         ClienteSistemaEntity clienteSistema = clienteSistemaRepositoryImpl.implementaBuscaPorId(idCliente);
 
+        log.debug("Iniciando construção do objeto PlanoEntity...");
         PlanoEntity planoAtualizado = PlanoEntity.builder()
                 .id(clienteSistema.getPlano().getId())
                 .codigoAssinaturaAsaas(clienteSistema.getPlano().getCodigoAssinaturaAsaas())
@@ -115,14 +133,26 @@ public class AssinaturaService {
                 .statusPlanoEnum(clienteSistema.getPlano().getStatusPlanoEnum())
                 .formaPagamentoSistemaEnum(clienteSistemaDto.getPlano().getFormaPagamentoSistemaEnum())
                 .build();
+        log.debug("Objeto PlanoEntity construído com sucesso");
 
+        log.debug("Setando planoAtualizado ao cliente...");
         clienteSistema.setPlano(planoAtualizado);
+
+        log.debug("Iniciando acesso ao método de implementação de persistência do cliente...");
         ClienteSistemaEntity clienteAtualizado = clienteSistemaRepositoryImpl.implementaPersistencia(clienteSistema);
+
+        log.debug("Iniciando acesso ao método de atualização de dados de assinatura do cliente na integradora de pagamentos...");
         atualizaDadosAssinaturaAsaas(clienteAtualizado);
+
+        log.info("Plano do cliente de id {} atualizado com sucesso", idCliente);
         return clienteAtualizado;
     }
 
     public void atualizaDadosAssinaturaAsaas(ClienteSistemaEntity clienteSistema) {
+
+        log.debug("Método de atualização de dados de assinatura do cliente na integradora de pagamentos acessado");
+
+        log.debug("Iniciando construção do objeto AtualizaAssinaturaRequest...");
         AtualizaAssinaturaRequest atualizaAssinaturaRequest = AtualizaAssinaturaRequest.builder()
                 .billingType(clienteSistema.getPlano().getFormaPagamentoSistemaEnum().toString())
                 .value(clienteSistema.getPlano().getTipoPlanoEnum().getValor())
@@ -130,18 +160,25 @@ public class AssinaturaService {
                 .description("Assinatura do plano " + clienteSistema.getPlano().getTipoPlanoEnum().getDesc())
                 .updatePendingPayments("true")
                 .build();
+        log.debug("Objeto AtualizaAssinaturaRequest construído com sucesso");
 
         ResponseEntity<AtualizaAssinaturaResponse> atualizaAssinaturaResponse;
         try {
             atualizaAssinaturaResponse = asaasProxy.atualizaAssinatura(
                     clienteSistema.getPlano().getCodigoAssinaturaAsaas(), atualizaAssinaturaRequest, System.getenv(TOKEN_ASAAS));
+            log.info("Dados da assinatura do cliente atualizados na integradora de pagamentos com sucesso");
+            log.debug("Assinatura ASAAS: {}", atualizaAssinaturaResponse.getBody());
         } catch (Exception e) {
+            log.error(FALHA_COMUNICACAO_ASAAS + e.getMessage());
             throw new FeignConnectionException(FALHA_COMUNICACAO_ASAAS + e.getMessage());
         }
 
-        if (atualizaAssinaturaResponse.getStatusCodeValue() != 200)
+        if (atualizaAssinaturaResponse.getStatusCodeValue() != 200) {
+            log.error("Ocorreu um erro no processo de atualização de assinatura do cliente com a integradora de pagamentos: {}",
+                    atualizaAssinaturaResponse.getBody());
             throw new InvalidRequestException("Ocorreu um erro no processo de atualização de assinatura com a integradora: "
                     + atualizaAssinaturaResponse.getBody());
+        }
     }
 
     public ConsultaAssinaturaResponse consultaAssinaturaAsaas(String id) {
@@ -210,6 +247,9 @@ public class AssinaturaService {
     //TODO Verificar informações fiscais com contador
     public void criaConfigFiscalAssinaturaAsaas(AssinaturaResponse assinatura) {
 
+        log.debug("Método de criação de configuração de NFSe para a assinatura {} acessado", assinatura);
+
+        log.debug("Iniciando construção do objeto CriaConfigFiscalRequest...");
         CriaConfigFiscalRequest criaConfigFiscalRequest = CriaConfigFiscalRequest.builder()
                 .municipalServiceId("104")
                 .municipalServiceCode("1.05")
@@ -228,13 +268,18 @@ public class AssinaturaService {
                         .pis(0.65)
                         .build())
                 .build();
+        log.debug("Objeto CriaConfigFiscalRequest construído com sucesso: {}", criaConfigFiscalRequest);
 
+        //TODO Tratar exceptions de comunicação e != 200 da integradora
+        log.debug("Iniciando acesso ao método de criação de configuração fiscal para a assinatura...");
         asaasProxy.criaConfiguracaoFiscalDaAssinatura(assinatura.getId(), criaConfigFiscalRequest, System.getenv(TOKEN_ASAAS));
+        log.debug("Configuração de NFSe para a assinatura criada com sucesso");
     }
 
     @Scheduled(cron = "0 1 1 * * ?", zone = "America/Sao_Paulo")
     public void verificaDiariamenteSeExistemPlanosVencidosAtivos() {
         //TODO Revisar lógica
+        log.info("Agendamento diário de verificação se existem planos vencidos ativos acionado");
         clienteSistemaRepositoryImpl.implementaBuscaPorPlanosVencidosAtivos();
     }
 }

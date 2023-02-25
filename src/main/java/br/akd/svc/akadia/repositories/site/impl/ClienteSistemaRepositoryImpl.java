@@ -20,6 +20,7 @@ public class ClienteSistemaRepositoryImpl {
     ClienteSistemaRepository clienteSistemaRepository;
 
     public List<ClienteSistemaEntity> buscaTodosClientes() {
+        log.debug("Método que implementa busca de todos os clientes do Akadion acessado");
         return clienteSistemaRepository.findAll();
     }
 
@@ -31,10 +32,12 @@ public class ClienteSistemaRepositoryImpl {
     }
 
     public Optional<ClienteSistemaEntity> implementaBuscaPorEmail(String email) {
+        log.debug("Método que implementa busca de cliente por e-mail acessado. E-mail recebido: {}", email);
         return clienteSistemaRepository.findByEmail(email);
     }
 
     public Optional<ClienteSistemaEntity> implementaBuscaPorCpf(String cpf) {
+        log.debug("Método que implementa busca de cliente por cpf acessado. Cpf recebido: {}", cpf);
         return clienteSistemaRepository.findByCpf(cpf);
     }
 
@@ -49,7 +52,7 @@ public class ClienteSistemaRepositoryImpl {
             clienteSistema = clienteOptional.get();
             log.debug("Cliente encontrado: {}", clienteSistema);
         } else {
-            log.error("Nenhum cliente foi encontrado com o id informado: {}", id);
+            log.warn("Nenhum cliente foi encontrado com o id informado: {}", id);
             throw new ObjectNotFoundException("Nenhum cliente foi encontrado com o id informado");
         }
 
@@ -76,6 +79,7 @@ public class ClienteSistemaRepositoryImpl {
     }
 
     public void implementaBuscaPorPlanosVencidosAtivos() {
+        log.debug("Método que implementa busca por planos vencidos ativos acessado");
         clienteSistemaRepository
                 .buscaPorClientesComPlanosVencidosAtivos("ATIVO", LocalDate.now().toString());
     }
