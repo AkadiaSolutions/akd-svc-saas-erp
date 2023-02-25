@@ -257,7 +257,7 @@ class ClienteSistemaServiceTest {
                             .build());
             Assertions.fail();
         } catch (Exception e) {
-            Assertions.assertEquals("Ocorreu um erro no processo atualização dos dados cadastrais do cliente: null",
+            Assertions.assertEquals("Ocorreu um erro no processo de atualização dos dados cadastrais do cliente: null",
                     e.getMessage());
         }
     }

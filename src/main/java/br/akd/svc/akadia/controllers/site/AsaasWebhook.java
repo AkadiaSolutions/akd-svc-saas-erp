@@ -56,7 +56,7 @@ public class AsaasWebhook {
 
     @PostMapping(value = "/fiscal")
     public ResponseEntity<HttpStatus> recebeStatusFiscal(@RequestBody AtualizacaoFiscalWebHook atualizacaoFiscalWebHook) {
-        log.info("Webhook ASAAS de atualização do status de fiscal de uma cobrança recebido: {}", atualizacaoFiscalWebHook);
+        log.info("Webhook ASAAS de atualização do status fiscal de uma cobrança recebido: {}", atualizacaoFiscalWebHook);
         pagamentoSistemaService.realizaTratamentoWebhookFiscal(atualizacaoFiscalWebHook);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
