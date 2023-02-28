@@ -27,7 +27,7 @@ import javax.ws.rs.core.MediaType;
 @Consumes({MediaType.APPLICATION_JSON, "application/json"})
 @RequestMapping("api/sistema/v1/cliente")
 public class ClienteController {
-    
+
     @Autowired
     ClienteService clienteService;
 
