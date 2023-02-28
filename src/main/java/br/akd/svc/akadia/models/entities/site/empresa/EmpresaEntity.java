@@ -76,4 +76,6 @@ public class EmpresaEntity {
     @ToString.Exclude
     private List<ChamadoEntity> chamados = new ArrayList<>();
 
+    //TODO Verificar necessidade de lista de colaboradores para facilitar persistência de empresa e colaborador responsável
+
 }
