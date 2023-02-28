@@ -1,4 +1,4 @@
-package br.akd.svc.akadia.config;
+package br.akd.svc.akadia.config.docs;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
