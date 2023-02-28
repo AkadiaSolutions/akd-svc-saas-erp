@@ -1,5 +1,7 @@
 package br.akd.svc.akadia.models.entities.sistema.clientes.mocks;
 
+import br.akd.svc.akadia.models.entities.global.mocks.EnderecoEntityBuilder;
+import br.akd.svc.akadia.models.entities.global.mocks.TelefoneEntityBuilder;
 import br.akd.svc.akadia.models.entities.sistema.clientes.ClienteEntity;
 
 import java.time.LocalDate;
@@ -28,6 +30,16 @@ public class ClienteEntityBuilder {
         builder.clienteEntity.setColaboradorResponsavel(null);
         builder.clienteEntity.setEmpresa(null);
         return builder;
+    }
+
+    public ClienteEntityBuilder comEndereco() {
+        this.clienteEntity.setEndereco(EnderecoEntityBuilder.builder().build());
+        return this;
+    }
+
+    public ClienteEntityBuilder comTelefone() {
+        this.clienteEntity.setTelefone(TelefoneEntityBuilder.builder().build());
+        return this;
     }
 
     public ClienteEntity build() {

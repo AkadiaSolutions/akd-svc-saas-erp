@@ -3,6 +3,7 @@ package br.akd.svc.akadia.controllers.sistema.clientes;
 import br.akd.svc.akadia.models.dto.sistema.clientes.ClienteDto;
 import br.akd.svc.akadia.models.entities.sistema.clientes.ClienteEntity;
 import br.akd.svc.akadia.services.exceptions.InvalidRequestException;
+import br.akd.svc.akadia.services.exceptions.ObjectNotFoundException;
 import br.akd.svc.akadia.services.sistema.clientes.ClienteService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -12,9 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
@@ -45,6 +44,22 @@ public class ClienteController {
     public ResponseEntity<ClienteEntity> criaNovoCliente(ClienteDto clienteDto) {
         log.info("Método controlador de criação de novo cliente acessado");
         return ResponseEntity.status(HttpStatus.CREATED).body(clienteService.criaNovoCliente(clienteDto));
+    }
+
+    @PutMapping("/{id}")
+    @ApiOperation(
+            value = "Atualização de cliente",
+            notes = "Esse endpoint tem como objetivo realizar a atualização de um cliente na base de dados da empresa",
+            produces = MediaType.APPLICATION_JSON,
+            consumes = MediaType.APPLICATION_JSON
+    )
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Cliente atualizado com sucesso", response = ClienteEntity.class),
+            @ApiResponse(code = 404, message = "Objeto cliente não encontrado pelo id informado", response = ObjectNotFoundException.class)
+    })
+    public ResponseEntity<ClienteEntity> atualizaCliente(ClienteDto clienteDto, @PathVariable Long id) {
+        log.info("Método controlador de atualização de cliente acessado");
+        return ResponseEntity.status(HttpStatus.OK).body(clienteService.atualizaCliente(id, clienteDto));
     }
 
 }

@@ -36,4 +36,15 @@ class ClienteControllerTest {
                 "colaboradorResponsavel=null, empresa=null),[]>", cliente.toString());
     }
 
+    @Test
+    @DisplayName("Deve testar método controlador de atualização de cliente")
+    void deveTestarMetodoControladorDeAtualizacaoDoCliente() {
+        when(clienteService.atualizaCliente(any(), any())).thenReturn(ClienteEntityBuilder.builder().build());
+        ResponseEntity<ClienteEntity> cliente = clienteController.atualizaCliente(ClienteDtoBuilder.builder().build(), 1L);
+        Assertions.assertEquals("<200 OK OK,ClienteEntity(id=1, dataCadastro=2023-02-27, horaCadastro=17:40, " +
+                "dataNascimento=1998-07-21, nome=Gabriel Lagrota, cpfCnpj=582.645.389-32, inscricaoEstadual=145574080114, " +
+                "email=gabrielafonso@mail.com.br, endereco=null, telefone=null, colaboradorResponsavel=null, " +
+                "empresa=null),[]>", cliente.toString());
+    }
+
 }

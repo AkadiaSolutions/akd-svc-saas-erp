@@ -22,18 +22,16 @@ public class ClienteEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false, updatable = false)
     private String dataCadastro;
 
+    @Column(nullable = false, updatable = false)
     private String horaCadastro;
-
     private String dataNascimento;
-
+    @Column(nullable = false)
     private String nome;
-
     private String cpfCnpj;
-
     private String inscricaoEstadual;
-
     private String email;
 
     @OneToOne(targetEntity = EnderecoEntity.class, orphanRemoval = true, cascade = CascadeType.ALL)
