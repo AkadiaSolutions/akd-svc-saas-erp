@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -40,9 +41,10 @@ public class ColaboradorController {
             @ApiResponse(code = 200, message = "Requisição realizada com sucesso", response = ColaboradorEntity.class),
     })
     @GetMapping
+    @PreAuthorize("hasAnyRole('COLABORADORES')")
     public ResponseEntity<List<ColaboradorEntity>> listaTodosColaboradores() {
         log.info("Método controlador de listagem de todos os colaboradores (GET) acessado");
-        return ResponseEntity.status(HttpStatus.OK).body(colaboradorRepositoryImpl.buscaTodosOsColaboradores());
+        return ResponseEntity.status(HttpStatus.OK).body(colaboradorRepositoryImpl.implementaBuscaTodosOsColaboradores());
     }
 
 }
