@@ -25,11 +25,17 @@ public class ClienteEntityBuilder {
         builder.clienteEntity.setCpfCnpj("582.645.389-32");
         builder.clienteEntity.setInscricaoEstadual("145574080114");
         builder.clienteEntity.setEmail("gabrielafonso@mail.com.br");
+        builder.clienteEntity.setExclusaoCliente(null);
         builder.clienteEntity.setEndereco(null);
         builder.clienteEntity.setTelefone(null);
         builder.clienteEntity.setColaboradorResponsavel(null);
         builder.clienteEntity.setEmpresa(null);
         return builder;
+    }
+
+    public ClienteEntityBuilder comObjetoExclusaoFalse() {
+        this.clienteEntity.setExclusaoCliente(ExclusaoClienteEntityBuilder.builder().build());
+        return this;
     }
 
     public ClienteEntityBuilder comEndereco() {

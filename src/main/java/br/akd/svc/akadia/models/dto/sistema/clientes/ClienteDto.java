@@ -22,6 +22,7 @@ public class ClienteDto {
     private String cpfCnpj;
     private String inscricaoEstadual;
     private String email;
+    private ExclusaoClienteDto exclusaoCliente;
     private EnderecoDto endereco;
     private TelefoneDto telefone;
     private ColaboradorDto colaboradorResponsavel;

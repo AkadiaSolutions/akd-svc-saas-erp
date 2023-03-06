@@ -34,16 +34,15 @@ public class ClienteEntity {
     private String inscricaoEstadual;
     private String email;
 
+    @OneToOne(targetEntity = ExclusaoClienteEntity.class, orphanRemoval = true, cascade = CascadeType.ALL)
+    private ExclusaoClienteEntity exclusaoCliente;
     @OneToOne(targetEntity = EnderecoEntity.class, orphanRemoval = true, cascade = CascadeType.ALL)
     private EnderecoEntity endereco;
-
     @OneToOne(targetEntity = EnderecoEntity.class, orphanRemoval = true, cascade = CascadeType.ALL)
     private TelefoneEntity telefone;
-
     @ManyToOne(targetEntity = ColaboradorEntity.class)
     @JoinColumn(name = "id_colab_responsavel")
     private ColaboradorEntity colaboradorResponsavel;
-
     @ManyToOne(targetEntity = EmpresaEntity.class)
     @JoinColumn(name = "id_empresa")
     private EmpresaEntity empresa;

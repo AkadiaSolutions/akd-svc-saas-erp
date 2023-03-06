@@ -19,8 +19,8 @@ class ClienteDtoTest {
         Assertions.assertEquals(
                 "ClienteDto(id=1, dataCadastro=2023-02-27, horaCadastro=17:40, dataNascimento=1998-07-21, " +
                         "nome=Gabriel Lagrota, cpfCnpj=582.645.389-32, inscricaoEstadual=145574080114, " +
-                        "email=gabrielafonso@mail.com.br, endereco=null, telefone=null, colaboradorResponsavel=null, " +
-                        "empresa=null)",
+                        "email=gabrielafonso@mail.com.br, exclusaoCliente=null, endereco=null, telefone=null, " +
+                        "colaboradorResponsavel=null, empresa=null)",
                 ClienteDtoBuilder.builder().build().toString()
         );
 
@@ -41,13 +41,14 @@ class ClienteDtoTest {
                 null,
                 null,
                 null,
+                null,
                 null
         );
         Assertions.assertEquals(
                 "ClienteDto(id=1, dataCadastro=2023-02-27, horaCadastro=17:40, dataNascimento=1998-07-21, " +
                         "nome=Gabriel Lagrota, cpfCnpj=582.645.389-32, inscricaoEstadual=145574080114, " +
-                        "email=gabrielafonso@mail.com.br, endereco=null, telefone=null, colaboradorResponsavel=null, " +
-                        "empresa=null)",
+                        "email=gabrielafonso@mail.com.br, exclusaoCliente=null, endereco=null, telefone=null, " +
+                        "colaboradorResponsavel=null, empresa=null)",
                 clienteDto.toString()
         );
 
@@ -72,8 +73,8 @@ class ClienteDtoTest {
         Assertions.assertEquals(
                 "ClienteDto(id=1, dataCadastro=2023-02-27, horaCadastro=17:40, dataNascimento=1998-07-21, " +
                         "nome=Gabriel Lagrota, cpfCnpj=582.645.389-32, inscricaoEstadual=null, " +
-                        "email=gabrielafonso@mail.com.br, endereco=null, telefone=null, colaboradorResponsavel=null, " +
-                        "empresa=null)",
+                        "email=gabrielafonso@mail.com.br, exclusaoCliente=null, endereco=null, telefone=null, " +
+                        "colaboradorResponsavel=null, empresa=null)",
                 clienteDto.toString()
         );
     }

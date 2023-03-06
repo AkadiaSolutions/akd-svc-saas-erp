@@ -25,11 +25,17 @@ public class ClienteDtoBuilder {
         builder.clienteDto.setCpfCnpj("582.645.389-32");
         builder.clienteDto.setInscricaoEstadual("145574080114");
         builder.clienteDto.setEmail("gabrielafonso@mail.com.br");
+        builder.clienteDto.setExclusaoCliente(null);
         builder.clienteDto.setEndereco(null);
         builder.clienteDto.setTelefone(null);
         builder.clienteDto.setColaboradorResponsavel(null);
         builder.clienteDto.setEmpresa(null);
         return builder;
+    }
+
+    public ClienteDtoBuilder comObjetoExclusaoFalse() {
+        this.clienteDto.setExclusaoCliente(ExclusaoClienteDtoBuilder.builder().build());
+        return this;
     }
 
     public ClienteDtoBuilder comEndereco() {

@@ -3,6 +3,8 @@ package br.akd.svc.akadia.models.entities.sistema.colaboradores;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -12,7 +14,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "tb_acesso_sistema")
-public class AcessoSistemaEntity {
+public class AcessoSistemaEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -20,4 +22,8 @@ public class AcessoSistemaEntity {
     private String nomeUsuario;
     private String senha;
     private String senhaCriptografada;
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "PERFIS")
+    protected Set<ModulosEnum> privilegios = new HashSet<>();
 }
