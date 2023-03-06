@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -16,9 +17,14 @@ public class ColaboradorRepositoryImpl {
     @Autowired
     ColaboradorRepository colaboradorRepository;
 
-    public List<ColaboradorEntity> buscaTodosOsColaboradores() {
+    public List<ColaboradorEntity> implementaBuscaTodosOsColaboradores() {
         log.debug("Método de serviço que implementa busca por todos os colaboradores cadastrados acessado");
         return colaboradorRepository.findAll();
+    }
+
+    public Optional<ColaboradorEntity> implementaBuscaPorNomeUsuario(String nomeUsuario) {
+        log.debug("Método de serviço que implementa busca por nome de usuário do colaborador");
+        return colaboradorRepository.buscaPorUsername(nomeUsuario);
     }
 
     @Transactional

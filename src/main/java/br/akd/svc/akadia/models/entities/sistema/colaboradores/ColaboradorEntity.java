@@ -107,4 +107,5 @@ public class ColaboradorEntity {
     @ManyToOne(targetEntity = EmpresaEntity.class)
     @JoinColumn(name = "id_empresa")
     private EmpresaEntity empresa;
+
 }

@@ -22,7 +22,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 
@@ -99,7 +98,7 @@ public class ClienteSistemaService {
                         .plano(PlanoEntity.builder()
                                 .dataContratacao(LocalDate.now().toString())
                                 .horaContratacao(LocalTime.now().toString())
-                                .dataVencimento(LocalDateTime.now().plusDays(7L).toString())
+                                .dataVencimento(LocalDate.now().plusDays(7L).toString())
                                 .tipoPlanoEnum(clienteSistemaDto.getPlano().getTipoPlanoEnum())
                                 .formaPagamentoSistemaEnum(clienteSistemaDto.getPlano().getFormaPagamentoSistemaEnum())
                                 .statusPlanoEnum(StatusPlanoEnum.PERIODO_DE_TESTES)
