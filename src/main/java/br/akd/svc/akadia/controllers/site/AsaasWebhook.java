@@ -13,10 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
@@ -48,15 +45,19 @@ public class AsaasWebhook {
                     response = FeignConnectionException.class),
     })
     @PostMapping(value = "/pagamento")
-    public ResponseEntity<HttpStatus> recebeStatusPagamento(@RequestBody AtualizacaoCobrancaWebHook atualizacaoCobrancaWebHook) {
+    public ResponseEntity<HttpStatus> recebeStatusPagamento(@RequestBody AtualizacaoCobrancaWebHook atualizacaoCobrancaWebHook,
+                                                            @RequestHeader(value = "asaas-access-token") String token) {
         log.info("Webhook ASAAS de atualização do status de cobrança recebido: {}", atualizacaoCobrancaWebHook);
+        pagamentoSistemaService.realizaValidacaoToken(token);
         pagamentoSistemaService.realizaTratamentoWebhookCobranca(atualizacaoCobrancaWebHook);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @PostMapping(value = "/fiscal")
-    public ResponseEntity<HttpStatus> recebeStatusFiscal(@RequestBody AtualizacaoFiscalWebHook atualizacaoFiscalWebHook) {
+    public ResponseEntity<HttpStatus> recebeStatusFiscal(@RequestBody AtualizacaoFiscalWebHook atualizacaoFiscalWebHook,
+                                                         @RequestHeader(value = "asaas-access-token") String token) {
         log.info("Webhook ASAAS de atualização do status fiscal de uma cobrança recebido: {}", atualizacaoFiscalWebHook);
+        pagamentoSistemaService.realizaValidacaoToken(token);
         pagamentoSistemaService.realizaTratamentoWebhookFiscal(atualizacaoFiscalWebHook);
         return ResponseEntity.status(HttpStatus.OK).build();
     }

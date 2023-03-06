@@ -10,8 +10,10 @@ import br.akd.svc.akadia.proxy.asaas.webhooks.cobranca.enums.BillingTypeEnum;
 import br.akd.svc.akadia.proxy.asaas.webhooks.fiscal.AtualizacaoFiscalWebHook;
 import br.akd.svc.akadia.repositories.site.impl.ClienteSistemaRepositoryImpl;
 import br.akd.svc.akadia.repositories.site.impl.PagamentoSistemaRepositoryImpl;
+import br.akd.svc.akadia.services.exceptions.UnauthorizedAccessException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -32,6 +34,23 @@ public class PagamentoSistemaService {
 
     @Autowired
     PagamentoSistemaRepositoryImpl pagamentoSistemaRepositoryImpl;
+
+    @Value("${TOKEN_WEBHOOK_ASAAS}")
+    String tokenWebhook;
+
+    public void realizaValidacaoToken(String token) {
+        log.debug("Método de validação de token acessado");
+
+        log.debug("Iniciando validação de token...");
+        if (token == null || token.equals("")) {
+            log.error("O token recebido é nulo ou vazio: {}", token);
+            throw new UnauthorizedAccessException("Nenhum token de acesso foi recebido");
+        }
+        if (!token.equals(tokenWebhook)) {
+            log.error("O token recebido não é compatível com o esperado: {}", token);
+            throw new UnauthorizedAccessException("O token de acesso recebido está incorreto");
+        }
+    }
 
     public void realizaTratamentoWebhookCobranca(AtualizacaoCobrancaWebHook atualizacaoCobrancaWebHook) {
 
