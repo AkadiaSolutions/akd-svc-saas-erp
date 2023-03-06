@@ -52,6 +52,18 @@ public class ExceptionHandler extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(standartError);
     }
 
+    @org.springframework.web.bind.annotation.ExceptionHandler(UnauthorizedAccessException.class)
+    public ResponseEntity<StandartError> unauthorizedAccessException(HttpServletRequest req,
+                                                                     UnauthorizedAccessException unauthorizedAccessException) {
+        StandartError standartError = StandartError.builder()
+                .localDateTime(LocalDateTime.now())
+                .status(401)
+                .error(unauthorizedAccessException.getMessage())
+                .path(req.getRequestURI())
+                .build();
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(standartError);
+    }
+
     @Override
     protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
                                                                   HttpHeaders headers,
@@ -69,4 +81,5 @@ public class ExceptionHandler extends ResponseEntityExceptionHandler {
                 .build();
         return ResponseEntity.status(status).body(standartError);
     }
+
 }
