@@ -9,8 +9,11 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.ResponseEntity;
+
+import javax.servlet.http.HttpServletRequest;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -28,8 +31,13 @@ class ClienteControllerTest {
     @Test
     @DisplayName("Deve testar método controlador de criação de novo cliente")
     void deveTestarMetodoControladorDeCriacaoDeNovoCliente() {
-        when(clienteService.criaNovoCliente(any())).thenReturn(ClienteEntityBuilder.builder().build());
-        ResponseEntity<ClienteEntity> cliente = clienteController.criaNovoCliente(ClienteDtoBuilder.builder().build());
+
+        when(clienteService.criaNovoCliente(any(), any())).thenReturn(ClienteEntityBuilder.builder().build());
+        HttpServletRequest mockedRequest = Mockito.mock(HttpServletRequest.class);
+
+        ResponseEntity<ClienteEntity> cliente =
+                clienteController.criaNovoCliente(mockedRequest, ClienteDtoBuilder.builder().build());
+
         Assertions.assertEquals("<201 CREATED Created,ClienteEntity(id=1, dataCadastro=2023-02-27, " +
                 "horaCadastro=17:40, dataNascimento=1998-07-21, nome=Gabriel Lagrota, cpfCnpj=582.645.389-32, " +
                 "inscricaoEstadual=145574080114, email=gabrielafonso@mail.com.br, endereco=null, telefone=null, " +
@@ -39,8 +47,13 @@ class ClienteControllerTest {
     @Test
     @DisplayName("Deve testar método controlador de atualização de cliente")
     void deveTestarMetodoControladorDeAtualizacaoDoCliente() {
-        when(clienteService.atualizaCliente(any(), any())).thenReturn(ClienteEntityBuilder.builder().build());
-        ResponseEntity<ClienteEntity> cliente = clienteController.atualizaCliente(ClienteDtoBuilder.builder().build(), 1L);
+
+        when(clienteService.atualizaCliente(any(), any(), any())).thenReturn(ClienteEntityBuilder.builder().build());
+        HttpServletRequest mockedRequest = Mockito.mock(HttpServletRequest.class);
+
+        ResponseEntity<ClienteEntity> cliente =
+                clienteController.atualizaCliente(mockedRequest, ClienteDtoBuilder.builder().build(), 1L);
+
         Assertions.assertEquals("<200 OK OK,ClienteEntity(id=1, dataCadastro=2023-02-27, horaCadastro=17:40, " +
                 "dataNascimento=1998-07-21, nome=Gabriel Lagrota, cpfCnpj=582.645.389-32, inscricaoEstadual=145574080114, " +
                 "email=gabrielafonso@mail.com.br, endereco=null, telefone=null, colaboradorResponsavel=null, " +

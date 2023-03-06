@@ -33,8 +33,9 @@ class ClienteRepositoryImplTest {
         when(clienteRepository.save(any())).thenReturn(ClienteEntity.builder().build());
         ClienteEntity cliente = clienteRepositoryImpl.implementaPersistencia(ClienteEntityBuilder.builder().build());
         Assertions.assertEquals("ClienteEntity(id=null, dataCadastro=null, horaCadastro=null, " +
-                "dataNascimento=null, nome=null, cpfCnpj=null, inscricaoEstadual=null, email=null, endereco=null, " +
-                "telefone=null, colaboradorResponsavel=null, empresa=null)", cliente.toString());
+                "dataNascimento=null, nome=null, cpfCnpj=null, inscricaoEstadual=null, email=null, " +
+                "exclusaoCliente=null, endereco=null, telefone=null, colaboradorResponsavel=null, empresa=null)",
+                cliente.toString());
     }
 
     @Test
@@ -43,8 +44,9 @@ class ClienteRepositoryImplTest {
         when(clienteRepository.findById(anyLong())).thenReturn(Optional.of(ClienteEntity.builder().build()));
         ClienteEntity cliente = clienteRepositoryImpl.implementaBuscaPorId(999L);
         Assertions.assertEquals("ClienteEntity(id=null, dataCadastro=null, horaCadastro=null, " +
-                "dataNascimento=null, nome=null, cpfCnpj=null, inscricaoEstadual=null, email=null, endereco=null, " +
-                "telefone=null, colaboradorResponsavel=null, empresa=null)", cliente.toString());
+                "dataNascimento=null, nome=null, cpfCnpj=null, inscricaoEstadual=null, email=null, " +
+                "exclusaoCliente=null, endereco=null, telefone=null, colaboradorResponsavel=null, empresa=null)",
+                cliente.toString());
     }
 
     @Test

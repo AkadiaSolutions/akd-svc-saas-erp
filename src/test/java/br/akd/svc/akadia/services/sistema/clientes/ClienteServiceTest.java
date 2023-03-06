@@ -3,6 +3,7 @@ package br.akd.svc.akadia.services.sistema.clientes;
 import br.akd.svc.akadia.models.dto.sistema.clientes.mocks.ClienteDtoBuilder;
 import br.akd.svc.akadia.models.entities.sistema.clientes.ClienteEntity;
 import br.akd.svc.akadia.models.entities.sistema.clientes.mocks.ClienteEntityBuilder;
+import br.akd.svc.akadia.models.entities.sistema.colaboradores.mocks.ColaboradorEntityBuilder;
 import br.akd.svc.akadia.repositories.sistema.clientes.impl.ClienteRepositoryImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -30,12 +31,14 @@ class ClienteServiceTest {
     void deveTestarMetodoDeCriacaoDeNovoCliente() {
 
         Mockito.when(clienteRepositoryImpl.implementaPersistencia(any()))
-                .thenReturn(ClienteEntityBuilder.builder().build());
+                .thenReturn(ClienteEntityBuilder.builder().comObjetoExclusaoFalse().build());
 
-        ClienteEntity clienteEntity = clienteService.criaNovoCliente(ClienteDtoBuilder.builder()
-                .comEndereco()
-                .comTelefone()
-                .build());
+        ClienteEntity clienteEntity = clienteService.criaNovoCliente(ColaboradorEntityBuilder.builder().build(),
+                ClienteDtoBuilder.builder()
+                        .comObjetoExclusaoFalse()
+                        .comEndereco()
+                        .comTelefone()
+                        .build());
 
         Assertions.assertEquals("ClienteEntity(id=1, dataCadastro=2023-02-27, horaCadastro=17:40, " +
                 "dataNascimento=1998-07-21, nome=Gabriel Lagrota, cpfCnpj=582.645.389-32, inscricaoEstadual=145574080114, " +
@@ -49,27 +52,34 @@ class ClienteServiceTest {
 
         Mockito.when(clienteRepositoryImpl.implementaBuscaPorId(anyLong()))
                 .thenReturn(ClienteEntityBuilder.builder()
+                        .comObjetoExclusaoFalse()
                         .comTelefone()
                         .comEndereco()
                         .build());
 
         Mockito.when(clienteRepositoryImpl.implementaPersistencia(any()))
                 .thenReturn(ClienteEntityBuilder.builder()
+                        .comObjetoExclusaoFalse()
                         .comTelefone()
                         .comEndereco()
                         .build());
 
-        ClienteEntity cliente = clienteService.atualizaCliente(1L, ClienteDtoBuilder.builder()
-                .comTelefone()
-                .comEndereco()
-                .build());
+        ClienteEntity cliente = clienteService.atualizaCliente(ColaboradorEntityBuilder.builder().build(), 1L,
+                ClienteDtoBuilder.builder()
+                        .comObjetoExclusaoFalse()
+                        .comTelefone()
+                        .comEndereco()
+                        .build());
 
         Assertions.assertEquals("ClienteEntity(id=1, dataCadastro=2023-02-27, horaCadastro=17:40, " +
-                "dataNascimento=1998-07-21, nome=Gabriel Lagrota, cpfCnpj=582.645.389-32, " +
-                "inscricaoEstadual=145574080114, email=gabrielafonso@mail.com.br, endereco=EnderecoEntity(id=1, " +
-                "logradouro=Avenida Coronel Manuel Py, numero=583, bairro=Lauzane Paulista, codigoPostal=02442-090, " +
-                "cidade=São Paulo, complemento=Casa 4, estadoEnum=SP), telefone=TelefoneEntity(id=1, prefixo=11, " +
-                "numero=979815415, tipoTelefoneEnum=MOVEL_WHATSAPP), colaboradorResponsavel=null, empresa=null)",
+                        "dataNascimento=1998-07-21, nome=Gabriel Lagrota, cpfCnpj=582.645.389-32, " +
+                        "inscricaoEstadual=145574080114, email=gabrielafonso@mail.com.br, " +
+                        "exclusaoCliente=ExclusaoClienteEntity(id=1, dataExclusao=2023-03-06, horaExclusao=14:36, " +
+                        "excluido=false, responsavelExclusao=null), endereco=EnderecoEntity(id=1, " +
+                        "logradouro=Avenida Coronel Manuel Py, numero=583, bairro=Lauzane Paulista, " +
+                        "codigoPostal=02442-090, cidade=São Paulo, complemento=Casa 4, estadoEnum=SP), " +
+                        "telefone=TelefoneEntity(id=1, prefixo=11, numero=979815415, tipoTelefoneEnum=MOVEL_WHATSAPP), " +
+                        "colaboradorResponsavel=null, empresa=null)",
                 cliente.toString());
     }
 

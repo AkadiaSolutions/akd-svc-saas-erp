@@ -28,7 +28,7 @@ class ColaboradorControllerTest {
     @Test
     @DisplayName("Deve testar método controlador de criação de novo colaborador")
     void deveTestarMetodoControladorDeCriacaoDeNovoColaborador() {
-        when(colaboradorRepositoryImpl.buscaTodosOsColaboradores()).thenReturn(new ArrayList<>());
+        when(colaboradorRepositoryImpl.implementaBuscaTodosOsColaboradores()).thenReturn(new ArrayList<>());
         ResponseEntity<List<ColaboradorEntity>> colaborador = colaboradorController.listaTodosColaboradores();
         Assertions.assertEquals("<200 OK OK,[],[]>", colaborador.toString());
     }
