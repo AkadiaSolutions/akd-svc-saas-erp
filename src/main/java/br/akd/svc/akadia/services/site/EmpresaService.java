@@ -6,6 +6,7 @@ import br.akd.svc.akadia.models.entities.global.TelefoneEntity;
 import br.akd.svc.akadia.models.entities.sistema.colaboradores.AcessoSistemaEntity;
 import br.akd.svc.akadia.models.entities.sistema.colaboradores.ColaboradorEntity;
 import br.akd.svc.akadia.models.entities.sistema.colaboradores.ConfiguracaoPerfilEntity;
+import br.akd.svc.akadia.models.entities.sistema.colaboradores.ModulosEnum;
 import br.akd.svc.akadia.models.entities.site.ClienteSistemaEntity;
 import br.akd.svc.akadia.models.entities.site.empresa.CriaEmpresaResponse;
 import br.akd.svc.akadia.models.entities.site.empresa.DadosEmpresaDeletadaEntity;
@@ -31,7 +32,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -269,6 +272,12 @@ public class EmpresaService {
         String senha = geraSenhaAleatoriaParaNovoLogin(empresaEntity);
         log.debug("Senha criada com sucesso");
 
+        log.debug("Criando objeto para definir permissões do usuário...");
+        Set<ModulosEnum> modulosLiberadosUsuario = new HashSet<>();
+
+        log.debug("Iniciando acesso ao método para realizar carga no objeto de permissões do usuário...");
+        habilitaTodosModulosColaborador(modulosLiberadosUsuario);
+
         log.debug("Construindo objeto e iniciando método de implementação de persistência de colaborador...");
         return colaboradorRepositoryImpl.implementaPersistencia(ColaboradorEntity.builder()
                 .dataCadastro(LocalDate.now().toString())
@@ -290,9 +299,10 @@ public class EmpresaService {
                 .statusColaboradorEnum(StatusColaboradorEnum.ATIVO)
                 .acessoSistema(AcessoSistemaEntity.builder()
                         .acessoSistemaAtivo(true)
-                        .nomeUsuario("admin")
+                        .nomeUsuario(geraNomeUsuarioParaResponsavelEmpresa())
                         .senha(senha)
                         .senhaCriptografada(new BCryptPasswordEncoder().encode(senha))
+                        .privilegios(modulosLiberadosUsuario)
                         .build())
                 .configuracaoPerfil(ConfiguracaoPerfilEntity.builder()
                         .dataUltimaAtualizacao(LocalDate.now().toString())
@@ -310,6 +320,47 @@ public class EmpresaService {
                 .empresa(empresaEntity)
                 .build()
         );
+    }
+
+    public void habilitaTodosModulosColaborador(Set<ModulosEnum> privilegios) {
+        log.debug("Método de setagem de todos os privilégios à lista de privilégios do colaborador acessado");
+        log.debug("Iniciando setagem de privilégios...");
+        privilegios.add(ModulosEnum.HOME);
+        privilegios.add(ModulosEnum.CLIENTES);
+        privilegios.add(ModulosEnum.VENDAS);
+        privilegios.add(ModulosEnum.LANCAMENTOS);
+        privilegios.add(ModulosEnum.ESTOQUE);
+        privilegios.add(ModulosEnum.DESPESAS);
+        privilegios.add(ModulosEnum.FECHAMENTOS);
+        privilegios.add(ModulosEnum.PATRIMONIOS);
+        privilegios.add(ModulosEnum.FORNECEDORES);
+        privilegios.add(ModulosEnum.COMPRAS);
+        privilegios.add(ModulosEnum.COLABORADORES);
+        privilegios.add(ModulosEnum.PRECOS);
+        log.debug("Lista de privilégios preenchida com sucesso");
+    }
+
+    public String geraNomeUsuarioParaResponsavelEmpresa() {
+        log.debug("Método de criação de username aleatório acessado");
+
+        log.debug("Iniciando processo de criação de username aleatório...");
+        int rangeAleatoriedade = 999999 - (100000 + 1);
+        boolean nomeUsuarioDisponivel = false;
+        String nomeUsuario = null;
+        while (!nomeUsuarioDisponivel) {
+            nomeUsuario = String.valueOf((int) (Math.random() * rangeAleatoriedade) + 100000);
+            log.debug("Nome de usuário gerado: {}. Iniciando verificação se nome de usuário está disponível...", nomeUsuario);
+            if (!colaboradorRepositoryImpl.implementaBuscaPorNomeUsuario(nomeUsuario).isPresent()) {
+                log.debug("O nome de usuário gerado está disponível. Finalizando iteração...");
+                nomeUsuarioDisponivel = true;
+            }
+            else {
+                log.debug("O nome de usuário gerado já existe: {}. Iniciando criação de novo username...", nomeUsuario);
+            }
+        }
+
+        log.debug("Nome de usuário criado com sucesso");
+        return nomeUsuario;
     }
 
     public String geraSenhaAleatoriaParaNovoLogin(EmpresaEntity empresaEntity) {
