@@ -7,11 +7,11 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum TipoOcupacaoEnum {
 
-    TECNICO_INTERNO(0, "Ativo"),
-    TECNICO_EXTERNO(1, "Afastado"),
-    ATENDENTE(2, "Férias"),
-    GERENTE(3, "Dispensado"),
-    DIRETOR(4, "Excluído"),
+    TECNICO_INTERNO(0, "Técnico Interno"),
+    TECNICO_EXTERNO(1, "Técnico Externo"),
+    ATENDENTE(2, "Atendente"),
+    GERENTE(3, "Gerente"),
+    DIRETOR(4, "Diretor"),
     FINANCEIRO(5, "Financeiro"),
     CONTABIL(5, "Contábil"),
     TECNICO(5, "Técnico"),
