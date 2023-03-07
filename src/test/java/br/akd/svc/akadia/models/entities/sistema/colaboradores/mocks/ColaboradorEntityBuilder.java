@@ -1,6 +1,7 @@
 package br.akd.svc.akadia.models.entities.sistema.colaboradores.mocks;
 
 import br.akd.svc.akadia.models.entities.sistema.colaboradores.ColaboradorEntity;
+import br.akd.svc.akadia.models.entities.site.empresa.mocks.EmpresaEntityBuilder;
 import br.akd.svc.akadia.models.enums.sistema.colaboradores.ModeloContratacaoEnum;
 import br.akd.svc.akadia.models.enums.sistema.colaboradores.ModeloTrabalhoEnum;
 import br.akd.svc.akadia.models.enums.sistema.colaboradores.StatusColaboradorEnum;
@@ -50,6 +51,11 @@ public class ColaboradorEntityBuilder {
         builder.colaboradorEntity.setParentescos(null);
         builder.colaboradorEntity.setEmpresa(null);
         return builder;
+    }
+
+    public ColaboradorEntityBuilder comEmpresa() {
+        colaboradorEntity.setEmpresa(EmpresaEntityBuilder.builder().build());
+        return this;
     }
 
     public ColaboradorEntity build() {

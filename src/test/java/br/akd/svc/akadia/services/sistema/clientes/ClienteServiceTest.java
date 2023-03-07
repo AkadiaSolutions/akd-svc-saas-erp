@@ -33,7 +33,7 @@ class ClienteServiceTest {
         Mockito.when(clienteRepositoryImpl.implementaPersistencia(any()))
                 .thenReturn(ClienteEntityBuilder.builder().comObjetoExclusaoFalse().build());
 
-        ClienteEntity clienteEntity = clienteService.criaNovoCliente(ColaboradorEntityBuilder.builder().build(),
+        ClienteEntity clienteEntity = clienteService.criaNovoCliente(ColaboradorEntityBuilder.builder().comEmpresa().build(),
                 ClienteDtoBuilder.builder()
                         .comObjetoExclusaoFalse()
                         .comEndereco()
@@ -41,8 +41,10 @@ class ClienteServiceTest {
                         .build());
 
         Assertions.assertEquals("ClienteEntity(id=1, dataCadastro=2023-02-27, horaCadastro=17:40, " +
-                "dataNascimento=1998-07-21, nome=Gabriel Lagrota, cpfCnpj=582.645.389-32, inscricaoEstadual=145574080114, " +
-                "email=gabrielafonso@mail.com.br, endereco=null, telefone=null, colaboradorResponsavel=null, " +
+                "dataNascimento=1998-07-21, nome=Gabriel Lagrota, cpfCnpj=582.645.389-32, " +
+                "inscricaoEstadual=145574080114, email=gabrielafonso@mail.com.br, " +
+                "exclusaoCliente=ExclusaoClienteEntity(id=1, dataExclusao=2023-03-06, horaExclusao=14:36, " +
+                "excluido=false, responsavelExclusao=null), endereco=null, telefone=null, colaboradorResponsavel=null, " +
                 "empresa=null)", clienteEntity.toString());
     }
 

@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-@DisplayName("eNUM: EffectiveDatePeriodEnum")
+@DisplayName("Enum: EffectiveDatePeriodEnum")
 class EffectiveDatePeriodEnumTest {
     @Test
     @DisplayName("Deve testar atributos")
