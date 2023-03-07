@@ -38,7 +38,7 @@ public class ClienteEntity {
     private ExclusaoClienteEntity exclusaoCliente;
     @OneToOne(targetEntity = EnderecoEntity.class, orphanRemoval = true, cascade = CascadeType.ALL)
     private EnderecoEntity endereco;
-    @OneToOne(targetEntity = EnderecoEntity.class, orphanRemoval = true, cascade = CascadeType.ALL)
+    @OneToOne(targetEntity = TelefoneEntity.class, orphanRemoval = true, cascade = CascadeType.ALL)
     private TelefoneEntity telefone;
     @ManyToOne(targetEntity = ColaboradorEntity.class)
     @JoinColumn(name = "id_colab_responsavel")

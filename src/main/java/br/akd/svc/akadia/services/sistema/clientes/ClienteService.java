@@ -8,12 +8,15 @@ import br.akd.svc.akadia.models.entities.sistema.clientes.ExclusaoClienteEntity;
 import br.akd.svc.akadia.models.entities.sistema.colaboradores.ColaboradorEntity;
 import br.akd.svc.akadia.repositories.sistema.clientes.impl.ClienteRepositoryImpl;
 import br.akd.svc.akadia.services.exceptions.InvalidRequestException;
+import br.akd.svc.akadia.services.exceptions.ObjectNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.temporal.TemporalAdjusters;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -21,6 +24,8 @@ public class ClienteService {
 
     @Autowired
     ClienteRepositoryImpl clienteRepositoryImpl;
+
+    private static final String RETORNANDO_CLIENTES = "Retornando lista de clientes encontrados...";
 
     public void validaSeChavesUnicasJaExistemParaNovoCliente(ClienteDto clienteDto, ColaboradorEntity colaboradorLogado) {
         log.debug("Método de validação de chave única de cliente acessado...");
@@ -36,17 +41,24 @@ public class ClienteService {
                                                                    ClienteEntity clienteEntity,
                                                                    ColaboradorEntity colaboradorLogado) {
         log.debug("Método de validação de chave única para atualização de cliente acessado...");
-        if (clienteDto.getCpfCnpj() != null && !clienteEntity.getCpfCnpj().equals(clienteDto.getCpfCnpj()))
+        if (clienteDto.getCpfCnpj() != null && clienteEntity.getCpfCnpj() == null
+                || clienteDto.getCpfCnpj() != null
+                && !clienteEntity.getCpfCnpj().equals(clienteDto.getCpfCnpj()))
             validaSeCpfCnpjJaExiste(clienteDto.getCpfCnpj(), colaboradorLogado.getEmpresa().getId());
-        if (clienteDto.getEmail() != null && !clienteEntity.getEmail().equalsIgnoreCase(clienteDto.getEmail()))
+        if (clienteDto.getEmail() != null && clienteEntity.getEmail() == null
+                || clienteDto.getEmail() != null
+                && !clienteEntity.getEmail().equalsIgnoreCase(clienteDto.getEmail())) {
             validaSeEmailJaExiste(clienteDto.getEmail(), colaboradorLogado.getEmpresa().getId());
-        if (clienteDto.getInscricaoEstadual() != null && !clienteEntity.getInscricaoEstadual().equalsIgnoreCase(clienteDto.getInscricaoEstadual()))
+        }
+        if (clienteDto.getInscricaoEstadual() != null && clienteEntity.getInscricaoEstadual() == null
+                || clienteDto.getInscricaoEstadual() != null
+                && !clienteEntity.getInscricaoEstadual().equalsIgnoreCase(clienteDto.getInscricaoEstadual()))
             validaSeInscricaoEstadualJaExiste(clienteDto.getInscricaoEstadual(), colaboradorLogado.getEmpresa().getId());
     }
 
     public void validaSeCpfCnpjJaExiste(String cpfCnpj, Long idEmpresa) {
         log.debug("Método de validação de chave única de CPF/CNPJ acessado");
-        if (clienteRepositoryImpl.implementaBuscaPorCpfCnpj(cpfCnpj, idEmpresa).isPresent()) {
+        if (clienteRepositoryImpl.implementaBuscaPorCpfCnpjIdentico(cpfCnpj, idEmpresa).isPresent()) {
             log.warn("O cpf/cnpj informado já existe");
             throw new InvalidRequestException("O cpf/cnpj informado já existe");
         }
@@ -55,7 +67,7 @@ public class ClienteService {
 
     public void validaSeEmailJaExiste(String email, Long idEmpresa) {
         log.debug("Método de validação de chave única de EMAIL acessado");
-        if (clienteRepositoryImpl.implementaBuscaPorEmail(email, idEmpresa).isPresent()) {
+        if (clienteRepositoryImpl.implementaBuscaPorEmailIdentico(email, idEmpresa).isPresent()) {
             log.warn("O e-mail informado já existe");
             throw new InvalidRequestException("O e-mail informado já existe");
         }
@@ -64,7 +76,7 @@ public class ClienteService {
 
     public void validaSeInscricaoEstadualJaExiste(String inscricaoEstadual, Long idEmpresa) {
         log.debug("Método de validação de chave única de EMAIL acessado");
-        if (clienteRepositoryImpl.implementaBuscaPorInscricaoEstadual(inscricaoEstadual, idEmpresa).isPresent()) {
+        if (clienteRepositoryImpl.implementaBuscaPorInscricaoEstadualIdentica(inscricaoEstadual, idEmpresa).isPresent()) {
             log.warn("A inscrição estadual informada já existe");
             throw new InvalidRequestException("A inscrição estadual informada já existe");
         }
@@ -142,9 +154,10 @@ public class ClienteService {
                 .inscricaoEstadual(clienteDto.getInscricaoEstadual())
                 .email(clienteDto.getEmail())
                 .exclusaoCliente(ExclusaoClienteEntity.builder()
+                        .id(clienteEncontrado.getId())
                         .excluido(false)
                         .build())
-                .endereco(clienteDto.getEndereco().getLogradouro().isEmpty()
+                .endereco(clienteDto.getEndereco() == null || clienteDto.getEndereco().getLogradouro().isEmpty()
                         ? null
                         : EnderecoEntity.builder()
                         .id(obtemIdEnderecoDoClienteAtualizavelSeTiver(clienteEncontrado))
@@ -180,8 +193,7 @@ public class ClienteService {
         if (clienteEncontrado.getTelefone() != null) {
             log.debug("O cliente possui telefone cadastrado. Seu id é: {}", clienteEncontrado.getTelefone().getId());
             return clienteEncontrado.getTelefone().getId();
-        }
-        else {
+        } else {
             log.debug("O cliente não possui nenhum telefone cadastrado. Retornando null...");
             return null;
         }
@@ -192,8 +204,7 @@ public class ClienteService {
         if (clienteEncontrado.getEndereco() != null) {
             log.debug("O cliente possui endereço cadastrado. Seu id é: {}", clienteEncontrado.getEndereco().getId());
             return clienteEncontrado.getEndereco().getId();
-        }
-        else {
+        } else {
             log.debug("O cliente não possui nenhum endereço cadastrado. Retornando null...");
             return null;
         }
@@ -231,6 +242,203 @@ public class ClienteService {
             throw new InvalidRequestException(mensagemCasoEstejaExcluido);
         }
         log.debug("O cliente de id {} não está excluído", cliente.getId());
+    }
+
+    public List<ClienteEntity> obtemClientesPeloNome(ColaboradorEntity colaboradorLogado, String nome) {
+        log.debug("Método de serviço de obtenção de lista de colaboradores pelo nome acessado");
+        log.debug("Iniciando acesso à implementação do método do repositório de busca por nome...");
+        List<ClienteEntity> clientes =
+                clienteRepositoryImpl.implementaBuscaPorNomeSemelhante(nome, colaboradorLogado.getEmpresa().getId());
+
+        if (clientes.isEmpty()) {
+            log.warn("Nenhum cliente foi encontrado com o nome informado: {}", nome);
+            throw new ObjectNotFoundException("Nenhum cliente foi encontrado com o nome informado");
+        } else {
+            log.info(RETORNANDO_CLIENTES);
+            return clientes;
+        }
+    }
+
+    public List<ClienteEntity> obtemClientesPeloEmail(ColaboradorEntity colaboradorLogado, String email) {
+        log.debug("Método de serviço de obtenção de lista de colaboradores pelo email acessado");
+        log.debug("Iniciando acesso à implementação do método do repositório de busca por email...");
+        List<ClienteEntity> clientes =
+                clienteRepositoryImpl.implementaBuscaPorEmailSemelhante(email, colaboradorLogado.getEmpresa().getId());
+
+        if (clientes.isEmpty()) {
+            log.warn("Nenhum cliente foi encontrado com o email informado: {}", email);
+            throw new ObjectNotFoundException("Nenhum cliente foi encontrado com o email informado");
+        } else {
+            log.info(RETORNANDO_CLIENTES);
+            return clientes;
+        }
+    }
+
+    public List<ClienteEntity> obtemClientesPeloCpfCnpj(ColaboradorEntity colaboradorLogado, String cpfCnpj) {
+        log.debug("Método de serviço de obtenção de lista de colaboradores pelo cpf ou cnpj acessado");
+        log.debug("Iniciando acesso à implementação do método do repositório de busca por cpf ou cnpj...");
+        List<ClienteEntity> clientes =
+                clienteRepositoryImpl.implementaBuscaPorCpfCnpjSemelhante(cpfCnpj, colaboradorLogado.getEmpresa().getId());
+
+        if (clientes.isEmpty()) {
+            log.warn("Nenhum cliente foi encontrado com o cpf ou cnpj informado: {}", cpfCnpj);
+            throw new ObjectNotFoundException("Nenhum cliente foi encontrado com o cpf ou cnpj informado");
+        } else {
+            log.info(RETORNANDO_CLIENTES);
+            return clientes;
+        }
+    }
+
+    public List<ClienteEntity> obtemClientesPelaInscricaoEstadual(ColaboradorEntity colaboradorLogado, String inscricaoEstadual) {
+        log.debug("Método de serviço de obtenção de lista de colaboradores pela inscrição estadual acessado");
+        log.debug("Iniciando acesso à implementação do método do repositório de busca por inscrição estadual...");
+        List<ClienteEntity> clientes =
+                clienteRepositoryImpl.implementaBuscaPorInscricaoEstadualSemelhante(inscricaoEstadual, colaboradorLogado.getEmpresa().getId());
+
+        if (clientes.isEmpty()) {
+            log.warn("Nenhum cliente foi encontrado com a inscrição estadual informada: {}", inscricaoEstadual);
+            throw new ObjectNotFoundException("Nenhum cliente foi encontrado com a inscrição estadual informada");
+        } else {
+            log.info(RETORNANDO_CLIENTES);
+            return clientes;
+        }
+    }
+
+    public List<ClienteEntity> obtemClientesPeloTelefone(ColaboradorEntity colaboradorLogado, String telefone) {
+        log.debug("Método de serviço de obtenção de lista de colaboradores pelo telefone acessado");
+        log.debug("Iniciando acesso à implementação do método do repositório de busca por telefone...");
+        List<ClienteEntity> clientes =
+                clienteRepositoryImpl.implementaBuscaPorTelefoneSemelhante(telefone, colaboradorLogado.getEmpresa().getId());
+
+        if (clientes.isEmpty()) {
+            log.warn("Nenhum cliente foi encontrado com o telefone informado: {}", telefone);
+            throw new ObjectNotFoundException("Nenhum cliente foi encontrado com o telefone informado");
+        } else {
+            log.info(RETORNANDO_CLIENTES);
+            return clientes;
+        }
+    }
+
+    public List<ClienteEntity> obtemClientesPorRangeDeData(ColaboradorEntity colaboradorLogado, String dataInicio, String dataFim) {
+        log.debug("Método de serviço de obtenção de lista de colaboradores por range de data acessado");
+
+        log.debug("Iniciando acesso ao método de validação das datas recebidas...");
+        realizaValidacaoDasDatasRecebidas(dataInicio, dataFim);
+
+        log.debug("Iniciando acesso à implementação do método do repositório de busca por período...");
+        List<ClienteEntity> clientes =
+                clienteRepositoryImpl.implementaBuscaPorPeriodo(dataInicio, dataFim, colaboradorLogado.getEmpresa().getId());
+
+        if (clientes.isEmpty()) {
+            log.warn("Nenhum cliente foi encontrado no range de datas informado informado: {} à {}", dataInicio, dataFim);
+            throw new ObjectNotFoundException("Nenhum cliente foi encontrado na data indicada");
+        } else {
+            log.info(RETORNANDO_CLIENTES);
+            return clientes;
+        }
+    }
+
+    public void realizaValidacaoDasDatasRecebidas(String dataInicio, String dataFim) {
+
+        log.debug("Método responsável por realizar as validações da data de início e data final recebidos acessado");
+
+        LocalDate dataInicioLocalDate;
+        LocalDate dataFimLocalDate;
+
+        try {
+            log.debug("Tentando converter a data de início da busca para o tipo LocalDate...");
+            dataInicioLocalDate = LocalDate.parse(dataInicio);
+        } catch (Exception e) {
+            log.warn("A data de início recebida é inválida e não pode ser convertida: {}", dataInicio);
+            throw new InvalidRequestException("A data de início não possui um padrão válido");
+        }
+
+        try {
+            log.debug("Tentando converter a data final da busca para o tipo LocalDate...");
+            dataFimLocalDate = LocalDate.parse(dataFim);
+        } catch (Exception e) {
+            log.warn("A data final recebida é inválida e não pode ser convertida: {}", dataFim);
+            throw new InvalidRequestException("A data final não possui um padrão válido");
+        }
+
+        if (dataInicioLocalDate.isAfter(dataFimLocalDate)) {
+            log.warn("A data de início recebida ({}) não pode ser posterior à data final recebida ({})", dataInicio, dataFim);
+            throw new InvalidRequestException("A data de início deve ser anterior ou igual à data final");
+        }
+
+    }
+
+    public List<ClienteEntity> obtemClientesPorMes(ColaboradorEntity colaboradorLogado, String mes, String ano) {
+        log.debug("Método de serviço de obtenção de lista de colaboradores por range de data acessado");
+
+        log.debug("Iniciando acesso ao método de validação dos dados recebidos...");
+        realizaValidacaoDoMesAno(mes, ano);
+
+        log.debug("Convertendo valores recebidos para valores inteiros...");
+        int mesParaInteiro = Integer.parseInt(mes);
+        int anoParaInteiro = Integer.parseInt(ano);
+
+        log.debug("Setando data de início da busca...");
+        LocalDate dataInicio = LocalDate.of(anoParaInteiro, mesParaInteiro, 1);
+        log.debug("Data de início setada: {}", dataInicio);
+
+        log.debug("Setando último dia do mês da busca...");
+        int ultimoDiaDoMes = LocalDate.now()
+                .withMonth(mesParaInteiro)
+                .withYear(anoParaInteiro)
+                .with(TemporalAdjusters.lastDayOfMonth()).getDayOfMonth();
+        log.debug("Último dia do mês da busca setado: {}", ultimoDiaDoMes);
+
+        log.debug("Setando data final da busca...");
+        LocalDate dataFim = LocalDate.of(anoParaInteiro, mesParaInteiro, ultimoDiaDoMes);
+        log.debug("Data final setada: {}", dataFim);
+
+        log.debug("Iniciando acesso à implementação do método do repositório de busca por período...");
+        List<ClienteEntity> clientes =
+                clienteRepositoryImpl.implementaBuscaPorPeriodo(dataInicio.toString(),
+                        dataFim.toString(),
+                        colaboradorLogado.getEmpresa().getId());
+
+        if (clientes.isEmpty()) {
+            log.warn("Nenhum cliente foi encontrado no range de datas informado informado: {} à {}", dataInicio, dataFim);
+            throw new ObjectNotFoundException("Nenhum cliente foi encontrado no mês e ano indicados");
+        } else {
+            log.info(RETORNANDO_CLIENTES);
+            return clientes;
+        }
+    }
+
+    public void realizaValidacaoDoMesAno(String mes, String ano) {
+
+        log.debug("Método responsável por realizar as validações do mês e ano recebidos acessado");
+
+        int mesConvertidoParaInteiro;
+        int anoConvertidoParaInteiro;
+
+        try {
+            log.debug("Tentando converter o mês da busca para o tipo inteiro...");
+            mesConvertidoParaInteiro = Integer.parseInt(mes);
+            log.debug("Mês convertido para inteiro com sucesso: {}", mesConvertidoParaInteiro);
+        } catch (Exception e) {
+            log.warn("O mês recebido é inválido e não pode ser convertido: {}", mes);
+            throw new InvalidRequestException("O mês não possui um padrão válido");
+        }
+
+        try {
+            log.debug("Tentando converter o ano da busca para o tipo inteiro...");
+            anoConvertidoParaInteiro = Integer.parseInt(ano);
+            log.debug("Ano convertido para inteiro com sucesso: {}", anoConvertidoParaInteiro);
+        } catch (Exception e) {
+            log.warn("O ano recebido é inválido e não pode ser convertido: {}", ano);
+            throw new InvalidRequestException("O ano não possui um padrão válido");
+        }
+
+        if (mesConvertidoParaInteiro < 1 || mesConvertidoParaInteiro > 12)
+            throw new InvalidRequestException("O mês deve possuir um valor entre 1 e 12");
+
+        if (anoConvertidoParaInteiro < 2020 || anoConvertidoParaInteiro > 2099)
+            throw new InvalidRequestException("O ano deve possuir um valor entre 2020 e 2099");
+
     }
 
 }

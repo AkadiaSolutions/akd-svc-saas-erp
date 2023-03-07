@@ -12,8 +12,8 @@ public class TelefoneEntityBuilder {
         TelefoneEntityBuilder builder = new TelefoneEntityBuilder();
         builder.telefoneEntity = new TelefoneEntity();
         builder.telefoneEntity.setId(1L);
-        builder.telefoneEntity.setPrefixo(11);
-        builder.telefoneEntity.setNumero(979815415L);
+        builder.telefoneEntity.setPrefixo("11");
+        builder.telefoneEntity.setNumero("979815415");
         builder.telefoneEntity.setTipoTelefoneEnum(TipoTelefoneEnum.MOVEL_WHATSAPP);
         return builder;
     }

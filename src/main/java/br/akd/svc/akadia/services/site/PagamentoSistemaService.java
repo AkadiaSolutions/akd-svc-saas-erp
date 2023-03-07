@@ -43,11 +43,11 @@ public class PagamentoSistemaService {
 
         log.debug("Iniciando validação de token...");
         if (token == null || token.equals("")) {
-            log.error("O token recebido é nulo ou vazio: {}", token);
+            log.warn("O token recebido é nulo ou vazio: {}", token);
             throw new UnauthorizedAccessException("Nenhum token de acesso foi recebido");
         }
         if (!token.equals(tokenWebhook)) {
-            log.error("O token recebido não é compatível com o esperado: {}", token);
+            log.warn("O token recebido não é compatível com o esperado: {}", token);
             throw new UnauthorizedAccessException("O token de acesso recebido está incorreto");
         }
     }

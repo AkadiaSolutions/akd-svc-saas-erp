@@ -45,7 +45,7 @@ public class ClienteSistemaService {
     public void validaSeEmailJaExiste(ClienteSistemaDto clienteSistemaDto) {
         log.debug("Método de validação de e-mail acessado...");
         if (clienteSistemaRepositoryImpl.implementaBuscaPorEmail(clienteSistemaDto.getEmail()).isPresent()) {
-            log.error("O e-mail informado já existe: {}", clienteSistemaDto.getEmail());
+            log.warn("O e-mail informado já existe: {}", clienteSistemaDto.getEmail());
             throw new InvalidRequestException("O e-mail informado já existe");
         }
     }
@@ -53,7 +53,7 @@ public class ClienteSistemaService {
     public void validaSeCpfJaExiste(ClienteSistemaDto clienteSistemaDto) {
         log.debug("Método de validação de cpf acessado...");
         if (clienteSistemaRepositoryImpl.implementaBuscaPorCpf(clienteSistemaDto.getCpf()).isPresent()) {
-            log.error("O cpf informado já existe: {}", clienteSistemaDto.getCpf());
+            log.warn("O cpf informado já existe: {}", clienteSistemaDto.getCpf());
             throw new InvalidRequestException("O cpf informado já existe");
         }
     }
@@ -148,7 +148,7 @@ public class ClienteSistemaService {
         ClienteSistemaRequest clienteSistemaRequest = ClienteSistemaRequest.builder()
                 .name(clienteSistema.getNome())
                 .email(clienteSistema.getEmail())
-                .phone(clienteSistema.getTelefone().getPrefixo().toString() + clienteSistema.getTelefone().getNumero())
+                .phone(clienteSistema.getTelefone().getPrefixo() + clienteSistema.getTelefone().getNumero())
                 .postalCode(clienteSistema.getEndereco() != null
                         ? clienteSistema.getEndereco().getCodigoPostal()
                         : null)
@@ -195,7 +195,7 @@ public class ClienteSistemaService {
         log.debug("Método de criação de número mobile com telefone informado ({}) acessado", telefone);
         String numeroMobile = null;
         if (!telefone.getTipoTelefoneEnum().equals(TipoTelefoneEnum.FIXO))
-            numeroMobile = telefone.getPrefixo().toString() + telefone.getNumero().toString();
+            numeroMobile = telefone.getPrefixo() + telefone.getNumero();
 
         log.debug("Retornando numero mobile criado: {}", numeroMobile);
         return numeroMobile;
@@ -263,7 +263,7 @@ public class ClienteSistemaService {
         ClienteSistemaRequest clienteSistemaRequest = ClienteSistemaRequest.builder()
                 .name(clienteAtualizado.getNome())
                 .email(clienteAtualizado.getEmail())
-                .phone(clienteAtualizado.getTelefone().getPrefixo().toString() + clienteAtualizado.getTelefone().getNumero())
+                .phone(clienteAtualizado.getTelefone().getPrefixo() + clienteAtualizado.getTelefone().getNumero())
                 .mobilePhone(criaNumeroMobileComObjetoTelefone(clienteAtualizado.getTelefone()))
                 .cpfCnpj(clienteAtualizado.getCpf())
                 .postalCode(clienteAtualizado.getEndereco().getCodigoPostal())
