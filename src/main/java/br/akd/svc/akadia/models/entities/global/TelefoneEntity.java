@@ -17,9 +17,9 @@ public class TelefoneEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Integer prefixo;
+    private String prefixo;
 
-    private Long numero;
+    private String numero;
 
     @Enumerated(EnumType.STRING)
     private TipoTelefoneEnum tipoTelefoneEnum;

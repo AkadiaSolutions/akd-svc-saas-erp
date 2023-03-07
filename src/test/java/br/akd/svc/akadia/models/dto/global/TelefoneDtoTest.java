@@ -14,7 +14,7 @@ class TelefoneDtoTest {
     void deveTestarAllArgsConstructor() {
 
         TelefoneDto telefoneDto =
-                new TelefoneDto(1L, 11, 979815415L, TipoTelefoneEnum.MOVEL_WHATSAPP);
+                new TelefoneDto(1L, "11", "979815415", TipoTelefoneEnum.MOVEL_WHATSAPP);
 
         Assertions.assertEquals(
                 "TelefoneDto(id=1, prefixo=11, numero=979815415, tipoTelefoneEnum=MOVEL_WHATSAPP)",
@@ -28,8 +28,8 @@ class TelefoneDtoTest {
     void deveTestarBuilder() {
         TelefoneDto telefoneDto = TelefoneDto.builder()
                 .id(1L)
-                .prefixo(11)
-                .numero(979815415L)
+                .prefixo("11")
+                .numero("979815415")
                 .tipoTelefoneEnum(TipoTelefoneEnum.MOVEL_WHATSAPP)
                 .build();
         Assertions.assertEquals(

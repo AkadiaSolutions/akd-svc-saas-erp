@@ -15,7 +15,7 @@ class TelefoneEntityTest {
     void deveTestarAllArgsConstructor() {
 
         TelefoneEntity telefoneEntity =
-                new TelefoneEntity(1L, 11, 979815415L, TipoTelefoneEnum.MOVEL_WHATSAPP);
+                new TelefoneEntity(1L, "11", "979815415", TipoTelefoneEnum.MOVEL_WHATSAPP);
 
         Assertions.assertEquals(
                 "TelefoneEntity(id=1, prefixo=11, numero=979815415, tipoTelefoneEnum=MOVEL_WHATSAPP)",
@@ -29,8 +29,8 @@ class TelefoneEntityTest {
     void deveTestarBuilder() {
         TelefoneEntity telefoneEntity = TelefoneEntity.builder()
                 .id(1L)
-                .prefixo(11)
-                .numero(979815415L)
+                .prefixo("11")
+                .numero("979815415")
                 .tipoTelefoneEnum(TipoTelefoneEnum.MOVEL_WHATSAPP)
                 .build();
         Assertions.assertEquals(

@@ -11,7 +11,7 @@ import lombok.*;
 @NoArgsConstructor
 public class TelefoneDto {
     private Long id;
-    private Integer prefixo;
-    private Long numero;
+    private String prefixo;
+    private String numero;
     private TipoTelefoneEnum tipoTelefoneEnum;
 }
