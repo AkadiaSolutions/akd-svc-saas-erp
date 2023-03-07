@@ -33,8 +33,9 @@ public class ClienteEntityBuilder {
         return builder;
     }
 
-    public ClienteEntityBuilder comObjetoExclusaoFalse() {
-        this.clienteEntity.setExclusaoCliente(ExclusaoClienteEntityBuilder.builder().build());
+    public ClienteEntityBuilder comExclusao(Boolean excluido) {
+        if (excluido) this.clienteEntity.setExclusaoCliente(ExclusaoClienteEntityBuilder.builder().comExclusao().build());
+        else this.clienteEntity.setExclusaoCliente(ExclusaoClienteEntityBuilder.builder().build());
         return this;
     }
 

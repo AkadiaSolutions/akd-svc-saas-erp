@@ -17,10 +17,17 @@ public class ExclusaoClienteEntityBuilder {
         builder.exclusaoClienteEntity = new ExclusaoClienteEntity();
         builder.exclusaoClienteEntity.setId(1L);
         builder.exclusaoClienteEntity.setExcluido(false);
-        builder.exclusaoClienteEntity.setDataExclusao(LocalDate.of(2023, 3, 6).toString());
-        builder.exclusaoClienteEntity.setHoraExclusao(LocalTime.of(14, 36).toString());
+        builder.exclusaoClienteEntity.setDataExclusao(null);
+        builder.exclusaoClienteEntity.setHoraExclusao(null);
         builder.exclusaoClienteEntity.setResponsavelExclusao(null);
         return builder;
+    }
+
+    public ExclusaoClienteEntityBuilder comExclusao() {
+        exclusaoClienteEntity.setExcluido(true);
+        exclusaoClienteEntity.setDataExclusao(LocalDate.of(2023, 3, 6).toString());
+        exclusaoClienteEntity.setHoraExclusao(LocalTime.of(14, 29).toString());
+        return this;
     }
 
     public ExclusaoClienteEntity build() {
