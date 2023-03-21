@@ -3,6 +3,7 @@ package br.akd.svc.akadia.controllers.sistema.clientes;
 import br.akd.svc.akadia.config.security.JWTUtil;
 import br.akd.svc.akadia.models.dto.sistema.clientes.ClienteDto;
 import br.akd.svc.akadia.models.entities.sistema.clientes.ClienteEntity;
+import br.akd.svc.akadia.repositories.sistema.clientes.ClienteRepository;
 import br.akd.svc.akadia.services.exceptions.InvalidRequestException;
 import br.akd.svc.akadia.services.exceptions.ObjectNotFoundException;
 import br.akd.svc.akadia.services.sistema.clientes.ClienteService;
@@ -12,6 +13,8 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.*;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -21,9 +24,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
+@CrossOrigin
 @RestController
 @Api(value = "Esta API disponibiliza os endpoints de CRUD da entidade Cliente")
 @Produces({MediaType.APPLICATION_JSON, "application/json"})
@@ -36,6 +41,20 @@ public class ClienteController {
 
     @Autowired
     JWTUtil jwtUtil;
+
+
+    //TODO PARA TESTE DO ANGULAR. REMOVER
+    @GetMapping
+    public ResponseEntity<List<ClienteEntity>> buscaTodosClientes(
+            @RequestParam(value = "busca", required = false) List<String> busca,
+            @PageableDefault(size = 20,
+                    page = 0,
+                    sort = {"horaCadastro", "dataCadastro"},
+                    direction = Sort.Direction.ASC) Pageable pageable) {
+        log.info("Endpoint de busca de todos os clientes acessado");
+        return ResponseEntity.ok().body(
+                clienteService.obtemClientesFiltrados(pageable, busca == null ? new ArrayList<String>() : busca));
+    }
 
     @GetMapping("/mes-ano")
     @ApiOperation(
@@ -52,8 +71,8 @@ public class ClienteController {
     })
     @PreAuthorize("hasAnyRole('CLIENTES')")
     public ResponseEntity<List<ClienteEntity>> buscaClientesPorMesAno(HttpServletRequest req,
-                                                                           @RequestParam("mes") String mes,
-                                                                           @RequestParam("ano") String ano) {
+                                                                      @RequestParam("mes") String mes,
+                                                                      @RequestParam("ano") String ano) {
         log.info("Método controlador de busca de clientes por mês e ano acessado");
         return ResponseEntity
                 .status(HttpStatus.OK)

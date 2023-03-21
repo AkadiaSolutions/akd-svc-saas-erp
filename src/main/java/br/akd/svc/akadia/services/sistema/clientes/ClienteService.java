@@ -6,11 +6,16 @@ import br.akd.svc.akadia.models.entities.global.TelefoneEntity;
 import br.akd.svc.akadia.models.entities.sistema.clientes.ClienteEntity;
 import br.akd.svc.akadia.models.entities.sistema.clientes.ExclusaoClienteEntity;
 import br.akd.svc.akadia.models.entities.sistema.colaboradores.ColaboradorEntity;
+import br.akd.svc.akadia.repositories.sistema.clientes.ClienteRepository;
 import br.akd.svc.akadia.repositories.sistema.clientes.impl.ClienteRepositoryImpl;
 import br.akd.svc.akadia.services.exceptions.InvalidRequestException;
 import br.akd.svc.akadia.services.exceptions.ObjectNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -24,6 +29,9 @@ public class ClienteService {
 
     @Autowired
     ClienteRepositoryImpl clienteRepositoryImpl;
+
+    @Autowired
+    ClienteRepository clienteRepository;
 
     private static final String RETORNANDO_CLIENTES = "Retornando lista de clientes encontrados...";
 
@@ -242,6 +250,38 @@ public class ClienteService {
             throw new InvalidRequestException(mensagemCasoEstejaExcluido);
         }
         log.debug("O cliente de id {} não está excluído", cliente.getId());
+    }
+
+    public List<ClienteEntity> obtemClientesFiltrados(Pageable pageable, List<String> filtrosBusca) {
+
+        ExampleMatcher customExampleMatcher = ExampleMatcher.matchingAll()
+                .withMatcher("nome", ExampleMatcher.GenericPropertyMatchers.startsWith().ignoreCase())
+                .withMatcher("cpfCnpj", ExampleMatcher.GenericPropertyMatchers.startsWith())
+                .withMatcher("email", ExampleMatcher.GenericPropertyMatchers.startsWith().ignoreCase())
+                .withMatcher("dataCadastro", ExampleMatcher.GenericPropertyMatchers.contains())
+                .withMatcher("endereco.bairro", ExampleMatcher.GenericPropertyMatchers.startsWith().ignoreCase())
+                .withIgnoreNullValues()
+                .withIgnorePaths("id", "horaCadastro", "dataNascimento",
+                        "inscricaoEstadual", "exclusaoCliente", "telefone", "colaboradorResponsavel", "empresa");
+
+        ClienteEntity clienteExample = new ClienteEntity();
+
+        for (String filtro : filtrosBusca) {
+            if (filtro.contains("nome=")) clienteExample.setNome(filtro.replace("nome=", ""));
+            if (filtro.contains("cpfCnpj=")) clienteExample.setCpfCnpj(filtro.replace("cpfCnpj=", ""));
+            if (filtro.contains("email=")) clienteExample.setEmail(filtro.replace("email=", ""));
+            if (filtro.contains("data=")) clienteExample.setDataCadastro(filtro.replace("data=", ""));
+            if (filtro.contains("mesAno=")) clienteExample.setDataCadastro(filtro.replace("mesAno=", ""));
+            if (filtro.contains("bairro=")) {
+                EnderecoEntity endereco = new EnderecoEntity();
+                endereco.setBairro(filtro.replace("bairro=", ""));
+                clienteExample.setEndereco(endereco);
+            }
+        }
+
+        Example<ClienteEntity> example = Example.of(clienteExample, customExampleMatcher);
+        Page<ClienteEntity> clientesEncontrados = clienteRepository.findAll(example, pageable);
+        return clientesEncontrados.getContent();
     }
 
     public List<ClienteEntity> obtemClientesPeloNome(ColaboradorEntity colaboradorLogado, String nome) {
