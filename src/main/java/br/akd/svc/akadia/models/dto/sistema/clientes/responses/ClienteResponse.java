@@ -25,7 +25,7 @@ public class ClienteResponse {
     private StatusClienteEnum statusCliente;
     private Integer qtdOrdensRealizadas;
     private Double giroTotal;
-    private ExclusaoClienteEntity exclusaoCliente;
+    private ExclusaoClienteResponse exclusaoCliente;
     private EnderecoEntity endereco;
     private TelefoneEntity telefone;
     private String nomeColaboradorResponsavel;

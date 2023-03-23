@@ -2,6 +2,7 @@ package br.akd.svc.akadia.services.sistema.clientes;
 
 import br.akd.svc.akadia.models.dto.sistema.clientes.ClienteDto;
 import br.akd.svc.akadia.models.dto.sistema.clientes.responses.ClienteResponse;
+import br.akd.svc.akadia.models.dto.sistema.clientes.responses.ExclusaoClienteResponse;
 import br.akd.svc.akadia.models.dto.sistema.clientes.responses.MetaDadosCliente;
 import br.akd.svc.akadia.models.entities.global.EnderecoEntity;
 import br.akd.svc.akadia.models.entities.global.TelefoneEntity;
@@ -326,7 +327,6 @@ public class ClienteService {
 
         ClienteEntity clienteExample = new ClienteEntity();
 
-        //TODO Arrumar mesAno e data
         for (String filtro : filtrosBusca) {
             if (filtro.contains("nome=")) clienteExample.setNome(filtro.replace("nome=", ""));
             if (filtro.contains("cpfCnpj=")) clienteExample.setCpfCnpj(filtro.replace("cpfCnpj=", ""));
@@ -357,7 +357,11 @@ public class ClienteService {
                     .statusCliente(cliente.getStatusCliente())
                     .qtdOrdensRealizadas(cliente.getQtdOrdensRealizadas())
                     .giroTotal(cliente.getGiroTotal())
-                    .exclusaoCliente(cliente.getExclusaoCliente())
+                    .exclusaoCliente(ExclusaoClienteResponse.builder()
+                            .dataExclusao(cliente.getExclusaoCliente().getDataExclusao())
+                            .horaExclusao(cliente.getExclusaoCliente().getHoraExclusao())
+                            .excluido(cliente.getExclusaoCliente().getExcluido())
+                            .build())
                     .endereco(cliente.getEndereco())
                     .telefone(cliente.getTelefone())
                     .nomeColaboradorResponsavel(cliente.getColaboradorResponsavel().getNome())
