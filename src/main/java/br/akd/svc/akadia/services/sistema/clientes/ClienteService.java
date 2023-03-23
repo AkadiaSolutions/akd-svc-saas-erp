@@ -1,6 +1,8 @@
 package br.akd.svc.akadia.services.sistema.clientes;
 
 import br.akd.svc.akadia.models.dto.sistema.clientes.ClienteDto;
+import br.akd.svc.akadia.models.dto.sistema.clientes.responses.ClienteResponse;
+import br.akd.svc.akadia.models.dto.sistema.clientes.responses.MetaDadosCliente;
 import br.akd.svc.akadia.models.entities.global.EnderecoEntity;
 import br.akd.svc.akadia.models.entities.global.TelefoneEntity;
 import br.akd.svc.akadia.models.entities.sistema.clientes.ClienteEntity;
@@ -12,16 +14,13 @@ import br.akd.svc.akadia.services.exceptions.InvalidRequestException;
 import br.akd.svc.akadia.services.exceptions.ObjectNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.ExampleMatcher;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.temporal.TemporalAdjusters;
-import java.util.List;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -106,6 +105,9 @@ public class ClienteService {
                 .nome(clienteDto.getNome())
                 .cpfCnpj(clienteDto.getCpfCnpj())
                 .inscricaoEstadual(clienteDto.getInscricaoEstadual())
+                .qtdOrdensRealizadas(0)
+                .giroTotal(0.0)
+                .statusCliente(clienteDto.getStatusCliente())
                 .email(clienteDto.getEmail())
                 .exclusaoCliente(ExclusaoClienteEntity.builder()
                         .excluido(false)
@@ -160,6 +162,9 @@ public class ClienteService {
                 .nome(clienteDto.getNome())
                 .cpfCnpj(clienteDto.getCpfCnpj())
                 .inscricaoEstadual(clienteDto.getInscricaoEstadual())
+                .qtdOrdensRealizadas(clienteEncontrado.getQtdOrdensRealizadas())
+                .giroTotal(clienteEncontrado.getGiroTotal())
+                .statusCliente(clienteDto.getStatusCliente())
                 .email(clienteDto.getEmail())
                 .exclusaoCliente(ExclusaoClienteEntity.builder()
                         .id(clienteEncontrado.getId())
@@ -252,8 +257,63 @@ public class ClienteService {
         log.debug("O cliente de id {} não está excluído", cliente.getId());
     }
 
-    public List<ClienteEntity> obtemClientesFiltrados(Pageable pageable, List<String> filtrosBusca) {
+    public MetaDadosCliente obtemMetaDadosDosClientes(List<String> filtrosBusca) {
+        Example<ClienteEntity> example = geraObjetoClienteExample(filtrosBusca);
+        List<ClienteEntity> clientes = clienteRepository.findAll(example);
+        return MetaDadosCliente.builder()
+                .totalClientesCadastrados(clientes.size())
+                .clienteComMaiorGiro(retornaClienteComMaiorGiro(clientes))
+                .clienteComMaisOrdens(retornaClienteComMaisOrdens(clientes))
+                .bairroComMaisClientes(retornaBairroComMaisClientes(clientes))
+                .build();
+    }
 
+    private ClienteEntity retornaClienteComMaiorGiro(List<ClienteEntity> clientes) {
+        Optional<ClienteEntity> clienteOptional = clientes.stream()
+                .max(Comparator.comparingDouble(ClienteEntity::getGiroTotal));
+        if (clienteOptional.isPresent() && clienteOptional.get().getGiroTotal() == 0) return null;
+        return clienteOptional.orElse(null);
+    }
+
+    private ClienteEntity retornaClienteComMaisOrdens(List<ClienteEntity> clientes) {
+        Optional<ClienteEntity> clienteOptional = clientes.stream()
+                .max(Comparator.comparingInt(ClienteEntity::getQtdOrdensRealizadas));
+        if (clienteOptional.isPresent() && clienteOptional.get().getQtdOrdensRealizadas() == 0) return null;
+        return clienteOptional.orElse(null);
+    }
+
+    private String retornaBairroComMaisClientes(List<ClienteEntity> clientes) {
+        Map<String, Integer> quantidadeDeClientesPorBairro = new HashMap<>();
+
+        String maiorBairro = null;
+        Integer maiorValor = 0;
+
+        for (ClienteEntity cliente : clientes) {
+            if (cliente.getEndereco() != null && cliente.getEndereco().getBairro() != null) {
+                String bairroAtual = cliente.getEndereco().getBairro().toUpperCase();
+                if (quantidadeDeClientesPorBairro.containsKey(bairroAtual))
+                    quantidadeDeClientesPorBairro.replace(bairroAtual, (quantidadeDeClientesPorBairro.get(bairroAtual) + 1));
+                else
+                    quantidadeDeClientesPorBairro.put(bairroAtual, 1);
+            }
+        }
+
+        for (Map.Entry<String, Integer> clientesBairro : quantidadeDeClientesPorBairro.entrySet()) {
+            if (clientesBairro.getValue() > maiorValor) {
+                maiorBairro = clientesBairro.getKey();
+                maiorValor = clientesBairro.getValue();
+            }
+        }
+
+        return maiorBairro;
+    }
+
+    public Page<ClienteResponse> realizaBuscaPaginadaPorClientes(Pageable pageable, List<String> filtrosBusca) {
+        Example<ClienteEntity> example = geraObjetoClienteExample(filtrosBusca);
+        return converteClientesEntityParaClientesResponse(pageable, clienteRepository.findAll(example, pageable));
+    }
+
+    public Example<ClienteEntity> geraObjetoClienteExample(List<String> filtrosBusca) {
         ExampleMatcher customExampleMatcher = ExampleMatcher.matchingAll()
                 .withMatcher("nome", ExampleMatcher.GenericPropertyMatchers.startsWith().ignoreCase())
                 .withMatcher("cpfCnpj", ExampleMatcher.GenericPropertyMatchers.startsWith())
@@ -266,6 +326,7 @@ public class ClienteService {
 
         ClienteEntity clienteExample = new ClienteEntity();
 
+        //TODO Arrumar mesAno e data
         for (String filtro : filtrosBusca) {
             if (filtro.contains("nome=")) clienteExample.setNome(filtro.replace("nome=", ""));
             if (filtro.contains("cpfCnpj=")) clienteExample.setCpfCnpj(filtro.replace("cpfCnpj=", ""));
@@ -278,10 +339,33 @@ public class ClienteService {
                 clienteExample.setEndereco(endereco);
             }
         }
+        return Example.of(clienteExample, customExampleMatcher);
+    }
 
-        Example<ClienteEntity> example = Example.of(clienteExample, customExampleMatcher);
-        Page<ClienteEntity> clientesEncontrados = clienteRepository.findAll(example, pageable);
-        return clientesEncontrados.getContent();
+    public Page<ClienteResponse> converteClientesEntityParaClientesResponse(Pageable pageable, Page<ClienteEntity> clientesEntity) {
+        List<ClienteResponse> clientesResponse = new ArrayList<>();
+        for (ClienteEntity cliente : clientesEntity.getContent()) {
+            ClienteResponse clienteResponse = ClienteResponse.builder()
+                    .id(cliente.getId())
+                    .dataCadastro(cliente.getDataCadastro())
+                    .horaCadastro(cliente.getHoraCadastro())
+                    .dataNascimento(cliente.getDataNascimento())
+                    .nome(cliente.getNome())
+                    .cpfCnpj(cliente.getCpfCnpj())
+                    .inscricaoEstadual(cliente.getInscricaoEstadual())
+                    .email(cliente.getEmail())
+                    .statusCliente(cliente.getStatusCliente())
+                    .qtdOrdensRealizadas(cliente.getQtdOrdensRealizadas())
+                    .giroTotal(cliente.getGiroTotal())
+                    .exclusaoCliente(cliente.getExclusaoCliente())
+                    .endereco(cliente.getEndereco())
+                    .telefone(cliente.getTelefone())
+                    .nomeColaboradorResponsavel(cliente.getColaboradorResponsavel().getNome())
+                    .build();
+            clientesResponse.add(clienteResponse);
+        }
+
+        return new PageImpl<>(clientesResponse, pageable, clientesResponse.size());
     }
 
     public List<ClienteEntity> obtemClientesPeloNome(ColaboradorEntity colaboradorLogado, String nome) {

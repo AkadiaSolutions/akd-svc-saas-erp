@@ -2,8 +2,9 @@ package br.akd.svc.akadia.controllers.sistema.clientes;
 
 import br.akd.svc.akadia.config.security.JWTUtil;
 import br.akd.svc.akadia.models.dto.sistema.clientes.ClienteDto;
+import br.akd.svc.akadia.models.dto.sistema.clientes.responses.ClienteResponse;
+import br.akd.svc.akadia.models.dto.sistema.clientes.responses.MetaDadosCliente;
 import br.akd.svc.akadia.models.entities.sistema.clientes.ClienteEntity;
-import br.akd.svc.akadia.repositories.sistema.clientes.ClienteRepository;
 import br.akd.svc.akadia.services.exceptions.InvalidRequestException;
 import br.akd.svc.akadia.services.exceptions.ObjectNotFoundException;
 import br.akd.svc.akadia.services.sistema.clientes.ClienteService;
@@ -13,8 +14,8 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.*;
-import org.springframework.data.web.PageableDefault;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -42,18 +43,22 @@ public class ClienteController {
     @Autowired
     JWTUtil jwtUtil;
 
-
-    //TODO PARA TESTE DO ANGULAR. REMOVER
-    @GetMapping
-    public ResponseEntity<List<ClienteEntity>> buscaTodosClientes(
-            @RequestParam(value = "busca", required = false) List<String> busca,
-            @PageableDefault(size = 20,
-                    page = 0,
-                    sort = {"horaCadastro", "dataCadastro"},
-                    direction = Sort.Direction.ASC) Pageable pageable) {
-        log.info("Endpoint de busca de todos os clientes acessado");
+    @GetMapping("/meta")
+    public ResponseEntity<MetaDadosCliente> obtemMetaDadosDosClientesBuscados(
+            @RequestParam(value = "busca", required = false) List<String> busca) {
+        log.info("Endpoint de obtenção de meta-dados do módulo de clientes acessado. Filtros de busca: {}",
+                busca == null ? "Nulo" : busca.toString());
         return ResponseEntity.ok().body(
-                clienteService.obtemClientesFiltrados(pageable, busca == null ? new ArrayList<String>() : busca));
+                clienteService.obtemMetaDadosDosClientes(busca == null ? new ArrayList<>() : busca));
+    }
+
+    @GetMapping
+    public ResponseEntity<Page<ClienteResponse>> obtemClientesPaginados(
+            @RequestParam(value = "busca", required = false) List<String> busca, Pageable pageable) {
+        log.info("Endpoint de busca paginada por clientes acessado. Filtros de busca: {}",
+                busca == null ? "Nulo" : busca.toString());
+        return ResponseEntity.ok().body(
+                clienteService.realizaBuscaPaginadaPorClientes(pageable, busca == null ? new ArrayList<>() : busca));
     }
 
     @GetMapping("/mes-ano")
