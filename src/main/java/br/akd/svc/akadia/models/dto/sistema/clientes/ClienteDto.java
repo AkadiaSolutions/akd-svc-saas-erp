@@ -4,6 +4,7 @@ import br.akd.svc.akadia.models.dto.global.EnderecoDto;
 import br.akd.svc.akadia.models.dto.global.TelefoneDto;
 import br.akd.svc.akadia.models.dto.sistema.colaboradores.ColaboradorDto;
 import br.akd.svc.akadia.models.dto.site.empresa.EmpresaDto;
+import br.akd.svc.akadia.models.enums.sistema.clientes.StatusClienteEnum;
 import lombok.*;
 
 @Getter
@@ -22,6 +23,9 @@ public class ClienteDto {
     private String cpfCnpj;
     private String inscricaoEstadual;
     private String email;
+    private StatusClienteEnum statusCliente;
+    private Integer qtdOrdensRealizadas;
+    private Double giroTotal;
     private ExclusaoClienteDto exclusaoCliente;
     private EnderecoDto endereco;
     private TelefoneDto telefone;

@@ -4,6 +4,7 @@ import br.akd.svc.akadia.models.entities.global.EnderecoEntity;
 import br.akd.svc.akadia.models.entities.global.TelefoneEntity;
 import br.akd.svc.akadia.models.entities.sistema.colaboradores.ColaboradorEntity;
 import br.akd.svc.akadia.models.entities.site.empresa.EmpresaEntity;
+import br.akd.svc.akadia.models.enums.sistema.clientes.StatusClienteEnum;
 import lombok.*;
 
 import javax.persistence.*;
@@ -33,7 +34,10 @@ public class ClienteEntity {
     private String cpfCnpj;
     private String inscricaoEstadual;
     private String email;
-
+    @Enumerated(EnumType.STRING)
+    private StatusClienteEnum statusCliente;
+    private Integer qtdOrdensRealizadas;
+    private Double giroTotal;
     @OneToOne(targetEntity = ExclusaoClienteEntity.class, orphanRemoval = true, cascade = CascadeType.ALL)
     private ExclusaoClienteEntity exclusaoCliente;
     @OneToOne(targetEntity = EnderecoEntity.class, orphanRemoval = true, cascade = CascadeType.ALL)
