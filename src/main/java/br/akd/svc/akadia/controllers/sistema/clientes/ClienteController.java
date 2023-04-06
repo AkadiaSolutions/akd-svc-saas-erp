@@ -2,6 +2,7 @@ package br.akd.svc.akadia.controllers.sistema.clientes;
 
 import br.akd.svc.akadia.config.security.JWTUtil;
 import br.akd.svc.akadia.models.dto.sistema.clientes.ClienteDto;
+import br.akd.svc.akadia.models.dto.sistema.clientes.responses.ClientePageResponse;
 import br.akd.svc.akadia.models.dto.sistema.clientes.responses.ClienteResponse;
 import br.akd.svc.akadia.models.dto.sistema.clientes.responses.MetaDadosCliente;
 import br.akd.svc.akadia.models.entities.sistema.clientes.ClienteEntity;
@@ -14,7 +15,6 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,8 +25,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import java.util.ArrayList;
-import java.util.List;
 
 @Slf4j
 @CrossOrigin
@@ -43,172 +41,89 @@ public class ClienteController {
     @Autowired
     JWTUtil jwtUtil;
 
+    @PostMapping("/verifica-ie")
+    @ApiOperation(
+            value = "Validação de duplicidade na entrada da inscrição estadual",
+            notes = "Esse endpoint tem como objetivo realizar a validação se a inscrição estadual digitada pelo " +
+                    "cliente já existe na base de dados da empresa.",
+            produces = MediaType.APPLICATION_JSON,
+            consumes = MediaType.APPLICATION_JSON
+    )
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Requisição finalizada com sucesso",
+                    response = ClienteEntity.class),
+    })
+    @PreAuthorize("hasAnyRole('CLIENTES')")
+    public ResponseEntity<?> verificaDuplicidadeInscricaoEstadual(HttpServletRequest req,
+                                                                  @RequestBody String inscricaoEstadual) {
+        log.info("Endpoint de validação de duplicidade de inscrição estadual acessado. IE: " + inscricaoEstadual);
+        clienteService.validaSeInscricaoEstadualJaExiste(inscricaoEstadual, jwtUtil.obtemUsuarioAtivo(req).getEmpresa().getId());
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/verifica-cpfCnpj")
+    @ApiOperation(
+            value = "Validação de duplicidade na entrada do CPF ou CNPJ",
+            notes = "Esse endpoint tem como objetivo realizar a validação se o CPF ou CNPJ digitado pelo cliente já " +
+                    "existe na base de dados da empresa.",
+            produces = MediaType.APPLICATION_JSON,
+            consumes = MediaType.APPLICATION_JSON
+    )
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Requisição finalizada com sucesso",
+                    response = ClienteEntity.class),
+    })
+    @PreAuthorize("hasAnyRole('CLIENTES')")
+    public ResponseEntity<String> verificaDuplicidadeCpfCnpj(HttpServletRequest req,
+                                                             @RequestBody String cpfCnpj) {
+        log.info("Endpoint de validação de duplicidade de CPF/CNPJ acessado. CPF/CNPJ: " + cpfCnpj);
+        clienteService.validaSeCpfCnpjJaExiste(cpfCnpj, jwtUtil.obtemUsuarioAtivo(req).getEmpresa().getId());
+        return ResponseEntity.ok().body(cpfCnpj);
+    }
+
     @GetMapping("/meta")
+    @ApiOperation(
+            value = "Obtenção de meta dados dos clientes cadastrados",
+            notes = "Esse endpoint tem como objetivo realizar a obtenção dos meta dados do módulo de clientes da empresa " +
+                    "do usuário que enviou a requisição, utilizando os filtros de busca enviados pelo usuário.",
+            produces = MediaType.APPLICATION_JSON,
+            consumes = MediaType.APPLICATION_JSON
+    )
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Requisição finalizada com sucesso",
+                    response = ClienteEntity.class),
+    })
+    @PreAuthorize("hasAnyRole('CLIENTES')")
     public ResponseEntity<MetaDadosCliente> obtemMetaDadosDosClientesBuscados(
-            @RequestParam(value = "busca", required = false) List<String> busca) {
+            @RequestParam(value = "busca", required = false) String busca,
+            HttpServletRequest req) {
         log.info("Endpoint de obtenção de meta-dados do módulo de clientes acessado. Filtros de busca: {}",
-                busca == null ? "Nulo" : busca.toString());
-        return ResponseEntity.ok().body(
-                clienteService.obtemMetaDadosDosClientes(busca == null ? new ArrayList<>() : busca));
+                busca == null ? "Nulo" : busca);
+        return ResponseEntity.ok().body(clienteService.obtemMetaDadosDosClientes(
+                jwtUtil.obtemUsuarioAtivo(req), busca));
     }
 
     @GetMapping
-    public ResponseEntity<Page<ClienteResponse>> obtemClientesPaginados(
-            @RequestParam(value = "busca", required = false) List<String> busca, Pageable pageable) {
+    @ApiOperation(
+            value = "Busca paginada por clientes cadastrados",
+            notes = "Esse endpoint tem como objetivo realizar a busca paginada de clientes cadastrados na empresa do " +
+                    "usuário que acionou a requisição com os filtros de busca enviados pelo usuário",
+            produces = MediaType.APPLICATION_JSON,
+            consumes = MediaType.APPLICATION_JSON
+    )
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Requisição finalizada com sucesso",
+                    response = ClienteEntity.class),
+    })
+    @PreAuthorize("hasAnyRole('CLIENTES')")
+    public ResponseEntity<ClientePageResponse> obtemClientesPaginados(
+            @RequestParam(value = "busca", required = false) String busca,
+            Pageable pageable,
+            HttpServletRequest req) {
         log.info("Endpoint de busca paginada por clientes acessado. Filtros de busca: {}",
-                busca == null ? "Nulo" : busca.toString());
-        return ResponseEntity.ok().body(
-                clienteService.realizaBuscaPaginadaPorClientes(pageable, busca == null ? new ArrayList<>() : busca));
-    }
-
-    @GetMapping("/mes-ano")
-    @ApiOperation(
-            value = "Busca de clientes cadastrados por mês/ano",
-            notes = "Esse endpoint tem como objetivo realizar a busca de clientes cadastrados em um mês específico de um ano específico",
-            produces = MediaType.APPLICATION_JSON,
-            consumes = MediaType.APPLICATION_JSON
-    )
-    @ApiResponses({
-            @ApiResponse(code = 200, message = "Requisição finalizada com sucesso",
-                    response = ClienteEntity.class),
-            @ApiResponse(code = 400, message = "Nenhum cliente foi encontrado no mês e ano indicado",
-                    response = ObjectNotFoundException.class)
-    })
-    @PreAuthorize("hasAnyRole('CLIENTES')")
-    public ResponseEntity<List<ClienteEntity>> buscaClientesPorMesAno(HttpServletRequest req,
-                                                                      @RequestParam("mes") String mes,
-                                                                      @RequestParam("ano") String ano) {
-        log.info("Método controlador de busca de clientes por mês e ano acessado");
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(clienteService.obtemClientesPorMes(jwtUtil.obtemUsuarioAtivo(req), mes, ano));
-    }
-
-    @GetMapping("/periodo")
-    @ApiOperation(
-            value = "Busca de clientes cadastrados em um range de data",
-            notes = "Esse endpoint tem como objetivo realizar a busca de clientes cadastrados em um período de data",
-            produces = MediaType.APPLICATION_JSON,
-            consumes = MediaType.APPLICATION_JSON
-    )
-    @ApiResponses({
-            @ApiResponse(code = 200, message = "Requisição finalizada com sucesso",
-                    response = ClienteEntity.class),
-            @ApiResponse(code = 400, message = "Nenhum cliente foi encontrado na data indicada",
-                    response = ObjectNotFoundException.class)
-    })
-    @PreAuthorize("hasAnyRole('CLIENTES')")
-    public ResponseEntity<List<ClienteEntity>> buscaClientesPorRangeDeData(HttpServletRequest req,
-                                                                           @RequestParam("inicio") String inicio,
-                                                                           @RequestParam("fim") String fim) {
-        log.info("Método controlador de busca de clientes por período de data acessado");
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(clienteService.obtemClientesPorRangeDeData(jwtUtil.obtemUsuarioAtivo(req), inicio, fim));
-    }
-
-    @GetMapping("/telefone")
-    @ApiOperation(
-            value = "Busca de clientes por telefone",
-            notes = "Esse endpoint tem como objetivo realizar a busca de clientes pelo telefone informado",
-            produces = MediaType.APPLICATION_JSON,
-            consumes = MediaType.APPLICATION_JSON
-    )
-    @ApiResponses({
-            @ApiResponse(code = 200, message = "Requisição finalizada com sucesso",
-                    response = ClienteEntity.class),
-            @ApiResponse(code = 400, message = "Nenhum cliente foi encontrado com o telefone informado",
-                    response = ObjectNotFoundException.class)
-    })
-    @PreAuthorize("hasAnyRole('CLIENTES')")
-    public ResponseEntity<List<ClienteEntity>> buscaClientesPeloTelefone(HttpServletRequest req,
-                                                                         @RequestParam("busca") String busca) {
-        log.info("Método controlador de busca de clientes pelo telefone acessado");
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(clienteService.obtemClientesPeloTelefone(jwtUtil.obtemUsuarioAtivo(req), busca));
-    }
-
-    @GetMapping("/inscricao-estadual")
-    @ApiOperation(
-            value = "Busca de clientes por inscrição estadual",
-            notes = "Esse endpoint tem como objetivo realizar a busca de clientes pela inscrição estadual informada",
-            produces = MediaType.APPLICATION_JSON,
-            consumes = MediaType.APPLICATION_JSON
-    )
-    @ApiResponses({
-            @ApiResponse(code = 200, message = "Requisição finalizada com sucesso",
-                    response = ClienteEntity.class),
-            @ApiResponse(code = 400, message = "Nenhum cliente foi encontrado com a inscrição estadual informada",
-                    response = ObjectNotFoundException.class)
-    })
-    @PreAuthorize("hasAnyRole('CLIENTES')")
-    public ResponseEntity<List<ClienteEntity>> buscaClientesPelaInscricaoEstadual(HttpServletRequest req,
-                                                                                  @RequestParam("busca") String busca) {
-        log.info("Método controlador de busca de clientes pela inscrição estadual acessado");
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(clienteService.obtemClientesPelaInscricaoEstadual(jwtUtil.obtemUsuarioAtivo(req), busca));
-    }
-
-    @GetMapping("/cpf-cnpj")
-    @ApiOperation(
-            value = "Busca de clientes por cpf ou cnpj",
-            notes = "Esse endpoint tem como objetivo realizar a busca de clientes pelo cpf ou cnpj informado",
-            produces = MediaType.APPLICATION_JSON,
-            consumes = MediaType.APPLICATION_JSON
-    )
-    @ApiResponses({
-            @ApiResponse(code = 200, message = "Requisição finalizada com sucesso", response = ClienteEntity.class),
-            @ApiResponse(code = 400, message = "Nenhum cliente foi encontrado com o cpf ou cnpj informado", response = ObjectNotFoundException.class)
-    })
-    @PreAuthorize("hasAnyRole('CLIENTES')")
-    public ResponseEntity<List<ClienteEntity>> buscaClientesPeloCpfOuCnpj(HttpServletRequest req,
-                                                                          @RequestParam("busca") String busca) {
-        log.info("Método controlador de busca de clientes pelo cpf ou cnpj acessado");
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(clienteService.obtemClientesPeloCpfCnpj(jwtUtil.obtemUsuarioAtivo(req), busca));
-    }
-
-    @GetMapping("/nome")
-    @ApiOperation(
-            value = "Busca de clientes por nome",
-            notes = "Esse endpoint tem como objetivo realizar a busca de clientes pelo nome informado",
-            produces = MediaType.APPLICATION_JSON,
-            consumes = MediaType.APPLICATION_JSON
-    )
-    @ApiResponses({
-            @ApiResponse(code = 200, message = "Requisição finalizada com sucesso", response = ClienteEntity.class),
-            @ApiResponse(code = 400, message = "Nenhum cliente foi encontrado com o nome informado", response = ObjectNotFoundException.class)
-    })
-    @PreAuthorize("hasAnyRole('CLIENTES')")
-    public ResponseEntity<List<ClienteEntity>> buscaClientesPeloNome(HttpServletRequest req,
-                                                                     @RequestParam("busca") String busca) {
-        log.info("Método controlador de busca de clientes pelo nome acessado");
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(clienteService.obtemClientesPeloNome(jwtUtil.obtemUsuarioAtivo(req), busca));
-    }
-
-    @GetMapping("/email")
-    @ApiOperation(
-            value = "Busca de clientes por e-mail",
-            notes = "Esse endpoint tem como objetivo realizar a busca de clientes pelo e-mail informado",
-            produces = MediaType.APPLICATION_JSON,
-            consumes = MediaType.APPLICATION_JSON
-    )
-    @ApiResponses({
-            @ApiResponse(code = 200, message = "Requisição finalizada com sucesso", response = ClienteEntity.class),
-            @ApiResponse(code = 400, message = "Nenhum cliente foi encontrado com o e-mail informado", response = ObjectNotFoundException.class)
-    })
-    @PreAuthorize("hasAnyRole('CLIENTES')")
-    public ResponseEntity<List<ClienteEntity>> buscaClientesPeloEmail(HttpServletRequest req,
-                                                                      @RequestParam("busca") String busca) {
-        log.info("Método controlador de busca de clientes pelo nome acessado");
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(clienteService.obtemClientesPeloEmail(jwtUtil.obtemUsuarioAtivo(req), busca));
+                busca == null ? "Nulo" : busca);
+        return ResponseEntity.ok().body(clienteService.realizaBuscaPaginadaPorClientes(
+                jwtUtil.obtemUsuarioAtivo(req), pageable, busca));
     }
 
     @PostMapping
@@ -265,8 +180,8 @@ public class ClienteController {
             @ApiResponse(code = 400, message = "Não é possível remover um cliente que já foi excluído", response = InvalidRequestException.class)
     })
     @PreAuthorize("hasAnyRole('CLIENTES')")
-    public ResponseEntity<ClienteEntity> removeCliente(HttpServletRequest req,
-                                                       @PathVariable Long id) {
+    public ResponseEntity<ClienteResponse> removeCliente(HttpServletRequest req,
+                                                         @PathVariable Long id) {
         log.info("Método controlador de remoção de cliente acessado");
         return ResponseEntity
                 .status(HttpStatus.OK)
