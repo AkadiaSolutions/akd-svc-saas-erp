@@ -18,7 +18,7 @@ public class EnderecoEntityBuilder {
         builder.enderecoEntity.setBairro("Lauzane Paulista");
         builder.enderecoEntity.setCidade("São Paulo");
         builder.enderecoEntity.setComplemento("Casa 4");
-        builder.enderecoEntity.setEstadoEnum(EstadoEnum.SP);
+        builder.enderecoEntity.setEstado(EstadoEnum.SP);
         return builder;
     }
 

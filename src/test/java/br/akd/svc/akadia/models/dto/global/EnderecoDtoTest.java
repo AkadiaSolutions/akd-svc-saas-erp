@@ -50,7 +50,7 @@ class EnderecoDtoTest {
                 .bairro("Lauzane Paulista")
                 .codigoPostal("02324-312")
                 .cidade("São Paulo")
-                .estadoEnum(EstadoEnum.SP)
+                .estado(EstadoEnum.SP)
                 .build();
 
         Assertions.assertEquals(

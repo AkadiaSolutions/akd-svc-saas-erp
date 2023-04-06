@@ -18,7 +18,7 @@ public class EnderecoDtoBuilder {
         builder.enderecoDto.setBairro("Lauzane Paulista");
         builder.enderecoDto.setCidade("São Paulo");
         builder.enderecoDto.setComplemento("Casa 4");
-        builder.enderecoDto.setEstadoEnum(EstadoEnum.SP);
+        builder.enderecoDto.setEstado(EstadoEnum.SP);
         return builder;
     }
 

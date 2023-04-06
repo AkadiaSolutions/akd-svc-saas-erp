@@ -18,6 +18,6 @@ public class EnderecoDto {
     private String cidade;
 
     private String complemento;
-    private EstadoEnum estadoEnum;
+    private EstadoEnum estado;
 
 }

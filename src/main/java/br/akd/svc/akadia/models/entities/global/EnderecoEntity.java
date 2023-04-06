@@ -28,6 +28,6 @@ public class EnderecoEntity {
     private String complemento;
 
     @Enumerated(EnumType.STRING)
-    private EstadoEnum estadoEnum;
+    private EstadoEnum estado;
 
 }
