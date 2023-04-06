@@ -1,6 +1,7 @@
 package br.akd.svc.akadia.models.entities.sistema.clientes;
 
 import br.akd.svc.akadia.models.entities.sistema.clientes.mocks.ClienteEntityBuilder;
+import br.akd.svc.akadia.models.enums.sistema.clientes.StatusClienteEnum;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -38,6 +39,9 @@ class ClienteEntityTest {
                 "582.645.389-32",
                 "145574080114",
                 "gabrielafonso@mail.com.br",
+                StatusClienteEnum.COMUM,
+                0,
+                0.0,
                 null,
                 null,
                 null,
