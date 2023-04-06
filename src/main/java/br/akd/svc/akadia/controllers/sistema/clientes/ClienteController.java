@@ -73,12 +73,14 @@ public class ClienteController {
             @ApiResponse(code = 200, message = "Requisição finalizada com sucesso",
                     response = ClienteEntity.class),
     })
+    @Produces({MediaType.APPLICATION_JSON, "application/json"})
+    @Consumes({MediaType.APPLICATION_JSON, "application/json"})
     @PreAuthorize("hasAnyRole('CLIENTES')")
-    public ResponseEntity<String> verificaDuplicidadeCpfCnpj(HttpServletRequest req,
+    public ResponseEntity<?> verificaDuplicidadeCpfCnpj(HttpServletRequest req,
                                                              @RequestBody String cpfCnpj) {
         log.info("Endpoint de validação de duplicidade de CPF/CNPJ acessado. CPF/CNPJ: " + cpfCnpj);
         clienteService.validaSeCpfCnpjJaExiste(cpfCnpj, jwtUtil.obtemUsuarioAtivo(req).getEmpresa().getId());
-        return ResponseEntity.ok().body(cpfCnpj);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/meta")
