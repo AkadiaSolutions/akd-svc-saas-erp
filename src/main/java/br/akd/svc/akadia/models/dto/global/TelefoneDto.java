@@ -13,5 +13,5 @@ public class TelefoneDto {
     private Long id;
     private String prefixo;
     private String numero;
-    private TipoTelefoneEnum tipoTelefoneEnum;
+    private TipoTelefoneEnum tipoTelefone;
 }

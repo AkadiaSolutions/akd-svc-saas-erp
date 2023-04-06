@@ -14,7 +14,7 @@ public class TelefoneDtoBuilder {
         builder.telefoneDto.setId(1L);
         builder.telefoneDto.setPrefixo("11");
         builder.telefoneDto.setNumero("979815415");
-        builder.telefoneDto.setTipoTelefoneEnum(TipoTelefoneEnum.MOVEL_WHATSAPP);
+        builder.telefoneDto.setTipoTelefone(TipoTelefoneEnum.MOVEL_WHATSAPP);
         return builder;
     }
 

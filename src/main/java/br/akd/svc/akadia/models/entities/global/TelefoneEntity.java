@@ -22,5 +22,5 @@ public class TelefoneEntity {
     private String numero;
 
     @Enumerated(EnumType.STRING)
-    private TipoTelefoneEnum tipoTelefoneEnum;
+    private TipoTelefoneEnum tipoTelefone;
 }

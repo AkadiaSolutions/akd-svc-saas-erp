@@ -31,7 +31,7 @@ class TelefoneEntityTest {
                 .id(1L)
                 .prefixo("11")
                 .numero("979815415")
-                .tipoTelefoneEnum(TipoTelefoneEnum.MOVEL_WHATSAPP)
+                .tipoTelefone(TipoTelefoneEnum.MOVEL_WHATSAPP)
                 .build();
         Assertions.assertEquals(
                 "TelefoneEntity(id=1, prefixo=11, numero=979815415, tipoTelefoneEnum=MOVEL_WHATSAPP)",
