@@ -28,7 +28,7 @@ public class LeadService {
                 .origemLeadEnum(OrigemLeadEnum.PRE_CADASTRO)
                 .email(clienteSistemaDto.getEmail())
                 .telefone(TelefoneEntity.builder()
-                        .tipoTelefoneEnum(clienteSistemaDto.getTelefone().getTipoTelefoneEnum())
+                        .tipoTelefone(clienteSistemaDto.getTelefone().getTipoTelefone())
                         .prefixo(clienteSistemaDto.getTelefone().getPrefixo())
                         .numero(clienteSistemaDto.getTelefone().getNumero())
                         .build())

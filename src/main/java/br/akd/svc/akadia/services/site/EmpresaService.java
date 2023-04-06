@@ -184,7 +184,7 @@ public class EmpresaService {
                         .build())
                 .segmentoEmpresaEnum(empresaDto.getSegmentoEmpresaEnum())
                 .telefone(TelefoneEntity.builder()
-                        .tipoTelefoneEnum(empresaDto.getTelefone().getTipoTelefoneEnum())
+                        .tipoTelefone(empresaDto.getTelefone().getTipoTelefone())
                         .prefixo(empresaDto.getTelefone().getPrefixo())
                         .numero(empresaDto.getTelefone().getNumero())
                         .build())
@@ -237,7 +237,7 @@ public class EmpresaService {
                         .bairro(empresaDto.getEndereco().getBairro())
                         .complemento(empresaDto.getEndereco().getComplemento())
                         .cidade(empresaDto.getEndereco().getCidade())
-                        .estadoEnum(empresaDto.getEndereco().getEstadoEnum())
+                        .estado(empresaDto.getEndereco().getEstado())
                         .build()
                         : null)
                 .build();
@@ -406,12 +406,12 @@ public class EmpresaService {
         empresa.setLogo(empresaDto.getLogo());
         empresa.getTelefone().setPrefixo(empresaDto.getTelefone().getPrefixo());
         empresa.getTelefone().setNumero(empresaDto.getTelefone().getNumero());
-        empresa.getTelefone().setTipoTelefoneEnum(empresaDto.getTelefone().getTipoTelefoneEnum());
+        empresa.getTelefone().setTipoTelefone(empresaDto.getTelefone().getTipoTelefone());
         empresa.getEndereco().setLogradouro(empresaDto.getEndereco().getLogradouro());
         empresa.getEndereco().setNumero(empresaDto.getEndereco().getNumero());
         empresa.getEndereco().setBairro(empresaDto.getEndereco().getBairro());
         empresa.getEndereco().setCidade(empresaDto.getEndereco().getCidade());
-        empresa.getEndereco().setEstadoEnum(empresaDto.getEndereco().getEstadoEnum());
+        empresa.getEndereco().setEstado(empresaDto.getEndereco().getEstado());
         empresa.getEndereco().setCodigoPostal(empresaDto.getEndereco().getCodigoPostal());
         empresa.getEndereco().setComplemento(empresaDto.getEndereco().getComplemento());
         empresa.getConfigFiscalEmpresa().setDiscriminaImpostos(empresaDto.getConfigFiscalEmpresa().getDiscriminaImpostos());

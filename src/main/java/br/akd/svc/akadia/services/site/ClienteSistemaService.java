@@ -79,7 +79,7 @@ public class ClienteSistemaService {
                         .telefone(TelefoneEntity.builder()
                                 .prefixo(clienteSistemaDto.getTelefone().getPrefixo())
                                 .numero(clienteSistemaDto.getTelefone().getNumero())
-                                .tipoTelefoneEnum(clienteSistemaDto.getTelefone().getTipoTelefoneEnum())
+                                .tipoTelefone(clienteSistemaDto.getTelefone().getTipoTelefone())
                                 .build())
                         .saldo(0.00)
                         .cartao(clienteSistemaDto.getPlano().getFormaPagamentoSistemaEnum().equals(FormaPagamentoSistemaEnum.CREDIT_CARD)
@@ -111,7 +111,7 @@ public class ClienteSistemaService {
                                 .numero(clienteSistemaDto.getEndereco().getNumero())
                                 .bairro(clienteSistemaDto.getEndereco().getBairro())
                                 .cidade(clienteSistemaDto.getEndereco().getCidade())
-                                .estadoEnum(clienteSistemaDto.getEndereco().getEstadoEnum())
+                                .estado(clienteSistemaDto.getEndereco().getEstado())
                                 .complemento(clienteSistemaDto.getEndereco().getComplemento())
                                 .build()
                                 : null)
@@ -194,7 +194,7 @@ public class ClienteSistemaService {
     public String criaNumeroMobileComObjetoTelefone(TelefoneEntity telefone) {
         log.debug("Método de criação de número mobile com telefone informado ({}) acessado", telefone);
         String numeroMobile = null;
-        if (!telefone.getTipoTelefoneEnum().equals(TipoTelefoneEnum.FIXO))
+        if (!telefone.getTipoTelefone().equals(TipoTelefoneEnum.FIXO))
             numeroMobile = telefone.getPrefixo() + telefone.getNumero();
 
         log.debug("Retornando numero mobile criado: {}", numeroMobile);
@@ -226,7 +226,7 @@ public class ClienteSistemaService {
                 .saldo(clienteSistema.getSaldo())
                 .plano(clienteSistema.getPlano())
                 .telefone(TelefoneEntity.builder()
-                        .tipoTelefoneEnum(clienteSistemaDto.getTelefone().getTipoTelefoneEnum())
+                        .tipoTelefone(clienteSistemaDto.getTelefone().getTipoTelefone())
                         .prefixo(clienteSistemaDto.getTelefone().getPrefixo())
                         .numero(clienteSistemaDto.getTelefone().getNumero())
                         .build())
@@ -236,7 +236,7 @@ public class ClienteSistemaService {
                         .bairro(clienteSistemaDto.getEndereco().getBairro())
                         .codigoPostal(clienteSistemaDto.getEndereco().getCodigoPostal())
                         .cidade(clienteSistemaDto.getEndereco().getCidade())
-                        .estadoEnum(clienteSistemaDto.getEndereco().getEstadoEnum())
+                        .estado(clienteSistemaDto.getEndereco().getEstado())
                         .build())
                 .cartao(clienteSistema.getCartao())
                 .pagamentos(clienteSistema.getPagamentos())
