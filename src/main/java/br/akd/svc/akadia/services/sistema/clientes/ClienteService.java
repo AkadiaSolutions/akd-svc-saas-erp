@@ -5,27 +5,24 @@ import br.akd.svc.akadia.models.dto.sistema.clientes.ClienteDto;
 import br.akd.svc.akadia.models.dto.sistema.clientes.responses.ClientePageResponse;
 import br.akd.svc.akadia.models.dto.sistema.clientes.responses.ClienteResponse;
 import br.akd.svc.akadia.models.dto.sistema.clientes.responses.ExclusaoClienteResponse;
-import br.akd.svc.akadia.models.dto.sistema.clientes.responses.MetaDadosCliente;
 import br.akd.svc.akadia.models.entities.global.EnderecoEntity;
 import br.akd.svc.akadia.models.entities.global.TelefoneEntity;
 import br.akd.svc.akadia.models.entities.sistema.clientes.ClienteEntity;
 import br.akd.svc.akadia.models.entities.sistema.clientes.ExclusaoClienteEntity;
 import br.akd.svc.akadia.models.entities.sistema.colaboradores.ColaboradorEntity;
-import br.akd.svc.akadia.models.entities.site.empresa.EmpresaEntity;
 import br.akd.svc.akadia.repositories.sistema.clientes.ClienteRepository;
 import br.akd.svc.akadia.repositories.sistema.clientes.impl.ClienteRepositoryImpl;
 import br.akd.svc.akadia.services.exceptions.InvalidRequestException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -290,115 +287,35 @@ public class ClienteService {
         log.debug("O cliente de id {} não está excluído", cliente.getId());
     }
 
-    public MetaDadosCliente obtemMetaDadosDosClientes(ColaboradorEntity colaboradorLogado,
-                                                      String filtrosBusca) {
-        //TODO Loggear
-        Example<ClienteEntity> example = geraObjetoClienteExample(colaboradorLogado, filtrosBusca);
-        List<ClienteEntity> clientes = clienteRepository.findAll(example);
-        return MetaDadosCliente.builder()
-                .totalClientesCadastrados(clientes.size())
-                .clienteComMaiorGiro(retornaClienteComMaiorGiro(clientes))
-                .clienteComMaisOrdens(retornaClienteComMaisOrdens(clientes))
-                .bairroComMaisClientes(retornaBairroComMaisClientes(clientes))
-                .build();
-    }
-
-    private ClienteEntity retornaClienteComMaiorGiro(List<ClienteEntity> clientes) {
-        //TODO Loggear
-        Optional<ClienteEntity> clienteOptional = clientes.stream()
-                .max(Comparator.comparingDouble(ClienteEntity::getGiroTotal));
-        if (clienteOptional.isPresent() && clienteOptional.get().getGiroTotal() == 0) return null;
-        return clienteOptional.orElse(null);
-    }
-
-    private ClienteEntity retornaClienteComMaisOrdens(List<ClienteEntity> clientes) {
-        //TODO Loggear
-        Optional<ClienteEntity> clienteOptional = clientes.stream()
-                .max(Comparator.comparingInt(ClienteEntity::getQtdOrdensRealizadas));
-        if (clienteOptional.isPresent() && clienteOptional.get().getQtdOrdensRealizadas() == 0) return null;
-        return clienteOptional.orElse(null);
-    }
-
-    private String retornaBairroComMaisClientes(List<ClienteEntity> clientes) {
-        //TODO Loggear
-        Map<String, Integer> quantidadeDeClientesPorBairro = new HashMap<>();
-
-        String maiorBairro = null;
-        Integer maiorValor = 0;
-
-        for (ClienteEntity cliente : clientes) {
-            if (cliente.getEndereco() != null && cliente.getEndereco().getBairro() != null) {
-                String bairroAtual = cliente.getEndereco().getBairro().toUpperCase();
-                if (quantidadeDeClientesPorBairro.containsKey(bairroAtual))
-                    quantidadeDeClientesPorBairro.replace(bairroAtual, (quantidadeDeClientesPorBairro.get(bairroAtual) + 1));
-                else
-                    quantidadeDeClientesPorBairro.put(bairroAtual, 1);
-            }
-        }
-
-        for (Map.Entry<String, Integer> clientesBairro : quantidadeDeClientesPorBairro.entrySet()) {
-            if (clientesBairro.getValue() > maiorValor) {
-                maiorBairro = clientesBairro.getKey();
-                maiorValor = clientesBairro.getValue();
-            }
-        }
-
-        return maiorBairro;
-    }
-
     public ClientePageResponse realizaBuscaPaginadaPorClientes(ColaboradorEntity colaboradorLogado,
                                                                Pageable pageable,
-                                                               String filtrosBusca) {
-        //TODO Loggear
-        Example<ClienteEntity> example = geraObjetoClienteExample(colaboradorLogado, filtrosBusca);
-        return converteClientesEntityParaClientesResponse(clienteRepository.findAll(example, pageable));
+                                                               String campoBusca) {
+        log.debug("Método de serviço de obtenção paginada de clientes acessado. Campo de busca: {}",
+                campoBusca != null ? campoBusca : "Nulo");
+
+        log.debug("Acessando repositório de busca de clientes");
+        Page<ClienteEntity> clientePage = campoBusca != null && !campoBusca.isEmpty()
+                ? clienteRepository.buscaPorClientesTypeAhead(pageable, campoBusca, colaboradorLogado.getId())
+                : clienteRepository.buscaPorClientes(pageable, colaboradorLogado.getId());
+
+        log.debug("Busca de clientes por paginação realizada com sucesso. Acessando método de conversão dos objetos do tipo " +
+                "Entity para objetos do tipo Response...");
+        ClientePageResponse clientePageResponse = converteClientesEntityParaClientesResponse(clientePage);
+        log.debug("Conversão de tipagem realizada com sucesso");
+
+        log.info("A busca paginada de clientes foi realizada com sucesso");
+        return clientePageResponse;
     }
 
-    public Example<ClienteEntity> geraObjetoClienteExample(ColaboradorEntity colaboradorLogado,
-                                                           String filtrosBusca) {
-        //TODO Loggear
-        ExampleMatcher customExampleMatcher = ExampleMatcher.matchingAll()
-                .withMatcher("nome", ExampleMatcher.GenericPropertyMatchers.startsWith().ignoreCase())
-                .withMatcher("cpfCnpj", ExampleMatcher.GenericPropertyMatchers.startsWith())
-                .withMatcher("email", ExampleMatcher.GenericPropertyMatchers.startsWith().ignoreCase())
-                .withMatcher("dataCadastro", ExampleMatcher.GenericPropertyMatchers.contains())
-                .withMatcher("endereco.bairro", ExampleMatcher.GenericPropertyMatchers.startsWith().ignoreCase())
-                .withMatcher("exclusaoCliente.excluido", ExampleMatcher.GenericPropertyMatchers.startsWith().exact())
-                .withIgnoreNullValues();
-
-        ClienteEntity clienteExample = ClienteEntity.builder()
-                .exclusaoCliente(ExclusaoClienteEntity.builder()
-                        .excluido(false)
-                        .responsavelExclusao(null)
-                        .dataExclusao(null)
-                        .horaExclusao(null)
-                        .build())
-                .empresa(EmpresaEntity.builder()
-                        .id(colaboradorLogado.getEmpresa().getId())
-                        .build())
-                .build();
-
-        if (filtrosBusca == null) return Example.of(clienteExample, customExampleMatcher);
-
-        for (String filtro : filtrosBusca.split(",")) {
-            if (filtro.contains("nome:")) clienteExample.setNome(filtro.replace("nome:", ""));
-            if (filtro.contains("cpfCnpj:")) clienteExample.setCpfCnpj(filtro.replace("cpfCnpj:", ""));
-            if (filtro.contains("email:")) clienteExample.setEmail(filtro.replace("email:", ""));
-            if (filtro.contains("data:")) clienteExample.setDataCadastro(filtro.replace("data:", ""));
-            if (filtro.contains("mesAno:")) clienteExample.setDataCadastro(filtro.replace("mesAno:", ""));
-            if (filtro.contains("bairro:")) {
-                EnderecoEntity endereco = new EnderecoEntity();
-                endereco.setBairro(filtro.replace("bairro:", ""));
-                clienteExample.setEndereco(endereco);
-            }
-        }
-
-        return Example.of(clienteExample, customExampleMatcher);
-    }
 
     public ClientePageResponse converteClientesEntityParaClientesResponse(Page<ClienteEntity> clientesEntity) {
-        //TODO Loggear
+        log.debug("Método de conversão de clientes do tipo Entity para clientes do tipo Response acessado");
+
+        log.debug("Criando lista vazia de objetos do tipo ClienteResponse...");
         List<ClienteResponse> clientesResponse = new ArrayList<>();
+
+        log.debug("Iniciando iteração da lista de ClienteEntity obtida na busca para conversão para objetos do tipo " +
+                "ClienteResponse...");
         for (ClienteEntity cliente : clientesEntity.getContent()) {
             ClienteResponse clienteResponse = ClienteResponse.builder()
                     .id(cliente.getId())
@@ -423,8 +340,11 @@ public class ClienteService {
                     .build();
             clientesResponse.add(clienteResponse);
         }
+        log.debug("Iteração finalizada com sucesso. Listagem de objetos do tipo ClienteResponse preenchida");
 
-        return ClientePageResponse.builder()
+        log.debug("Iniciando criação de objeto do tipo ClientePageResponse, que possui todas as informações referentes " +
+                "ao conteúdo da página e à paginação...");
+        ClientePageResponse clientePageResponse = ClientePageResponse.builder()
                 .content(clientesResponse)
                 .empty(clientesEntity.isEmpty())
                 .first(clientesEntity.isFirst())
@@ -440,6 +360,9 @@ public class ClienteService {
                 .totalElements(clientesEntity.getTotalElements())
                 .totalPages(clientesEntity.getTotalPages())
                 .build();
+
+        log.debug("Objeto do tipo ClientePageResponse criado com sucesso. Retornando objeto...");
+        return clientePageResponse;
     }
 
 }

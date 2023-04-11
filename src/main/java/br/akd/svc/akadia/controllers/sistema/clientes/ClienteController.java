@@ -4,7 +4,6 @@ import br.akd.svc.akadia.config.security.JWTUtil;
 import br.akd.svc.akadia.models.dto.sistema.clientes.ClienteDto;
 import br.akd.svc.akadia.models.dto.sistema.clientes.responses.ClientePageResponse;
 import br.akd.svc.akadia.models.dto.sistema.clientes.responses.ClienteResponse;
-import br.akd.svc.akadia.models.dto.sistema.clientes.responses.MetaDadosCliente;
 import br.akd.svc.akadia.models.entities.sistema.clientes.ClienteEntity;
 import br.akd.svc.akadia.services.exceptions.InvalidRequestException;
 import br.akd.svc.akadia.services.exceptions.ObjectNotFoundException;
@@ -77,32 +76,10 @@ public class ClienteController {
     @Consumes({MediaType.APPLICATION_JSON, "application/json"})
     @PreAuthorize("hasAnyRole('CLIENTES')")
     public ResponseEntity<?> verificaDuplicidadeCpfCnpj(HttpServletRequest req,
-                                                             @RequestBody String cpfCnpj) {
+                                                        @RequestBody String cpfCnpj) {
         log.info("Endpoint de validação de duplicidade de CPF/CNPJ acessado. CPF/CNPJ: " + cpfCnpj);
         clienteService.validaSeCpfCnpjJaExiste(cpfCnpj, jwtUtil.obtemUsuarioAtivo(req).getEmpresa().getId());
         return ResponseEntity.ok().build();
-    }
-
-    @GetMapping("/meta")
-    @ApiOperation(
-            value = "Obtenção de meta dados dos clientes cadastrados",
-            notes = "Esse endpoint tem como objetivo realizar a obtenção dos meta dados do módulo de clientes da empresa " +
-                    "do usuário que enviou a requisição, utilizando os filtros de busca enviados pelo usuário.",
-            produces = MediaType.APPLICATION_JSON,
-            consumes = MediaType.APPLICATION_JSON
-    )
-    @ApiResponses({
-            @ApiResponse(code = 200, message = "Requisição finalizada com sucesso",
-                    response = ClienteEntity.class),
-    })
-    @PreAuthorize("hasAnyRole('CLIENTES')")
-    public ResponseEntity<MetaDadosCliente> obtemMetaDadosDosClientesBuscados(
-            @RequestParam(value = "busca", required = false) String busca,
-            HttpServletRequest req) {
-        log.info("Endpoint de obtenção de meta-dados do módulo de clientes acessado. Filtros de busca: {}",
-                busca == null ? "Nulo" : busca);
-        return ResponseEntity.ok().body(clienteService.obtemMetaDadosDosClientes(
-                jwtUtil.obtemUsuarioAtivo(req), busca));
     }
 
     @GetMapping
