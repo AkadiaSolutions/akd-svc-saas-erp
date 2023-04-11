@@ -24,6 +24,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import java.util.List;
 
 @Slf4j
 @CrossOrigin
@@ -144,6 +145,26 @@ public class ClienteController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(clienteService.atualizaCliente(jwtUtil.obtemUsuarioAtivo(req), id, clienteDto));
+    }
+
+    @DeleteMapping
+    @ApiOperation(
+            value = "Remoção de cliente em massa",
+            notes = "Esse endpoint tem como objetivo realizar a exclusão de clientes em massa",
+            produces = MediaType.APPLICATION_JSON,
+            consumes = MediaType.APPLICATION_JSON
+    )
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Clientes excluídos com sucesso", response = ClienteEntity.class),
+            @ApiResponse(code = 404, message = "Objetos não encontrados pelo id informado", response = ObjectNotFoundException.class),
+            @ApiResponse(code = 400, message = "Não é possível remover um cliente que já foi excluído", response = InvalidRequestException.class)
+    })
+    @PreAuthorize("hasAnyRole('CLIENTES')")
+    public ResponseEntity<?> removeClientesEmMassa(HttpServletRequest req,
+                                                                 @RequestBody List<Long> id) {
+        log.info("Método controlador de remoção de clientes em massa acessado");
+        clienteService.removeClientesEmMassa(jwtUtil.obtemUsuarioAtivo(req), id);
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{id}")

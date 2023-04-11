@@ -34,6 +34,8 @@ public class ClienteService {
     @Autowired
     ClienteRepository clienteRepository;
 
+    String BUSCA_CLIENTE_POR_ID = "Iniciando acesso ao método de implementação de busca pelo cliente por id...";
+
     public void validaSeChavesUnicasJaExistemParaNovoCliente(ClienteDto clienteDto, ColaboradorEntity colaboradorLogado) {
         log.debug("Método de validação de chave única de cliente acessado...");
         if (clienteDto.getCpfCnpj() != null)
@@ -141,7 +143,7 @@ public class ClienteService {
     public ClienteEntity atualizaCliente(ColaboradorEntity colaboradorLogado, Long id, ClienteDto clienteDto) {
         log.debug("Método de serviço de criação de novo cliente acessado");
 
-        log.debug("Iniciando acesso ao método de implementação de busca pelo cliente por id...");
+        log.debug(BUSCA_CLIENTE_POR_ID);
         ClienteEntity clienteEncontrado = clienteRepositoryImpl.implementaBuscaPorId(id);
 
         log.debug("Iniciando acesso ao método de validação de alteração de dados de cliente excluído...");
@@ -236,7 +238,7 @@ public class ClienteService {
     public ClienteResponse removeCliente(ColaboradorEntity colaboradorLogado, Long id) {
         log.debug("Método de serviço de remoção de cliente acessado");
 
-        log.debug("Iniciando acesso ao método de implementação de busca pelo cliente por id...");
+        log.debug(BUSCA_CLIENTE_POR_ID);
         ClienteEntity clienteEncontrado = clienteRepositoryImpl.implementaBuscaPorId(id);
 
         log.debug("Iniciando acesso ao método de validação de exclusão de cliente que já foi excluído...");
@@ -277,6 +279,39 @@ public class ClienteService {
                 .build();
     }
 
+    public void removeClientesEmMassa(ColaboradorEntity colaboradorLogado, List<Long> ids) {
+        log.debug("Método de serviço de remoção de cliente acessado");
+
+        List<ClienteEntity> clientesEncontrados = new ArrayList<>();
+
+        for (Long id : ids) {
+            log.debug(BUSCA_CLIENTE_POR_ID);
+            ClienteEntity clienteEncontrado = clienteRepositoryImpl.implementaBuscaPorId(id);
+            clientesEncontrados.add(clienteEncontrado);
+        }
+
+        log.debug("Iniciando acesso ao método de validação de exclusão de cliente que já foi excluído...");
+        for (ClienteEntity cliente : clientesEncontrados) {
+            validaSeClienteEstaExcluido(cliente,
+                    "O cliente selecionado já foi excluído");
+            log.debug("Atualizando objeto ExclusaoCliente do cliente com dados referentes à sua exclusão...");
+            cliente.getExclusaoCliente().setDataExclusao(LocalDate.now().toString());
+            cliente.getExclusaoCliente().setHoraExclusao(LocalTime.now().toString());
+            cliente.getExclusaoCliente().setExcluido(true);
+            cliente.getExclusaoCliente().setResponsavelExclusao(colaboradorLogado);
+            log.debug("Objeto ExclusaoCliente do cliente de id {} setado com sucesso", cliente.getId());
+        }
+
+        log.debug("Verificando se listagem de clientes encontrados está preenchida...");
+        if (!clientesEncontrados.isEmpty()) {
+            log.debug("Persistindo cliente excluído no banco de dados...");
+            clienteRepositoryImpl.implementaPersistenciaEmMassa(clientesEncontrados);
+        }
+        else throw new InvalidRequestException("Nenhum cliente foi encontrado para remoção");
+
+        log.info("Clientes excluídos com sucesso");
+    }
+
     public void validaSeClienteEstaExcluido(ClienteEntity cliente, String mensagemCasoEstejaExcluido) {
         log.debug("Método de validação de cliente excluído acessado");
         if (Boolean.TRUE.equals(cliente.getExclusaoCliente().getExcluido())) {
@@ -306,7 +341,6 @@ public class ClienteService {
         log.info("A busca paginada de clientes foi realizada com sucesso");
         return clientePageResponse;
     }
-
 
     public ClientePageResponse converteClientesEntityParaClientesResponse(Page<ClienteEntity> clientesEntity) {
         log.debug("Método de conversão de clientes do tipo Entity para clientes do tipo Response acessado");
