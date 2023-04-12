@@ -24,9 +24,15 @@ public class ClienteRepositoryImpl {
         return repository.save(cliente);
     }
 
+    @Transactional
     public void implementaPersistenciaEmMassa(List<ClienteEntity> clientes) {
         log.debug("Método de serviço que implementa persistência em massa do cliente acessado");
         repository.saveAll((clientes));
+    }
+
+    public List<ClienteEntity> implementaBuscaPorTodos(Long idEmpresa) {
+        log.debug("Método que implementa busca por todos os clientes acessado");
+        return repository.buscaTodos(idEmpresa);
     }
 
     public ClienteEntity implementaBuscaPorId(Long id) {
@@ -42,9 +48,23 @@ public class ClienteRepositoryImpl {
             log.warn("Nenhum cliente foi encontrado com o id {}", id);
             throw new ObjectNotFoundException("Nenhum cliente foi encontrado com o id informado");
         }
-
         log.debug("Retornando o cliente encontrado...");
         return clienteEntity;
+    }
+
+    public List<ClienteEntity> implementaBuscaPorIdEmMassa(List<Long> ids) {
+        log.debug("Método que implementa busca de cliente por id em massa acessado. Ids: {}", ids.toString());
+
+        List<ClienteEntity> clientes = repository.findAllById(ids);
+
+        if (!clientes.isEmpty()) {
+            log.debug("{} Clientes encontrados", clientes.size());
+        } else {
+            log.warn("Nenhum cliente foi encontrado");
+            throw new ObjectNotFoundException("Nenhum cliente foi encontrado com os ids informados");
+        }
+        log.debug("Retornando os clientes encontrados...");
+        return clientes;
     }
 
     public Optional<ClienteEntity> implementaBuscaPorCpfCnpjIdentico(String cpfCnpj, Long id) {

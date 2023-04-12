@@ -5,9 +5,12 @@ import br.akd.svc.akadia.models.dto.sistema.clientes.ClienteDto;
 import br.akd.svc.akadia.models.dto.sistema.clientes.responses.ClientePageResponse;
 import br.akd.svc.akadia.models.dto.sistema.clientes.responses.ClienteResponse;
 import br.akd.svc.akadia.models.entities.sistema.clientes.ClienteEntity;
+import br.akd.svc.akadia.models.entities.sistema.colaboradores.ColaboradorEntity;
 import br.akd.svc.akadia.services.exceptions.InvalidRequestException;
 import br.akd.svc.akadia.services.exceptions.ObjectNotFoundException;
+import br.akd.svc.akadia.services.sistema.clientes.ClienteRelatorioService;
 import br.akd.svc.akadia.services.sistema.clientes.ClienteService;
+import com.lowagie.text.DocumentException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -21,9 +24,13 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @Slf4j
@@ -37,6 +44,9 @@ public class ClienteController {
 
     @Autowired
     ClienteService clienteService;
+
+    @Autowired
+    ClienteRelatorioService relatorioService;
 
     @Autowired
     JWTUtil jwtUtil;
@@ -161,9 +171,9 @@ public class ClienteController {
     })
     @PreAuthorize("hasAnyRole('CLIENTES')")
     public ResponseEntity<?> removeClientesEmMassa(HttpServletRequest req,
-                                                                 @RequestBody List<Long> id) {
+                                                                 @RequestBody List<Long> ids) {
         log.info("Método controlador de remoção de clientes em massa acessado");
-        clienteService.removeClientesEmMassa(jwtUtil.obtemUsuarioAtivo(req), id);
+        clienteService.removeClientesEmMassa(jwtUtil.obtemUsuarioAtivo(req), ids);
         return ResponseEntity.ok().build();
     }
 
@@ -186,6 +196,26 @@ public class ClienteController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(clienteService.removeCliente(jwtUtil.obtemUsuarioAtivo(req), id));
+    }
+
+    @PostMapping("/relatorio")
+    public void relatorio(HttpServletResponse res,
+                          HttpServletRequest req,
+                          @RequestBody List<Long> ids) throws DocumentException, IOException {
+        log.info("Método controlador de obtenção de relatório de clientes em PDF acessado. IDs: {}", ids);
+
+        ColaboradorEntity usuarioAtivo = jwtUtil.obtemUsuarioAtivo(req);
+
+        res.setContentType("application/pdf");
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachement; filename=akadion_"
+                + usuarioAtivo.getEmpresa().getNome().replace(" ", "-").toLowerCase()
+                + "_clientes_"
+                + new SimpleDateFormat("dd.MM.yyyy_HHmmss").format(new Date())
+                + ".pdf";
+        res.setHeader(headerKey, headerValue);
+
+        relatorioService.exportarPdf(res, usuarioAtivo, ids);
     }
 
 }
