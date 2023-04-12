@@ -23,4 +23,8 @@ public class TelefoneEntity {
 
     @Enumerated(EnumType.STRING)
     private TipoTelefoneEnum tipoTelefone;
+
+    public String getTelefoneCompleto() {
+        return "(" + this.getPrefixo() + ") " + this.getNumero();
+    }
 }
