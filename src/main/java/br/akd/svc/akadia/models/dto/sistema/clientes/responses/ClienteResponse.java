@@ -3,6 +3,7 @@ package br.akd.svc.akadia.models.dto.sistema.clientes.responses;
 import br.akd.svc.akadia.models.entities.global.EnderecoEntity;
 import br.akd.svc.akadia.models.entities.global.TelefoneEntity;
 import br.akd.svc.akadia.models.enums.sistema.clientes.StatusClienteEnum;
+import br.akd.svc.akadia.models.enums.sistema.clientes.TipoPessoaEnum;
 import lombok.*;
 
 @Getter
@@ -22,6 +23,7 @@ public class ClienteResponse {
     private String inscricaoEstadual;
     private String email;
     private StatusClienteEnum statusCliente;
+    private TipoPessoaEnum tipoPessoa;
     private Integer qtdOrdensRealizadas;
     private Double giroTotal;
     private ExclusaoClienteResponse exclusaoCliente;
