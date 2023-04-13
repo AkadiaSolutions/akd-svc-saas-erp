@@ -12,6 +12,10 @@ import java.util.Optional;
 
 @Repository
 public interface ClienteRepository extends JpaRepository<ClienteEntity, Long> {
+
+    @Query("SELECT c FROM ClienteEntity c WHERE c.id=?1 and c.empresa.id = ?2 and c.exclusaoCliente.excluido = FALSE")
+    Optional<ClienteEntity> buscaPorId(Long idCliente, Long idEmpresa);
+
     @Query("SELECT c FROM ClienteEntity c WHERE c.cpfCnpj = ?1 " +
             "and c.empresa.id = ?2 " +
             "and c.exclusaoCliente.excluido = FALSE")

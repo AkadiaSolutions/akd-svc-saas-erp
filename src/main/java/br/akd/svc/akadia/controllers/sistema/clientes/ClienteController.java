@@ -51,6 +51,26 @@ public class ClienteController {
     @Autowired
     JWTUtil jwtUtil;
 
+    @GetMapping("/{id}")
+    @ApiOperation(
+            value = "Busca de cliente por id",
+            notes = "Esse endpoint tem como objetivo realizar a busca de um cliente pelo id recebido pelo parâmetro",
+            produces = MediaType.APPLICATION_JSON,
+            consumes = MediaType.APPLICATION_JSON
+    )
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Requisição finalizada com sucesso",
+                    response = ClienteEntity.class),
+    })
+    @PreAuthorize("hasAnyRole('CLIENTES')")
+    public ResponseEntity<ClienteResponse> obtemClientePorId(
+            @PathVariable("id") Long id,
+            HttpServletRequest req) {
+        log.info("Endpoint de busca de cliente por id acessado. ID recebido: {}", id);
+        return ResponseEntity.ok().body(clienteService.realizaBuscaDeClientePorId(
+                jwtUtil.obtemUsuarioAtivo(req), id));
+    }
+
     @PostMapping("/verifica-ie")
     @ApiOperation(
             value = "Validação de duplicidade na entrada da inscrição estadual",

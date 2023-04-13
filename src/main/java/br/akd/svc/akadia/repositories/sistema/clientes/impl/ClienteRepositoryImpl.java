@@ -35,10 +35,10 @@ public class ClienteRepositoryImpl {
         return repository.buscaTodos(idEmpresa);
     }
 
-    public ClienteEntity implementaBuscaPorId(Long id) {
+    public ClienteEntity implementaBuscaPorId(Long id, Long idEmpresa) {
         log.debug("Método que implementa busca de cliente por id acessado. Id: {}", id);
 
-        Optional<ClienteEntity> clienteOptional = repository.findById(id);
+        Optional<ClienteEntity> clienteOptional = repository.buscaPorId(id, idEmpresa);
 
         ClienteEntity clienteEntity;
         if (clienteOptional.isPresent()) {

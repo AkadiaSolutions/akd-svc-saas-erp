@@ -95,6 +95,7 @@ public class ClienteService {
                 .qtdOrdensRealizadas(0)
                 .giroTotal(0.0)
                 .statusCliente(clienteDto.getStatusCliente())
+                .tipoPessoa(clienteDto.getTipoPessoa())
                 .email(clienteDto.getEmail() != null ? clienteDto.getEmail().toLowerCase() : null)
                 .exclusaoCliente(ExclusaoClienteEntity.builder()
                         .excluido(false)
@@ -144,7 +145,7 @@ public class ClienteService {
         log.debug("Método de serviço de criação de novo cliente acessado");
 
         log.debug(BUSCA_CLIENTE_POR_ID);
-        ClienteEntity clienteEncontrado = clienteRepositoryImpl.implementaBuscaPorId(id);
+        ClienteEntity clienteEncontrado = clienteRepositoryImpl.implementaBuscaPorId(id, colaboradorLogado.getEmpresa().getId());
 
         log.debug("Iniciando acesso ao método de validação de alteração de dados de cliente excluído...");
         validaSeClienteEstaExcluido(clienteEncontrado, "Não é possível atualizar um cliente excluído");
@@ -164,6 +165,7 @@ public class ClienteService {
                 .qtdOrdensRealizadas(clienteEncontrado.getQtdOrdensRealizadas())
                 .giroTotal(clienteEncontrado.getGiroTotal())
                 .statusCliente(clienteDto.getStatusCliente())
+                .tipoPessoa(clienteDto.getTipoPessoa())
                 .email(clienteDto.getEmail())
                 .exclusaoCliente(ExclusaoClienteEntity.builder()
                         .id(clienteEncontrado.getId())
@@ -239,7 +241,7 @@ public class ClienteService {
         log.debug("Método de serviço de remoção de cliente acessado");
 
         log.debug(BUSCA_CLIENTE_POR_ID);
-        ClienteEntity clienteEncontrado = clienteRepositoryImpl.implementaBuscaPorId(id);
+        ClienteEntity clienteEncontrado = clienteRepositoryImpl.implementaBuscaPorId(id, colaboradorLogado.getEmpresa().getId());
 
         log.debug("Iniciando acesso ao método de validação de exclusão de cliente que já foi excluído...");
         validaSeClienteEstaExcluido(clienteEncontrado,
@@ -266,6 +268,7 @@ public class ClienteService {
                 .inscricaoEstadual(clienteExcluido.getInscricaoEstadual())
                 .email(clienteExcluido.getEmail())
                 .statusCliente(clienteExcluido.getStatusCliente())
+                .tipoPessoa(clienteExcluido.getTipoPessoa())
                 .qtdOrdensRealizadas(clienteExcluido.getQtdOrdensRealizadas())
                 .giroTotal(clienteExcluido.getGiroTotal())
                 .exclusaoCliente(ExclusaoClienteResponse.builder()
@@ -286,7 +289,7 @@ public class ClienteService {
 
         for (Long id : ids) {
             log.debug(BUSCA_CLIENTE_POR_ID);
-            ClienteEntity clienteEncontrado = clienteRepositoryImpl.implementaBuscaPorId(id);
+            ClienteEntity clienteEncontrado = clienteRepositoryImpl.implementaBuscaPorId(id, colaboradorLogado.getEmpresa().getId());
             clientesEncontrados.add(clienteEncontrado);
         }
 
@@ -306,8 +309,7 @@ public class ClienteService {
         if (!clientesEncontrados.isEmpty()) {
             log.debug("Persistindo cliente excluído no banco de dados...");
             clienteRepositoryImpl.implementaPersistenciaEmMassa(clientesEncontrados);
-        }
-        else throw new InvalidRequestException("Nenhum cliente foi encontrado para remoção");
+        } else throw new InvalidRequestException("Nenhum cliente foi encontrado para remoção");
 
         log.info("Clientes excluídos com sucesso");
     }
@@ -320,6 +322,21 @@ public class ClienteService {
             throw new InvalidRequestException(mensagemCasoEstejaExcluido);
         }
         log.debug("O cliente de id {} não está excluído", cliente.getId());
+    }
+
+    public ClienteResponse realizaBuscaDeClientePorId(ColaboradorEntity colaboradorLogado, Long id) {
+        log.debug("Método de serviço de obtenção de cliente por id. ID recebido: {}", id);
+
+        log.debug("Acessando repositório de busca de cliente por ID...");
+        ClienteEntity cliente = clienteRepositoryImpl.implementaBuscaPorId(id, colaboradorLogado.getEmpresa().getId());
+
+        log.debug("Busca de clientes por id realizada com sucesso. Acessando método de conversão dos objeto do tipo " +
+                "Entity para objeto do tipo Response...");
+        ClienteResponse clienteResponse = converteClienteEntityParaClienteResponse(cliente);
+        log.debug("Conversão de tipagem realizada com sucesso");
+
+        log.info("A busca de cliente por id foi realizada com sucesso");
+        return clienteResponse;
     }
 
     public ClientePageResponse realizaBuscaPaginadaPorClientes(ColaboradorEntity colaboradorLogado,
@@ -335,14 +352,14 @@ public class ClienteService {
 
         log.debug("Busca de clientes por paginação realizada com sucesso. Acessando método de conversão dos objetos do tipo " +
                 "Entity para objetos do tipo Response...");
-        ClientePageResponse clientePageResponse = converteClientesEntityParaClientesResponse(clientePage);
+        ClientePageResponse clientePageResponse = converteListaDeClientesEntityParaClientesResponse(clientePage);
         log.debug("Conversão de tipagem realizada com sucesso");
 
         log.info("A busca paginada de clientes foi realizada com sucesso");
         return clientePageResponse;
     }
 
-    public ClientePageResponse converteClientesEntityParaClientesResponse(Page<ClienteEntity> clientesEntity) {
+    public ClientePageResponse converteListaDeClientesEntityParaClientesResponse(Page<ClienteEntity> clientesEntity) {
         log.debug("Método de conversão de clientes do tipo Entity para clientes do tipo Response acessado");
 
         log.debug("Criando lista vazia de objetos do tipo ClienteResponse...");
@@ -361,6 +378,7 @@ public class ClienteService {
                     .inscricaoEstadual(cliente.getInscricaoEstadual())
                     .email(cliente.getEmail())
                     .statusCliente(cliente.getStatusCliente())
+                    .tipoPessoa(cliente.getTipoPessoa())
                     .qtdOrdensRealizadas(cliente.getQtdOrdensRealizadas())
                     .giroTotal(cliente.getGiroTotal())
                     .exclusaoCliente(ExclusaoClienteResponse.builder()
@@ -397,6 +415,36 @@ public class ClienteService {
 
         log.debug("Objeto do tipo ClientePageResponse criado com sucesso. Retornando objeto...");
         return clientePageResponse;
+    }
+
+    public ClienteResponse converteClienteEntityParaClienteResponse(ClienteEntity cliente) {
+        log.debug("Método de conversão de objeto do tipo ClienteEntity para objeto do tipo ClienteResponse acessado");
+
+        log.debug("Iniciando construção do objeto ClienteResponse...");
+        ClienteResponse clienteResponse = ClienteResponse.builder()
+                .id(cliente.getId())
+                .dataCadastro(cliente.getDataCadastro())
+                .horaCadastro(cliente.getHoraCadastro())
+                .dataNascimento(cliente.getDataNascimento())
+                .nome(cliente.getNome())
+                .cpfCnpj(cliente.getCpfCnpj())
+                .inscricaoEstadual(cliente.getInscricaoEstadual())
+                .email(cliente.getEmail())
+                .statusCliente(cliente.getStatusCliente())
+                .tipoPessoa(cliente.getTipoPessoa())
+                .qtdOrdensRealizadas(cliente.getQtdOrdensRealizadas())
+                .giroTotal(cliente.getGiroTotal())
+                .exclusaoCliente(ExclusaoClienteResponse.builder()
+                        .dataExclusao(cliente.getExclusaoCliente().getDataExclusao())
+                        .horaExclusao(cliente.getExclusaoCliente().getHoraExclusao())
+                        .excluido(cliente.getExclusaoCliente().getExcluido())
+                        .build())
+                .endereco(cliente.getEndereco())
+                .telefone(cliente.getTelefone())
+                .nomeColaboradorResponsavel(cliente.getColaboradorResponsavel().getNome())
+                .build();
+        log.debug("Objeto ClienteResponse buildado com sucesso. Retornando...");
+        return clienteResponse;
     }
 
 }
