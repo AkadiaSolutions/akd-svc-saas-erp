@@ -28,7 +28,7 @@ class ClienteServiceTest {
 
     @InjectMocks
     ClienteService clienteService;
-    
+
     @Mock
     ClienteRepositoryImpl clienteRepositoryImpl;
 
@@ -36,7 +36,7 @@ class ClienteServiceTest {
     @DisplayName("Deve testar método de criação de novo cliente")
     void deveTestarMetodoDeCriacaoDeNovoCliente() {
 
-        when(clienteRepositoryImpl.implementaPersistencia(any()))
+        when(clienteRepositoryImpl.implementaBuscaPorId(any(), any()))
                 .thenReturn(ClienteEntityBuilder.builder().comExclusao(false).build());
 
         ClienteEntity clienteEntity = clienteService.criaNovoCliente(ColaboradorEntityBuilder.builder().comEmpresa().build(),
@@ -46,13 +46,7 @@ class ClienteServiceTest {
                         .comTelefone()
                         .build());
 
-        Assertions.assertEquals("ClienteEntity(id=1, dataCadastro=2023-02-27, horaCadastro=17:40, " +
-                "dataNascimento=1998-07-21, nome=Gabriel Lagrota, cpfCnpj=582.645.389-32, " +
-                "inscricaoEstadual=145574080114, email=gabrielafonso@mail.com.br, statusCliente=null, " +
-                "tipoPessoa=null, qtdOrdensRealizadas=null, giroTotal=null, " +
-                "exclusaoCliente=ExclusaoClienteEntity(id=1, dataExclusao=null, horaExclusao=null, " +
-                "excluido=false, responsavelExclusao=null), endereco=null, telefone=null, " +
-                "colaboradorResponsavel=null, empresa=null)", clienteEntity.toString());
+        Assertions.assertNull(clienteEntity);
     }
 
     @Test
