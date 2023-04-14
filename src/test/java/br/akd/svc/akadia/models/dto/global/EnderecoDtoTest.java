@@ -15,7 +15,7 @@ class EnderecoDtoTest {
     void deveTestarDataBuilder() {
         Assertions.assertEquals(
                 "EnderecoDto(id=1, logradouro=Avenida Coronel Manuel Py, numero=583, bairro=Lauzane Paulista, " +
-                        "codigoPostal=02442-090, cidade=São Paulo, complemento=Casa 4, estadoEnum=SP)",
+                        "codigoPostal=02442-090, cidade=São Paulo, complemento=Casa 4, estado=SP)",
                 EnderecoDtoBuilder.builder().build().toString()
         );
     }
@@ -35,7 +35,7 @@ class EnderecoDtoTest {
         );
         Assertions.assertEquals(
                 "EnderecoDto(id=1, logradouro=Rua 9, numero=544, bairro=Lauzane Paulista, " +
-                        "codigoPostal=02442-050, cidade=São Paulo, complemento=Casa 4, estadoEnum=SP)",
+                        "codigoPostal=02442-050, cidade=São Paulo, complemento=Casa 4, estado=SP)",
                 enderecoDto.toString()
         );
     }
@@ -55,7 +55,7 @@ class EnderecoDtoTest {
 
         Assertions.assertEquals(
                 "EnderecoDto(id=1, logradouro=Rua Said Saad, numero=145, bairro=Lauzane Paulista, " +
-                        "codigoPostal=02324-312, cidade=São Paulo, complemento=null, estadoEnum=SP)",
+                        "codigoPostal=02324-312, cidade=São Paulo, complemento=null, estado=SP)",
                 enderecoDto.toString()
         );
     }

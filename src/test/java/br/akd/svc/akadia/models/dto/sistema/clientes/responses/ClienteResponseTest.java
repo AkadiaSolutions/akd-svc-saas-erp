@@ -1,6 +1,6 @@
-package br.akd.svc.akadia.models.dto.sistema.clientes;
+package br.akd.svc.akadia.models.dto.sistema.clientes.responses;
 
-import br.akd.svc.akadia.models.dto.sistema.clientes.mocks.ClienteDtoBuilder;
+import br.akd.svc.akadia.models.dto.sistema.clientes.responses.mocks.ClienteResponseBuilder;
 import br.akd.svc.akadia.models.enums.sistema.clientes.StatusClienteEnum;
 import br.akd.svc.akadia.models.enums.sistema.clientes.TipoPessoaEnum;
 import org.junit.jupiter.api.Assertions;
@@ -12,19 +12,17 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 @SpringBootTest
-@DisplayName("DTO: ClienteDto")
-class ClienteDtoTest {
-
+@DisplayName("Response: Cliente")
+class ClienteResponseTest {
     @Test
     @DisplayName("Deve testar dataBuilder")
     void deveTestarDataBuilder() {
         Assertions.assertEquals(
-                "ClienteDto(id=1, dataCadastro=2023-02-27, horaCadastro=17:40, dataNascimento=1998-07-21, " +
+                "ClienteResponse(id=1, dataCadastro=2023-02-27, horaCadastro=17:40, dataNascimento=1998-07-21, " +
                         "nome=Gabriel Lagrota, cpfCnpj=582.645.389-32, inscricaoEstadual=145574080114, " +
-                        "email=gabrielafonso@mail.com.br, statusCliente=null, tipoPessoa=null, " +
-                        "qtdOrdensRealizadas=null, giroTotal=null, exclusaoCliente=null, endereco=null, " +
-                        "telefone=null, colaboradorResponsavel=null, empresa=null)",
-                ClienteDtoBuilder.builder().build().toString()
+                        "email=gabrielafonso@mail.com.br, statusCliente=COMUM, tipoPessoa=FISICA, qtdOrdensRealizadas=0, " +
+                        "giroTotal=0.0, exclusaoCliente=null, endereco=null, telefone=null, " +
+                        "nomeColaboradorResponsavel=Fulano)", ClienteResponseBuilder.builder().build().toString()
         );
 
     }
@@ -32,7 +30,7 @@ class ClienteDtoTest {
     @Test
     @DisplayName("Deve testar @AllArgsConstructor")
     void deveTestarAllArgsConstructor() {
-        ClienteDto clienteDto = new ClienteDto(
+        ClienteResponse clienteResponse = new ClienteResponse(
                 1L,
                 LocalDate.of(2023, 2, 27).toString(),
                 LocalTime.of(17, 40).toString(),
@@ -48,16 +46,15 @@ class ClienteDtoTest {
                 null,
                 null,
                 null,
-                null,
-                null
+                "Fulano"
         );
         Assertions.assertEquals(
-                "ClienteDto(id=1, dataCadastro=2023-02-27, horaCadastro=17:40, dataNascimento=1998-07-21, " +
+                "ClienteResponse(id=1, dataCadastro=2023-02-27, horaCadastro=17:40, dataNascimento=1998-07-21, " +
                         "nome=Gabriel Lagrota, cpfCnpj=582.645.389-32, inscricaoEstadual=145574080114, " +
-                        "email=gabrielafonso@mail.com.br, statusCliente=COMUM, tipoPessoa=FISICA, " +
-                        "qtdOrdensRealizadas=0, giroTotal=0.0, exclusaoCliente=null, endereco=null, telefone=null, " +
-                        "colaboradorResponsavel=null, empresa=null)",
-                clienteDto.toString()
+                        "email=gabrielafonso@mail.com.br, statusCliente=COMUM, tipoPessoa=FISICA, qtdOrdensRealizadas=0, " +
+                        "giroTotal=0.0, exclusaoCliente=null, endereco=null, telefone=null, " +
+                        "nomeColaboradorResponsavel=Fulano)",
+                clienteResponse.toString()
         );
 
     }
@@ -65,27 +62,31 @@ class ClienteDtoTest {
     @Test
     @DisplayName("Deve testar @Builder")
     void deveTestarBuilder() {
-        ClienteDto clienteDto = ClienteDto.builder()
+        ClienteResponse clienteResponse = ClienteResponse.builder()
                 .id(1L)
                 .dataCadastro(LocalDate.of(2023, 2, 27).toString())
                 .horaCadastro(LocalTime.of(17, 40).toString())
                 .dataNascimento("1998-07-21")
                 .nome("Gabriel Lagrota")
                 .cpfCnpj("582.645.389-32")
+                .inscricaoEstadual(null)
                 .email("gabrielafonso@mail.com.br")
+                .statusCliente(StatusClienteEnum.COMUM)
+                .tipoPessoa(TipoPessoaEnum.FISICA)
+                .qtdOrdensRealizadas(0)
+                .giroTotal(0.0)
+                .exclusaoCliente(null)
                 .endereco(null)
                 .telefone(null)
-                .colaboradorResponsavel(null)
-                .empresa(null)
+                .nomeColaboradorResponsavel("Fulano")
                 .build();
         Assertions.assertEquals(
-                "ClienteDto(id=1, dataCadastro=2023-02-27, horaCadastro=17:40, dataNascimento=1998-07-21, " +
+                "ClienteResponse(id=1, dataCadastro=2023-02-27, horaCadastro=17:40, dataNascimento=1998-07-21, " +
                         "nome=Gabriel Lagrota, cpfCnpj=582.645.389-32, inscricaoEstadual=null, " +
-                        "email=gabrielafonso@mail.com.br, statusCliente=null, tipoPessoa=null, " +
-                        "qtdOrdensRealizadas=null, giroTotal=null, exclusaoCliente=null, endereco=null, telefone=null, " +
-                        "colaboradorResponsavel=null, empresa=null)",
-                clienteDto.toString()
+                        "email=gabrielafonso@mail.com.br, statusCliente=COMUM, tipoPessoa=FISICA, " +
+                        "qtdOrdensRealizadas=0, giroTotal=0.0, exclusaoCliente=null, endereco=null, telefone=null, " +
+                        "nomeColaboradorResponsavel=Fulano)",
+                clienteResponse.toString()
         );
     }
-
 }

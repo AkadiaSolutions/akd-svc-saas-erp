@@ -20,7 +20,17 @@ class ColaboradorInternoDtoTest {
     @Test
     @DisplayName("Deve testar dataBuilder")
     void deveTestarDataBuilder() {
-        Assertions.assertEquals("ColaboradorInternoDto(id=1, dataCadastro=2023-02-02, horaCadastro=17:10, nome=Gabriel Lagrota, email=gabriellagrota23@gmail.com, cpf=471.534.278-21, acessoSistemaLiberado=true, dataNascimento=1998-07-21, remuneracao=10000.0, tempoFerias=30, entradaEmpresa=01-01-2023, saidaEmpresa=null, cargoEnum=GESTAO, statusAtividadeEnum=ATIVO, telefone=TelefoneDto(id=1, prefixo=11, numero=979815415, tipoTelefoneEnum=MOVEL_WHATSAPP), parentescos=[ParentescoDto(id=1, nome=Heitor Gonçalves Lagrota, dataNascimento=2021-04-11, cpf=588.543.987-21, grauParentescoEnum=FILHO, telefone=TelefoneDto(id=1, prefixo=11, numero=979815415, tipoTelefoneEnum=MOVEL_WHATSAPP))], chamados=[ChamadoDto(id=null, dataCriacao=null, horaCriacao=null, ticket=null, descricao=null, dataBaixa=null, horaBaixa=null, categoriaChamadoEnum=null, statusChamadoEnum=null, atendenteResponsavel=null, empresa=null, avaliacao=null, mensagens=[])])",
+        Assertions.assertEquals("ColaboradorInternoDto(id=1, dataCadastro=2023-02-02, horaCadastro=17:10, " +
+                        "nome=Gabriel Lagrota, email=gabriellagrota23@gmail.com, cpf=471.534.278-21, " +
+                        "acessoSistemaLiberado=true, dataNascimento=1998-07-21, remuneracao=10000.0, tempoFerias=30, " +
+                        "entradaEmpresa=01-01-2023, saidaEmpresa=null, cargoEnum=GESTAO, statusAtividadeEnum=ATIVO, " +
+                        "telefone=TelefoneDto(id=1, prefixo=11, numero=979815415, tipoTelefone=MOVEL_WHATSAPP), " +
+                        "parentescos=[ParentescoDto(id=1, nome=Heitor Gonçalves Lagrota, dataNascimento=2021-04-11, " +
+                        "cpf=588.543.987-21, grauParentescoEnum=FILHO, telefone=TelefoneDto(id=1, prefixo=11, " +
+                        "numero=979815415, tipoTelefone=MOVEL_WHATSAPP))], chamados=[ChamadoDto(id=null, " +
+                        "dataCriacao=null, horaCriacao=null, ticket=null, descricao=null, dataBaixa=null, " +
+                        "horaBaixa=null, categoriaChamadoEnum=null, statusChamadoEnum=null, atendenteResponsavel=null, " +
+                        "empresa=null, avaliacao=null, mensagens=[])])",
                 ColaboradorInternoDtoBuilder.builder().comParentescos().comChamados().build().toString());
     }
 
@@ -47,7 +57,12 @@ class ColaboradorInternoDtoTest {
                 new ArrayList<>()
         );
 
-        Assertions.assertEquals("ColaboradorInternoDto(id=1, dataCadastro=2023-02-02, horaCadastro=23:52, nome=Fulano, email=fulano@gmail.com, cpf=123.456.789-10, acessoSistemaLiberado=true, dataNascimento=1989-04-15, remuneracao=8700.0, tempoFerias=30, entradaEmpresa=2023-01-02, saidaEmpresa=null, cargoEnum=DESENVOLVEDOR, statusAtividadeEnum=ATIVO, telefone=TelefoneDto(id=1, prefixo=11, numero=979815415, tipoTelefoneEnum=MOVEL_WHATSAPP), parentescos=[], chamados=[])",
+        Assertions.assertEquals("ColaboradorInternoDto(id=1, dataCadastro=2023-02-02, horaCadastro=23:52, " +
+                        "nome=Fulano, email=fulano@gmail.com, cpf=123.456.789-10, acessoSistemaLiberado=true, " +
+                        "dataNascimento=1989-04-15, remuneracao=8700.0, tempoFerias=30, entradaEmpresa=2023-01-02, " +
+                        "saidaEmpresa=null, cargoEnum=DESENVOLVEDOR, statusAtividadeEnum=ATIVO, " +
+                        "telefone=TelefoneDto(id=1, prefixo=11, numero=979815415, tipoTelefone=MOVEL_WHATSAPP), " +
+                        "parentescos=[], chamados=[])",
                 colaboradorInternoDto.toString());
     }
 

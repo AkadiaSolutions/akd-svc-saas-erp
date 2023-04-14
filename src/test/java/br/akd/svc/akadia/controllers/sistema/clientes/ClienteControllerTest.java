@@ -51,8 +51,9 @@ class ClienteControllerTest {
 
         Assertions.assertEquals("<201 CREATED Created,ClienteEntity(id=1, dataCadastro=2023-02-27, " +
                 "horaCadastro=17:40, dataNascimento=1998-07-21, nome=Gabriel Lagrota, cpfCnpj=582.645.389-32, " +
-                "inscricaoEstadual=145574080114, email=gabrielafonso@mail.com.br, exclusaoCliente=null, endereco=null, " +
-                "telefone=null, colaboradorResponsavel=null, empresa=null),[]>", cliente.toString());
+                "inscricaoEstadual=145574080114, email=gabrielafonso@mail.com.br, statusCliente=null, tipoPessoa=null, " +
+                "qtdOrdensRealizadas=null, giroTotal=null, exclusaoCliente=null, endereco=null, telefone=null, " +
+                "colaboradorResponsavel=null, empresa=null),[]>", cliente.toString());
     }
 
     @Test
@@ -67,9 +68,10 @@ class ClienteControllerTest {
                 clienteController.atualizaCliente(mockedRequest, ClienteDtoBuilder.builder().build(), 1L);
 
         Assertions.assertEquals("<200 OK OK,ClienteEntity(id=1, dataCadastro=2023-02-27, horaCadastro=17:40, " +
-                "dataNascimento=1998-07-21, nome=Gabriel Lagrota, cpfCnpj=582.645.389-32, " +
-                "inscricaoEstadual=145574080114, email=gabrielafonso@mail.com.br, exclusaoCliente=null, " +
-                "endereco=null, telefone=null, colaboradorResponsavel=null, empresa=null),[]>", cliente.toString());
+                "dataNascimento=1998-07-21, nome=Gabriel Lagrota, cpfCnpj=582.645.389-32, inscricaoEstadual=145574080114, " +
+                "email=gabrielafonso@mail.com.br, statusCliente=null, tipoPessoa=null, qtdOrdensRealizadas=null, " +
+                "giroTotal=null, exclusaoCliente=null, endereco=null, telefone=null, colaboradorResponsavel=null, " +
+                "empresa=null),[]>", cliente.toString());
     }
 
     @Test

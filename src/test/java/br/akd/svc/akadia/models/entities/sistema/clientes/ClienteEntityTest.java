@@ -2,6 +2,7 @@ package br.akd.svc.akadia.models.entities.sistema.clientes;
 
 import br.akd.svc.akadia.models.entities.sistema.clientes.mocks.ClienteEntityBuilder;
 import br.akd.svc.akadia.models.enums.sistema.clientes.StatusClienteEnum;
+import br.akd.svc.akadia.models.enums.sistema.clientes.TipoPessoaEnum;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -20,8 +21,9 @@ class ClienteEntityTest {
         Assertions.assertEquals(
                 "ClienteEntity(id=1, dataCadastro=2023-02-27, horaCadastro=17:40, dataNascimento=1998-07-21, " +
                         "nome=Gabriel Lagrota, cpfCnpj=582.645.389-32, inscricaoEstadual=145574080114, " +
-                        "email=gabrielafonso@mail.com.br, exclusaoCliente=null, endereco=null, telefone=null, " +
-                        "colaboradorResponsavel=null, empresa=null)",
+                        "email=gabrielafonso@mail.com.br, statusCliente=null, tipoPessoa=null, " +
+                        "qtdOrdensRealizadas=null, giroTotal=null, exclusaoCliente=null, endereco=null, " +
+                        "telefone=null, colaboradorResponsavel=null, empresa=null)",
                 ClienteEntityBuilder.builder().build().toString()
         );
 
@@ -40,6 +42,7 @@ class ClienteEntityTest {
                 "145574080114",
                 "gabrielafonso@mail.com.br",
                 StatusClienteEnum.COMUM,
+                TipoPessoaEnum.FISICA,
                 0,
                 0.0,
                 null,
@@ -51,7 +54,8 @@ class ClienteEntityTest {
         Assertions.assertEquals(
                 "ClienteEntity(id=1, dataCadastro=2023-02-27, horaCadastro=17:40, dataNascimento=1998-07-21, " +
                         "nome=Gabriel Lagrota, cpfCnpj=582.645.389-32, inscricaoEstadual=145574080114, " +
-                        "email=gabrielafonso@mail.com.br, exclusaoCliente=null, endereco=null, telefone=null, " +
+                        "email=gabrielafonso@mail.com.br, statusCliente=COMUM, tipoPessoa=FISICA, " +
+                        "qtdOrdensRealizadas=0, giroTotal=0.0, exclusaoCliente=null, endereco=null, telefone=null, " +
                         "colaboradorResponsavel=null, empresa=null)",
                 clienteEntity.toString()
         );
@@ -78,8 +82,9 @@ class ClienteEntityTest {
         Assertions.assertEquals(
                 "ClienteEntity(id=1, dataCadastro=2023-02-27, horaCadastro=17:40, dataNascimento=1998-07-21, " +
                         "nome=Gabriel Lagrota, cpfCnpj=582.645.389-32, inscricaoEstadual=145574080114, " +
-                        "email=gabrielafonso@mail.com.br, exclusaoCliente=null, endereco=null, telefone=null, " +
-                        "colaboradorResponsavel=null, empresa=null)",
+                        "email=gabrielafonso@mail.com.br, statusCliente=null, tipoPessoa=null, " +
+                        "qtdOrdensRealizadas=null, giroTotal=null, exclusaoCliente=null, endereco=null, " +
+                        "telefone=null, colaboradorResponsavel=null, empresa=null)",
                 clienteEntity.toString()
         );
     }

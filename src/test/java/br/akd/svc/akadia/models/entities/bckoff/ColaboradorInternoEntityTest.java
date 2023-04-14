@@ -24,7 +24,7 @@ class ColaboradorInternoEntityTest {
                         "nome=Gabriel Lagrota, email=gabriellagrota23@gmail.com, cpf=471.534.278-21, " +
                         "acessoSistemaLiberado=true, dataNascimento=1998-07-21, remuneracao=10000.0, tempoFerias=30, " +
                         "entradaEmpresa=01-01-2023, saidaEmpresa=null, cargoEnum=GESTAO, statusAtividadeEnum=ATIVO, " +
-                        "telefone=TelefoneEntity(id=1, prefixo=11, numero=979815415, tipoTelefoneEnum=MOVEL_WHATSAPP))",
+                        "telefone=TelefoneEntity(id=1, prefixo=11, numero=979815415, tipoTelefone=MOVEL_WHATSAPP))",
                 ColaboradorInternoEntityBuilder.builder().comParentescos().comChamados().build().toString());
     }
 
@@ -55,7 +55,7 @@ class ColaboradorInternoEntityTest {
                         "nome=Fulano, email=fulano@gmail.com, cpf=123.456.789-10, acessoSistemaLiberado=true, " +
                         "dataNascimento=1989-04-15, remuneracao=8700.0, tempoFerias=30, entradaEmpresa=2023-01-02, " +
                         "saidaEmpresa=null, cargoEnum=DESENVOLVEDOR, statusAtividadeEnum=ATIVO, " +
-                        "telefone=TelefoneEntity(id=1, prefixo=11, numero=979815415, tipoTelefoneEnum=MOVEL_WHATSAPP))",
+                        "telefone=TelefoneEntity(id=1, prefixo=11, numero=979815415, tipoTelefone=MOVEL_WHATSAPP))",
                 colaboradorInternoEntity.toString());
     }
 

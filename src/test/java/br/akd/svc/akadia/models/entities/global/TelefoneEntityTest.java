@@ -18,7 +18,7 @@ class TelefoneEntityTest {
                 new TelefoneEntity(1L, "11", "979815415", TipoTelefoneEnum.MOVEL_WHATSAPP);
 
         Assertions.assertEquals(
-                "TelefoneEntity(id=1, prefixo=11, numero=979815415, tipoTelefoneEnum=MOVEL_WHATSAPP)",
+                "TelefoneEntity(id=1, prefixo=11, numero=979815415, tipoTelefone=MOVEL_WHATSAPP)",
                 telefoneEntity.toString()
         );
 
@@ -34,7 +34,7 @@ class TelefoneEntityTest {
                 .tipoTelefone(TipoTelefoneEnum.MOVEL_WHATSAPP)
                 .build();
         Assertions.assertEquals(
-                "TelefoneEntity(id=1, prefixo=11, numero=979815415, tipoTelefoneEnum=MOVEL_WHATSAPP)",
+                "TelefoneEntity(id=1, prefixo=11, numero=979815415, tipoTelefone=MOVEL_WHATSAPP)",
                 telefoneEntity.toString()
         );
     }

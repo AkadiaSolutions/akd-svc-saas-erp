@@ -18,7 +18,7 @@ class ParentescoEntityTest {
         Assertions.assertEquals(
                 "ParentescoEntity(id=1, nome=Heitor Gonçalves Lagrota, dataNascimento=2021-04-11, " +
                         "cpf=588.543.987-21, grauParentescoEnum=FILHO, telefone=TelefoneEntity(id=1, prefixo=11, " +
-                        "numero=979815415, tipoTelefoneEnum=MOVEL_WHATSAPP))",
+                        "numero=979815415, tipoTelefone=MOVEL_WHATSAPP))",
                 ParentescoEntityBuilder.builder().build().toString()
         );
     }
@@ -37,7 +37,7 @@ class ParentescoEntityTest {
         Assertions.assertEquals(
                 "ParentescoEntity(id=1, nome=Guilherme, dataNascimento=2008-02-03, cpf=123.456.789-10, " +
                         "grauParentescoEnum=IRMAO, telefone=TelefoneEntity(id=1, prefixo=11, numero=979815415, " +
-                        "tipoTelefoneEnum=MOVEL_WHATSAPP))",
+                        "tipoTelefone=MOVEL_WHATSAPP))",
                 parentescoEntity.toString()
         );
     }

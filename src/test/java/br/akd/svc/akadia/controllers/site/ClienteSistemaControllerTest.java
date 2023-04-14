@@ -53,7 +53,7 @@ class ClienteSistemaControllerTest {
                 .thenReturn(LeadEntityBuilder.builder().build());
         Assertions.assertEquals("<201 CREATED Created,LeadEntity(id=1, nome=Fulano da Silva, " +
                         "email=fulano@gmail.com, origemLeadEnum=MANUAL, telefone=TelefoneEntity(id=1, prefixo=11, " +
-                        "numero=979815415, tipoTelefoneEnum=MOVEL_WHATSAPP)),[]>",
+                        "numero=979815415, tipoTelefone=MOVEL_WHATSAPP)),[]>",
                 clienteSistemaController.captaLeadsPreCadastro(ClienteSistemaDtoBuilder.builder().build()).toString());
     }
 

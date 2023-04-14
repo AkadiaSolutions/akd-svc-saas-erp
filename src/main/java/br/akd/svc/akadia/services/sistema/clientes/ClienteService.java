@@ -396,6 +396,7 @@ public class ClienteService {
 
         log.debug("Iniciando criação de objeto do tipo ClientePageResponse, que possui todas as informações referentes " +
                 "ao conteúdo da página e à paginação...");
+        clientesEntity.getPageable();
         ClientePageResponse clientePageResponse = ClientePageResponse.builder()
                 .content(clientesResponse)
                 .empty(clientesEntity.isEmpty())

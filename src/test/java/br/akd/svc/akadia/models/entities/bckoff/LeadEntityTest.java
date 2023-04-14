@@ -17,7 +17,7 @@ class LeadEntityTest {
     void deveTestarDataBuilder() {
         Assertions.assertEquals("LeadEntity(id=1, nome=Fulano da Silva, email=fulano@gmail.com, " +
                         "origemLeadEnum=MANUAL, telefone=TelefoneEntity(id=1, prefixo=11, numero=979815415, " +
-                        "tipoTelefoneEnum=MOVEL_WHATSAPP))",
+                        "tipoTelefone=MOVEL_WHATSAPP))",
                 LeadEntityBuilder.builder().build().toString());
     }
 
@@ -34,7 +34,7 @@ class LeadEntityTest {
         );
 
         Assertions.assertEquals("LeadEntity(id=1, nome=Fulano, email=fulano@gmail.com, origemLeadEnum=MANUAL, " +
-                        "telefone=TelefoneEntity(id=1, prefixo=11, numero=979815415, tipoTelefoneEnum=MOVEL_WHATSAPP))",
+                        "telefone=TelefoneEntity(id=1, prefixo=11, numero=979815415, tipoTelefone=MOVEL_WHATSAPP))",
                 lead.toString());
     }
 
@@ -51,7 +51,7 @@ class LeadEntityTest {
                 .build();
 
         Assertions.assertEquals("LeadEntity(id=1, nome=Fulano, email=fulano@gmail.com, origemLeadEnum=MANUAL, " +
-                        "telefone=TelefoneEntity(id=1, prefixo=11, numero=979815415, tipoTelefoneEnum=MOVEL_WHATSAPP))",
+                        "telefone=TelefoneEntity(id=1, prefixo=11, numero=979815415, tipoTelefone=MOVEL_WHATSAPP))",
                 lead.toString());
     }
 }

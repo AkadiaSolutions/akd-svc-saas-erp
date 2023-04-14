@@ -16,7 +16,7 @@ class LeadDtoTest {
     void deveTestarDataBuilder() {
         Assertions.assertEquals("LeadDto(id=1, nome=Fulano da Silva, email=fulano@gmail.com, " +
                         "origemLeadEnum=MANUAL, telefone=TelefoneDto(id=1, prefixo=11, numero=979815415, " +
-                        "tipoTelefoneEnum=MOVEL_WHATSAPP))",
+                        "tipoTelefone=MOVEL_WHATSAPP))",
                 LeadDtoBuilder.builder().build().toString());
     }
 
@@ -33,7 +33,7 @@ class LeadDtoTest {
         );
 
         Assertions.assertEquals("LeadDto(id=1, nome=Fulano, email=fulano@gmail.com, origemLeadEnum=MANUAL, " +
-                        "telefone=TelefoneDto(id=1, prefixo=11, numero=979815415, tipoTelefoneEnum=MOVEL_WHATSAPP))",
+                        "telefone=TelefoneDto(id=1, prefixo=11, numero=979815415, tipoTelefone=MOVEL_WHATSAPP))",
                 lead.toString());
     }
 
@@ -50,7 +50,7 @@ class LeadDtoTest {
                 .build();
 
         Assertions.assertEquals("LeadDto(id=1, nome=Fulano, email=fulano@gmail.com, origemLeadEnum=MANUAL, " +
-                        "telefone=TelefoneDto(id=1, prefixo=11, numero=979815415, tipoTelefoneEnum=MOVEL_WHATSAPP))",
+                        "telefone=TelefoneDto(id=1, prefixo=11, numero=979815415, tipoTelefone=MOVEL_WHATSAPP))",
                 lead.toString());
     }
 }
