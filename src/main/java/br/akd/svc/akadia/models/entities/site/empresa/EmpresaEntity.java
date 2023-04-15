@@ -75,7 +75,4 @@ public class EmpresaEntity {
     @OneToMany(targetEntity = ChamadoEntity.class, orphanRemoval = true, cascade = CascadeType.ALL)
     @ToString.Exclude
     private List<ChamadoEntity> chamados = new ArrayList<>();
-
-    //TODO Verificar necessidade de lista de colaboradores para facilitar persistência de empresa e colaborador responsável
-
 }

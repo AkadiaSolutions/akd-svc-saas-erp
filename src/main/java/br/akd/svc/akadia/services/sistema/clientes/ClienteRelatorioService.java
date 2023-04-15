@@ -58,6 +58,7 @@ public class ClienteRelatorioService {
             document.add(constroiTabelaObjetos(clientes));
             log.debug("Iniciando acesso ao método de construção dos informativos do PDF...");
             document.add(constroiTabelaInformativos(clientes));
+            log.info("PDF gerado com sucesso");
         } catch (Exception e) {
             log.error("Ocorreu um erro na criação do PDF: {}", e.getMessage());
             throw new InvalidClassException(e.toString());
