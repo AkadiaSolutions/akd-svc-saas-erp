@@ -4,7 +4,6 @@ import br.akd.svc.akadia.config.security.JWTUtil;
 import br.akd.svc.akadia.models.dto.sistema.clientes.ClienteDto;
 import br.akd.svc.akadia.models.dto.sistema.clientes.responses.ClientePageResponse;
 import br.akd.svc.akadia.models.dto.sistema.clientes.responses.ClienteResponse;
-import br.akd.svc.akadia.models.entities.sistema.clientes.ClienteEntity;
 import br.akd.svc.akadia.models.entities.sistema.colaboradores.ColaboradorEntity;
 import br.akd.svc.akadia.services.exceptions.InvalidRequestException;
 import br.akd.svc.akadia.services.exceptions.ObjectNotFoundException;
@@ -60,7 +59,7 @@ public class ClienteController {
     )
     @ApiResponses({
             @ApiResponse(code = 200, message = "A busca de cliente por id foi realizada com sucesso",
-                    response = ClienteEntity.class),
+                    response = ClienteResponse.class),
             @ApiResponse(code = 400, message = "Nenhum cliente foi encontrado com o id informado",
                     response = ObjectNotFoundException.class),
     })
@@ -82,8 +81,7 @@ public class ClienteController {
             consumes = MediaType.APPLICATION_JSON
     )
     @ApiResponses({
-            @ApiResponse(code = 200, message = "Requisição finalizada com sucesso",
-                    response = ClienteEntity.class),
+            @ApiResponse(code = 200, message = "Requisição finalizada com sucesso"),
             @ApiResponse(code = 400, message = "A inscrição estadual informada já existe",
                     response = InvalidRequestException.class),
     })
@@ -104,8 +102,7 @@ public class ClienteController {
             consumes = MediaType.APPLICATION_JSON
     )
     @ApiResponses({
-            @ApiResponse(code = 200, message = "Requisição finalizada com sucesso",
-                    response = ClienteEntity.class),
+            @ApiResponse(code = 200, message = "Requisição finalizada com sucesso"),
             @ApiResponse(code = 400, message = "O CPF/CNPJ informado já existe",
                     response = InvalidRequestException.class)
     })
@@ -129,7 +126,7 @@ public class ClienteController {
     )
     @ApiResponses({
             @ApiResponse(code = 200, message = "A busca paginada de clientes foi realizada com sucesso",
-                    response = ClienteEntity.class),
+                    response = ClientePageResponse.class),
     })
     @PreAuthorize("hasAnyRole('CLIENTES')")
     public ResponseEntity<ClientePageResponse> obtemClientesPaginados(
@@ -150,14 +147,14 @@ public class ClienteController {
             consumes = MediaType.APPLICATION_JSON
     )
     @ApiResponses({
-            @ApiResponse(code = 201, message = "Cliente persistido com sucesso", response = ClienteEntity.class),
+            @ApiResponse(code = 201, message = "Cliente persistido com sucesso", response = ClienteResponse.class),
             @ApiResponse(code = 400, message = "A inscrição estadual informada já existe", response = InvalidRequestException.class),
             @ApiResponse(code = 400, message = "O CPF/CNPJ informado já existe", response = InvalidRequestException.class),
             @ApiResponse(code = 400, message = "Erro de requisição inválida", response = InvalidRequestException.class)
     })
     @PreAuthorize("hasAnyRole('CLIENTES')")
-    public ResponseEntity<ClienteEntity> criaNovoCliente(HttpServletRequest req,
-                                                         @RequestBody ClienteDto clienteDto) {
+    public ResponseEntity<ClienteResponse> criaNovoCliente(HttpServletRequest req,
+                                                           @RequestBody ClienteDto clienteDto) {
         log.info("Método controlador de criação de novo cliente acessado");
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -172,15 +169,15 @@ public class ClienteController {
             consumes = MediaType.APPLICATION_JSON
     )
     @ApiResponses({
-            @ApiResponse(code = 200, message = "Cliente atualizado com sucesso", response = ClienteEntity.class),
+            @ApiResponse(code = 200, message = "Cliente atualizado com sucesso", response = ClienteResponse.class),
             @ApiResponse(code = 400, message = "A inscrição estadual informada já existe", response = InvalidRequestException.class),
             @ApiResponse(code = 400, message = "O CPF/CNPJ informado já existe", response = InvalidRequestException.class),
             @ApiResponse(code = 400, message = "Nenhum cliente foi encontrado com o id informado", response = ObjectNotFoundException.class)
     })
     @PreAuthorize("hasAnyRole('CLIENTES')")
-    public ResponseEntity<ClienteEntity> atualizaCliente(HttpServletRequest req,
-                                                         @RequestBody ClienteDto clienteDto,
-                                                         @PathVariable Long id) {
+    public ResponseEntity<ClienteResponse> atualizaCliente(HttpServletRequest req,
+                                                           @RequestBody ClienteDto clienteDto,
+                                                           @PathVariable Long id) {
         log.info("Método controlador de atualização de cliente acessado");
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -195,7 +192,7 @@ public class ClienteController {
             consumes = MediaType.APPLICATION_JSON
     )
     @ApiResponses({
-            @ApiResponse(code = 200, message = "Clientes excluídos com sucesso", response = ClienteEntity.class),
+            @ApiResponse(code = 200, message = "Clientes excluídos com sucesso"),
             @ApiResponse(code = 400, message = "Nenhum cliente foi encontrado com o id informado", response = ObjectNotFoundException.class),
             @ApiResponse(code = 400, message = "O cliente selecionado já foi excluído", response = InvalidRequestException.class),
             @ApiResponse(code = 400, message = "Nenhum cliente foi encontrado para remoção", response = InvalidRequestException.class),
@@ -217,7 +214,7 @@ public class ClienteController {
             consumes = MediaType.APPLICATION_JSON
     )
     @ApiResponses({
-            @ApiResponse(code = 200, message = "Clientes excluídos com sucesso", response = ClienteEntity.class),
+            @ApiResponse(code = 200, message = "Clientes excluídos com sucesso", response = ClienteResponse.class),
             @ApiResponse(code = 400, message = "Nenhum cliente foi encontrado com o id informado", response = ObjectNotFoundException.class),
             @ApiResponse(code = 400, message = "O cliente selecionado já foi excluído", response = InvalidRequestException.class),
             @ApiResponse(code = 400, message = "Nenhum cliente foi encontrado para remoção", response = InvalidRequestException.class),
@@ -241,7 +238,7 @@ public class ClienteController {
             consumes = MediaType.APPLICATION_JSON
     )
     @ApiResponses({
-            @ApiResponse(code = 200, message = "PDF gerado com sucesso", response = ClienteEntity.class),
+            @ApiResponse(code = 200, message = "PDF gerado com sucesso"),
             @ApiResponse(code = 400, message = "Ocorreu um erro na criação do PDF", response = Exception.class),
     })
     public void relatorio(HttpServletResponse res,

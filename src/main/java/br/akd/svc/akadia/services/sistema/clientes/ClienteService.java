@@ -77,7 +77,7 @@ public class ClienteService {
         log.debug("Validação de chave única de INSCRIÇÃO ESTADUAL... OK");
     }
 
-    public ClienteEntity criaNovoCliente(ColaboradorEntity colaboradorLogado, ClienteDto clienteDto) {
+    public ClienteResponse criaNovoCliente(ColaboradorEntity colaboradorLogado, ClienteDto clienteDto) {
 
         log.debug("Método de serviço de criação de novo cliente acessado");
 
@@ -116,8 +116,11 @@ public class ClienteService {
         log.debug("Iniciando acesso ao método de implementação da persistência do cliente...");
         ClienteEntity clientePersistido = clienteRepositoryImpl.implementaPersistencia(clienteEntity);
 
-        log.info("Cliente persistido com sucesso");
-        return clientePersistido;
+        log.debug("Cliente persistido com sucesso. Convertendo clienteEntity para clienteResponse...");
+        ClienteResponse clienteResponse = converteClienteEntityParaClienteResponse(clientePersistido);
+
+        log.info("Cliente criado com sucesso");
+        return clienteResponse;
     }
 
     private EnderecoEntity realizaTratamentoEnderecoDoNovoCliente(EnderecoDto enderecoDto) {
@@ -141,7 +144,7 @@ public class ClienteService {
                 .build();
     }
 
-    public ClienteEntity atualizaCliente(ColaboradorEntity colaboradorLogado, Long id, ClienteDto clienteDto) {
+    public ClienteResponse atualizaCliente(ColaboradorEntity colaboradorLogado, Long id, ClienteDto clienteDto) {
         log.debug("Método de serviço de criação de novo cliente acessado");
 
         log.debug(BUSCA_CLIENTE_POR_ID);
@@ -188,8 +191,11 @@ public class ClienteService {
         log.debug("Iniciando acesso ao método de implementação da persistência do cliente...");
         ClienteEntity clientePersistido = clienteRepositoryImpl.implementaPersistencia(novoClienteAtualizado);
 
-        log.info("Cliente persistido com sucesso");
-        return clientePersistido;
+        log.debug("Cliente persistido com sucesso. Convertendo clienteEntity para clienteResponse...");
+        ClienteResponse clienteResponse = converteClienteEntityParaClienteResponse(clientePersistido);
+
+        log.info("Cliente criado com sucesso");
+        return clienteResponse;
     }
 
     private EnderecoEntity realizaTratamentoEnderecoDoClienteAtualizado(EnderecoDto enderecoDto,
