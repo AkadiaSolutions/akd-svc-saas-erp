@@ -17,6 +17,7 @@ import java.awt.*;
 import java.io.IOException;
 import java.io.InvalidClassException;
 import java.text.SimpleDateFormat;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -45,6 +46,8 @@ public class ClienteRelatorioService {
         List<ClienteEntity> clientes = idsClientes.isEmpty()
                 ? clienteRepository.implementaBuscaPorTodos(usuarioLogado.getEmpresa().getId())
                 : clienteRepository.implementaBuscaPorIdEmMassa(idsClientes);
+
+        Collections.reverse(clientes);
 
         log.debug("Iniciando construção do objeto Document, que se trata da estrutura do PDF gerado...");
         try (Document document = new Document(PageSize.A4)) {
