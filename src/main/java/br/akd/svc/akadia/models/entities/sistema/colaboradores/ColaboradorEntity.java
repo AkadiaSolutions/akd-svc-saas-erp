@@ -32,6 +32,9 @@ public class ColaboradorEntity {
 
     private String horaCadastro;
 
+    @Column(unique = true)
+    private Long matricula;
+
     @Lob
     private byte[] fotoPerfil;
 
@@ -44,8 +47,6 @@ public class ColaboradorEntity {
     private String cpfCnpj;
 
     private Boolean ativo;
-
-    private Boolean excluido;
 
     private Double salario;
 
@@ -69,6 +70,9 @@ public class ColaboradorEntity {
 
     @Enumerated(EnumType.STRING)
     private StatusColaboradorEnum statusColaboradorEnum;
+
+    @OneToOne(targetEntity = ExclusaoColaboradorEntity.class, orphanRemoval = true, cascade = CascadeType.ALL)
+    private ExclusaoColaboradorEntity exclusao;
 
     @OneToOne(targetEntity = AcessoSistemaEntity.class, orphanRemoval = true, cascade = CascadeType.ALL)
     private AcessoSistemaEntity acessoSistema;

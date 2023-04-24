@@ -23,13 +23,13 @@ public class ColaboradorDto {
     private Long id;
     private String dataCadastro;
     private String horaCadastro;
+    private Long matricula;
     private byte[] fotoPerfil;
     private String nome;
     private String dataNascimento;
     private String email;
     private String cpfCnpj;
     private Boolean ativo;
-    private Boolean excluido;
     private Double salario;
     private String entradaEmpresa;
     private String saidaEmpresa;
@@ -39,6 +39,7 @@ public class ColaboradorDto {
     private ModeloContratacaoEnum modeloContratacaoEnum;
     private ModeloTrabalhoEnum modeloTrabalhoEnum;
     private StatusColaboradorEnum statusColaboradorEnum;
+    private ExclusaoColaboradorDto exclusao;
     private AcessoSistemaDto acessoSistema;
     private ConfiguracaoPerfilDto configuracaoPerfil;
     private EnderecoDto endereco;
