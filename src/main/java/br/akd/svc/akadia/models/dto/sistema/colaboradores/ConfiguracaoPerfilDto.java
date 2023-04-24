@@ -11,9 +11,7 @@ import lombok.*;
 @AllArgsConstructor
 public class ConfiguracaoPerfilDto {
     private Long id;
-
     private String dataUltimaAtualizacao;
     private String horaUltimaAtualizacao;
-
     private TemaTelaEnum temaTelaEnum;
 }

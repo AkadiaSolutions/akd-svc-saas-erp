@@ -194,6 +194,7 @@ public class ClienteSistemaService {
     public String criaNumeroMobileComObjetoTelefone(TelefoneEntity telefone) {
         log.debug("Método de criação de número mobile com telefone informado ({}) acessado", telefone);
         String numeroMobile = null;
+
         if (!telefone.getTipoTelefone().equals(TipoTelefoneEnum.FIXO))
             numeroMobile = telefone.getPrefixo() + telefone.getNumero();
 
