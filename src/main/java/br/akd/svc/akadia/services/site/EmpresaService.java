@@ -12,10 +12,7 @@ import br.akd.svc.akadia.models.entities.site.empresa.fiscal.ConfigFiscalEmpresa
 import br.akd.svc.akadia.models.entities.site.empresa.fiscal.NfceConfigEntity;
 import br.akd.svc.akadia.models.entities.site.empresa.fiscal.NfeConfigEntity;
 import br.akd.svc.akadia.models.entities.site.empresa.fiscal.NfseConfigEntity;
-import br.akd.svc.akadia.models.enums.sistema.colaboradores.ModeloTrabalhoEnum;
-import br.akd.svc.akadia.models.enums.sistema.colaboradores.StatusColaboradorEnum;
-import br.akd.svc.akadia.models.enums.sistema.colaboradores.TemaTelaEnum;
-import br.akd.svc.akadia.models.enums.sistema.colaboradores.TipoOcupacaoEnum;
+import br.akd.svc.akadia.models.enums.sistema.colaboradores.*;
 import br.akd.svc.akadia.repositories.sistema.colaboradores.impl.ColaboradorRepositoryImpl;
 import br.akd.svc.akadia.repositories.site.impl.ClienteSistemaRepositoryImpl;
 import br.akd.svc.akadia.repositories.site.impl.EmpresaRepositoryImpl;
@@ -322,7 +319,6 @@ public class EmpresaService {
                 .pontos(new ArrayList<>())
                 .historicoFerias(new ArrayList<>())
                 .advertencias(new ArrayList<>())
-                .parentescos(new ArrayList<>())
                 .empresa(empresaEntity)
                 .build()
         );
@@ -334,7 +330,7 @@ public class EmpresaService {
         privilegios.add(ModulosEnum.HOME);
         privilegios.add(ModulosEnum.CLIENTES);
         privilegios.add(ModulosEnum.VENDAS);
-        privilegios.add(ModulosEnum.LANCAMENTOS);
+        privilegios.add(ModulosEnum.PDV);
         privilegios.add(ModulosEnum.ESTOQUE);
         privilegios.add(ModulosEnum.DESPESAS);
         privilegios.add(ModulosEnum.FECHAMENTOS);

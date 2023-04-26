@@ -1,7 +1,6 @@
 package br.akd.svc.akadia.models.entities.sistema.colaboradores;
 
 import br.akd.svc.akadia.models.entities.global.EnderecoEntity;
-import br.akd.svc.akadia.models.entities.global.ParentescoEntity;
 import br.akd.svc.akadia.models.entities.global.TelefoneEntity;
 import br.akd.svc.akadia.models.entities.site.empresa.EmpresaEntity;
 import br.akd.svc.akadia.models.enums.sistema.colaboradores.ModeloContratacaoEnum;
@@ -103,10 +102,6 @@ public class ColaboradorEntity {
     @OneToMany(targetEntity = AdvertenciaEntity.class, orphanRemoval = true, cascade = CascadeType.ALL)
     @ToString.Exclude
     private List<AdvertenciaEntity> advertencias = new ArrayList<>();
-
-    @OneToMany(targetEntity = ParentescoEntity.class, orphanRemoval = true, cascade = CascadeType.ALL)
-    @ToString.Exclude
-    private List<ParentescoEntity> parentescos = new ArrayList<>();
 
     @ManyToOne(targetEntity = EmpresaEntity.class)
     @JoinColumn(name = "id_empresa")

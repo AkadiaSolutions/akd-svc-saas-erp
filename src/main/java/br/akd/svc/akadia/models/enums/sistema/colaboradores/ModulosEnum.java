@@ -1,4 +1,4 @@
-package br.akd.svc.akadia.models.entities.sistema.colaboradores;
+package br.akd.svc.akadia.models.enums.sistema.colaboradores;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,7 +10,7 @@ public enum ModulosEnum {
     HOME(0, "Tela principal", "PRINCIPAL"),
     CLIENTES(1, "Clientes", "CLIENTES"),
     VENDAS(2, "Vendas", "VENDAS"),
-    LANCAMENTOS(3, "Lançamentos", "LANCAMENTOS"),
+    PDV(3, "Lançamentos", "PDV"),
     ESTOQUE(4, "Estoque", "ESTOQUE"),
     DESPESAS(5, "Despesas", "DESPESAS"),
     FECHAMENTOS(6, "Fechamentos", "FECHAMENTOS"),
@@ -22,7 +22,6 @@ public enum ModulosEnum {
 
     private final Integer code;
     private final String desc;
-
     public final String role;
 
 }

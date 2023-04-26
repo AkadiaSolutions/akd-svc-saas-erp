@@ -1,16 +1,15 @@
 package br.akd.svc.akadia.services.sistema.colaboradores;
 
 import br.akd.svc.akadia.models.dto.global.EnderecoDto;
-import br.akd.svc.akadia.models.dto.global.ParentescoDto;
 import br.akd.svc.akadia.models.dto.sistema.colaboradores.ColaboradorDto;
 import br.akd.svc.akadia.models.dto.sistema.colaboradores.responses.AcessoSistemaResponse;
 import br.akd.svc.akadia.models.dto.sistema.colaboradores.responses.ColaboradorPageResponse;
 import br.akd.svc.akadia.models.dto.sistema.colaboradores.responses.ColaboradorResponse;
 import br.akd.svc.akadia.models.dto.sistema.colaboradores.responses.ExclusaoColaboradorResponse;
 import br.akd.svc.akadia.models.entities.global.EnderecoEntity;
-import br.akd.svc.akadia.models.entities.global.ParentescoEntity;
 import br.akd.svc.akadia.models.entities.global.TelefoneEntity;
 import br.akd.svc.akadia.models.entities.sistema.colaboradores.*;
+import br.akd.svc.akadia.models.enums.sistema.colaboradores.ModulosEnum;
 import br.akd.svc.akadia.models.enums.sistema.colaboradores.TemaTelaEnum;
 import br.akd.svc.akadia.repositories.sistema.colaboradores.ColaboradorRepository;
 import br.akd.svc.akadia.repositories.sistema.colaboradores.impl.ColaboradorRepositoryImpl;
@@ -96,9 +95,10 @@ public class ColaboradorService {
                         .horaEntradaAlmoco(colaboradorDto.getExpediente().getHoraEntradaAlmoco())
                         .horaSaidaAlmoco(colaboradorDto.getExpediente().getHoraSaidaAlmoco())
                         .horaSaida(colaboradorDto.getExpediente().getHoraSaida())
+                        .cargaHorariaSemanal(colaboradorDto.getExpediente().getCargaHorariaSemanal())
+                        .escalaEnum(colaboradorDto.getExpediente().getEscalaEnum())
                         .build())
                 .dispensa(null)
-                .parentescos(realizaTratamentoParentescosDoNovoColaborador(colaboradorDto.getParentescos()))
                 .empresa(colaboradorLogado.getEmpresa())
                 .build();
         log.debug("Objeto colaboradorEntity criado com sucesso");
@@ -116,11 +116,6 @@ public class ColaboradorService {
     private Set<ModulosEnum> realizaTratamentoDosPrivilegiosDoNovoColaborador(List<ModulosEnum> privilegios) {
         //TODO Elaborar lógica
         return new HashSet<>();
-    }
-
-    private List<ParentescoEntity> realizaTratamentoParentescosDoNovoColaborador(List<ParentescoDto> parentescos) {
-        //TODO Elaborar lógica
-        return new ArrayList<>();
     }
 
     private EnderecoEntity realizaTratamentoEnderecoDoNovoColaborador(EnderecoDto enderecoDto) {
@@ -200,9 +195,10 @@ public class ColaboradorService {
                         .horaEntradaAlmoco(colaboradorDto.getExpediente().getHoraEntradaAlmoco())
                         .horaSaidaAlmoco(colaboradorDto.getExpediente().getHoraSaidaAlmoco())
                         .horaSaida(colaboradorDto.getExpediente().getHoraSaida())
+                        .cargaHorariaSemanal(colaboradorDto.getExpediente().getCargaHorariaSemanal())
+                        .escalaEnum(colaboradorDto.getExpediente().getEscalaEnum())
                         .build())
                 .dispensa(null)
-                .parentescos(realizaTratamentoParentescosDoColaboradorAtualizado(colaboradorDto.getParentescos()))
                 .empresa(colaboradorLogado.getEmpresa())
                 .build();
         log.debug("Objeto colaborador construído com sucesso");
@@ -220,11 +216,6 @@ public class ColaboradorService {
     private Set<ModulosEnum> realizaTratamentoDosPrivilegiosDoColaboradorAtualizado(List<ModulosEnum> privilegios) {
         //TODO Elaborar lógica
         return new HashSet<>();
-    }
-
-    private List<ParentescoEntity> realizaTratamentoParentescosDoColaboradorAtualizado(List<ParentescoDto> parentescos) {
-        //TODO Elaborar lógica
-        return new ArrayList<>();
     }
 
     private EnderecoEntity realizaTratamentoEnderecoDoColaboradorAtualizado(EnderecoDto enderecoDto,
@@ -431,7 +422,6 @@ public class ColaboradorService {
                     .pontos(colaborador.getPontos())
                     .historicoFerias(colaborador.getHistoricoFerias())
                     .advertencias(colaborador.getAdvertencias())
-                    .parentescos(colaborador.getParentescos())
                     .build();
             colaboradoresResponse.add(colaboradorResponse);
         }
@@ -492,7 +482,8 @@ public class ColaboradorService {
             long matriculaAleatoria =
                     (long) (ConversorDeDados.RANDOM.nextFloat() * (max - min) + min);
 
-            if (Boolean.FALSE.equals(colaboradorRepository.existsByMatricula(matriculaAleatoria))) return matriculaAleatoria;
+            if (Boolean.FALSE.equals(colaboradorRepository.existsByMatricula(matriculaAleatoria)))
+                return matriculaAleatoria;
         }
     }
 }

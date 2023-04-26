@@ -1,7 +1,6 @@
 package br.akd.svc.akadia.models.dto.sistema.colaboradores;
 
 import br.akd.svc.akadia.models.dto.global.EnderecoDto;
-import br.akd.svc.akadia.models.dto.global.ParentescoDto;
 import br.akd.svc.akadia.models.dto.global.TelefoneDto;
 import br.akd.svc.akadia.models.dto.site.empresa.EmpresaDto;
 import br.akd.svc.akadia.models.enums.sistema.colaboradores.ModeloContratacaoEnum;
@@ -49,6 +48,5 @@ public class ColaboradorDto {
     private List<PontoDto> pontos = new ArrayList<>();
     private List<FeriasDto> historicoFerias = new ArrayList<>();
     private List<AdvertenciaDto> advertencias = new ArrayList<>();
-    private List<ParentescoDto> parentescos = new ArrayList<>();
     private EmpresaDto empresa;
 }
