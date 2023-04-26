@@ -1,6 +1,6 @@
 package br.akd.svc.akadia.models.dto.sistema.colaboradores.responses;
 
-import br.akd.svc.akadia.models.entities.sistema.colaboradores.ModulosEnum;
+import br.akd.svc.akadia.models.enums.sistema.colaboradores.ModulosEnum;
 import lombok.*;
 
 import java.util.HashSet;

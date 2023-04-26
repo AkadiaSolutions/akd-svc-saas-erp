@@ -1,6 +1,6 @@
 package br.akd.svc.akadia.config.security;
 
-import br.akd.svc.akadia.models.entities.sistema.colaboradores.ModulosEnum;
+import br.akd.svc.akadia.models.enums.sistema.colaboradores.ModulosEnum;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

@@ -145,7 +145,7 @@ public class ClienteService {
     }
 
     public ClienteResponse atualizaCliente(ColaboradorEntity colaboradorLogado, Long id, ClienteDto clienteDto) {
-        log.debug("Método de serviço de criação de novo cliente acessado");
+        log.debug("Método de serviço de atualização de cliente acessado");
 
         log.debug(BUSCA_CLIENTE_POR_ID);
         ClienteEntity clienteEncontrado = clienteRepositoryImpl.implementaBuscaPorId(id, colaboradorLogado.getEmpresa().getId());
@@ -170,10 +170,7 @@ public class ClienteService {
                 .statusCliente(clienteDto.getStatusCliente())
                 .tipoPessoa(clienteDto.getTipoPessoa())
                 .email(clienteDto.getEmail())
-                .exclusaoCliente(ExclusaoClienteEntity.builder()
-                        .id(clienteEncontrado.getId())
-                        .excluido(false)
-                        .build())
+                .exclusaoCliente(clienteEncontrado.getExclusaoCliente())
                 .endereco(realizaTratamentoEnderecoDoClienteAtualizado(clienteDto.getEndereco(), clienteEncontrado))
                 .telefone(clienteDto.getTelefone() == null
                         ? null
@@ -353,8 +350,8 @@ public class ClienteService {
 
         log.debug("Acessando repositório de busca de clientes");
         Page<ClienteEntity> clientePage = campoBusca != null && !campoBusca.isEmpty()
-                ? clienteRepository.buscaPorClientesTypeAhead(pageable, campoBusca, colaboradorLogado.getId())
-                : clienteRepository.buscaPorClientes(pageable, colaboradorLogado.getId());
+                ? clienteRepository.buscaPorClientesTypeAhead(pageable, campoBusca, colaboradorLogado.getEmpresa().getId())
+                : clienteRepository.buscaPorClientes(pageable, colaboradorLogado.getEmpresa().getId());
 
         log.debug("Busca de clientes por paginação realizada com sucesso. Acessando método de conversão dos objetos do tipo " +
                 "Entity para objetos do tipo Response...");

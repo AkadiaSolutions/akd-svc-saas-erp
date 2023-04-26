@@ -1,5 +1,7 @@
 package br.akd.svc.akadia.models.entities.sistema.colaboradores;
 
+
+import br.akd.svc.akadia.models.enums.sistema.colaboradores.ModulosEnum;
 import lombok.*;
 
 import javax.persistence.*;
@@ -14,7 +16,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "tb_acesso_sistema")
-public class AcessoSistemaEntity{
+public class AcessoSistemaEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
