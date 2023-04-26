@@ -241,6 +241,7 @@ public class ClienteController {
             @ApiResponse(code = 200, message = "PDF gerado com sucesso"),
             @ApiResponse(code = 400, message = "Ocorreu um erro na criação do PDF", response = Exception.class),
     })
+    @PreAuthorize("hasAnyRole('CLIENTES')")
     public void relatorio(HttpServletResponse res,
                           HttpServletRequest req,
                           @RequestBody List<Long> ids) throws DocumentException, IOException {

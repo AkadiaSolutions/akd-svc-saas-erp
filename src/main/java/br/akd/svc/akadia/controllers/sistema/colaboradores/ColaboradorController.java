@@ -7,7 +7,6 @@ import br.akd.svc.akadia.models.dto.sistema.colaboradores.responses.ColaboradorR
 import br.akd.svc.akadia.models.entities.sistema.colaboradores.ColaboradorEntity;
 import br.akd.svc.akadia.services.exceptions.InvalidRequestException;
 import br.akd.svc.akadia.services.exceptions.ObjectNotFoundException;
-import br.akd.svc.akadia.services.sistema.colaboradores.ColaboradorRelatorioService;
 import br.akd.svc.akadia.services.sistema.colaboradores.ColaboradorService;
 import com.lowagie.text.DocumentException;
 import io.swagger.annotations.Api;
@@ -27,7 +26,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -42,9 +40,6 @@ public class ColaboradorController {
 
     @Autowired
     ColaboradorService colaboradorService;
-
-    @Autowired
-    ColaboradorRelatorioService relatorioService;
 
     @Autowired
     JWTUtil jwtUtil;
@@ -196,9 +191,10 @@ public class ColaboradorController {
             @ApiResponse(code = 200, message = "PDF gerado com sucesso"),
             @ApiResponse(code = 400, message = "Ocorreu um erro na criação do PDF", response = Exception.class),
     })
+    @PreAuthorize("hasAnyRole('COLABORADORES')")
     public void relatorio(HttpServletResponse res,
                           HttpServletRequest req,
-                          @RequestBody List<Long> ids) throws DocumentException, IOException {
+                          @RequestBody List<Long> ids) throws DocumentException {
         log.info("Método controlador de obtenção de relatório de colaboradores em PDF acessado. IDs: {}", ids);
 
         ColaboradorEntity usuarioAtivo = jwtUtil.obtemUsuarioAtivo(req);
