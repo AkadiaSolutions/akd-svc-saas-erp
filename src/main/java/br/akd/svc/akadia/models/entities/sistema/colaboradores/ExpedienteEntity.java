@@ -1,5 +1,6 @@
 package br.akd.svc.akadia.models.entities.sistema.colaboradores;
 
+import br.akd.svc.akadia.models.enums.sistema.colaboradores.EscalaEnum;
 import lombok.*;
 
 import javax.persistence.*;
@@ -20,4 +21,6 @@ public class ExpedienteEntity {
     private String horaSaidaAlmoco;
     private String horaEntradaAlmoco;
     private String horaSaida;
+    private Integer cargaHorariaSemanal;
+    private EscalaEnum escalaEnum;
 }
