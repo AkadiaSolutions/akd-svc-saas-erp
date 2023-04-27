@@ -1,6 +1,7 @@
 package br.akd.svc.akadia.models.dto.sistema.colaboradores;
 
 import br.akd.svc.akadia.models.enums.sistema.colaboradores.ModulosEnum;
+import br.akd.svc.akadia.models.enums.sistema.colaboradores.PermissaoEnum;
 import lombok.*;
 
 import java.util.ArrayList;
@@ -18,5 +19,6 @@ public class AcessoSistemaDto {
     private String nomeUsuario;
     private String senha;
     private String senhaCriptografada;
+    private PermissaoEnum permissaoEnum;
     private List<ModulosEnum> privilegios = new ArrayList<>();
 }

@@ -2,6 +2,7 @@ package br.akd.svc.akadia.models.entities.sistema.colaboradores;
 
 
 import br.akd.svc.akadia.models.enums.sistema.colaboradores.ModulosEnum;
+import br.akd.svc.akadia.models.enums.sistema.colaboradores.PermissaoEnum;
 import lombok.*;
 
 import javax.persistence.*;
@@ -24,7 +25,8 @@ public class AcessoSistemaEntity {
     private String nomeUsuario;
     private String senha;
     private String senhaCriptografada;
-
+    @Enumerated(EnumType.STRING)
+    private PermissaoEnum permissaoEnum;
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "PERFIS")
     protected Set<ModulosEnum> privilegios = new HashSet<>();

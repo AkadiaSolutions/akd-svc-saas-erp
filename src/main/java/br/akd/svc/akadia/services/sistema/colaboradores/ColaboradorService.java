@@ -75,6 +75,7 @@ public class ColaboradorService {
                         .senha(colaboradorDto.getAcessoSistema().getSenha())
                         .senhaCriptografada(new BCryptPasswordEncoder().encode(colaboradorDto.getAcessoSistema().getSenha()))
                         .acessoSistemaAtivo(colaboradorDto.getAcessoSistema().getAcessoSistemaAtivo())
+                        .permissaoEnum(colaboradorDto.getAcessoSistema().getPermissaoEnum())
                         .privilegios(realizaTratamentoDosPrivilegiosDoNovoColaborador(colaboradorDto.getAcessoSistema().getPrivilegios()))
                         .build())
                 .configuracaoPerfil(ConfiguracaoPerfilEntity.builder()
@@ -177,6 +178,7 @@ public class ColaboradorService {
                         .senha(colaboradorDto.getAcessoSistema().getSenha())
                         .senhaCriptografada(new BCryptPasswordEncoder().encode(colaboradorDto.getAcessoSistema().getSenha()))
                         .acessoSistemaAtivo(colaboradorDto.getAcessoSistema().getAcessoSistemaAtivo())
+                        .permissaoEnum(colaboradorDto.getAcessoSistema().getPermissaoEnum())
                         .privilegios(realizaTratamentoDosPrivilegiosDoColaboradorAtualizado(
                                 colaboradorDto.getAcessoSistema().getPrivilegios()))
                         .build())
@@ -407,6 +409,7 @@ public class ColaboradorService {
                     .acessoSistema(AcessoSistemaResponse.builder()
                             .nomeUsuario(colaborador.getAcessoSistema().getNomeUsuario())
                             .acessoSistemaAtivo(colaborador.getAcessoSistema().getAcessoSistemaAtivo())
+                            .permissaoEnum(colaborador.getAcessoSistema().getPermissaoEnum())
                             .privilegios(colaborador.getAcessoSistema().getPrivilegios())
                             .build())
                     .configuracaoPerfil(colaborador.getConfiguracaoPerfil())

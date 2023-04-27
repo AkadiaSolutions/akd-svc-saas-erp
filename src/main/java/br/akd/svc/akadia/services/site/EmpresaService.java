@@ -299,6 +299,7 @@ public class EmpresaService {
                         .nomeUsuario(geraNomeUsuarioParaResponsavelEmpresa())
                         .senha(senha)
                         .senhaCriptografada(new BCryptPasswordEncoder().encode(senha))
+                        .permissaoEnum(PermissaoEnum.LEITURA_AVANCADA_ALTERACAO)
                         .privilegios(modulosLiberadosUsuario)
                         .build())
                 .configuracaoPerfil(ConfiguracaoPerfilEntity.builder()
