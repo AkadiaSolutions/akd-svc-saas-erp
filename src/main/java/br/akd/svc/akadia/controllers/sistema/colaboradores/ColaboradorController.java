@@ -5,6 +5,7 @@ import br.akd.svc.akadia.models.dto.sistema.colaboradores.ColaboradorDto;
 import br.akd.svc.akadia.models.dto.sistema.colaboradores.responses.ColaboradorPageResponse;
 import br.akd.svc.akadia.models.dto.sistema.colaboradores.responses.ColaboradorResponse;
 import br.akd.svc.akadia.models.entities.sistema.colaboradores.ColaboradorEntity;
+import br.akd.svc.akadia.repositories.sistema.colaboradores.ColaboradorRepository;
 import br.akd.svc.akadia.services.exceptions.InvalidRequestException;
 import br.akd.svc.akadia.services.exceptions.ObjectNotFoundException;
 import br.akd.svc.akadia.services.sistema.colaboradores.ColaboradorService;
@@ -28,7 +29,9 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
@@ -40,6 +43,9 @@ public class ColaboradorController {
 
     @Autowired
     ColaboradorService colaboradorService;
+
+    @Autowired
+    ColaboradorRepository colaboradorRepository;
 
     @Autowired
     JWTUtil jwtUtil;
@@ -209,6 +215,26 @@ public class ColaboradorController {
         res.setHeader(headerKey, headerValue);
 
         //relatorioService.exportarPdf(res, usuarioAtivo, ids);
+    }
+
+    @GetMapping("/ocupacoes")
+    @ApiOperation(
+            value = "Obtém todas as ocupações da empresa",
+            notes = "Esse endpoint tem como objetivo retornar uma lista com todas as ocupações já cadastradas da empresa " +
+                    "atual",
+            produces = MediaType.APPLICATION_JSON,
+            consumes = MediaType.APPLICATION_JSON
+    )
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Ok")
+    })
+    @PreAuthorize("hasAnyRole('COLABORADORES')")
+    public ResponseEntity<List<String>> obtemOcupacoes(HttpServletRequest req) {
+        ColaboradorEntity usuarioAtivo = jwtUtil.obtemUsuarioAtivo(req);
+        return ResponseEntity.ok()
+                .body(new LinkedHashSet<>(
+                        colaboradorRepository.buscaTodasOcupacoesDaEmpresa(usuarioAtivo.getEmpresa().getId()))
+                        .stream().sorted().collect(Collectors.toList()));
     }
 
 }

@@ -24,6 +24,9 @@ public interface ColaboradorRepository extends JpaRepository<ColaboradorEntity, 
     @Query("SELECT c FROM ColaboradorEntity c WHERE c.empresa.id = ?1 and c.exclusao.excluido = FALSE")
     List<ColaboradorEntity> buscaTodos(Long id);
 
+    @Query("SELECT upper(c.ocupacao) FROM ColaboradorEntity c WHERE c.empresa.id = ?1")
+    List<String> buscaTodasOcupacoesDaEmpresa(Long id);
+
     @Query("SELECT c FROM ColaboradorEntity c WHERE c.empresa.id = ?1 and c.exclusao.excluido = FALSE")
     Page<ColaboradorEntity> buscaPorColaboradores(Pageable pageable, Long id);
 
