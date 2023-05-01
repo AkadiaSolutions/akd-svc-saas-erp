@@ -15,6 +15,6 @@ public class ExpedienteDto {
     private String horaSaidaAlmoco;
     private String horaEntradaAlmoco;
     private String horaSaida;
-    private Integer cargaHorariaSemanal;
+    private String cargaHorariaSemanal;
     private EscalaEnum escalaEnum;
 }
