@@ -23,7 +23,6 @@ public class ColaboradorDto {
     private String dataCadastro;
     private String horaCadastro;
     private String matricula;
-    private byte[] fotoPerfil;
     private String nome;
     private String dataNascimento;
     private String email;

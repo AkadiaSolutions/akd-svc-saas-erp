@@ -34,9 +34,6 @@ public class ColaboradorEntity {
     @Column(unique = true)
     private String matricula;
 
-    @Lob
-    private byte[] fotoPerfil;
-
     private String nome;
 
     private String dataNascimento;

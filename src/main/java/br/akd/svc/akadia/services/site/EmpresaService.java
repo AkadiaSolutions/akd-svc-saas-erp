@@ -280,7 +280,6 @@ public class EmpresaService {
                 .dataCadastro(LocalDate.now().toString())
                 .horaCadastro(LocalTime.now().toString())
                 .matricula(colaboradorService.geraMatriculaUnica())
-                .fotoPerfil(null)
                 .nome("admin")
                 .dataNascimento(null)
                 .email(null)
