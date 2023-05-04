@@ -22,7 +22,6 @@ public class AcessoSistemaEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Boolean acessoSistemaAtivo;
-    private String nomeUsuario;
     private String senha;
     private String senhaCriptografada;
     @Enumerated(EnumType.STRING)

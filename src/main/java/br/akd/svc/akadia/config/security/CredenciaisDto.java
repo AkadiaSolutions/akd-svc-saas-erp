@@ -11,7 +11,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class CredenciaisDto {
 
-    private String nomeUsuario;
+    private String matricula;
     private String senha;
 
 }

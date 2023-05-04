@@ -32,7 +32,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         try {
             CredenciaisDto creds = new ObjectMapper().readValue(request.getInputStream(), CredenciaisDto.class);
             UsernamePasswordAuthenticationToken authenticationToken =
-                    new UsernamePasswordAuthenticationToken(creds.getNomeUsuario(), creds.getSenha(), new ArrayList<>());
+                    new UsernamePasswordAuthenticationToken(creds.getMatricula(), creds.getSenha(), new ArrayList<>());
             return authenticationManager.authenticate(authenticationToken);
         } catch (Exception e) {
             throw new UnauthorizedAccessException(e.getMessage());

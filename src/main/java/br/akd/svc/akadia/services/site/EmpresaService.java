@@ -285,7 +285,6 @@ public class EmpresaService {
                 .dataNascimento(null)
                 .email(null)
                 .cpfCnpj(null)
-                .ativo(true)
                 .salario(0.0)
                 .entradaEmpresa(null)
                 .saidaEmpresa(null)
@@ -296,7 +295,6 @@ public class EmpresaService {
                 .statusColaboradorEnum(StatusColaboradorEnum.ATIVO)
                 .acessoSistema(AcessoSistemaEntity.builder()
                         .acessoSistemaAtivo(true)
-                        .nomeUsuario(geraNomeUsuarioParaResponsavelEmpresa())
                         .senha(senha)
                         .senhaCriptografada(new BCryptPasswordEncoder().encode(senha))
                         .permissaoEnum(PermissaoEnum.LEITURA_AVANCADA_ALTERACAO)
@@ -341,28 +339,6 @@ public class EmpresaService {
         privilegios.add(ModulosEnum.COLABORADORES);
         privilegios.add(ModulosEnum.PRECOS);
         log.debug("Lista de privilégios preenchida com sucesso");
-    }
-
-    public String geraNomeUsuarioParaResponsavelEmpresa() {
-        log.debug("Método de criação de username aleatório acessado");
-
-        log.debug("Iniciando processo de criação de username aleatório...");
-        int rangeAleatoriedade = 999999 - (100000 + 1);
-        boolean nomeUsuarioDisponivel = false;
-        String nomeUsuario = null;
-        while (!nomeUsuarioDisponivel) {
-            nomeUsuario = String.valueOf((int) (Math.random() * rangeAleatoriedade) + 100000);
-            log.debug("Nome de usuário gerado: {}. Iniciando verificação se nome de usuário está disponível...", nomeUsuario);
-            if (!colaboradorRepositoryImpl.implementaBuscaPorNomeUsuario(nomeUsuario).isPresent()) {
-                log.debug("O nome de usuário gerado está disponível. Finalizando iteração...");
-                nomeUsuarioDisponivel = true;
-            } else {
-                log.debug("O nome de usuário gerado já existe: {}. Iniciando criação de novo username...", nomeUsuario);
-            }
-        }
-
-        log.debug("Nome de usuário criado com sucesso");
-        return nomeUsuario;
     }
 
     public String geraSenhaAleatoriaParaNovoLogin(EmpresaEntity empresaEntity) {

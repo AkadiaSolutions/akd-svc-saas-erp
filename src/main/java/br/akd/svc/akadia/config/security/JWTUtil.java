@@ -1,7 +1,7 @@
 package br.akd.svc.akadia.config.security;
 
 import br.akd.svc.akadia.models.entities.sistema.colaboradores.ColaboradorEntity;
-import br.akd.svc.akadia.repositories.sistema.colaboradores.impl.ColaboradorRepositoryImpl;
+import br.akd.svc.akadia.repositories.sistema.colaboradores.ColaboradorRepository;
 import br.akd.svc.akadia.services.exceptions.ObjectNotFoundException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -19,7 +19,7 @@ import java.util.function.Function;
 public class JWTUtil {
 
     @Autowired
-    ColaboradorRepositoryImpl colaboradorRepositoryImpl;
+    ColaboradorRepository colaboradorRepository;
 
     @Value("${jwt.expiration}")
     private Long expiration;
@@ -75,9 +75,9 @@ public class JWTUtil {
     public ColaboradorEntity obtemUsuarioAtivo(HttpServletRequest req) {
         String token = req.getHeader("Authorization").replace("Bearer ", "");
         String username = getUsernameFromToken(token);
-        Optional<ColaboradorEntity> colaboradorOptional = colaboradorRepositoryImpl.implementaBuscaPorNomeUsuario(username);
+        Optional<ColaboradorEntity> colaboradorOptional = colaboradorRepository.buscaPorMatricula(username);
         return colaboradorOptional.orElseThrow(() ->
-                new ObjectNotFoundException("Nenhum colaborador foi encontrado pelo username " + username));
+                new ObjectNotFoundException("Nenhum colaborador foi encontrado pela matrícula " + username));
     }
 
 }

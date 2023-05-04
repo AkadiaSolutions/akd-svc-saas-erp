@@ -23,11 +23,6 @@ public class ColaboradorRepositoryImpl {
         return colaboradorRepository.findAll();
     }
 
-    public Optional<ColaboradorEntity> implementaBuscaPorNomeUsuario(String nomeUsuario) {
-        log.debug("Método de serviço que implementa busca por nome de usuário do colaborador");
-        return colaboradorRepository.buscaPorUsername(nomeUsuario);
-    }
-
     @Transactional
     public ColaboradorEntity implementaPersistencia(ColaboradorEntity colaborador) {
         log.debug("Método de serviço que implementa persistência do colaborador acessado");
@@ -38,11 +33,6 @@ public class ColaboradorRepositoryImpl {
     public void implementaPersistenciaEmMassa(List<ColaboradorEntity> colaboradores) {
         log.debug("Método de serviço que implementa persistência em massa do colaborador acessado");
         colaboradorRepository.saveAll((colaboradores));
-    }
-
-    public List<ColaboradorEntity> implementaBuscaPorTodos(Long idEmpresa) {
-        log.debug("Método que implementa busca por todos os colaboradores acessado");
-        return colaboradorRepository.buscaTodos(idEmpresa);
     }
 
     public ColaboradorEntity implementaBuscaPorId(Long id, Long idEmpresa) {
@@ -60,21 +50,6 @@ public class ColaboradorRepositoryImpl {
         }
         log.debug("Retornando o colaborador encontrado...");
         return colaboradorEntity;
-    }
-
-    public List<ColaboradorEntity> implementaBuscaPorIdEmMassa(List<Long> ids) {
-        log.debug("Método que implementa busca de colaborador por id em massa acessado. Ids: {}", ids.toString());
-
-        List<ColaboradorEntity> colaboradores = colaboradorRepository.findAllById(ids);
-
-        if (!colaboradores.isEmpty()) {
-            log.debug("{} Colaboradores encontrados", colaboradores.size());
-        } else {
-            log.warn("Nenhum colaborador foi encontrado");
-            throw new ObjectNotFoundException("Nenhum colaborador foi encontrado com os ids informados");
-        }
-        log.debug("Retornando os colaboradores encontrados...");
-        return colaboradores;
     }
 
 }

@@ -16,7 +16,6 @@ import java.util.List;
 public class AcessoSistemaDto {
     private Long id;
     private Boolean acessoSistemaAtivo;
-    private String nomeUsuario;
     private String senha;
     private String senhaCriptografada;
     private PermissaoEnum permissaoEnum;

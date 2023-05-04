@@ -14,7 +14,6 @@ import java.util.Set;
 @AllArgsConstructor
 public class AcessoSistemaResponse {
     private Boolean acessoSistemaAtivo;
-    private String nomeUsuario;
     private PermissaoEnum permissaoEnum;
     private Set<ModulosEnum> privilegios = new HashSet<>();
 }

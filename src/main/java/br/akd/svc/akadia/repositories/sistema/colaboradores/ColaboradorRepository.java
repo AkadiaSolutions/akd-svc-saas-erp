@@ -13,18 +13,15 @@ import java.util.Optional;
 @Repository
 public interface ColaboradorRepository extends JpaRepository<ColaboradorEntity, Long> {
 
-    Boolean existsByMatricula(Long matricula);
+    Boolean existsByMatricula(String matricula);
 
-    @Query("SELECT c FROM ColaboradorEntity c WHERE c.acessoSistema.nomeUsuario = ?1")
-    Optional<ColaboradorEntity> buscaPorUsername(String username);
+    @Query("SELECT c FROM ColaboradorEntity c WHERE c.matricula = ?1")
+    Optional<ColaboradorEntity> buscaPorMatricula(String matricula);
 
     @Query("SELECT c FROM ColaboradorEntity c WHERE c.id=?1 and c.empresa.id = ?2 and c.exclusao.excluido = FALSE")
     Optional<ColaboradorEntity> buscaPorId(Long idColaborador, Long idEmpresa);
 
-    @Query("SELECT c FROM ColaboradorEntity c WHERE c.empresa.id = ?1 and c.exclusao.excluido = FALSE")
-    List<ColaboradorEntity> buscaTodos(Long id);
-
-    @Query("SELECT upper(c.ocupacao) FROM ColaboradorEntity c WHERE c.empresa.id = ?1")
+    @Query("SELECT upper(c.ocupacao) FROM ColaboradorEntity c WHERE c.empresa.id = ?1 and c.ocupacao IS NOT NULL")
     List<String> buscaTodasOcupacoesDaEmpresa(Long id);
 
     @Query("SELECT c FROM ColaboradorEntity c WHERE c.empresa.id = ?1 and c.exclusao.excluido = FALSE")

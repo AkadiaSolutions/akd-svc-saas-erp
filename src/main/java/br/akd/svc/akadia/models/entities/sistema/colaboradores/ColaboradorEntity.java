@@ -32,7 +32,7 @@ public class ColaboradorEntity {
     private String horaCadastro;
 
     @Column(unique = true)
-    private Long matricula;
+    private String matricula;
 
     @Lob
     private byte[] fotoPerfil;
@@ -44,8 +44,6 @@ public class ColaboradorEntity {
     private String email;
 
     private String cpfCnpj;
-
-    private Boolean ativo;
 
     private Double salario;
 

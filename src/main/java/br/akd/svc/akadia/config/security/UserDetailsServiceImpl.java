@@ -17,11 +17,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     private ColaboradorRepository colaboradorRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String nomeUsuario) throws UsernameNotFoundException {
-        Optional<ColaboradorEntity> colaborador = colaboradorRepository.buscaPorUsername(nomeUsuario);
+    public UserDetails loadUserByUsername(String matricula) throws UsernameNotFoundException {
+        Optional<ColaboradorEntity> colaborador = colaboradorRepository.buscaPorMatricula(matricula);
         if (colaborador.isPresent()) {
             return new UserSS(colaborador.get().getId(),
-                    colaborador.get().getAcessoSistema().getNomeUsuario(),
+                    colaborador.get().getMatricula(),
                     colaborador.get().getAcessoSistema().getSenhaCriptografada(),
                     colaborador.get().getAcessoSistema().getPrivilegios());
         }

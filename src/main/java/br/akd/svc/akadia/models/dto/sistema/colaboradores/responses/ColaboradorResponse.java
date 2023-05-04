@@ -21,13 +21,12 @@ public class ColaboradorResponse {
     private Long id;
     private String dataCadastro;
     private String horaCadastro;
-    private Long matricula;
+    private String matricula;
     private byte[] fotoPerfil;
     private String nome;
     private String dataNascimento;
     private String email;
     private String cpfCnpj;
-    private Boolean ativo;
     private Double salario;
     private String entradaEmpresa;
     private String saidaEmpresa;
