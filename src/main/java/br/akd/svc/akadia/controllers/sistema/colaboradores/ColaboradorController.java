@@ -21,12 +21,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedHashSet;
@@ -98,23 +100,22 @@ public class ColaboradorController {
     @PostMapping
     @ApiOperation(
             value = "Criação de novo colaborador",
-            notes = "Esse endpoint tem como objetivo realizar a criação de um novo colaborador na base dados da empresa",
-            produces = MediaType.APPLICATION_JSON,
-            consumes = MediaType.APPLICATION_JSON
+            notes = "Esse endpoint tem como objetivo realizar a criação de um novo colaborador na base dados da empresa"
     )
     @ApiResponses({
-            @ApiResponse(code = 201, message = "Colaborador persistido com sucesso", response = ColaboradorResponse.class),
+            @ApiResponse(code = 201, message = "Colaborador persistido com sucesso", response = Long.class),
             @ApiResponse(code = 400, message = "A inscrição estadual informada já existe", response = InvalidRequestException.class),
             @ApiResponse(code = 400, message = "O CPF/CNPJ informado já existe", response = InvalidRequestException.class),
             @ApiResponse(code = 400, message = "Erro de requisição inválida", response = InvalidRequestException.class)
     })
     @PreAuthorize("hasAnyRole('COLABORADORES')")
-    public ResponseEntity<ColaboradorResponse> criaNovoColaborador(HttpServletRequest req,
-                                                                   @RequestBody ColaboradorDto colaboradorDto) {
+    public ResponseEntity<String> criaNovoColaborador(HttpServletRequest req,
+                                                      @RequestParam(value = "contratoColaborador", required = false) MultipartFile contratoColaborador,
+                                                      @RequestParam("colaborador") String colaborador) throws IOException {
         log.info("Método controlador de criação de novo colaborador acessado");
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(colaboradorService.criaNovoColaborador(jwtUtil.obtemUsuarioAtivo(req), colaboradorDto));
+                .body(colaboradorService.criaNovoColaborador(jwtUtil.obtemUsuarioAtivo(req), contratoColaborador, colaborador));
     }
 
     @PutMapping("/{id}")

@@ -15,13 +15,16 @@ import br.akd.svc.akadia.repositories.sistema.colaboradores.ColaboradorRepositor
 import br.akd.svc.akadia.repositories.sistema.colaboradores.impl.ColaboradorRepositoryImpl;
 import br.akd.svc.akadia.services.exceptions.InvalidRequestException;
 import br.akd.svc.akadia.utils.ConversorDeDados;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -40,104 +43,44 @@ public class ColaboradorService {
 
     String BUSCA_COLABORADOR_POR_ID = "Iniciando acesso ao método de implementação de busca de colaborador por id...";
 
-    public ColaboradorResponse criaNovoColaborador(ColaboradorEntity colaboradorLogado, ColaboradorDto colaboradorDto) {
+    public String criaNovoColaborador(ColaboradorEntity colaboradorLogado,
+                                      MultipartFile contratoColaborador,
+                                      String colaboradorEmJson) throws IOException {
 
         log.debug("Método de serviço de criação de novo colaborador acessado");
 
-        log.debug("Iniciando criação do objeto ColaboradorEntity...");
-        ColaboradorEntity colaboradorEntity = ColaboradorEntity.builder()
-                .dataCadastro(LocalDate.now().toString())
-                .horaCadastro(LocalTime.now().toString())
-                .matricula(geraMatriculaUnica())
-                .fotoPerfil(colaboradorDto.getFotoPerfil())
-                .nome(colaboradorDto.getNome())
-                .dataNascimento(colaboradorDto.getDataNascimento())
-                .email(colaboradorDto.getEmail())
-                .cpfCnpj(colaboradorDto.getCpfCnpj())
-                .ativo(colaboradorDto.getAtivo())
-                .salario(colaboradorDto.getSalario())
-                .entradaEmpresa(colaboradorDto.getEntradaEmpresa())
-                .saidaEmpresa(colaboradorDto.getSaidaEmpresa())
-                .contratoContratacao(colaboradorDto.getContratoContratacao())
-                .ocupacao(colaboradorDto.getOcupacao())
-                .tipoOcupacaoEnum(colaboradorDto.getTipoOcupacaoEnum())
-                .modeloContratacaoEnum(colaboradorDto.getModeloContratacaoEnum())
-                .modeloTrabalhoEnum(colaboradorDto.getModeloTrabalhoEnum())
-                .statusColaboradorEnum(colaboradorDto.getStatusColaboradorEnum())
-                .exclusao(ExclusaoColaboradorEntity.builder()
-                        .excluido(false)
-                        .dataExclusao(null)
-                        .horaExclusao(null)
-                        .responsavelExclusao(null)
-                        .build())
-                .acessoSistema(AcessoSistemaEntity.builder()
-                        .nomeUsuario(colaboradorDto.getAcessoSistema().getNomeUsuario())
-                        .senha(colaboradorDto.getAcessoSistema().getSenha())
-                        .senhaCriptografada(new BCryptPasswordEncoder().encode(colaboradorDto.getAcessoSistema().getSenha()))
-                        .acessoSistemaAtivo(colaboradorDto.getAcessoSistema().getAcessoSistemaAtivo())
-                        .permissaoEnum(colaboradorDto.getAcessoSistema().getPermissaoEnum())
-                        .privilegios(realizaTratamentoDosPrivilegiosDoNovoColaborador(colaboradorDto.getAcessoSistema().getPrivilegios()))
-                        .build())
-                .configuracaoPerfil(ConfiguracaoPerfilEntity.builder()
-                        .temaTelaEnum(TemaTelaEnum.TELA_CLARA)
-                        .dataUltimaAtualizacao(LocalDate.now().toString())
-                        .horaUltimaAtualizacao(LocalTime.now().toString())
-                        .build())
-                .endereco(realizaTratamentoEnderecoDoNovoColaborador(colaboradorDto.getEndereco()))
-                .telefone(colaboradorDto.getTelefone() == null
-                        ? null
-                        : TelefoneEntity.builder()
-                        .prefixo(colaboradorDto.getTelefone().getPrefixo())
-                        .numero(colaboradorDto.getTelefone().getNumero())
-                        .tipoTelefone(colaboradorDto.getTelefone().getTipoTelefone())
-                        .build())
-                .expediente(ExpedienteEntity.builder()
-                        .horaEntrada(colaboradorDto.getExpediente().getHoraEntrada())
-                        .horaEntradaAlmoco(colaboradorDto.getExpediente().getHoraEntradaAlmoco())
-                        .horaSaidaAlmoco(colaboradorDto.getExpediente().getHoraSaidaAlmoco())
-                        .horaSaida(colaboradorDto.getExpediente().getHoraSaida())
-                        .cargaHorariaSemanal(colaboradorDto.getExpediente().getCargaHorariaSemanal())
-                        .escalaEnum(colaboradorDto.getExpediente().getEscalaEnum())
-                        .build())
-                .dispensa(null)
-                .empresa(colaboradorLogado.getEmpresa())
-                .build();
-        log.debug("Objeto colaboradorEntity criado com sucesso");
+        log.debug("Convertendo objeto colaborador recebido de Json para entity...");
+        ColaboradorEntity colaboradorEntity = new ObjectMapper().readValue(colaboradorEmJson, ColaboradorEntity.class);
+
+        log.debug("Iniciando setagem de dados do colaborador...");
+        colaboradorEntity.setDataCadastro(LocalDate.now().toString());
+        colaboradorEntity.setHoraCadastro(LocalTime.now().toString());
+        colaboradorEntity.setMatricula(geraMatriculaUnica());
+        colaboradorEntity.setContratoContratacao(contratoColaborador != null ? contratoColaborador.getBytes() : null);
+        colaboradorEntity.setExclusao(ExclusaoColaboradorEntity.builder()
+                .excluido(false)
+                .dataExclusao(null)
+                .horaExclusao(null)
+                .responsavelExclusao(null)
+                .build());
+        colaboradorEntity.getAcessoSistema().setSenhaCriptografada(
+                Boolean.TRUE.equals(colaboradorEntity.getAcessoSistema().getAcessoSistemaAtivo())
+                        ? new BCryptPasswordEncoder().encode(colaboradorEntity.getAcessoSistema().getSenha())
+                        : null);
+        colaboradorEntity.setConfiguracaoPerfil(ConfiguracaoPerfilEntity.builder()
+                .temaTelaEnum(TemaTelaEnum.TELA_CLARA)
+                .dataUltimaAtualizacao(LocalDate.now().toString())
+                .horaUltimaAtualizacao(LocalTime.now().toString())
+                .build());
+        colaboradorEntity.setDispensa(null);
+        colaboradorEntity.setEmpresa(colaboradorLogado.getEmpresa());
+        log.debug("Setagem de dados realizada com sucesso");
 
         log.debug("Iniciando acesso ao método de implementação da persistência do colaborador...");
         ColaboradorEntity colaboradorPersistido = colaboradorRepositoryImpl.implementaPersistencia(colaboradorEntity);
 
-        log.debug("Colaborador persistido com sucesso. Convertendo colaboradorEntity para colaboradorResponse...");
-        ColaboradorResponse colaboradorResponse = converteColaboradorEntityParaColaboradorResponse(colaboradorPersistido);
-
         log.info("Colaborador criado com sucesso");
-        return colaboradorResponse;
-    }
-
-    private Set<ModulosEnum> realizaTratamentoDosPrivilegiosDoNovoColaborador(List<ModulosEnum> privilegios) {
-        //TODO Elaborar lógica
-        return new HashSet<>();
-    }
-
-    private EnderecoEntity realizaTratamentoEnderecoDoNovoColaborador(EnderecoDto enderecoDto) {
-        if (enderecoDto == null) return null;
-        return EnderecoEntity.builder()
-                .codigoPostal(enderecoDto.getCodigoPostal())
-                .logradouro(enderecoDto.getLogradouro() != null
-                        ? enderecoDto.getLogradouro().toUpperCase()
-                        : null)
-                .numero(enderecoDto.getNumero())
-                .bairro(enderecoDto.getBairro() != null
-                        ? enderecoDto.getBairro().toUpperCase()
-                        : null)
-                .cidade(enderecoDto.getCidade() != null
-                        ? enderecoDto.getCidade().toUpperCase()
-                        : null)
-                .complemento(enderecoDto.getComplemento() != null
-                        ? enderecoDto.getComplemento().toUpperCase()
-                        : null)
-                .estado(enderecoDto.getEstado())
-                .build();
+        return colaboradorPersistido.getMatricula();
     }
 
     public ColaboradorResponse atualizaColaborador(ColaboradorEntity colaboradorLogado, Long id, ColaboradorDto colaboradorDto) {
@@ -162,7 +105,6 @@ public class ColaboradorService {
                 .dataNascimento(colaboradorDto.getDataNascimento())
                 .email(colaboradorDto.getEmail())
                 .cpfCnpj(colaboradorDto.getCpfCnpj())
-                .ativo(colaboradorDto.getAtivo())
                 .salario(colaboradorDto.getSalario())
                 .entradaEmpresa(colaboradorDto.getEntradaEmpresa())
                 .saidaEmpresa(colaboradorDto.getSaidaEmpresa())
@@ -174,7 +116,6 @@ public class ColaboradorService {
                 .statusColaboradorEnum(colaboradorDto.getStatusColaboradorEnum())
                 .exclusao(colaboradorEncontrado.getExclusao())
                 .acessoSistema(AcessoSistemaEntity.builder()
-                        .nomeUsuario(colaboradorDto.getAcessoSistema().getNomeUsuario())
                         .senha(colaboradorDto.getAcessoSistema().getSenha())
                         .senhaCriptografada(new BCryptPasswordEncoder().encode(colaboradorDto.getAcessoSistema().getSenha()))
                         .acessoSistemaAtivo(colaboradorDto.getAcessoSistema().getAcessoSistemaAtivo())
@@ -396,7 +337,6 @@ public class ColaboradorService {
                     .dataNascimento(colaborador.getDataNascimento())
                     .email(colaborador.getEmail())
                     .cpfCnpj(colaborador.getCpfCnpj())
-                    .ativo(colaborador.getAtivo())
                     .salario(colaborador.getSalario())
                     .entradaEmpresa(colaborador.getEntradaEmpresa())
                     .saidaEmpresa(colaborador.getSaidaEmpresa())
@@ -407,7 +347,6 @@ public class ColaboradorService {
                     .modeloTrabalhoEnum(colaborador.getModeloTrabalhoEnum())
                     .statusColaboradorEnum(colaborador.getStatusColaboradorEnum())
                     .acessoSistema(AcessoSistemaResponse.builder()
-                            .nomeUsuario(colaborador.getAcessoSistema().getNomeUsuario())
                             .acessoSistemaAtivo(colaborador.getAcessoSistema().getAcessoSistemaAtivo())
                             .permissaoEnum(colaborador.getAcessoSistema().getPermissaoEnum())
                             .privilegios(colaborador.getAcessoSistema().getPrivilegios())
@@ -475,18 +414,24 @@ public class ColaboradorService {
         return colaboradorResponse;
     }
 
-    public Long geraMatriculaUnica() {
+    public String geraMatriculaUnica() {
 
-        //TODO Loggear
-
+        log.debug("Método responsável por gerar matrícula do colaborador acessado");
         long min = 1000000L;
         long max = 9999999L;
         while (true) {
+            log.debug("Gerando matrícula...");
+
             long matriculaAleatoria =
                     (long) (ConversorDeDados.RANDOM.nextFloat() * (max - min) + min);
 
-            if (Boolean.FALSE.equals(colaboradorRepository.existsByMatricula(matriculaAleatoria)))
-                return matriculaAleatoria;
+            String matricula = Long.toString(matriculaAleatoria);
+
+            log.debug("Matrícula gerada: {}", matricula);
+            if (Boolean.FALSE.equals(colaboradorRepository.existsByMatricula(matricula)))
+                return matricula;
+
+            else log.debug("A matrícula gerada já existe. Tentando novamente...");
         }
     }
 }
