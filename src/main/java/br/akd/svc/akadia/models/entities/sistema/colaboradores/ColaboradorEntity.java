@@ -1,5 +1,6 @@
 package br.akd.svc.akadia.models.entities.sistema.colaboradores;
 
+import br.akd.svc.akadia.models.entities.global.ArquivoEntity;
 import br.akd.svc.akadia.models.entities.global.EnderecoEntity;
 import br.akd.svc.akadia.models.entities.global.TelefoneEntity;
 import br.akd.svc.akadia.models.entities.site.empresa.EmpresaEntity;
@@ -48,9 +49,6 @@ public class ColaboradorEntity {
 
     private String saidaEmpresa;
 
-    @Lob
-    private byte[] contratoContratacao;
-
     private String ocupacao;
 
     @Enumerated(EnumType.STRING)
@@ -64,6 +62,9 @@ public class ColaboradorEntity {
 
     @Enumerated(EnumType.STRING)
     private StatusColaboradorEnum statusColaboradorEnum;
+
+    @OneToOne(targetEntity = ArquivoEntity.class, orphanRemoval = true, cascade = CascadeType.ALL)
+    private ArquivoEntity contratoContratacao;
 
     @OneToOne(targetEntity = ExclusaoColaboradorEntity.class, orphanRemoval = true, cascade = CascadeType.ALL)
     private ExclusaoColaboradorEntity exclusao;
@@ -97,6 +98,14 @@ public class ColaboradorEntity {
     @OneToMany(targetEntity = AdvertenciaEntity.class, orphanRemoval = true, cascade = CascadeType.ALL)
     @ToString.Exclude
     private List<AdvertenciaEntity> advertencias = new ArrayList<>();
+
+    @OneToMany(targetEntity = AcessoEntity.class, orphanRemoval = true, cascade = CascadeType.ALL)
+    @ToString.Exclude
+    private List<AcessoEntity> acessos = new ArrayList<>();
+
+    @OneToMany(targetEntity = AcaoEntity.class, orphanRemoval = true, cascade = CascadeType.ALL)
+    @ToString.Exclude
+    private List<AcaoEntity> acoes = new ArrayList<>();
 
     @ManyToOne(targetEntity = EmpresaEntity.class)
     @JoinColumn(name = "id_empresa")

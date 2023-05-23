@@ -1,14 +1,12 @@
 package br.akd.svc.akadia.controllers.sistema.colaboradores;
 
 import br.akd.svc.akadia.config.security.JWTUtil;
-import br.akd.svc.akadia.models.dto.sistema.colaboradores.ColaboradorDto;
-import br.akd.svc.akadia.models.dto.sistema.colaboradores.responses.ColaboradorPageResponse;
-import br.akd.svc.akadia.models.dto.sistema.colaboradores.responses.ColaboradorResponse;
+import br.akd.svc.akadia.models.dto.sistema.colaboradores.responses.*;
 import br.akd.svc.akadia.models.entities.sistema.colaboradores.ColaboradorEntity;
 import br.akd.svc.akadia.repositories.sistema.colaboradores.ColaboradorRepository;
 import br.akd.svc.akadia.services.exceptions.InvalidRequestException;
 import br.akd.svc.akadia.services.exceptions.ObjectNotFoundException;
-import br.akd.svc.akadia.services.sistema.colaboradores.ColaboradorService;
+import br.akd.svc.akadia.services.sistema.colaboradores.*;
 import com.lowagie.text.DocumentException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -36,6 +34,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Slf4j
+@CrossOrigin
 @RestController
 @Api(value = "Essa API disponibiliza os endpoints de CRUD da entidade Colaborador")
 @Produces({MediaType.APPLICATION_JSON, "application/json"})
@@ -47,10 +46,47 @@ public class ColaboradorController {
     ColaboradorService colaboradorService;
 
     @Autowired
+    AcaoService acaoService;
+
+    @Autowired
+    AdvertenciaService advertenciaService;
+
+    @Autowired
+    AcessoService acessoService;
+
+    @Autowired
+    ColaboradorRelatorioService relatorioService;
+
+    @Autowired
     ColaboradorRepository colaboradorRepository;
 
     @Autowired
     JWTUtil jwtUtil;
+
+    @PostMapping("/{idColaborador}/advertencias")
+    @ApiOperation(
+            value = "Criação de nova advertência",
+            notes = "Esse endpoint tem como objetivo realizar a criação de uma advertência e atribuí-la " +
+                    "a um colaborador específico"
+    )
+    @ApiResponses({
+            @ApiResponse(code = 201, message = "Advertência persistida com sucesso", response = String.class),
+            @ApiResponse(code = 400, message = "Erro de requisição inválida", response = InvalidRequestException.class)
+    })
+    @PreAuthorize("hasAnyRole('COLABORADORES')")
+    public void criaNovaAdvertencia(HttpServletRequest req,
+                                                      HttpServletResponse res,
+                                                      @PathVariable(value = "idColaborador") Long idColaborador,
+                                                      @RequestParam(value = "arquivoAdvertencia", required = false) MultipartFile arquivoAdvertencia,
+                                                      @RequestParam("advertencia") String advertencia) throws IOException {
+        log.info("Método controlador de criação de nova advertência acessado");
+        advertenciaService.geraAdvertenciaColaborador(
+                jwtUtil.obtemUsuarioAtivo(req),
+                res,
+                idColaborador,
+                arquivoAdvertencia,
+                advertencia);
+    }
 
     @GetMapping("/{id}")
     @ApiOperation(
@@ -72,6 +108,69 @@ public class ColaboradorController {
         log.info("Endpoint de busca de colaborador por id acessado. ID recebido: {}", id);
         return ResponseEntity.ok().body(colaboradorService.realizaBuscaDeColaboradorPorId(
                 jwtUtil.obtemUsuarioAtivo(req), id));
+    }
+
+    @GetMapping("/{id}/acessos")
+    @ApiOperation(
+            value = "Busca paginada por acessos do colaborador",
+            notes = "Esse endpoint tem como objetivo realizar a busca paginada de acessos do colaborador",
+            produces = MediaType.APPLICATION_JSON,
+            consumes = MediaType.APPLICATION_JSON
+    )
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "A busca paginada de advertências do colaborador foi realizada com sucesso",
+                    response = AcessoPageResponse.class),
+    })
+    @PreAuthorize("hasAnyRole('COLABORADORES')")
+    public ResponseEntity<AcessoPageResponse> obtemAcessosColaboradorPaginada(
+            Pageable pageable,
+            HttpServletRequest req,
+            @PathVariable("id") Long id) {
+        log.info("Endpoint de busca paginada de acessos do colaborador acessada");
+        return ResponseEntity.ok().body(acessoService.obtemAcessosColaborador(
+                jwtUtil.obtemUsuarioAtivo(req), pageable, id));
+    }
+
+    @GetMapping("/{id}/advertencias")
+    @ApiOperation(
+            value = "Busca paginada por advertências do colaborador",
+            notes = "Esse endpoint tem como objetivo realizar a busca paginada de advertências do colaborador",
+            produces = MediaType.APPLICATION_JSON,
+            consumes = MediaType.APPLICATION_JSON
+    )
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "A busca paginada de advertências do colaborador foi realizada com sucesso",
+                    response = ColaboradorPageResponse.class),
+    })
+    @PreAuthorize("hasAnyRole('COLABORADORES')")
+    public ResponseEntity<AdvertenciaPageResponse> obtemAdvertenciasColaboradorPaginada(
+            Pageable pageable,
+            HttpServletRequest req,
+            @PathVariable("id") Long id) {
+        log.info("Endpoint de busca paginada de advertências do colaborador acessada");
+        return ResponseEntity.ok().body(advertenciaService.obtemAdvertenciasColaborador(
+                jwtUtil.obtemUsuarioAtivo(req), pageable, id));
+    }
+
+    @GetMapping("/{id}/acoes")
+    @ApiOperation(
+            value = "Busca paginada por ações de colaborador",
+            notes = "Esse endpoint tem como objetivo realizar a busca paginada de ações de colaborador",
+            produces = MediaType.APPLICATION_JSON,
+            consumes = MediaType.APPLICATION_JSON
+    )
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "A busca paginada de ações do colaborador foi realizada com sucesso",
+                    response = AcaoPageResponse.class),
+    })
+    @PreAuthorize("hasAnyRole('COLABORADORES')")
+    public ResponseEntity<AcaoPageResponse> obtemAcoesColaboradorPaginada(
+            Pageable pageable,
+            HttpServletRequest req,
+            @PathVariable("id") Long id) {
+        log.info("Endpoint de busca paginada de ações do colaborador acessada");
+        return ResponseEntity.ok().body(acaoService.obtemAcoesColaborador(
+                jwtUtil.obtemUsuarioAtivo(req), pageable, id));
     }
 
     @GetMapping
@@ -132,13 +231,18 @@ public class ColaboradorController {
             @ApiResponse(code = 400, message = "Nenhum colaborador foi encontrado com o id informado", response = ObjectNotFoundException.class)
     })
     @PreAuthorize("hasAnyRole('COLABORADORES')")
-    public ResponseEntity<ColaboradorResponse> atualizaColaborador(HttpServletRequest req,
-                                                                   @RequestBody ColaboradorDto colaboradorDto,
-                                                                   @PathVariable Long id) {
+    public ResponseEntity<String> atualizaColaborador(HttpServletRequest req,
+                                                      @RequestParam(value = "contratoColaborador", required = false) MultipartFile contratoColaborador,
+                                                      @RequestParam("colaborador") String colaborador,
+                                                      @RequestParam("id") Long id) throws IOException {
         log.info("Método controlador de atualização de colaborador acessado");
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(colaboradorService.atualizaColaborador(jwtUtil.obtemUsuarioAtivo(req), id, colaboradorDto));
+                .body(colaboradorService.atualizaColaborador(
+                        jwtUtil.obtemUsuarioAtivo(req),
+                        id,
+                        contratoColaborador,
+                        colaborador).getMatricula());
     }
 
     @DeleteMapping
@@ -201,7 +305,7 @@ public class ColaboradorController {
     @PreAuthorize("hasAnyRole('COLABORADORES')")
     public void relatorio(HttpServletResponse res,
                           HttpServletRequest req,
-                          @RequestBody List<Long> ids) throws DocumentException {
+                          @RequestBody List<Long> ids) throws DocumentException, IOException {
         log.info("Método controlador de obtenção de relatório de colaboradores em PDF acessado. IDs: {}", ids);
 
         ColaboradorEntity usuarioAtivo = jwtUtil.obtemUsuarioAtivo(req);
@@ -215,7 +319,7 @@ public class ColaboradorController {
                 + ".pdf";
         res.setHeader(headerKey, headerValue);
 
-        //relatorioService.exportarPdf(res, usuarioAtivo, ids);
+        relatorioService.exportarPdf(res, usuarioAtivo, ids);
     }
 
     @GetMapping("/ocupacoes")

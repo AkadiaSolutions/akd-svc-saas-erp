@@ -5,12 +5,14 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public enum TipoTelefoneEnum {
+public enum TipoArquivoEnum {
 
-    FIXO (0, "Fixo"),
-    MOVEL (1, "Móvel"),
-    MOVEL_WHATSAPP (2, "Móvel com whatsapp");
+    JPG(0, "jpeg"),
+    PNG(1, "png"),
+    PDF(2, "pdf"),
+    DOCX(3, "docx");
 
     private final int code;
     private final String desc;
+
 }
