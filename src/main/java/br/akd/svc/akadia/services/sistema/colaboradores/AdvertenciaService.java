@@ -5,9 +5,12 @@ import br.akd.svc.akadia.models.entities.global.ArquivoEntity;
 import br.akd.svc.akadia.models.entities.sistema.colaboradores.AdvertenciaEntity;
 import br.akd.svc.akadia.models.entities.sistema.colaboradores.ColaboradorEntity;
 import br.akd.svc.akadia.models.enums.global.TipoArquivoEnum;
+import br.akd.svc.akadia.models.enums.sistema.colaboradores.ModulosEnum;
+import br.akd.svc.akadia.models.enums.sistema.colaboradores.TipoAcaoEnum;
 import br.akd.svc.akadia.repositories.sistema.colaboradores.ColaboradorRepository;
 import br.akd.svc.akadia.repositories.sistema.colaboradores.impl.ColaboradorRepositoryImpl;
 import br.akd.svc.akadia.services.exceptions.ObjectNotFoundException;
+import br.akd.svc.akadia.utils.Constantes;
 import br.akd.svc.akadia.utils.SecurityUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -37,6 +40,66 @@ public class AdvertenciaService {
     @Autowired
     AdvertenciaRelatorioService advertenciaRelatorioService;
 
+    @Autowired
+    AcaoService acaoService;
+
+    String NENHUMA_ADVERTENCIA_ENCONTRADA = "Nenhuma advertência foi encontrada no colaborador atual";
+
+    public void anexaArquivoAdvertencia(ColaboradorEntity colaboradorLogado,
+                                        MultipartFile anexo,
+                                        Long idColaborador,
+                                        Long idAdvertencia) throws IOException {
+
+        log.debug("Método de serviço de anexação de PDF padrão na advertência acessado");
+
+        log.debug("Iniciando acesso ao método de verificação se colaborador logado possui nível de permissão " +
+                "suficiente para realizar alterações");
+        SecurityUtil.verificaSePodeRealizarAlteracoes(colaboradorLogado.getAcessoSistema());
+
+        log.debug("Obtendo colaborador pelo id {}...", idColaborador);
+        ColaboradorEntity colaborador = colaboradorRepositoryImpl.implementaBuscaPorId(idColaborador,
+                colaboradorLogado.getEmpresa().getId());
+
+        log.debug("Gerando uma lista com todas as advertências do colaboador encontrado...");
+        List<AdvertenciaEntity> advertenciaList = colaborador.getAdvertencias();
+
+        AdvertenciaEntity advertenciaEntity = null;
+
+        log.debug("Iniciando iteração por todas as advertências do colaborador...");
+        for (AdvertenciaEntity advertencia : advertenciaList) {
+            log.debug("Verificando se advertência de id {} possui o mesmo id recebido por parâmetro: ({})",
+                    advertencia.getId(), idAdvertencia);
+            if (Objects.equals(advertencia.getId(), idAdvertencia)) {
+                log.debug("A advertência possui o mesmo id");
+                advertenciaEntity = advertencia;
+            }
+        }
+
+        if (advertenciaEntity == null) {
+            log.error(NENHUMA_ADVERTENCIA_ENCONTRADA);
+            throw new ObjectNotFoundException(NENHUMA_ADVERTENCIA_ENCONTRADA);
+        }
+
+        log.debug("Setando contrato na advertência do colaborador...");
+        advertenciaEntity.setAdvertenciaAssinada(anexo != null
+                ? ArquivoEntity.builder()
+                .nome(anexo.getOriginalFilename())
+                .tipo(realizaTratamentoTipoDeArquivoDoContratoAdvertencia(anexo.getContentType()))
+                .tamanho(anexo.getSize())
+                .arquivo(anexo.getBytes())
+                .build()
+                : null);
+
+        log.debug("Realizando atualização do objeto colaborador com advertência acoplada...");
+        colaboradorRepositoryImpl.implementaPersistencia(colaborador);
+
+        log.debug(Constantes.INICIANDO_SALVAMENTO_HISTORICO_COLABORADOR);
+        acaoService.salvaHistoricoColaborador(colaboradorLogado, colaborador.getId(),
+                ModulosEnum.COLABORADORES, TipoAcaoEnum.ALTERACAO, "Anexo adicionado à advertência");
+
+        log.info("Atualização de anexo da advertência de id {} finalizado com sucesso", idAdvertencia);
+    }
+
     public void geraPdfPadraoAdvertencia(ColaboradorEntity colaboradorLogado,
                                          HttpServletResponse res,
                                          Long idColaborador,
@@ -48,17 +111,34 @@ public class AdvertenciaService {
         ColaboradorEntity colaborador = colaboradorRepositoryImpl.implementaBuscaPorId(idColaborador,
                 colaboradorLogado.getEmpresa().getId());
 
+        log.debug("Gerando uma lista com todas as advertências do colaboador encontrado...");
         List<AdvertenciaEntity> advertenciaList = colaborador.getAdvertencias();
 
         AdvertenciaEntity advertenciaEntity = null;
 
-        for (AdvertenciaEntity advertencia: advertenciaList) {
-            if (Objects.equals(advertencia.getId(), idAdvertencia)) advertenciaEntity = advertencia;
+        log.debug("Iniciando iteração por todas as advertências do colaborador...");
+        for (AdvertenciaEntity advertencia : advertenciaList) {
+            log.debug("Verificando se advertência de id {} possui o mesmo id recebido por parâmetro: ({})",
+                    advertencia.getId(), idAdvertencia);
+            if (Objects.equals(advertencia.getId(), idAdvertencia)) {
+                log.debug("A advertência possui o mesmo id");
+                advertenciaEntity = advertencia;
+            }
         }
 
-        if (advertenciaEntity == null) throw new ObjectNotFoundException("Nenhuma advertência foi encontrada no colaborador atual");
+        if (advertenciaEntity == null) {
+            log.error(NENHUMA_ADVERTENCIA_ENCONTRADA);
+            throw new ObjectNotFoundException(NENHUMA_ADVERTENCIA_ENCONTRADA);
+        }
 
+        log.debug("Iniciando exportação do PDF padrão");
         advertenciaRelatorioService.exportarPdf(res, colaboradorLogado, colaborador, advertenciaEntity);
+
+        log.debug(Constantes.INICIANDO_SALVAMENTO_HISTORICO_COLABORADOR);
+        acaoService.salvaHistoricoColaborador(colaboradorLogado, colaborador.getId(),
+                ModulosEnum.COLABORADORES, TipoAcaoEnum.RELATORIO, "Arquivo padrão de advertência gerado");
+
+        log.info("Exportação do PDF padrão da advertência de id {} realizado com sucesso", idAdvertencia);
     }
 
     public void geraAdvertenciaColaborador(ColaboradorEntity colaboradorLogado,
@@ -102,6 +182,10 @@ public class AdvertenciaService {
 
         log.debug("Iniciando acesso ao método de exportação de PDF para gerar a advertência em PDF...");
         advertenciaRelatorioService.exportarPdf(res, colaboradorLogado, colaborador, advertenciaEntity);
+
+        log.debug(Constantes.INICIANDO_SALVAMENTO_HISTORICO_COLABORADOR);
+        acaoService.salvaHistoricoColaborador(colaboradorLogado, colaborador.getId(),
+                ModulosEnum.COLABORADORES, TipoAcaoEnum.ALTERACAO, "Advertência criada");
 
         log.info("Requisição finalizada com sucesso");
     }

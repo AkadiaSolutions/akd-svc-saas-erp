@@ -39,6 +39,28 @@ public class AdvertenciaController {
     @Autowired
     JWTUtil jwtUtil;
 
+    @PutMapping("anexa-documento/{idColaborador}/{idAdvertencia}")
+    @ApiOperation(
+            value = "Anexação de arquivo na advertência",
+            notes = "Esse endpoint tem como objetivo realizar a chamada à lógica de anexação de arquivo em uma advertência"
+    )
+    @ApiResponses({
+            @ApiResponse(code = 201, message = "Arquivo anexado com sucesso", response = String.class),
+            @ApiResponse(code = 400, message = "Erro de requisição inválida", response = InvalidRequestException.class)
+    })
+    @PreAuthorize("hasAnyRole('COLABORADORES')")
+    public void anexaArquivoAdvertencia(HttpServletRequest req,
+                                        @RequestParam(value = "anexo", required = false) MultipartFile anexo,
+                                        @PathVariable(value = "idColaborador") Long idColaborador,
+                                        @PathVariable(value = "idAdvertencia") Long idAdvertencia) throws IOException {
+        log.info("Método controlador de anexação de arquivo em advertência acessado");
+        advertenciaService.anexaArquivoAdvertencia(
+                jwtUtil.obtemUsuarioAtivo(req),
+                anexo,
+                idColaborador,
+                idAdvertencia);
+    }
+
     @GetMapping("pdf-padrao/{idColaborador}/{idAdvertencia}")
     @ApiOperation(
             value = "Obtenção de PDF padrão",
