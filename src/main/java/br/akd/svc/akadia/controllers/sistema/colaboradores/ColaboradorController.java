@@ -49,9 +49,6 @@ public class ColaboradorController {
     AcaoService acaoService;
 
     @Autowired
-    AdvertenciaService advertenciaService;
-
-    @Autowired
     AcessoService acessoService;
 
     @Autowired
@@ -62,31 +59,6 @@ public class ColaboradorController {
 
     @Autowired
     JWTUtil jwtUtil;
-
-    @PostMapping("/{idColaborador}/advertencias")
-    @ApiOperation(
-            value = "Criação de nova advertência",
-            notes = "Esse endpoint tem como objetivo realizar a criação de uma advertência e atribuí-la " +
-                    "a um colaborador específico"
-    )
-    @ApiResponses({
-            @ApiResponse(code = 201, message = "Advertência persistida com sucesso", response = String.class),
-            @ApiResponse(code = 400, message = "Erro de requisição inválida", response = InvalidRequestException.class)
-    })
-    @PreAuthorize("hasAnyRole('COLABORADORES')")
-    public void criaNovaAdvertencia(HttpServletRequest req,
-                                                      HttpServletResponse res,
-                                                      @PathVariable(value = "idColaborador") Long idColaborador,
-                                                      @RequestParam(value = "arquivoAdvertencia", required = false) MultipartFile arquivoAdvertencia,
-                                                      @RequestParam("advertencia") String advertencia) throws IOException {
-        log.info("Método controlador de criação de nova advertência acessado");
-        advertenciaService.geraAdvertenciaColaborador(
-                jwtUtil.obtemUsuarioAtivo(req),
-                res,
-                idColaborador,
-                arquivoAdvertencia,
-                advertencia);
-    }
 
     @GetMapping("/{id}")
     @ApiOperation(
@@ -128,27 +100,6 @@ public class ColaboradorController {
             @PathVariable("id") Long id) {
         log.info("Endpoint de busca paginada de acessos do colaborador acessada");
         return ResponseEntity.ok().body(acessoService.obtemAcessosColaborador(
-                jwtUtil.obtemUsuarioAtivo(req), pageable, id));
-    }
-
-    @GetMapping("/{id}/advertencias")
-    @ApiOperation(
-            value = "Busca paginada por advertências do colaborador",
-            notes = "Esse endpoint tem como objetivo realizar a busca paginada de advertências do colaborador",
-            produces = MediaType.APPLICATION_JSON,
-            consumes = MediaType.APPLICATION_JSON
-    )
-    @ApiResponses({
-            @ApiResponse(code = 200, message = "A busca paginada de advertências do colaborador foi realizada com sucesso",
-                    response = ColaboradorPageResponse.class),
-    })
-    @PreAuthorize("hasAnyRole('COLABORADORES')")
-    public ResponseEntity<AdvertenciaPageResponse> obtemAdvertenciasColaboradorPaginada(
-            Pageable pageable,
-            HttpServletRequest req,
-            @PathVariable("id") Long id) {
-        log.info("Endpoint de busca paginada de advertências do colaborador acessada");
-        return ResponseEntity.ok().body(advertenciaService.obtemAdvertenciasColaborador(
                 jwtUtil.obtemUsuarioAtivo(req), pageable, id));
     }
 
