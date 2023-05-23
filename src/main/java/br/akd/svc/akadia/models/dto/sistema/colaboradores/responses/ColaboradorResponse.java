@@ -1,5 +1,6 @@
 package br.akd.svc.akadia.models.dto.sistema.colaboradores.responses;
 
+import br.akd.svc.akadia.models.entities.global.ArquivoEntity;
 import br.akd.svc.akadia.models.entities.global.EnderecoEntity;
 import br.akd.svc.akadia.models.entities.global.TelefoneEntity;
 import br.akd.svc.akadia.models.entities.sistema.colaboradores.*;
@@ -29,7 +30,6 @@ public class ColaboradorResponse {
     private Double salario;
     private String entradaEmpresa;
     private String saidaEmpresa;
-    private byte[] contratoContratacao;
     private String ocupacao;
     private TipoOcupacaoEnum tipoOcupacaoEnum;
     private ModeloContratacaoEnum modeloContratacaoEnum;
@@ -38,6 +38,7 @@ public class ColaboradorResponse {
     private ExclusaoColaboradorResponse exclusao;
     private AcessoSistemaResponse acessoSistema;
     private ConfiguracaoPerfilEntity configuracaoPerfil;
+    private ArquivoEntity contratoContratacao;
     private EnderecoEntity endereco;
     private TelefoneEntity telefone;
     private ExpedienteEntity expediente;

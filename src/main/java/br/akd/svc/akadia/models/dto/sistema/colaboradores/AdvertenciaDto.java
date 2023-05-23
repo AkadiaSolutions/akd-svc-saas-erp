@@ -1,5 +1,7 @@
 package br.akd.svc.akadia.models.dto.sistema.colaboradores;
 
+import br.akd.svc.akadia.models.entities.global.ArquivoEntity;
+import br.akd.svc.akadia.models.enums.sistema.colaboradores.StatusAdvertenciaEnum;
 import lombok.*;
 
 @Getter
@@ -14,5 +16,6 @@ public class AdvertenciaDto {
     private String horaCadastro;
     private String motivo;
     private String descricao;
-    private byte[] advertenciaAssinada;
+    private StatusAdvertenciaEnum statusAdvertenciaEnum;
+    private ArquivoEntity advertenciaAssinada;
 }

@@ -18,9 +18,9 @@ public class ColaboradorRepositoryImpl {
     @Autowired
     ColaboradorRepository colaboradorRepository;
 
-    public List<ColaboradorEntity> implementaBuscaTodosOsColaboradores() {
-        log.debug("Método de serviço que implementa busca por todos os colaboradores cadastrados acessado");
-        return colaboradorRepository.findAll();
+    public List<ColaboradorEntity> implementaBuscaPorTodos(Long id) {
+        log.debug("Método de serviço que implementa busca por todos os colaboradores cadastrados em uma empresa acessado");
+        return colaboradorRepository.buscaTodos(id);
     }
 
     @Transactional
@@ -50,6 +50,21 @@ public class ColaboradorRepositoryImpl {
         }
         log.debug("Retornando o colaborador encontrado...");
         return colaboradorEntity;
+    }
+
+    public List<ColaboradorEntity> implementaBuscaPorIdEmMassa(List<Long> ids) {
+        log.debug("Método que implementa busca de colaborador por id em massa acessado. Ids: {}", ids.toString());
+
+        List<ColaboradorEntity> colaboradores = colaboradorRepository.findAllById(ids);
+
+        if (!colaboradores.isEmpty()) {
+            log.debug("{} Colaboradores encontrados", colaboradores.size());
+        } else {
+            log.warn("Nenhum colaborador foi encontrado");
+            throw new ObjectNotFoundException("Nenhum colaborador foi encontrado com os ids informados");
+        }
+        log.debug("Retornando os colaboradores encontrados...");
+        return colaboradores;
     }
 
 }

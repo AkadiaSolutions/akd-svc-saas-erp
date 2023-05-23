@@ -10,9 +10,14 @@ import br.akd.svc.akadia.models.entities.global.TelefoneEntity;
 import br.akd.svc.akadia.models.entities.sistema.clientes.ClienteEntity;
 import br.akd.svc.akadia.models.entities.sistema.clientes.ExclusaoClienteEntity;
 import br.akd.svc.akadia.models.entities.sistema.colaboradores.ColaboradorEntity;
+import br.akd.svc.akadia.models.enums.sistema.colaboradores.ModulosEnum;
+import br.akd.svc.akadia.models.enums.sistema.colaboradores.TipoAcaoEnum;
 import br.akd.svc.akadia.repositories.sistema.clientes.ClienteRepository;
 import br.akd.svc.akadia.repositories.sistema.clientes.impl.ClienteRepositoryImpl;
 import br.akd.svc.akadia.services.exceptions.InvalidRequestException;
+import br.akd.svc.akadia.services.sistema.colaboradores.AcaoService;
+import br.akd.svc.akadia.utils.Constantes;
+import br.akd.svc.akadia.utils.SecurityUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -27,6 +32,9 @@ import java.util.List;
 @Slf4j
 @Service
 public class ClienteService {
+
+    @Autowired
+    AcaoService acaoService;
 
     @Autowired
     ClienteRepositoryImpl clienteRepositoryImpl;
@@ -81,6 +89,10 @@ public class ClienteService {
 
         log.debug("Método de serviço de criação de novo cliente acessado");
 
+        log.debug("Iniciando acesso ao método de verificação se colaborador logado possui nível de permissão " +
+                "suficiente para realizar alterações");
+        SecurityUtil.verificaSePodeRealizarAlteracoes(colaboradorLogado.getAcessoSistema());
+
         log.debug("Iniciando acesso ao método de validação de chave única...");
         validaSeChavesUnicasJaExistemParaNovoCliente(clienteDto, colaboradorLogado);
 
@@ -116,6 +128,10 @@ public class ClienteService {
         log.debug("Iniciando acesso ao método de implementação da persistência do cliente...");
         ClienteEntity clientePersistido = clienteRepositoryImpl.implementaPersistencia(clienteEntity);
 
+        log.debug(Constantes.INICIANDO_SALVAMENTO_HISTORICO_COLABORADOR);
+        acaoService.salvaHistoricoColaborador(colaboradorLogado, clientePersistido.getId(),
+                ModulosEnum.CLIENTES, TipoAcaoEnum.CRIACAO, null);
+
         log.debug("Cliente persistido com sucesso. Convertendo clienteEntity para clienteResponse...");
         ClienteResponse clienteResponse = converteClienteEntityParaClienteResponse(clientePersistido);
 
@@ -146,6 +162,10 @@ public class ClienteService {
 
     public ClienteResponse atualizaCliente(ColaboradorEntity colaboradorLogado, Long id, ClienteDto clienteDto) {
         log.debug("Método de serviço de atualização de cliente acessado");
+
+        log.debug("Iniciando acesso ao método de verificação se colaborador logado possui nível de permissão " +
+                "suficiente para realizar alterações");
+        SecurityUtil.verificaSePodeRealizarAlteracoes(colaboradorLogado.getAcessoSistema());
 
         log.debug(BUSCA_CLIENTE_POR_ID);
         ClienteEntity clienteEncontrado = clienteRepositoryImpl.implementaBuscaPorId(id, colaboradorLogado.getEmpresa().getId());
@@ -187,6 +207,10 @@ public class ClienteService {
 
         log.debug("Iniciando acesso ao método de implementação da persistência do cliente...");
         ClienteEntity clientePersistido = clienteRepositoryImpl.implementaPersistencia(novoClienteAtualizado);
+
+        log.debug(Constantes.INICIANDO_SALVAMENTO_HISTORICO_COLABORADOR);
+        acaoService.salvaHistoricoColaborador(colaboradorLogado, clientePersistido.getId(),
+                ModulosEnum.CLIENTES, TipoAcaoEnum.ALTERACAO, null);
 
         log.debug("Cliente persistido com sucesso. Convertendo clienteEntity para clienteResponse...");
         ClienteResponse clienteResponse = converteClienteEntityParaClienteResponse(clientePersistido);
@@ -260,6 +284,10 @@ public class ClienteService {
         log.debug("Persistindo cliente excluído no banco de dados...");
         ClienteEntity clienteExcluido = clienteRepositoryImpl.implementaPersistencia(clienteEncontrado);
 
+        log.debug(Constantes.INICIANDO_SALVAMENTO_HISTORICO_COLABORADOR);
+        acaoService.salvaHistoricoColaborador(colaboradorLogado, null,
+                ModulosEnum.CLIENTES, TipoAcaoEnum.REMOCAO, null);
+
         log.info("Cliente excluído com sucesso");
         return ClienteResponse.builder()
                 .id(clienteExcluido.getId())
@@ -312,6 +340,10 @@ public class ClienteService {
         if (!clientesEncontrados.isEmpty()) {
             log.debug("Persistindo cliente excluído no banco de dados...");
             clienteRepositoryImpl.implementaPersistenciaEmMassa(clientesEncontrados);
+
+            log.debug(Constantes.INICIANDO_SALVAMENTO_HISTORICO_COLABORADOR);
+            acaoService.salvaHistoricoColaborador(colaboradorLogado, null,
+                    ModulosEnum.CLIENTES, TipoAcaoEnum.REMOCAO_EM_MASSA, clientesEncontrados.size() + " Itens removidos");
         } else throw new InvalidRequestException("Nenhum cliente foi encontrado para remoção");
 
         log.info("Clientes excluídos com sucesso");
