@@ -7,6 +7,7 @@ import br.akd.svc.akadia.models.entities.sistema.colaboradores.ColaboradorEntity
 import br.akd.svc.akadia.models.enums.global.TipoArquivoEnum;
 import br.akd.svc.akadia.repositories.sistema.colaboradores.ColaboradorRepository;
 import br.akd.svc.akadia.repositories.sistema.colaboradores.impl.ColaboradorRepositoryImpl;
+import br.akd.svc.akadia.services.exceptions.ObjectNotFoundException;
 import br.akd.svc.akadia.utils.SecurityUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +22,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Objects;
 
 @Slf4j
 @Service
@@ -35,11 +37,35 @@ public class AdvertenciaService {
     @Autowired
     AdvertenciaRelatorioService advertenciaRelatorioService;
 
+    public void geraPdfPadraoAdvertencia(ColaboradorEntity colaboradorLogado,
+                                         HttpServletResponse res,
+                                         Long idColaborador,
+                                         Long idAdvertencia) throws IOException {
+
+        log.debug("Método de serviço de obtenção de PDF padrão da advertência acessado");
+
+        log.debug("Obtendo colaborador pelo id ({})...", idColaborador);
+        ColaboradorEntity colaborador = colaboradorRepositoryImpl.implementaBuscaPorId(idColaborador,
+                colaboradorLogado.getEmpresa().getId());
+
+        List<AdvertenciaEntity> advertenciaList = colaborador.getAdvertencias();
+
+        AdvertenciaEntity advertenciaEntity = null;
+
+        for (AdvertenciaEntity advertencia: advertenciaList) {
+            if (Objects.equals(advertencia.getId(), idAdvertencia)) advertenciaEntity = advertencia;
+        }
+
+        if (advertenciaEntity == null) throw new ObjectNotFoundException("Nenhuma advertência foi encontrada no colaborador atual");
+
+        advertenciaRelatorioService.exportarPdf(res, colaboradorLogado, colaborador, advertenciaEntity);
+    }
+
     public void geraAdvertenciaColaborador(ColaboradorEntity colaboradorLogado,
-                                             HttpServletResponse res,
-                                             Long idColaboradorAlvo,
-                                             MultipartFile contratoAdvertencia,
-                                             String advertenciaEmJson) throws IOException {
+                                           HttpServletResponse res,
+                                           Long idColaboradorAlvo,
+                                           MultipartFile contratoAdvertencia,
+                                           String advertenciaEmJson) throws IOException {
 
         log.debug("Método de serviço de criação de nova advertência acessado");
 
