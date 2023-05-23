@@ -3,6 +3,7 @@ package br.akd.svc.akadia.config.security;
 import br.akd.svc.akadia.models.entities.sistema.colaboradores.ColaboradorEntity;
 import br.akd.svc.akadia.repositories.sistema.colaboradores.ColaboradorRepository;
 import br.akd.svc.akadia.services.exceptions.ObjectNotFoundException;
+import br.akd.svc.akadia.services.sistema.colaboradores.AcessoService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -21,6 +22,9 @@ public class JWTUtil {
     @Autowired
     ColaboradorRepository colaboradorRepository;
 
+    @Autowired
+    AcessoService acessoService;
+
     @Value("${jwt.expiration}")
     private Long expiration;
 
@@ -28,6 +32,7 @@ public class JWTUtil {
     private String secret;
 
     public String generateToken(String username) {
+        acessoService.registraAcessoColaborador(username);
         return Jwts.builder()
                 .setSubject(username)
                 .setExpiration(new Date(System.currentTimeMillis() + expiration))

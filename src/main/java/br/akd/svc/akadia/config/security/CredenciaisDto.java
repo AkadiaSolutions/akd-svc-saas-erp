@@ -10,8 +10,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CredenciaisDto {
-
     private String matricula;
     private String senha;
-
 }
