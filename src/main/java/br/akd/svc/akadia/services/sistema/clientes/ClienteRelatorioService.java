@@ -2,7 +2,11 @@ package br.akd.svc.akadia.services.sistema.clientes;
 
 import br.akd.svc.akadia.models.entities.sistema.clientes.ClienteEntity;
 import br.akd.svc.akadia.models.entities.sistema.colaboradores.ColaboradorEntity;
+import br.akd.svc.akadia.models.enums.sistema.colaboradores.ModulosEnum;
+import br.akd.svc.akadia.models.enums.sistema.colaboradores.TipoAcaoEnum;
 import br.akd.svc.akadia.repositories.sistema.clientes.impl.ClienteRepositoryImpl;
+import br.akd.svc.akadia.services.sistema.colaboradores.AcaoService;
+import br.akd.svc.akadia.utils.Constantes;
 import com.lowagie.text.Font;
 import com.lowagie.text.*;
 import com.lowagie.text.pdf.PdfPCell;
@@ -29,6 +33,9 @@ public class ClienteRelatorioService {
 
     @Autowired
     ClienteRepositoryImpl clienteRepository;
+
+    @Autowired
+    AcaoService acaoService;
 
     Color STRONG_BLACK = new Color(0, 0, 0);
     Color WEAK_BLACK = new Color(30, 30, 30);
@@ -62,6 +69,11 @@ public class ClienteRelatorioService {
             log.debug("Iniciando acesso ao método de construção dos informativos do PDF...");
             document.add(constroiTabelaInformativos(clientes));
             log.info("PDF gerado com sucesso");
+
+            log.debug(Constantes.INICIANDO_SALVAMENTO_HISTORICO_COLABORADOR);
+            acaoService.salvaHistoricoColaborador(usuarioLogado, null,
+                    ModulosEnum.CLIENTES, TipoAcaoEnum.RELATORIO, null);
+
         } catch (Exception e) {
             log.error("Ocorreu um erro na criação do PDF: {}", e.getMessage());
             throw new InvalidClassException(e.toString());

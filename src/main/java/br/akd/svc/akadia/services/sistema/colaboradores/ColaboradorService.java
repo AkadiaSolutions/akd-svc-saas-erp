@@ -6,15 +6,21 @@ import br.akd.svc.akadia.models.dto.sistema.colaboradores.responses.AcessoSistem
 import br.akd.svc.akadia.models.dto.sistema.colaboradores.responses.ColaboradorPageResponse;
 import br.akd.svc.akadia.models.dto.sistema.colaboradores.responses.ColaboradorResponse;
 import br.akd.svc.akadia.models.dto.sistema.colaboradores.responses.ExclusaoColaboradorResponse;
+import br.akd.svc.akadia.models.entities.global.ArquivoEntity;
 import br.akd.svc.akadia.models.entities.global.EnderecoEntity;
 import br.akd.svc.akadia.models.entities.global.TelefoneEntity;
 import br.akd.svc.akadia.models.entities.sistema.colaboradores.*;
+import br.akd.svc.akadia.models.enums.global.TipoArquivoEnum;
 import br.akd.svc.akadia.models.enums.sistema.colaboradores.ModulosEnum;
+import br.akd.svc.akadia.models.enums.sistema.colaboradores.PermissaoEnum;
 import br.akd.svc.akadia.models.enums.sistema.colaboradores.TemaTelaEnum;
+import br.akd.svc.akadia.models.enums.sistema.colaboradores.TipoAcaoEnum;
 import br.akd.svc.akadia.repositories.sistema.colaboradores.ColaboradorRepository;
 import br.akd.svc.akadia.repositories.sistema.colaboradores.impl.ColaboradorRepositoryImpl;
 import br.akd.svc.akadia.services.exceptions.InvalidRequestException;
+import br.akd.svc.akadia.utils.Constantes;
 import br.akd.svc.akadia.utils.ConversorDeDados;
+import br.akd.svc.akadia.utils.SecurityUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,11 +36,14 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Slf4j
 @Service
 public class ColaboradorService {
+
+    @Autowired
+    AcaoService acaoService;
+
     @Autowired
     ColaboradorRepositoryImpl colaboradorRepositoryImpl;
 
@@ -49,6 +58,10 @@ public class ColaboradorService {
 
         log.debug("Método de serviço de criação de novo colaborador acessado");
 
+        log.debug("Iniciando acesso ao método de verificação se colaborador logado possui nível de permissão " +
+                "suficiente para realizar alterações");
+        SecurityUtil.verificaSePodeRealizarAlteracoes(colaboradorLogado.getAcessoSistema());
+
         log.debug("Convertendo objeto colaborador recebido de Json para entity...");
         ColaboradorEntity colaboradorEntity = new ObjectMapper().readValue(colaboradorEmJson, ColaboradorEntity.class);
 
@@ -56,7 +69,14 @@ public class ColaboradorService {
         colaboradorEntity.setDataCadastro(LocalDate.now().toString());
         colaboradorEntity.setHoraCadastro(LocalTime.now().toString());
         colaboradorEntity.setMatricula(geraMatriculaUnica());
-        colaboradorEntity.setContratoContratacao(contratoColaborador != null ? contratoColaborador.getBytes() : null);
+        colaboradorEntity.setContratoContratacao(contratoColaborador != null
+                ? ArquivoEntity.builder()
+                .nome(contratoColaborador.getOriginalFilename())
+                .tipo(realizaTratamentoTipoDeArquivoDoContratoColaborador(contratoColaborador.getContentType()))
+                .tamanho(contratoColaborador.getSize())
+                .arquivo(contratoColaborador.getBytes())
+                .build()
+                : null);
         colaboradorEntity.setExclusao(ExclusaoColaboradorEntity.builder()
                 .excluido(false)
                 .dataExclusao(null)
@@ -79,12 +99,26 @@ public class ColaboradorService {
         log.debug("Iniciando acesso ao método de implementação da persistência do colaborador...");
         ColaboradorEntity colaboradorPersistido = colaboradorRepositoryImpl.implementaPersistencia(colaboradorEntity);
 
+        log.debug(Constantes.INICIANDO_SALVAMENTO_HISTORICO_COLABORADOR);
+        acaoService.salvaHistoricoColaborador(colaboradorLogado, colaboradorPersistido.getId(),
+                ModulosEnum.COLABORADORES, TipoAcaoEnum.CRIACAO, null);
+
         log.info("Colaborador criado com sucesso");
         return colaboradorPersistido.getMatricula();
     }
 
-    public ColaboradorResponse atualizaColaborador(ColaboradorEntity colaboradorLogado, Long id, ColaboradorDto colaboradorDto) {
+    public ColaboradorResponse atualizaColaborador(ColaboradorEntity colaboradorLogado,
+                                                   Long id,
+                                                   MultipartFile contratoColaborador,
+                                                   String colaboradorEmJson) throws IOException {
         log.debug("Método de serviço de atualização de colaborador acessado");
+
+        log.debug("Iniciando acesso ao método de verificação se colaborador logado possui nível de permissão " +
+                "suficiente para realizar alterações");
+        SecurityUtil.verificaSePodeRealizarAlteracoes(colaboradorLogado.getAcessoSistema());
+
+        log.debug("Convertendo objeto colaborador recebido de Json para entity...");
+        ColaboradorDto colaboradorDto = new ObjectMapper().readValue(colaboradorEmJson, ColaboradorDto.class);
 
         log.debug(BUSCA_COLABORADOR_POR_ID);
         ColaboradorEntity colaboradorEncontrado =
@@ -107,21 +141,21 @@ public class ColaboradorService {
                 .salario(colaboradorDto.getSalario())
                 .entradaEmpresa(colaboradorDto.getEntradaEmpresa())
                 .saidaEmpresa(colaboradorDto.getSaidaEmpresa())
-                .contratoContratacao(colaboradorDto.getContratoContratacao())
+                .contratoContratacao(contratoColaborador != null
+                        ? ArquivoEntity.builder()
+                        .nome(contratoColaborador.getOriginalFilename())
+                        .tipo(realizaTratamentoTipoDeArquivoDoContratoColaborador(contratoColaborador.getContentType()))
+                        .tamanho(contratoColaborador.getSize())
+                        .arquivo(contratoColaborador.getBytes())
+                        .build()
+                        : null)
                 .ocupacao(colaboradorDto.getOcupacao())
                 .tipoOcupacaoEnum(colaboradorDto.getTipoOcupacaoEnum())
                 .modeloContratacaoEnum(colaboradorDto.getModeloContratacaoEnum())
                 .modeloTrabalhoEnum(colaboradorDto.getModeloTrabalhoEnum())
                 .statusColaboradorEnum(colaboradorDto.getStatusColaboradorEnum())
                 .exclusao(colaboradorEncontrado.getExclusao())
-                .acessoSistema(AcessoSistemaEntity.builder()
-                        .senha(colaboradorDto.getAcessoSistema().getSenha())
-                        .senhaCriptografada(new BCryptPasswordEncoder().encode(colaboradorDto.getAcessoSistema().getSenha()))
-                        .acessoSistemaAtivo(colaboradorDto.getAcessoSistema().getAcessoSistemaAtivo())
-                        .permissaoEnum(colaboradorDto.getAcessoSistema().getPermissaoEnum())
-                        .privilegios(realizaTratamentoDosPrivilegiosDoColaboradorAtualizado(
-                                colaboradorDto.getAcessoSistema().getPrivilegios()))
-                        .build())
+                .acessoSistema(constroiObjetoAcessoSistemaParaAtualizacaoDeColaborador(colaboradorEncontrado, colaboradorDto))
                 .configuracaoPerfil(colaboradorEncontrado.getConfiguracaoPerfil())
                 .endereco(realizaTratamentoEnderecoDoColaboradorAtualizado(colaboradorDto.getEndereco(), colaboradorEncontrado))
                 .telefone(colaboradorDto.getTelefone() == null
@@ -132,21 +166,31 @@ public class ColaboradorService {
                         .numero(colaboradorDto.getTelefone().getNumero())
                         .tipoTelefone(colaboradorDto.getTelefone().getTipoTelefone())
                         .build())
-                .expediente(ExpedienteEntity.builder()
+                .expediente(colaboradorDto.getExpediente() != null
+                        ? ExpedienteEntity.builder()
                         .horaEntrada(colaboradorDto.getExpediente().getHoraEntrada())
                         .horaEntradaAlmoco(colaboradorDto.getExpediente().getHoraEntradaAlmoco())
                         .horaSaidaAlmoco(colaboradorDto.getExpediente().getHoraSaidaAlmoco())
                         .horaSaida(colaboradorDto.getExpediente().getHoraSaida())
                         .cargaHorariaSemanal(colaboradorDto.getExpediente().getCargaHorariaSemanal())
                         .escalaEnum(colaboradorDto.getExpediente().getEscalaEnum())
-                        .build())
-                .dispensa(null)
+                        .build()
+                        : null)
+                .dispensa(colaboradorEncontrado.getDispensa())
+                .acoes(colaboradorEncontrado.getAcoes())
+                .advertencias(colaboradorEncontrado.getAdvertencias())
+                .historicoFerias(colaboradorEncontrado.getHistoricoFerias())
+                .pontos(colaboradorEncontrado.getPontos())
                 .empresa(colaboradorLogado.getEmpresa())
                 .build();
         log.debug("Objeto colaborador construído com sucesso");
 
         log.debug("Iniciando acesso ao método de implementação da persistência do colaborador...");
         ColaboradorEntity colaboradorPersistido = colaboradorRepositoryImpl.implementaPersistencia(novoColaboradorAtualizado);
+
+        log.debug(Constantes.INICIANDO_SALVAMENTO_HISTORICO_COLABORADOR);
+        acaoService.salvaHistoricoColaborador(colaboradorLogado, colaboradorPersistido.getId(),
+                ModulosEnum.COLABORADORES, TipoAcaoEnum.ALTERACAO, null);
 
         log.debug("Colaborador persistido com sucesso. Convertendo colaboradorEntity para colaboradorResponse...");
         ColaboradorResponse colaboradorResponse = converteColaboradorEntityParaColaboradorResponse(colaboradorPersistido);
@@ -155,9 +199,46 @@ public class ColaboradorService {
         return colaboradorResponse;
     }
 
-    private Set<ModulosEnum> realizaTratamentoDosPrivilegiosDoColaboradorAtualizado(List<ModulosEnum> privilegios) {
-        //TODO Elaborar lógica
-        return new HashSet<>();
+    private AcessoSistemaEntity constroiObjetoAcessoSistemaParaAtualizacaoDeColaborador(ColaboradorEntity colaboradorPreAtualizacao,
+                                                                                        ColaboradorDto colaboradorNovo) {
+
+        if (Boolean.FALSE.equals(colaboradorNovo.getAcessoSistema().getAcessoSistemaAtivo())) return
+                AcessoSistemaEntity.builder()
+                        .acessoSistemaAtivo(false)
+                        .senha(null)
+                        .senhaCriptografada(null)
+                        .permissaoEnum(PermissaoEnum.LEITURA_BASICA)
+                        .privilegios(new HashSet<>())
+                        .build();
+        else {
+            return AcessoSistemaEntity.builder()
+                    .senha((colaboradorNovo.getAcessoSistema().getSenha() != null && !"".equals(colaboradorNovo.getAcessoSistema().getSenha()))
+                            ? colaboradorNovo.getAcessoSistema().getSenha()
+                            : colaboradorPreAtualizacao.getAcessoSistema().getSenha())
+                    .senhaCriptografada(new BCryptPasswordEncoder().encode(colaboradorNovo.getAcessoSistema().getSenha()))
+                    .acessoSistemaAtivo(colaboradorNovo.getAcessoSistema().getAcessoSistemaAtivo())
+                    .permissaoEnum(colaboradorNovo.getAcessoSistema().getPermissaoEnum())
+                    .privilegios(colaboradorNovo.getAcessoSistema().getPrivilegios() != null
+                            ? new HashSet<>(colaboradorNovo.getAcessoSistema().getPrivilegios())
+                            : new HashSet<>())
+                    .build();
+        }
+    }
+
+    private TipoArquivoEnum realizaTratamentoTipoDeArquivoDoContratoColaborador(String tipoArquivo) {
+
+        if (tipoArquivo == null) return TipoArquivoEnum.PDF;
+
+        switch (tipoArquivo) {
+            case "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
+                return TipoArquivoEnum.DOCX;
+            case "image/png":
+                return TipoArquivoEnum.PNG;
+            case "image/jpeg":
+                return TipoArquivoEnum.JPG;
+            default:
+                return TipoArquivoEnum.PDF;
+        }
     }
 
     private EnderecoEntity realizaTratamentoEnderecoDoColaboradorAtualizado(EnderecoDto enderecoDto,
@@ -226,6 +307,10 @@ public class ColaboradorService {
         log.debug("Persistindo colaborador excluído no banco de dados...");
         ColaboradorEntity colaboradorExcluido = colaboradorRepositoryImpl.implementaPersistencia(colaboradorEncontrado);
 
+        log.debug(Constantes.INICIANDO_SALVAMENTO_HISTORICO_COLABORADOR);
+        acaoService.salvaHistoricoColaborador(colaboradorLogado, null,
+                ModulosEnum.COLABORADORES, TipoAcaoEnum.REMOCAO, null);
+
         log.info("Colaborador excluído com sucesso");
         return ColaboradorResponse.builder()
                 .id(colaboradorExcluido.getId())
@@ -264,6 +349,10 @@ public class ColaboradorService {
         if (!colaboradoresEncontrados.isEmpty()) {
             log.debug("Persistindo colaborador excluído no banco de dados...");
             colaboradorRepositoryImpl.implementaPersistenciaEmMassa(colaboradoresEncontrados);
+
+            log.debug(Constantes.INICIANDO_SALVAMENTO_HISTORICO_COLABORADOR);
+            acaoService.salvaHistoricoColaborador(colaboradorLogado, null, ModulosEnum.COLABORADORES,
+                    TipoAcaoEnum.REMOCAO_EM_MASSA, colaboradoresEncontrados.size() + " Itens removidos");
         } else throw new InvalidRequestException("Nenhum colaborador foi encontrado para remoção");
 
         log.info("colaboradores excluídos com sucesso");
@@ -400,6 +489,29 @@ public class ColaboradorService {
                 .dataCadastro(colaborador.getDataCadastro())
                 .horaCadastro(colaborador.getHoraCadastro())
                 .nome(colaborador.getNome())
+                .matricula(colaborador.getMatricula())
+                .dataNascimento(colaborador.getDataNascimento())
+                .email(colaborador.getEmail())
+                .cpfCnpj(colaborador.getCpfCnpj())
+                .salario(colaborador.getSalario())
+                .entradaEmpresa(colaborador.getEntradaEmpresa())
+                .saidaEmpresa(colaborador.getSaidaEmpresa())
+                .contratoContratacao(colaborador.getContratoContratacao())
+                .ocupacao(colaborador.getOcupacao())
+                .tipoOcupacaoEnum(colaborador.getTipoOcupacaoEnum())
+                .modeloTrabalhoEnum(colaborador.getModeloTrabalhoEnum())
+                .modeloContratacaoEnum(colaborador.getModeloContratacaoEnum())
+                .statusColaboradorEnum(colaborador.getStatusColaboradorEnum())
+                .acessoSistema(AcessoSistemaResponse.builder()
+                        .acessoSistemaAtivo(colaborador.getAcessoSistema().getAcessoSistemaAtivo())
+                        .permissaoEnum(colaborador.getAcessoSistema().getPermissaoEnum())
+                        .privilegios(colaborador.getAcessoSistema().getPrivilegios())
+                        .build())
+                .configuracaoPerfil(colaborador.getConfiguracaoPerfil())
+                .expediente(colaborador.getExpediente())
+                .dispensa(colaborador.getDispensa())
+                .pontos(colaborador.getPontos())
+                .historicoFerias(colaborador.getHistoricoFerias())
                 .exclusao(ExclusaoColaboradorResponse.builder()
                         .dataExclusao(colaborador.getExclusao().getDataExclusao())
                         .horaExclusao(colaborador.getExclusao().getHoraExclusao())
@@ -432,4 +544,5 @@ public class ColaboradorService {
             else log.debug("A matrícula gerada já existe. Tentando novamente...");
         }
     }
+
 }
