@@ -40,6 +40,26 @@ public class AdvertenciaController {
     @Autowired
     JWTUtil jwtUtil;
 
+    @GetMapping("obtem-anexo/{idColaborador}/{idAdvertencia}")
+    @ApiOperation(
+            value = "Obtem anexo de advertência",
+            notes = "Esse endpoint tem como objetivo realizar a obtenção de anexo de uma advertência"
+    )
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Anexo obtido com sucesso", response = String.class),
+            @ApiResponse(code = 400, message = "Erro de requisição inválida", response = InvalidRequestException.class)
+    })
+    @PreAuthorize("hasAnyRole('COLABORADORES')")
+    public ResponseEntity<byte[]> obtemAnexoAdvertencia(HttpServletRequest req,
+                                                        @PathVariable(value = "idColaborador") Long idColaborador,
+                                                        @PathVariable(value = "idAdvertencia") Long idAdvertencia) {
+        log.info("Método controlador de obtenção de anexo de advertência acessado");
+        return ResponseEntity.ok().body(advertenciaService.obtemAnexoAdvertencia(
+                jwtUtil.obtemUsuarioAtivo(req),
+                idColaborador,
+                idAdvertencia).getArquivo());
+    }
+
     @DeleteMapping("/{idColaborador}/{idAdvertencia}")
     @ApiOperation(
             value = "Remove uma advertência",

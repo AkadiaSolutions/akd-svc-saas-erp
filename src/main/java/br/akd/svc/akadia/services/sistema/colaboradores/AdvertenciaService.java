@@ -48,6 +48,28 @@ public class AdvertenciaService {
     String ATUALIZA_COLABORADOR_COM_ADVERTENCIA = "Realizando atualização do objeto colaborador com advertência acoplada...";
     String ACESSA_METODO_BUSCA_ADVERTENCIA = "Iniciando acesso ao método de busca de advertência por id na lista de advertências do cliente...";
 
+    public ArquivoEntity obtemAnexoAdvertencia(ColaboradorEntity colaboradorLogado,
+                                               Long idColaborador,
+                                               Long idAdvertencia) {
+
+        log.debug("Método de serviço de obtenção de anexo de advertência acessado");
+
+        log.debug("Obtendo colaborador pelo id: {}...", idColaborador);
+        ColaboradorEntity colaborador = colaboradorRepositoryImpl.implementaBuscaPorId(idColaborador,
+                colaboradorLogado.getEmpresa().getId());
+
+        log.debug(ACESSA_METODO_BUSCA_ADVERTENCIA);
+        AdvertenciaEntity advertenciaEntity = realizaBuscaAdvertenciaPorIdNaListaDeAdvertenciasDoColaborador(
+                colaborador.getAdvertencias(), idAdvertencia);
+
+        log.debug(Constantes.INICIANDO_SALVAMENTO_HISTORICO_COLABORADOR);
+        acaoService.salvaHistoricoColaborador(colaboradorLogado, colaborador.getId(),
+                ModulosEnum.COLABORADORES, TipoAcaoEnum.OUTRO, "Download de anexo de advertência");
+
+        log.info("Obtenção de anexo de advertência de id {} finalizado com sucesso", idAdvertencia);
+        return advertenciaEntity.getAdvertenciaAssinada();
+    }
+
     public void removerAdvertencia(ColaboradorEntity colaboradorLogado,
                                    Long idColaborador,
                                    Long idAdvertencia) {
