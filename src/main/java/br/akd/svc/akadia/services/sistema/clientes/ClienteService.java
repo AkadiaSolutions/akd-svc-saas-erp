@@ -89,8 +89,7 @@ public class ClienteService {
 
         log.debug("Método de serviço de criação de novo cliente acessado");
 
-        log.debug("Iniciando acesso ao método de verificação se colaborador logado possui nível de permissão " +
-                "suficiente para realizar alterações");
+        log.debug(Constantes.VERIFICANDO_SE_COLABORADOR_PODE_ALTERAR_DADOS);
         SecurityUtil.verificaSePodeRealizarAlteracoes(colaboradorLogado.getAcessoSistema());
 
         log.debug("Iniciando acesso ao método de validação de chave única...");
@@ -163,8 +162,7 @@ public class ClienteService {
     public ClienteResponse atualizaCliente(ColaboradorEntity colaboradorLogado, Long id, ClienteDto clienteDto) {
         log.debug("Método de serviço de atualização de cliente acessado");
 
-        log.debug("Iniciando acesso ao método de verificação se colaborador logado possui nível de permissão " +
-                "suficiente para realizar alterações");
+        log.debug(Constantes.VERIFICANDO_SE_COLABORADOR_PODE_ALTERAR_DADOS);
         SecurityUtil.verificaSePodeRealizarAlteracoes(colaboradorLogado.getAcessoSistema());
 
         log.debug(BUSCA_CLIENTE_POR_ID);

@@ -58,8 +58,7 @@ public class ColaboradorService {
 
         log.debug("Método de serviço de criação de novo colaborador acessado");
 
-        log.debug("Iniciando acesso ao método de verificação se colaborador logado possui nível de permissão " +
-                "suficiente para realizar alterações");
+        log.debug(Constantes.VERIFICANDO_SE_COLABORADOR_PODE_ALTERAR_DADOS);
         SecurityUtil.verificaSePodeRealizarAlteracoes(colaboradorLogado.getAcessoSistema());
 
         log.debug("Convertendo objeto colaborador recebido de Json para entity...");
@@ -113,8 +112,7 @@ public class ColaboradorService {
                                                    String colaboradorEmJson) throws IOException {
         log.debug("Método de serviço de atualização de colaborador acessado");
 
-        log.debug("Iniciando acesso ao método de verificação se colaborador logado possui nível de permissão " +
-                "suficiente para realizar alterações");
+        log.debug(Constantes.VERIFICANDO_SE_COLABORADOR_PODE_ALTERAR_DADOS);
         SecurityUtil.verificaSePodeRealizarAlteracoes(colaboradorLogado.getAcessoSistema());
 
         log.debug("Convertendo objeto colaborador recebido de Json para entity...");
