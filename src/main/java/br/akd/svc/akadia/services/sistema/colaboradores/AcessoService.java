@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -27,6 +28,7 @@ public class AcessoService {
     @Autowired
     ColaboradorRepository colaboradorRepository;
 
+    @Transactional
     public void registraAcessoColaborador(String matricula) {
         log.debug("Método responsável por realizar a criação do log de acessos do colaborador acessado");
 
@@ -40,7 +42,8 @@ public class AcessoService {
 
         log.debug("Adicionando objeto Acesso ao colaborador...");
         ColaboradorEntity colaborador = colaboradorOptional.get();
-        colaborador.getAcessos().add(new AcessoEntity(null, LocalDate.now().toString(), LocalTime.now().toString()));
+        AcessoEntity novoAcesso = new AcessoEntity(null, LocalDate.now().toString(), LocalTime.now().toString());
+        colaborador.addAcesso(novoAcesso);
 
         log.debug("Realizando persistência do colaborador com acesso registrado...");
         colaboradorRepositoryImpl.implementaPersistencia(colaborador);

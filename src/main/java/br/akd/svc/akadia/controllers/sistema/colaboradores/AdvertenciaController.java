@@ -3,6 +3,7 @@ package br.akd.svc.akadia.controllers.sistema.colaboradores;
 import br.akd.svc.akadia.config.security.JWTUtil;
 import br.akd.svc.akadia.models.dto.sistema.colaboradores.responses.AdvertenciaPageResponse;
 import br.akd.svc.akadia.models.dto.sistema.colaboradores.responses.ColaboradorPageResponse;
+import br.akd.svc.akadia.models.enums.sistema.colaboradores.StatusAdvertenciaEnum;
 import br.akd.svc.akadia.services.exceptions.InvalidRequestException;
 import br.akd.svc.akadia.services.sistema.colaboradores.AdvertenciaService;
 import io.swagger.annotations.Api;
@@ -39,6 +40,29 @@ public class AdvertenciaController {
     @Autowired
     JWTUtil jwtUtil;
 
+    @PutMapping("altera-status/{idColaborador}/{idAdvertencia}")
+    @ApiOperation(
+            value = "Alteração de status da advertência",
+            notes = "Esse endpoint tem como objetivo realizar a alteração do status da advertência"
+    )
+    @ApiResponses({
+            @ApiResponse(code = 201, message = "Status da advertência alterado com sucesso", response = String.class),
+            @ApiResponse(code = 400, message = "Erro de requisição inválida", response = InvalidRequestException.class)
+    })
+    @PreAuthorize("hasAnyRole('COLABORADORES')")
+    public ResponseEntity<?> alteraStatusAdvertencia(HttpServletRequest req,
+                                                     @RequestBody String statusAdvertenciaEnum,
+                                                     @PathVariable(value = "idColaborador") Long idColaborador,
+                                                     @PathVariable(value = "idAdvertencia") Long idAdvertencia) {
+        log.info("Método controlador de anexação de arquivo em advertência acessado");
+        advertenciaService.alteraStatusAdvertencia(
+                jwtUtil.obtemUsuarioAtivo(req),
+                StatusAdvertenciaEnum.valueOf(statusAdvertenciaEnum),
+                idColaborador,
+                idAdvertencia);
+        return ResponseEntity.ok().build();
+    }
+
     @PutMapping("anexa-documento/{idColaborador}/{idAdvertencia}")
     @ApiOperation(
             value = "Anexação de arquivo na advertência",
@@ -49,7 +73,7 @@ public class AdvertenciaController {
             @ApiResponse(code = 400, message = "Erro de requisição inválida", response = InvalidRequestException.class)
     })
     @PreAuthorize("hasAnyRole('COLABORADORES')")
-    public void anexaArquivoAdvertencia(HttpServletRequest req,
+    public ResponseEntity<?> anexaArquivoAdvertencia(HttpServletRequest req,
                                         @RequestParam(value = "anexo", required = false) MultipartFile anexo,
                                         @PathVariable(value = "idColaborador") Long idColaborador,
                                         @PathVariable(value = "idAdvertencia") Long idAdvertencia) throws IOException {
@@ -59,6 +83,7 @@ public class AdvertenciaController {
                 anexo,
                 idColaborador,
                 idAdvertencia);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("pdf-padrao/{idColaborador}/{idAdvertencia}")
@@ -71,7 +96,7 @@ public class AdvertenciaController {
             @ApiResponse(code = 400, message = "Erro de requisição inválida", response = InvalidRequestException.class)
     })
     @PreAuthorize("hasAnyRole('COLABORADORES')")
-    public void geraPdfPadraoAdvertencia(HttpServletRequest req,
+    public ResponseEntity<?> geraPdfPadraoAdvertencia(HttpServletRequest req,
                                          HttpServletResponse res,
                                          @PathVariable(value = "idColaborador") Long idColaborador,
                                          @PathVariable(value = "idAdvertencia") Long idAdvertencia) throws IOException {
@@ -81,6 +106,7 @@ public class AdvertenciaController {
                 res,
                 idColaborador,
                 idAdvertencia);
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping("/{idColaborador}")
@@ -94,7 +120,7 @@ public class AdvertenciaController {
             @ApiResponse(code = 400, message = "Erro de requisição inválida", response = InvalidRequestException.class)
     })
     @PreAuthorize("hasAnyRole('COLABORADORES')")
-    public void criaNovaAdvertencia(HttpServletRequest req,
+    public ResponseEntity<?> criaNovaAdvertencia(HttpServletRequest req,
                                     HttpServletResponse res,
                                     @PathVariable(value = "idColaborador") Long idColaborador,
                                     @RequestParam(value = "arquivoAdvertencia", required = false) MultipartFile arquivoAdvertencia,
@@ -106,6 +132,7 @@ public class AdvertenciaController {
                 idColaborador,
                 arquivoAdvertencia,
                 advertencia);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/{id}")

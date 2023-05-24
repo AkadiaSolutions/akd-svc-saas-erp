@@ -111,4 +111,8 @@ public class ColaboradorEntity {
     @JoinColumn(name = "id_empresa")
     private EmpresaEntity empresa;
 
+    public void addAcesso(AcessoEntity acesso) {
+        this.acessos.add(acesso);
+    }
+
 }

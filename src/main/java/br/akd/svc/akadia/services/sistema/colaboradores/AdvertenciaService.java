@@ -6,6 +6,7 @@ import br.akd.svc.akadia.models.entities.sistema.colaboradores.AdvertenciaEntity
 import br.akd.svc.akadia.models.entities.sistema.colaboradores.ColaboradorEntity;
 import br.akd.svc.akadia.models.enums.global.TipoArquivoEnum;
 import br.akd.svc.akadia.models.enums.sistema.colaboradores.ModulosEnum;
+import br.akd.svc.akadia.models.enums.sistema.colaboradores.StatusAdvertenciaEnum;
 import br.akd.svc.akadia.models.enums.sistema.colaboradores.TipoAcaoEnum;
 import br.akd.svc.akadia.repositories.sistema.colaboradores.ColaboradorRepository;
 import br.akd.svc.akadia.repositories.sistema.colaboradores.impl.ColaboradorRepositoryImpl;
@@ -44,6 +45,39 @@ public class AdvertenciaService {
     AcaoService acaoService;
 
     String NENHUMA_ADVERTENCIA_ENCONTRADA = "Nenhuma advertência foi encontrada no colaborador atual";
+    String ATUALIZA_COLABORADOR_COM_ADVERTENCIA = "Realizando atualização do objeto colaborador com advertência acoplada...";
+    String ACESSA_METODO_BUSCA_ADVERTENCIA = "Iniciando acesso ao método de busca de advertência por id na lista de advertências do cliente...";
+
+    public void alteraStatusAdvertencia(ColaboradorEntity colaboradorLogado,
+                                        StatusAdvertenciaEnum statusAdvertenciaEnum,
+                                        Long idColaborador,
+                                        Long idAdvertencia) {
+
+        log.debug("Método de serviço de alteração de status da advertência acessado");
+
+        log.debug(Constantes.VERIFICANDO_SE_COLABORADOR_PODE_ALTERAR_DADOS);
+        SecurityUtil.verificaSePodeRealizarAlteracoes(colaboradorLogado.getAcessoSistema());
+
+        log.debug("Obtendo colaborador pelo id {}...", idColaborador);
+        ColaboradorEntity colaborador = colaboradorRepositoryImpl.implementaBuscaPorId(idColaborador,
+                colaboradorLogado.getEmpresa().getId());
+
+        log.debug(ACESSA_METODO_BUSCA_ADVERTENCIA);
+        AdvertenciaEntity advertenciaEntity = realizaBuscaAdvertenciaPorIdNaListaDeAdvertenciasDoColaborador(
+                colaborador.getAdvertencias(), idAdvertencia);
+
+        log.debug("Setando status atualizado da advertência...");
+        advertenciaEntity.setStatusAdvertenciaEnum(statusAdvertenciaEnum);
+
+        log.debug(ATUALIZA_COLABORADOR_COM_ADVERTENCIA);
+        colaboradorRepositoryImpl.implementaPersistencia(colaborador);
+
+        log.debug(Constantes.INICIANDO_SALVAMENTO_HISTORICO_COLABORADOR);
+        acaoService.salvaHistoricoColaborador(colaboradorLogado, colaborador.getId(),
+                ModulosEnum.COLABORADORES, TipoAcaoEnum.ALTERACAO, "Anexo adicionado à advertência");
+
+        log.info("Atualização de anexo da advertência de id {} finalizado com sucesso", idAdvertencia);
+    }
 
     public void anexaArquivoAdvertencia(ColaboradorEntity colaboradorLogado,
                                         MultipartFile anexo,
@@ -52,33 +86,16 @@ public class AdvertenciaService {
 
         log.debug("Método de serviço de anexação de PDF padrão na advertência acessado");
 
-        log.debug("Iniciando acesso ao método de verificação se colaborador logado possui nível de permissão " +
-                "suficiente para realizar alterações");
+        log.debug(Constantes.VERIFICANDO_SE_COLABORADOR_PODE_ALTERAR_DADOS);
         SecurityUtil.verificaSePodeRealizarAlteracoes(colaboradorLogado.getAcessoSistema());
 
         log.debug("Obtendo colaborador pelo id {}...", idColaborador);
         ColaboradorEntity colaborador = colaboradorRepositoryImpl.implementaBuscaPorId(idColaborador,
                 colaboradorLogado.getEmpresa().getId());
 
-        log.debug("Gerando uma lista com todas as advertências do colaboador encontrado...");
-        List<AdvertenciaEntity> advertenciaList = colaborador.getAdvertencias();
-
-        AdvertenciaEntity advertenciaEntity = null;
-
-        log.debug("Iniciando iteração por todas as advertências do colaborador...");
-        for (AdvertenciaEntity advertencia : advertenciaList) {
-            log.debug("Verificando se advertência de id {} possui o mesmo id recebido por parâmetro: ({})",
-                    advertencia.getId(), idAdvertencia);
-            if (Objects.equals(advertencia.getId(), idAdvertencia)) {
-                log.debug("A advertência possui o mesmo id");
-                advertenciaEntity = advertencia;
-            }
-        }
-
-        if (advertenciaEntity == null) {
-            log.error(NENHUMA_ADVERTENCIA_ENCONTRADA);
-            throw new ObjectNotFoundException(NENHUMA_ADVERTENCIA_ENCONTRADA);
-        }
+        log.debug(ACESSA_METODO_BUSCA_ADVERTENCIA);
+        AdvertenciaEntity advertenciaEntity = realizaBuscaAdvertenciaPorIdNaListaDeAdvertenciasDoColaborador(
+                colaborador.getAdvertencias(), idAdvertencia);
 
         log.debug("Setando contrato na advertência do colaborador...");
         advertenciaEntity.setAdvertenciaAssinada(anexo != null
@@ -90,7 +107,7 @@ public class AdvertenciaService {
                 .build()
                 : null);
 
-        log.debug("Realizando atualização do objeto colaborador com advertência acoplada...");
+        log.debug(ATUALIZA_COLABORADOR_COM_ADVERTENCIA);
         colaboradorRepositoryImpl.implementaPersistencia(colaborador);
 
         log.debug(Constantes.INICIANDO_SALVAMENTO_HISTORICO_COLABORADOR);
@@ -111,25 +128,9 @@ public class AdvertenciaService {
         ColaboradorEntity colaborador = colaboradorRepositoryImpl.implementaBuscaPorId(idColaborador,
                 colaboradorLogado.getEmpresa().getId());
 
-        log.debug("Gerando uma lista com todas as advertências do colaboador encontrado...");
-        List<AdvertenciaEntity> advertenciaList = colaborador.getAdvertencias();
-
-        AdvertenciaEntity advertenciaEntity = null;
-
-        log.debug("Iniciando iteração por todas as advertências do colaborador...");
-        for (AdvertenciaEntity advertencia : advertenciaList) {
-            log.debug("Verificando se advertência de id {} possui o mesmo id recebido por parâmetro: ({})",
-                    advertencia.getId(), idAdvertencia);
-            if (Objects.equals(advertencia.getId(), idAdvertencia)) {
-                log.debug("A advertência possui o mesmo id");
-                advertenciaEntity = advertencia;
-            }
-        }
-
-        if (advertenciaEntity == null) {
-            log.error(NENHUMA_ADVERTENCIA_ENCONTRADA);
-            throw new ObjectNotFoundException(NENHUMA_ADVERTENCIA_ENCONTRADA);
-        }
+        log.debug(ACESSA_METODO_BUSCA_ADVERTENCIA);
+        AdvertenciaEntity advertenciaEntity = realizaBuscaAdvertenciaPorIdNaListaDeAdvertenciasDoColaborador(
+                colaborador.getAdvertencias(), idAdvertencia);
 
         log.debug("Iniciando exportação do PDF padrão");
         advertenciaRelatorioService.exportarPdf(res, colaboradorLogado, colaborador, advertenciaEntity);
@@ -141,6 +142,31 @@ public class AdvertenciaService {
         log.info("Exportação do PDF padrão da advertência de id {} realizado com sucesso", idAdvertencia);
     }
 
+    public AdvertenciaEntity realizaBuscaAdvertenciaPorIdNaListaDeAdvertenciasDoColaborador(
+            List<AdvertenciaEntity> advertenciaList, Long idAdvertenciaBuscada) {
+
+        log.debug("Método de busca de advertência por id na lista de advertências do colaborador acessado");
+
+        AdvertenciaEntity advertenciaEntity = null;
+
+        log.debug("Iniciando iteração por todas as advertências do colaborador...");
+        for (AdvertenciaEntity advertencia : advertenciaList) {
+            log.debug("Verificando se advertência de id {} possui o mesmo id recebido por parâmetro: ({})",
+                    advertencia.getId(), idAdvertenciaBuscada);
+            if (Objects.equals(advertencia.getId(), idAdvertenciaBuscada)) {
+                log.debug("A advertência possui o mesmo id");
+                advertenciaEntity = advertencia;
+            }
+        }
+
+        if (advertenciaEntity == null) {
+            log.error(NENHUMA_ADVERTENCIA_ENCONTRADA);
+            throw new ObjectNotFoundException(NENHUMA_ADVERTENCIA_ENCONTRADA);
+        }
+
+        return advertenciaEntity;
+    }
+
     public void geraAdvertenciaColaborador(ColaboradorEntity colaboradorLogado,
                                            HttpServletResponse res,
                                            Long idColaboradorAlvo,
@@ -149,8 +175,7 @@ public class AdvertenciaService {
 
         log.debug("Método de serviço de criação de nova advertência acessado");
 
-        log.debug("Iniciando acesso ao método de verificação se colaborador logado possui nível de permissão " +
-                "suficiente para realizar alterações");
+        log.debug(Constantes.VERIFICANDO_SE_COLABORADOR_PODE_ALTERAR_DADOS);
         SecurityUtil.verificaSePodeRealizarAlteracoes(colaboradorLogado.getAcessoSistema());
 
         log.debug("Convertendo objeto advertência recebido de Json para entity...");
@@ -175,7 +200,7 @@ public class AdvertenciaService {
         log.debug("Adicionando advertência criada ao objeto colaborador...");
         colaborador.getAdvertencias().add(advertenciaEntity);
 
-        log.debug("Realizando atualização do objeto colaborador com advertência acoplada...");
+        log.debug(ATUALIZA_COLABORADOR_COM_ADVERTENCIA);
         colaboradorRepositoryImpl.implementaPersistencia(colaborador);
 
         log.debug("Persistência realizada com sucesso");
