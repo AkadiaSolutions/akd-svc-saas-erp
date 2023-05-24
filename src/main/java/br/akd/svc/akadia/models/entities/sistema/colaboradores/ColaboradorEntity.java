@@ -111,6 +111,10 @@ public class ColaboradorEntity {
     @JoinColumn(name = "id_empresa")
     private EmpresaEntity empresa;
 
+    public void removeAdvertencia(AdvertenciaEntity advertencia) {
+        this.advertencias.remove(advertencia);
+    }
+
     public void addAcesso(AcessoEntity acesso) {
         this.acessos.add(acesso);
     }

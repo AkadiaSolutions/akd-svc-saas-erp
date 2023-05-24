@@ -40,13 +40,34 @@ public class AdvertenciaController {
     @Autowired
     JWTUtil jwtUtil;
 
+    @DeleteMapping("/{idColaborador}/{idAdvertencia}")
+    @ApiOperation(
+            value = "Remove uma advertência",
+            notes = "Esse endpoint tem como objetivo realizar a remoção de uma advertência"
+    )
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Advertência removida com sucesso", response = String.class),
+            @ApiResponse(code = 400, message = "Erro de requisição inválida", response = InvalidRequestException.class)
+    })
+    @PreAuthorize("hasAnyRole('COLABORADORES')")
+    public ResponseEntity<?> removeAdvertencia(HttpServletRequest req,
+                                               @PathVariable(value = "idColaborador") Long idColaborador,
+                                               @PathVariable(value = "idAdvertencia") Long idAdvertencia) {
+        log.info("Método controlador de exclusão da advertência acessado");
+        advertenciaService.removerAdvertencia(
+                jwtUtil.obtemUsuarioAtivo(req),
+                idColaborador,
+                idAdvertencia);
+        return ResponseEntity.ok().build();
+    }
+
     @PutMapping("altera-status/{idColaborador}/{idAdvertencia}")
     @ApiOperation(
             value = "Alteração de status da advertência",
             notes = "Esse endpoint tem como objetivo realizar a alteração do status da advertência"
     )
     @ApiResponses({
-            @ApiResponse(code = 201, message = "Status da advertência alterado com sucesso", response = String.class),
+            @ApiResponse(code = 200, message = "Status da advertência alterado com sucesso", response = String.class),
             @ApiResponse(code = 400, message = "Erro de requisição inválida", response = InvalidRequestException.class)
     })
     @PreAuthorize("hasAnyRole('COLABORADORES')")
@@ -54,7 +75,7 @@ public class AdvertenciaController {
                                                      @RequestBody String statusAdvertenciaEnum,
                                                      @PathVariable(value = "idColaborador") Long idColaborador,
                                                      @PathVariable(value = "idAdvertencia") Long idAdvertencia) {
-        log.info("Método controlador de anexação de arquivo em advertência acessado");
+        log.info("Método controlador de alteração de status da advertência acessado");
         advertenciaService.alteraStatusAdvertencia(
                 jwtUtil.obtemUsuarioAtivo(req),
                 StatusAdvertenciaEnum.valueOf(statusAdvertenciaEnum),
@@ -69,14 +90,14 @@ public class AdvertenciaController {
             notes = "Esse endpoint tem como objetivo realizar a chamada à lógica de anexação de arquivo em uma advertência"
     )
     @ApiResponses({
-            @ApiResponse(code = 201, message = "Arquivo anexado com sucesso", response = String.class),
+            @ApiResponse(code = 200, message = "Arquivo anexado com sucesso", response = String.class),
             @ApiResponse(code = 400, message = "Erro de requisição inválida", response = InvalidRequestException.class)
     })
     @PreAuthorize("hasAnyRole('COLABORADORES')")
     public ResponseEntity<?> anexaArquivoAdvertencia(HttpServletRequest req,
-                                        @RequestParam(value = "anexo", required = false) MultipartFile anexo,
-                                        @PathVariable(value = "idColaborador") Long idColaborador,
-                                        @PathVariable(value = "idAdvertencia") Long idAdvertencia) throws IOException {
+                                                     @RequestParam(value = "anexo", required = false) MultipartFile anexo,
+                                                     @PathVariable(value = "idColaborador") Long idColaborador,
+                                                     @PathVariable(value = "idAdvertencia") Long idAdvertencia) throws IOException {
         log.info("Método controlador de anexação de arquivo em advertência acessado");
         advertenciaService.anexaArquivoAdvertencia(
                 jwtUtil.obtemUsuarioAtivo(req),
@@ -92,14 +113,14 @@ public class AdvertenciaController {
             notes = "Esse endpoint tem como objetivo realizar a obtenção do PDF padrão da advertência recebida"
     )
     @ApiResponses({
-            @ApiResponse(code = 201, message = "PDF obtido com sucesso", response = String.class),
+            @ApiResponse(code = 200, message = "PDF obtido com sucesso", response = String.class),
             @ApiResponse(code = 400, message = "Erro de requisição inválida", response = InvalidRequestException.class)
     })
     @PreAuthorize("hasAnyRole('COLABORADORES')")
     public ResponseEntity<?> geraPdfPadraoAdvertencia(HttpServletRequest req,
-                                         HttpServletResponse res,
-                                         @PathVariable(value = "idColaborador") Long idColaborador,
-                                         @PathVariable(value = "idAdvertencia") Long idAdvertencia) throws IOException {
+                                                      HttpServletResponse res,
+                                                      @PathVariable(value = "idColaborador") Long idColaborador,
+                                                      @PathVariable(value = "idAdvertencia") Long idAdvertencia) throws IOException {
         log.info("Método controlador de obtenção de PDF padrão da advertência acessado");
         advertenciaService.geraPdfPadraoAdvertencia(
                 jwtUtil.obtemUsuarioAtivo(req),
@@ -121,10 +142,10 @@ public class AdvertenciaController {
     })
     @PreAuthorize("hasAnyRole('COLABORADORES')")
     public ResponseEntity<?> criaNovaAdvertencia(HttpServletRequest req,
-                                    HttpServletResponse res,
-                                    @PathVariable(value = "idColaborador") Long idColaborador,
-                                    @RequestParam(value = "arquivoAdvertencia", required = false) MultipartFile arquivoAdvertencia,
-                                    @RequestParam("advertencia") String advertencia) throws IOException {
+                                                 HttpServletResponse res,
+                                                 @PathVariable(value = "idColaborador") Long idColaborador,
+                                                 @RequestParam(value = "arquivoAdvertencia", required = false) MultipartFile arquivoAdvertencia,
+                                                 @RequestParam("advertencia") String advertencia) throws IOException {
         log.info("Método controlador de criação de nova advertência acessado");
         advertenciaService.geraAdvertenciaColaborador(
                 jwtUtil.obtemUsuarioAtivo(req),

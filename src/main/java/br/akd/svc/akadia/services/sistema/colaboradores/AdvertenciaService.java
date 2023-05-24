@@ -48,6 +48,36 @@ public class AdvertenciaService {
     String ATUALIZA_COLABORADOR_COM_ADVERTENCIA = "Realizando atualização do objeto colaborador com advertência acoplada...";
     String ACESSA_METODO_BUSCA_ADVERTENCIA = "Iniciando acesso ao método de busca de advertência por id na lista de advertências do cliente...";
 
+    public void removerAdvertencia(ColaboradorEntity colaboradorLogado,
+                                   Long idColaborador,
+                                   Long idAdvertencia) {
+
+        log.debug("Método de serviço de remoção de advertência acessado");
+
+        log.debug(Constantes.VERIFICANDO_SE_COLABORADOR_PODE_ALTERAR_DADOS);
+        SecurityUtil.verificaSePodeRealizarAlteracoes(colaboradorLogado.getAcessoSistema());
+
+        log.debug("Obtendo colaborador pelo id: {}...", idColaborador);
+        ColaboradorEntity colaborador = colaboradorRepositoryImpl.implementaBuscaPorId(idColaborador,
+                colaboradorLogado.getEmpresa().getId());
+
+        log.debug(ACESSA_METODO_BUSCA_ADVERTENCIA);
+        AdvertenciaEntity advertenciaEntity = realizaBuscaAdvertenciaPorIdNaListaDeAdvertenciasDoColaborador(
+                colaborador.getAdvertencias(), idAdvertencia);
+
+        log.debug("Removendo advertência...");
+        colaborador.removeAdvertencia(advertenciaEntity);
+
+        log.debug(ATUALIZA_COLABORADOR_COM_ADVERTENCIA);
+        colaboradorRepositoryImpl.implementaPersistencia(colaborador);
+
+        log.debug(Constantes.INICIANDO_SALVAMENTO_HISTORICO_COLABORADOR);
+        acaoService.salvaHistoricoColaborador(colaboradorLogado, colaborador.getId(),
+                ModulosEnum.COLABORADORES, TipoAcaoEnum.REMOCAO, "Remoção de advertência realizada");
+
+        log.info("Remoção de advertência de id {} finalizado com sucesso", idAdvertencia);
+    }
+
     public void alteraStatusAdvertencia(ColaboradorEntity colaboradorLogado,
                                         StatusAdvertenciaEnum statusAdvertenciaEnum,
                                         Long idColaborador,
@@ -74,9 +104,11 @@ public class AdvertenciaService {
 
         log.debug(Constantes.INICIANDO_SALVAMENTO_HISTORICO_COLABORADOR);
         acaoService.salvaHistoricoColaborador(colaboradorLogado, colaborador.getId(),
-                ModulosEnum.COLABORADORES, TipoAcaoEnum.ALTERACAO, "Anexo adicionado à advertência");
+                ModulosEnum.COLABORADORES, TipoAcaoEnum.ALTERACAO,
+                "Status da advertência de motivo [" + advertenciaEntity.getMotivo()
+                        + "] alterado para " + statusAdvertenciaEnum.getDesc());
 
-        log.info("Atualização de anexo da advertência de id {} finalizado com sucesso", idAdvertencia);
+        log.info("Atualização de status da advertência de id {} finalizado com sucesso", idAdvertencia);
     }
 
     public void anexaArquivoAdvertencia(ColaboradorEntity colaboradorLogado,

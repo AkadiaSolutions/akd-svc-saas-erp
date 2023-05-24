@@ -177,6 +177,7 @@ public class ColaboradorService {
                 .dispensa(colaboradorEncontrado.getDispensa())
                 .acoes(colaboradorEncontrado.getAcoes())
                 .advertencias(colaboradorEncontrado.getAdvertencias())
+                .acessos(colaboradorEncontrado.getAcessos())
                 .historicoFerias(colaboradorEncontrado.getHistoricoFerias())
                 .pontos(colaboradorEncontrado.getPontos())
                 .empresa(colaboradorLogado.getEmpresa())
