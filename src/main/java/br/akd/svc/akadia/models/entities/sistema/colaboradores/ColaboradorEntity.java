@@ -64,6 +64,9 @@ public class ColaboradorEntity {
     private StatusColaboradorEnum statusColaboradorEnum;
 
     @OneToOne(targetEntity = ArquivoEntity.class, orphanRemoval = true, cascade = CascadeType.ALL)
+    private ArquivoEntity fotoPerfil;
+
+    @OneToOne(targetEntity = ArquivoEntity.class, orphanRemoval = true, cascade = CascadeType.ALL)
     private ArquivoEntity contratoContratacao;
 
     @OneToOne(targetEntity = ExclusaoColaboradorEntity.class, orphanRemoval = true, cascade = CascadeType.ALL)

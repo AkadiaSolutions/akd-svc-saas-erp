@@ -1,5 +1,6 @@
 package br.akd.svc.akadia.repositories.sistema.colaboradores;
 
+import br.akd.svc.akadia.models.entities.global.ArquivoEntity;
 import br.akd.svc.akadia.models.entities.sistema.colaboradores.AcaoEntity;
 import br.akd.svc.akadia.models.entities.sistema.colaboradores.AcessoEntity;
 import br.akd.svc.akadia.models.entities.sistema.colaboradores.AdvertenciaEntity;
@@ -23,6 +24,9 @@ public interface ColaboradorRepository extends JpaRepository<ColaboradorEntity, 
 
     @Query("SELECT c FROM ColaboradorEntity c WHERE c.matricula = ?1")
     Optional<ColaboradorEntity> buscaPorMatricula(String matricula);
+
+    @Query("SELECT c.fotoPerfil FROM ColaboradorEntity c WHERE c.id=?1 and c.empresa.id = ?2 and c.exclusao.excluido = FALSE")
+    Optional<ArquivoEntity> buscaImagemPerfilPorId(Long idColaborador, Long idEmpresa);
 
     @Query("SELECT c FROM ColaboradorEntity c WHERE c.id=?1 and c.empresa.id = ?2 and c.exclusao.excluido = FALSE")
     Optional<ColaboradorEntity> buscaPorId(Long idColaborador, Long idEmpresa);

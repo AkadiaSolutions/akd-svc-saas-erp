@@ -1,5 +1,6 @@
 package br.akd.svc.akadia.repositories.sistema.colaboradores.impl;
 
+import br.akd.svc.akadia.models.entities.global.ArquivoEntity;
 import br.akd.svc.akadia.models.entities.sistema.colaboradores.ColaboradorEntity;
 import br.akd.svc.akadia.repositories.sistema.colaboradores.ColaboradorRepository;
 import br.akd.svc.akadia.services.exceptions.ObjectNotFoundException;
@@ -50,6 +51,23 @@ public class ColaboradorRepositoryImpl {
         }
         log.debug("Retornando o colaborador encontrado...");
         return colaboradorEntity;
+    }
+
+    public ArquivoEntity implementaBuscaDeImagemDePerfilPorId(Long id, Long idEmpresa) {
+        log.debug("Método que implementa busca de imagem de perfil de colaborador por id acessado. Id: {}", id);
+
+        Optional<ArquivoEntity> arquivoEntityOptional = colaboradorRepository.buscaImagemPerfilPorId(id, idEmpresa);
+
+        ArquivoEntity arquivoEntity;
+        if (arquivoEntityOptional.isPresent()) {
+            arquivoEntity = arquivoEntityOptional.get();
+            log.debug("Imagem de perfil encontrada: {}", arquivoEntity.getNome());
+        } else {
+            log.warn("Nenhuma imagem de perfil foi encontrada com o id {}", id);
+            throw new ObjectNotFoundException("Nenhuma imagem de perfil foi encontrada com o id informado");
+        }
+        log.debug("Retornando a imagem de perfil encontrada...");
+        return arquivoEntity;
     }
 
     public List<ColaboradorEntity> implementaBuscaPorIdEmMassa(List<Long> ids) {

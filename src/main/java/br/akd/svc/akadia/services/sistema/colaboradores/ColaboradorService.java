@@ -95,7 +95,7 @@ public class ColaboradorService {
         colaboradorEntity.setEmpresa(colaboradorLogado.getEmpresa());
         log.debug("Setagem de dados realizada com sucesso");
 
-        log.debug("Iniciando acesso ao método de implementação da persistência do colaborador...");
+        log.debug(Constantes.INICIANDO_IMPL_PERSISTENCIA_COLABORADOR);
         ColaboradorEntity colaboradorPersistido = colaboradorRepositoryImpl.implementaPersistencia(colaboradorEntity);
 
         log.debug(Constantes.INICIANDO_SALVAMENTO_HISTORICO_COLABORADOR);
@@ -174,6 +174,7 @@ public class ColaboradorService {
                         .escalaEnum(colaboradorDto.getExpediente().getEscalaEnum())
                         .build()
                         : null)
+                .fotoPerfil(colaboradorEncontrado.getFotoPerfil())
                 .dispensa(colaboradorEncontrado.getDispensa())
                 .acoes(colaboradorEncontrado.getAcoes())
                 .advertencias(colaboradorEncontrado.getAdvertencias())
@@ -184,7 +185,7 @@ public class ColaboradorService {
                 .build();
         log.debug("Objeto colaborador construído com sucesso");
 
-        log.debug("Iniciando acesso ao método de implementação da persistência do colaborador...");
+        log.debug(Constantes.INICIANDO_IMPL_PERSISTENCIA_COLABORADOR);
         ColaboradorEntity colaboradorPersistido = colaboradorRepositoryImpl.implementaPersistencia(novoColaboradorAtualizado);
 
         log.debug(Constantes.INICIANDO_SALVAMENTO_HISTORICO_COLABORADOR);
@@ -443,6 +444,7 @@ public class ColaboradorService {
                             .horaExclusao(colaborador.getExclusao().getHoraExclusao())
                             .excluido(colaborador.getExclusao().getExcluido())
                             .build())
+                    .fotoPerfil(colaborador.getFotoPerfil())
                     .endereco(colaborador.getEndereco())
                     .telefone(colaborador.getTelefone())
                     .expediente(colaborador.getExpediente())
@@ -506,6 +508,7 @@ public class ColaboradorService {
                         .permissaoEnum(colaborador.getAcessoSistema().getPermissaoEnum())
                         .privilegios(colaborador.getAcessoSistema().getPrivilegios())
                         .build())
+                .fotoPerfil(colaborador.getFotoPerfil())
                 .configuracaoPerfil(colaborador.getConfiguracaoPerfil())
                 .expediente(colaborador.getExpediente())
                 .dispensa(colaborador.getDispensa())
@@ -521,6 +524,56 @@ public class ColaboradorService {
                 .build();
         log.debug("Objeto ColaboradorResponse buildado com sucesso. Retornando...");
         return colaboradorResponse;
+    }
+
+    public ColaboradorResponse atualizaImagemPerfilColaborador(ColaboradorEntity colaboradorLogado,
+                                                               Long id,
+                                                               MultipartFile fotoPerfil) throws IOException {
+
+        log.debug("Método de serviço de atualização de foto de perfil de colaborador acessado");
+
+        log.debug(Constantes.VERIFICANDO_SE_COLABORADOR_PODE_ALTERAR_DADOS);
+        SecurityUtil.verificaSePodeRealizarAlteracoes(colaboradorLogado.getAcessoSistema());
+
+        log.debug("Iniciando construção do objeto ArquivoEntity da foto de perfil do colaborador...");
+        ArquivoEntity fotoPerfilEntity = fotoPerfil != null
+                ? ArquivoEntity.builder()
+                .nome(fotoPerfil.getOriginalFilename())
+                .tipo(realizaTratamentoTipoDeArquivoDoContratoColaborador(fotoPerfil.getContentType()))
+                .tamanho(fotoPerfil.getSize())
+                .arquivo(fotoPerfil.getBytes())
+                .build()
+                : null;
+
+        log.debug("Acessando repositório de busca de colaborador por ID...");
+        ColaboradorEntity colaborador =
+                colaboradorRepositoryImpl.implementaBuscaPorId(id, colaboradorLogado.getEmpresa().getId());
+
+        log.debug("Acoplando foto de perfil ao objeto do colaborador...");
+        colaborador.setFotoPerfil(fotoPerfilEntity);
+
+        log.debug(Constantes.INICIANDO_IMPL_PERSISTENCIA_COLABORADOR);
+        ColaboradorEntity colaboradorPersistido = colaboradorRepositoryImpl.implementaPersistencia(colaborador);
+
+        if (fotoPerfil != null) {
+            log.debug(Constantes.INICIANDO_SALVAMENTO_HISTORICO_COLABORADOR);
+            acaoService.salvaHistoricoColaborador(colaboradorLogado, colaboradorPersistido.getId(),
+                    ModulosEnum.COLABORADORES, TipoAcaoEnum.ALTERACAO, "Alteração da foto de perfil do colaborador "
+                            + colaboradorPersistido.getNome());
+        }
+        else {
+            log.debug(Constantes.INICIANDO_SALVAMENTO_HISTORICO_COLABORADOR);
+            acaoService.salvaHistoricoColaborador(colaboradorLogado, colaboradorPersistido.getId(),
+                    ModulosEnum.COLABORADORES, TipoAcaoEnum.REMOCAO, "Remoção da foto de perfil do colaborador "
+                            + colaboradorPersistido.getNome());
+        }
+
+        return converteColaboradorEntityParaColaboradorResponse(colaboradorPersistido);
+    }
+
+    public byte[] obtemImagemPerfilColaborador(ColaboradorEntity colaboradorLogado, Long id) {
+        return colaboradorRepositoryImpl.implementaBuscaDeImagemDePerfilPorId(
+                id, colaboradorLogado.getEmpresa().getId()).getArquivo();
     }
 
     public String geraMatriculaUnica() {

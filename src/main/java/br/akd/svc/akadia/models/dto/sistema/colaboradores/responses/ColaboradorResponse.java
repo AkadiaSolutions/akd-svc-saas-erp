@@ -35,6 +35,7 @@ public class ColaboradorResponse {
     private ModeloContratacaoEnum modeloContratacaoEnum;
     private ModeloTrabalhoEnum modeloTrabalhoEnum;
     private StatusColaboradorEnum statusColaboradorEnum;
+    private ArquivoEntity fotoPerfil;
     private ExclusaoColaboradorResponse exclusao;
     private AcessoSistemaResponse acessoSistema;
     private ConfiguracaoPerfilEntity configuracaoPerfil;

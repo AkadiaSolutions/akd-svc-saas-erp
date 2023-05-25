@@ -1,12 +1,18 @@
 package br.akd.svc.akadia.controllers.sistema.colaboradores;
 
 import br.akd.svc.akadia.config.security.JWTUtil;
-import br.akd.svc.akadia.models.dto.sistema.colaboradores.responses.*;
+import br.akd.svc.akadia.models.dto.sistema.colaboradores.responses.AcaoPageResponse;
+import br.akd.svc.akadia.models.dto.sistema.colaboradores.responses.AcessoPageResponse;
+import br.akd.svc.akadia.models.dto.sistema.colaboradores.responses.ColaboradorPageResponse;
+import br.akd.svc.akadia.models.dto.sistema.colaboradores.responses.ColaboradorResponse;
 import br.akd.svc.akadia.models.entities.sistema.colaboradores.ColaboradorEntity;
 import br.akd.svc.akadia.repositories.sistema.colaboradores.ColaboradorRepository;
 import br.akd.svc.akadia.services.exceptions.InvalidRequestException;
 import br.akd.svc.akadia.services.exceptions.ObjectNotFoundException;
-import br.akd.svc.akadia.services.sistema.colaboradores.*;
+import br.akd.svc.akadia.services.sistema.colaboradores.AcaoService;
+import br.akd.svc.akadia.services.sistema.colaboradores.AcessoService;
+import br.akd.svc.akadia.services.sistema.colaboradores.ColaboradorRelatorioService;
+import br.akd.svc.akadia.services.sistema.colaboradores.ColaboradorService;
 import com.lowagie.text.DocumentException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -59,6 +65,50 @@ public class ColaboradorController {
 
     @Autowired
     JWTUtil jwtUtil;
+
+    @GetMapping("imagem-perfil/{id}")
+    @ApiOperation(
+            value = "Obtenção de imagem de perfil do colaborador",
+            notes = "Esse endpoint tem como objetivo realizar a obtenção da imagem de perfil de um colaborador",
+            produces = MediaType.APPLICATION_JSON,
+            consumes = MediaType.APPLICATION_JSON
+    )
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Imagem de perfil do colaborador obtida com sucesso", response = ColaboradorResponse.class),
+            @ApiResponse(code = 400, message = "Nenhum colaborador foi encontrado com o id informado", response = ObjectNotFoundException.class)
+    })
+    @PreAuthorize("hasAnyRole('COLABORADORES')")
+    public ResponseEntity<byte[]> obtemImagemDePerfilDoColaborador(HttpServletRequest req,
+                                                                                @PathVariable("id") Long id) {
+        log.info("Método controlador de obtenção de imagem de perfil de colaborador acessado");
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(colaboradorService.obtemImagemPerfilColaborador(jwtUtil.obtemUsuarioAtivo(req), id));
+    }
+
+    @PutMapping("imagem-perfil/{id}")
+    @ApiOperation(
+            value = "Atualização de imagem de perfil do colaborador",
+            notes = "Esse endpoint tem como objetivo realizar a atualização da imagem de perfil de um colaborador",
+            produces = MediaType.APPLICATION_JSON,
+            consumes = MediaType.APPLICATION_JSON
+    )
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Colaborador atualizado com sucesso", response = ColaboradorResponse.class),
+            @ApiResponse(code = 400, message = "Nenhum colaborador foi encontrado com o id informado", response = ObjectNotFoundException.class)
+    })
+    @PreAuthorize("hasAnyRole('COLABORADORES')")
+    public ResponseEntity<ColaboradorResponse> atualizaImagemPerfilColaborador(HttpServletRequest req,
+                                                                               @RequestParam(value = "imagemPerfil", required = false) MultipartFile imagemPerfil,
+                                                                               @PathVariable("id") Long id) throws IOException {
+        log.info("Método controlador de atualização de imagem de perfil de colaborador acessado");
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(colaboradorService.atualizaImagemPerfilColaborador(
+                        jwtUtil.obtemUsuarioAtivo(req),
+                        id,
+                        imagemPerfil));
+    }
 
     @GetMapping("/{id}")
     @ApiOperation(
