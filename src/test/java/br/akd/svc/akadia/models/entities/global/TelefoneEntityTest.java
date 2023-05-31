@@ -25,6 +25,24 @@ class TelefoneEntityTest {
     }
 
     @Test
+    @DisplayName("Deve testar getTelefoneCompleto")
+    void deveTestarGetTelefoneCompleto() {
+        TelefoneEntity telefoneEntity = TelefoneEntity.builder()
+                .id(1L)
+                .prefixo("11")
+                .numero("979815415")
+                .tipoTelefone(TipoTelefoneEnum.MOVEL_WHATSAPP)
+                .build();
+
+        String telefoneCompleto = telefoneEntity.getTelefoneCompleto();
+
+        Assertions.assertEquals(
+                "TelefoneEntity(id=1, prefixo=11, numero=979815415, tipoTelefone=MOVEL_WHATSAPP)",
+                telefoneEntity.toString()
+        );
+    }
+
+    @Test
     @DisplayName("Deve testar @Builder")
     void deveTestarBuilder() {
         TelefoneEntity telefoneEntity = TelefoneEntity.builder()
