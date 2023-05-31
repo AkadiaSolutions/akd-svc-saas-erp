@@ -3,7 +3,10 @@ package br.akd.svc.akadia.services.site;
 import br.akd.svc.akadia.models.dto.site.empresa.EmpresaDto;
 import br.akd.svc.akadia.models.entities.global.EnderecoEntity;
 import br.akd.svc.akadia.models.entities.global.TelefoneEntity;
-import br.akd.svc.akadia.models.entities.sistema.colaboradores.*;
+import br.akd.svc.akadia.models.entities.sistema.colaboradores.AcessoSistemaEntity;
+import br.akd.svc.akadia.models.entities.sistema.colaboradores.ColaboradorEntity;
+import br.akd.svc.akadia.models.entities.sistema.colaboradores.ConfiguracaoPerfilEntity;
+import br.akd.svc.akadia.models.entities.sistema.colaboradores.ExclusaoColaboradorEntity;
 import br.akd.svc.akadia.models.entities.site.ClienteSistemaEntity;
 import br.akd.svc.akadia.models.entities.site.empresa.CriaEmpresaResponse;
 import br.akd.svc.akadia.models.entities.site.empresa.DadosEmpresaDeletadaEntity;
@@ -280,6 +283,7 @@ public class EmpresaService {
                 .dataCadastro(LocalDate.now().toString())
                 .horaCadastro(LocalTime.now().toString())
                 .matricula(colaboradorService.geraMatriculaUnica())
+                .fotoPerfil(null)
                 .nome("admin")
                 .dataNascimento(null)
                 .email(null)
@@ -291,6 +295,7 @@ public class EmpresaService {
                 .ocupacao("Administrador do sistema")
                 .tipoOcupacaoEnum(TipoOcupacaoEnum.ADMINISTRADOR)
                 .modeloTrabalhoEnum(ModeloTrabalhoEnum.PRESENCIAL)
+                .modeloContratacaoEnum(ModeloContratacaoEnum.CLT)
                 .statusColaboradorEnum(StatusColaboradorEnum.ATIVO)
                 .acessoSistema(AcessoSistemaEntity.builder()
                         .acessoSistemaAtivo(true)
@@ -317,6 +322,8 @@ public class EmpresaService {
                 .pontos(new ArrayList<>())
                 .historicoFerias(new ArrayList<>())
                 .advertencias(new ArrayList<>())
+                .acessos(new ArrayList<>())
+                .acoes(new ArrayList<>())
                 .empresa(empresaEntity)
                 .build()
         );

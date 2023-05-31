@@ -28,7 +28,6 @@ public class ClienteDtoBuilder {
         builder.clienteDto.setExclusaoCliente(null);
         builder.clienteDto.setEndereco(null);
         builder.clienteDto.setTelefone(null);
-        builder.clienteDto.setColaboradorResponsavel(null);
         builder.clienteDto.setEmpresa(null);
         return builder;
     }

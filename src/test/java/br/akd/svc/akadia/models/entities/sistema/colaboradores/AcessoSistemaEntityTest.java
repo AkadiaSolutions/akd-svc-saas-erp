@@ -1,6 +1,8 @@
 package br.akd.svc.akadia.models.entities.sistema.colaboradores;
 
+import br.akd.svc.akadia.models.enums.sistema.colaboradores.ModulosEnum;
 import br.akd.svc.akadia.models.entities.sistema.colaboradores.mocks.AcessoSistemaEntityBuilder;
+import br.akd.svc.akadia.models.enums.sistema.colaboradores.PermissaoEnum;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,8 +20,8 @@ class AcessoSistemaEntityTest {
     @DisplayName("Deve testar dataBuilder")
     void deveTestarDataBuilder() {
         Assertions.assertEquals(
-                "AcessoSistemaEntity(id=1, acessoSistemaAtivo=true, nomeUsuario=admin, senha=123, " +
-                        "senhaCriptografada=1239jd89j1u9tbhg, privilegios=[])",
+                "AcessoSistemaEntity(id=1, acessoSistemaAtivo=true, senha=123, " +
+                        "senhaCriptografada=1239jd89j1u9tbhg, permissaoEnum=LEITURA_AVANCADA_ALTERACAO, privilegios=[])",
                 AcessoSistemaEntityBuilder.builder().build().toString()
         );
     }
@@ -35,12 +37,12 @@ class AcessoSistemaEntityTest {
                 true,
                 "admin",
                 "123",
-                "9js109j192jf18g09fj",
+                PermissaoEnum.LEITURA_AVANCADA_ALTERACAO,
                 privilegiosUsuario
         );
         Assertions.assertEquals(
-                "AcessoSistemaEntity(id=1, acessoSistemaAtivo=true, nomeUsuario=admin, senha=123, " +
-                        "senhaCriptografada=9js109j192jf18g09fj, privilegios=[])",
+                "AcessoSistemaEntity(id=1, acessoSistemaAtivo=true, senha=admin, senhaCriptografada=123, " +
+                        "permissaoEnum=LEITURA_AVANCADA_ALTERACAO, privilegios=[])",
                 acessoSistemaEntity.toString()
         );
     }
@@ -48,16 +50,18 @@ class AcessoSistemaEntityTest {
     @Test
     @DisplayName("Deve testar @Builder")
     void deveTestarBuilder() {
+        Set<ModulosEnum> privilegiosUsuario = new HashSet<>();
         AcessoSistemaEntity acessoSistemaEntity = AcessoSistemaEntity.builder()
                 .id(1L)
                 .acessoSistemaAtivo(true)
-                .nomeUsuario("admin")
                 .senha("123")
                 .senhaCriptografada("d9k1089fh19b")
+                .permissaoEnum(PermissaoEnum.LEITURA_BASICA)
+                .privilegios(privilegiosUsuario)
                 .build();
         Assertions.assertEquals(
-                "AcessoSistemaEntity(id=1, acessoSistemaAtivo=true, nomeUsuario=admin, senha=123, " +
-                        "senhaCriptografada=d9k1089fh19b, privilegios=null)",
+                "AcessoSistemaEntity(id=1, acessoSistemaAtivo=true, senha=123, " +
+                        "senhaCriptografada=d9k1089fh19b, permissaoEnum=LEITURA_BASICA, privilegios=[])",
                 acessoSistemaEntity.toString()
         );
     }

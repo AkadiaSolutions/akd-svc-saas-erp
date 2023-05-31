@@ -22,8 +22,8 @@ class ClienteDtoTest {
                 "ClienteDto(id=1, dataCadastro=2023-02-27, horaCadastro=17:40, dataNascimento=1998-07-21, " +
                         "nome=Gabriel Lagrota, cpfCnpj=582.645.389-32, inscricaoEstadual=145574080114, " +
                         "email=gabrielafonso@mail.com.br, statusCliente=null, tipoPessoa=null, " +
-                        "qtdOrdensRealizadas=null, giroTotal=null, exclusaoCliente=null, endereco=null, " +
-                        "telefone=null, colaboradorResponsavel=null, empresa=null)",
+                        "qtdOrdensRealizadas=null, giroTotal=null, exclusaoCliente=null, endereco=null, telefone=null, " +
+                        "empresa=null)",
                 ClienteDtoBuilder.builder().build().toString()
         );
 
@@ -48,7 +48,6 @@ class ClienteDtoTest {
                 null,
                 null,
                 null,
-                null,
                 null
         );
         Assertions.assertEquals(
@@ -56,7 +55,7 @@ class ClienteDtoTest {
                         "nome=Gabriel Lagrota, cpfCnpj=582.645.389-32, inscricaoEstadual=145574080114, " +
                         "email=gabrielafonso@mail.com.br, statusCliente=COMUM, tipoPessoa=FISICA, " +
                         "qtdOrdensRealizadas=0, giroTotal=0.0, exclusaoCliente=null, endereco=null, telefone=null, " +
-                        "colaboradorResponsavel=null, empresa=null)",
+                        "empresa=null)",
                 clienteDto.toString()
         );
 
@@ -75,7 +74,6 @@ class ClienteDtoTest {
                 .email("gabrielafonso@mail.com.br")
                 .endereco(null)
                 .telefone(null)
-                .colaboradorResponsavel(null)
                 .empresa(null)
                 .build();
         Assertions.assertEquals(
@@ -83,7 +81,7 @@ class ClienteDtoTest {
                         "nome=Gabriel Lagrota, cpfCnpj=582.645.389-32, inscricaoEstadual=null, " +
                         "email=gabrielafonso@mail.com.br, statusCliente=null, tipoPessoa=null, " +
                         "qtdOrdensRealizadas=null, giroTotal=null, exclusaoCliente=null, endereco=null, telefone=null, " +
-                        "colaboradorResponsavel=null, empresa=null)",
+                        "empresa=null)",
                 clienteDto.toString()
         );
     }

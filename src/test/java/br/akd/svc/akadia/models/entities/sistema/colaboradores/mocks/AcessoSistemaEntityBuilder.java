@@ -1,6 +1,9 @@
 package br.akd.svc.akadia.models.entities.sistema.colaboradores.mocks;
 
 import br.akd.svc.akadia.models.entities.sistema.colaboradores.AcessoSistemaEntity;
+import br.akd.svc.akadia.models.enums.sistema.colaboradores.PermissaoEnum;
+
+import java.util.HashSet;
 
 public class AcessoSistemaEntityBuilder {
 
@@ -14,9 +17,10 @@ public class AcessoSistemaEntityBuilder {
         builder.acessoSistemaEntity = new AcessoSistemaEntity();
         builder.acessoSistemaEntity.setId(1L);
         builder.acessoSistemaEntity.setAcessoSistemaAtivo(true);
-        builder.acessoSistemaEntity.setNomeUsuario("admin");
         builder.acessoSistemaEntity.setSenha("123");
         builder.acessoSistemaEntity.setSenhaCriptografada("1239jd89j1u9tbhg");
+        builder.acessoSistemaEntity.setPermissaoEnum(PermissaoEnum.LEITURA_AVANCADA_ALTERACAO);
+        builder.acessoSistemaEntity.setPrivilegios(new HashSet<>());
         return builder;
     }
 

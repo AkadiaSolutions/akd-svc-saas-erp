@@ -2,11 +2,11 @@ package br.akd.svc.akadia.services.sistema.clientes;
 
 import br.akd.svc.akadia.models.dto.sistema.clientes.mocks.ClienteDtoBuilder;
 import br.akd.svc.akadia.models.dto.sistema.clientes.responses.ClienteResponse;
-import br.akd.svc.akadia.models.entities.sistema.clientes.ClienteEntity;
 import br.akd.svc.akadia.models.entities.sistema.clientes.mocks.ClienteEntityBuilder;
 import br.akd.svc.akadia.models.entities.sistema.colaboradores.mocks.ColaboradorEntityBuilder;
 import br.akd.svc.akadia.repositories.sistema.clientes.impl.ClienteRepositoryImpl;
 import br.akd.svc.akadia.services.exceptions.InvalidRequestException;
+import br.akd.svc.akadia.services.sistema.colaboradores.AcaoService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -20,6 +20,7 @@ import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
@@ -32,44 +33,55 @@ class ClienteServiceTest {
     @Mock
     ClienteRepositoryImpl clienteRepositoryImpl;
 
+    @Mock
+    AcaoService acaoService;
+
     @Test
     @DisplayName("Deve testar método de criação de novo cliente")
     void deveTestarMetodoDeCriacaoDeNovoCliente() {
 
         when(clienteRepositoryImpl.implementaBuscaPorId(any(), any()))
-                .thenReturn(ClienteEntityBuilder.builder().comExclusao(false).build());
+                .thenReturn(ClienteEntityBuilder.builder().comColaborador().comExclusao(false).build());
 
-        ClienteEntity clienteEntity = clienteService.criaNovoCliente(ColaboradorEntityBuilder.builder().comEmpresa().build(),
+        when(clienteRepositoryImpl.implementaPersistencia(any()))
+                .thenReturn(ClienteEntityBuilder.builder().comColaborador().comExclusao(false).build());
+
+        doNothing().when(acaoService).salvaHistoricoColaborador(any(), any(), any(), any(), any());
+
+        ClienteResponse clienteResponse = clienteService.criaNovoCliente(
+                ColaboradorEntityBuilder.builder()
+                        .comEmpresa()
+                        .comAcessoCompleto()
+                        .build(),
                 ClienteDtoBuilder.builder()
                         .comObjetoExclusaoFalse()
                         .comEndereco()
                         .comTelefone()
                         .build());
 
-        Assertions.assertNull(clienteEntity);
+        Assertions.assertEquals("ClienteResponse(id=1, dataCadastro=2023-02-27, horaCadastro=17:40, " +
+                "dataNascimento=1998-07-21, nome=Gabriel Lagrota, cpfCnpj=582.645.389-32, inscricaoEstadual=145574080114, " +
+                "email=gabrielafonso@mail.com.br, statusCliente=null, tipoPessoa=null, qtdOrdensRealizadas=null, " +
+                "giroTotal=null, exclusaoCliente=ExclusaoClienteResponse(dataExclusao=null, horaExclusao=null, " +
+                "excluido=false), endereco=null, telefone=null, nomeColaboradorResponsavel=João da Silva)", clienteResponse.toString());
     }
 
     @Test
     @DisplayName("Deve testar método de atualização do cliente")
     void deveTestarMetodoDeAtualizacaoDeCliente() {
 
-        when(clienteRepositoryImpl.implementaBuscaPorId(anyLong(), anyLong()))
-                .thenReturn(ClienteEntityBuilder.builder()
-                        .comExclusao(false)
-                        .comTelefone()
-                        .comEndereco()
-                        .build());
+        when(clienteRepositoryImpl.implementaBuscaPorId(any(), any()))
+                .thenReturn(ClienteEntityBuilder.builder().comColaborador().comExclusao(false).build());
 
         when(clienteRepositoryImpl.implementaPersistencia(any()))
-                .thenReturn(ClienteEntityBuilder.builder()
-                        .comExclusao(false)
-                        .comTelefone()
-                        .comEndereco()
-                        .build());
+                .thenReturn(ClienteEntityBuilder.builder().comColaborador().comExclusao(false).build());
 
-        ClienteEntity cliente = clienteService.atualizaCliente(
+        doNothing().when(acaoService).salvaHistoricoColaborador(any(), any(), any(), any(), any());
+
+        ClienteResponse cliente = clienteService.atualizaCliente(
                 ColaboradorEntityBuilder.builder()
                         .comEmpresa()
+                        .comAcessoCompleto()
                         .build(),
                 1L,
                 ClienteDtoBuilder.builder()
@@ -78,16 +90,12 @@ class ClienteServiceTest {
                         .comEndereco()
                         .build());
 
-        Assertions.assertEquals("ClienteEntity(id=1, dataCadastro=2023-02-27, horaCadastro=17:40, " +
+        Assertions.assertEquals("ClienteResponse(id=1, dataCadastro=2023-02-27, horaCadastro=17:40, " +
                         "dataNascimento=1998-07-21, nome=Gabriel Lagrota, cpfCnpj=582.645.389-32, " +
                         "inscricaoEstadual=145574080114, email=gabrielafonso@mail.com.br, statusCliente=null, " +
                         "tipoPessoa=null, qtdOrdensRealizadas=null, giroTotal=null, " +
-                        "exclusaoCliente=ExclusaoClienteEntity(id=1, dataExclusao=null, horaExclusao=null, " +
-                        "excluido=false, responsavelExclusao=null), endereco=EnderecoEntity(id=1, " +
-                        "logradouro=Avenida Coronel Manuel Py, numero=583, bairro=Lauzane Paulista, " +
-                        "codigoPostal=02442-090, cidade=São Paulo, complemento=Casa 4, estado=SP), " +
-                        "telefone=TelefoneEntity(id=1, prefixo=11, numero=979815415, tipoTelefone=MOVEL_WHATSAPP), " +
-                        "colaboradorResponsavel=null, empresa=null)",
+                        "exclusaoCliente=ExclusaoClienteResponse(dataExclusao=null, horaExclusao=null, excluido=false), " +
+                        "endereco=null, telefone=null, nomeColaboradorResponsavel=João da Silva)",
                 cliente.toString());
     }
 

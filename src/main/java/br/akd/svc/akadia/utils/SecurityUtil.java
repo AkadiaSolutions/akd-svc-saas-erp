@@ -4,8 +4,10 @@ import br.akd.svc.akadia.models.entities.sistema.colaboradores.AcessoSistemaEnti
 import br.akd.svc.akadia.models.enums.sistema.colaboradores.PermissaoEnum;
 import br.akd.svc.akadia.services.exceptions.UnauthorizedAccessException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 
 @Slf4j
+@Service
 public class SecurityUtil {
 
     SecurityUtil(){}

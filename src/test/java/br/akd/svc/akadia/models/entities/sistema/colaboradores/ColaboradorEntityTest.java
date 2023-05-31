@@ -22,13 +22,13 @@ class ColaboradorEntityTest {
     @DisplayName("Deve testar dataBuilder")
     void deveTestarDataBuilder() {
         Assertions.assertEquals(
-                "ColaboradorEntity(id=1, dataCadastro=2023-02-13, horaCadastro=10:44, fotoPerfil=[], " +
-                        "nome=João da Silva, dataNascimento=2021-04-11, email=joaosilva@gmail.com, " +
-                        "cpfCnpj=12345678910, ativo=true, excluido=false, salario=2000.0, entradaEmpresa=2023-02-13, " +
-                        "saidaEmpresa=null, contratoContratacao=[], ocupacao=Técnico Interno, " +
+                "ColaboradorEntity(id=1, dataCadastro=2023-02-13, horaCadastro=10:44, matricula=123456, " +
+                        "nome=João da Silva, dataNascimento=2021-04-11, email=joaosilva@gmail.com, cpfCnpj=12345678910, " +
+                        "salario=2000.0, entradaEmpresa=2023-02-13, saidaEmpresa=null, ocupacao=Técnico Interno, " +
                         "tipoOcupacaoEnum=TECNICO_INTERNO, modeloContratacaoEnum=CLT, modeloTrabalhoEnum=PRESENCIAL, " +
-                        "statusColaboradorEnum=ATIVO, acessoSistema=null, configuracaoPerfil=null, endereco=null, " +
-                        "telefone=null, expediente=null, dispensa=null, empresa=null)",
+                        "statusColaboradorEnum=ATIVO, fotoPerfil=null, contratoContratacao=null, exclusao=null, " +
+                        "acessoSistema=null, configuracaoPerfil=null, endereco=null, telefone=null, expediente=null, " +
+                        "dispensa=null, empresa=null)",
                 ColaboradorEntityBuilder.builder().build().toString()
         );
     }
@@ -40,18 +40,15 @@ class ColaboradorEntityTest {
                 1L,
                 LocalDate.of(2023, 2, 13).toString(),
                 LocalTime.of(11, 17).toString(),
-                new byte[]{},
+                "123456",
                 "Fulano",
                 "11-11-2011",
                 "fulano@gmail.com",
                 "10987654321",
-                true,
-                false,
                 3400.0,
                 LocalDate.of(2023, 11, 1).toString(),
                 null,
-                new byte[]{},
-                "Administrativo",
+                "Administrador",
                 TipoOcupacaoEnum.ADMINISTRATIVO,
                 ModeloContratacaoEnum.CLT,
                 ModeloTrabalhoEnum.HIBRIDO,
@@ -62,6 +59,10 @@ class ColaboradorEntityTest {
                 null,
                 null,
                 null,
+                null,
+                null,
+                null,
+                new ArrayList<>(),
                 new ArrayList<>(),
                 new ArrayList<>(),
                 new ArrayList<>(),
@@ -69,11 +70,11 @@ class ColaboradorEntityTest {
                 null
         );
         Assertions.assertEquals(
-                "ColaboradorEntity(id=1, dataCadastro=2023-02-13, horaCadastro=11:17, fotoPerfil=[], " +
+                "ColaboradorEntity(id=1, dataCadastro=2023-02-13, horaCadastro=11:17, matricula=123456, " +
                         "nome=Fulano, dataNascimento=11-11-2011, email=fulano@gmail.com, cpfCnpj=10987654321, " +
-                        "ativo=true, excluido=false, salario=3400.0, entradaEmpresa=2023-11-01, saidaEmpresa=null, " +
-                        "contratoContratacao=[], ocupacao=Administrativo, tipoOcupacaoEnum=ADMINISTRATIVO, " +
-                        "modeloContratacaoEnum=CLT, modeloTrabalhoEnum=HIBRIDO, statusColaboradorEnum=FERIAS, " +
+                        "salario=3400.0, entradaEmpresa=2023-11-01, saidaEmpresa=null, ocupacao=Administrador, " +
+                        "tipoOcupacaoEnum=ADMINISTRATIVO, modeloContratacaoEnum=CLT, modeloTrabalhoEnum=HIBRIDO, " +
+                        "statusColaboradorEnum=FERIAS, fotoPerfil=null, contratoContratacao=null, exclusao=null, " +
                         "acessoSistema=null, configuracaoPerfil=null, endereco=null, telefone=null, expediente=null, " +
                         "dispensa=null, empresa=null)",
                 colaboradorEntity.toString()
@@ -87,22 +88,22 @@ class ColaboradorEntityTest {
                 .id(1L)
                 .dataCadastro(LocalDate.of(2023, 2, 13).toString())
                 .horaCadastro(LocalTime.of(11, 18).toString())
-                .fotoPerfil(new byte[]{})
+                .matricula("123456")
                 .nome("Ciclano Nogueira")
                 .dataNascimento(LocalDate.of(1972, 6, 4).toString())
                 .email("ciclanonogueira@uol.com.br")
                 .cpfCnpj("12436585312")
-                .ativo(false)
-                .excluido(true)
                 .salario(1800.0)
                 .entradaEmpresa(LocalDate.of(2018, 8, 12).toString())
                 .saidaEmpresa(LocalDate.of(20222, 12, 1).toString())
-                .contratoContratacao(new byte[]{})
                 .ocupacao("Técnico geral")
                 .tipoOcupacaoEnum(TipoOcupacaoEnum.TECNICO)
                 .modeloContratacaoEnum(ModeloContratacaoEnum.FREELANCER)
                 .modeloTrabalhoEnum(ModeloTrabalhoEnum.PRESENCIAL)
                 .statusColaboradorEnum(StatusColaboradorEnum.DISPENSADO)
+                .fotoPerfil(null)
+                .contratoContratacao(null)
+                .exclusao(null)
                 .acessoSistema(null)
                 .configuracaoPerfil(null)
                 .endereco(null)
@@ -112,17 +113,18 @@ class ColaboradorEntityTest {
                 .pontos(new ArrayList<>())
                 .historicoFerias(new ArrayList<>())
                 .advertencias(new ArrayList<>())
-                .parentescos(new ArrayList<>())
+                .acessos(new ArrayList<>())
+                .acoes(new ArrayList<>())
                 .empresa(null)
                 .build();
         Assertions.assertEquals(
-                "ColaboradorEntity(id=1, dataCadastro=2023-02-13, horaCadastro=11:18, fotoPerfil=[], " +
+                "ColaboradorEntity(id=1, dataCadastro=2023-02-13, horaCadastro=11:18, matricula=123456, " +
                         "nome=Ciclano Nogueira, dataNascimento=1972-06-04, email=ciclanonogueira@uol.com.br, " +
-                        "cpfCnpj=12436585312, ativo=false, excluido=true, salario=1800.0, entradaEmpresa=2018-08-12, " +
-                        "saidaEmpresa=+20222-12-01, contratoContratacao=[], ocupacao=Técnico geral, " +
-                        "tipoOcupacaoEnum=TECNICO, modeloContratacaoEnum=FREELANCER, modeloTrabalhoEnum=PRESENCIAL, " +
-                        "statusColaboradorEnum=DISPENSADO, acessoSistema=null, configuracaoPerfil=null, endereco=null, " +
-                        "telefone=null, expediente=null, dispensa=null, empresa=null)",
+                        "cpfCnpj=12436585312, salario=1800.0, entradaEmpresa=2018-08-12, saidaEmpresa=+20222-12-01, " +
+                        "ocupacao=Técnico geral, tipoOcupacaoEnum=TECNICO, modeloContratacaoEnum=FREELANCER, " +
+                        "modeloTrabalhoEnum=PRESENCIAL, statusColaboradorEnum=DISPENSADO, fotoPerfil=null, " +
+                        "contratoContratacao=null, exclusao=null, acessoSistema=null, configuracaoPerfil=null, " +
+                        "endereco=null, telefone=null, expediente=null, dispensa=null, empresa=null)",
                 colaboradorEntity.toString()
         );
     }

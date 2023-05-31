@@ -1,7 +1,5 @@
 package br.akd.svc.akadia.services.sistema.colaboradores;
 
-import br.akd.svc.akadia.models.dto.global.EnderecoDto;
-import br.akd.svc.akadia.models.dto.sistema.colaboradores.ColaboradorDto;
 import br.akd.svc.akadia.models.dto.sistema.colaboradores.responses.AcessoSistemaResponse;
 import br.akd.svc.akadia.models.dto.sistema.colaboradores.responses.ColaboradorPageResponse;
 import br.akd.svc.akadia.models.dto.sistema.colaboradores.responses.ColaboradorResponse;
@@ -116,7 +114,7 @@ public class ColaboradorService {
         SecurityUtil.verificaSePodeRealizarAlteracoes(colaboradorLogado.getAcessoSistema());
 
         log.debug("Convertendo objeto colaborador recebido de Json para entity...");
-        ColaboradorDto colaboradorDto = new ObjectMapper().readValue(colaboradorEmJson, ColaboradorDto.class);
+        ColaboradorEntity colaborador = new ObjectMapper().readValue(colaboradorEmJson, ColaboradorEntity.class);
 
         log.debug(BUSCA_COLABORADOR_POR_ID);
         ColaboradorEntity colaboradorEncontrado =
@@ -132,13 +130,13 @@ public class ColaboradorService {
                 .dataCadastro(colaboradorEncontrado.getDataCadastro())
                 .horaCadastro(colaboradorEncontrado.getHoraCadastro())
                 .matricula(colaboradorEncontrado.getMatricula())
-                .nome(colaboradorDto.getNome())
-                .dataNascimento(colaboradorDto.getDataNascimento())
-                .email(colaboradorDto.getEmail())
-                .cpfCnpj(colaboradorDto.getCpfCnpj())
-                .salario(colaboradorDto.getSalario())
-                .entradaEmpresa(colaboradorDto.getEntradaEmpresa())
-                .saidaEmpresa(colaboradorDto.getSaidaEmpresa())
+                .nome(colaborador.getNome())
+                .dataNascimento(colaborador.getDataNascimento())
+                .email(colaborador.getEmail())
+                .cpfCnpj(colaborador.getCpfCnpj())
+                .salario(colaborador.getSalario())
+                .entradaEmpresa(colaborador.getEntradaEmpresa())
+                .saidaEmpresa(colaborador.getSaidaEmpresa())
                 .contratoContratacao(contratoColaborador != null
                         ? ArquivoEntity.builder()
                         .nome(contratoColaborador.getOriginalFilename())
@@ -147,31 +145,31 @@ public class ColaboradorService {
                         .arquivo(contratoColaborador.getBytes())
                         .build()
                         : null)
-                .ocupacao(colaboradorDto.getOcupacao())
-                .tipoOcupacaoEnum(colaboradorDto.getTipoOcupacaoEnum())
-                .modeloContratacaoEnum(colaboradorDto.getModeloContratacaoEnum())
-                .modeloTrabalhoEnum(colaboradorDto.getModeloTrabalhoEnum())
-                .statusColaboradorEnum(colaboradorDto.getStatusColaboradorEnum())
+                .ocupacao(colaborador.getOcupacao())
+                .tipoOcupacaoEnum(colaborador.getTipoOcupacaoEnum())
+                .modeloContratacaoEnum(colaborador.getModeloContratacaoEnum())
+                .modeloTrabalhoEnum(colaborador.getModeloTrabalhoEnum())
+                .statusColaboradorEnum(colaborador.getStatusColaboradorEnum())
                 .exclusao(colaboradorEncontrado.getExclusao())
-                .acessoSistema(constroiObjetoAcessoSistemaParaAtualizacaoDeColaborador(colaboradorEncontrado, colaboradorDto))
+                .acessoSistema(constroiObjetoAcessoSistemaParaAtualizacaoDeColaborador(colaboradorEncontrado, colaborador))
                 .configuracaoPerfil(colaboradorEncontrado.getConfiguracaoPerfil())
-                .endereco(realizaTratamentoEnderecoDoColaboradorAtualizado(colaboradorDto.getEndereco(), colaboradorEncontrado))
-                .telefone(colaboradorDto.getTelefone() == null
+                .endereco(realizaTratamentoEnderecoDoColaboradorAtualizado(colaborador.getEndereco(), colaboradorEncontrado))
+                .telefone(colaborador.getTelefone() == null
                         ? null
                         : TelefoneEntity.builder()
                         .id(obtemIdTelefoneDoColaboradorAtualizavelSeTiver(colaboradorEncontrado))
-                        .prefixo(colaboradorDto.getTelefone().getPrefixo())
-                        .numero(colaboradorDto.getTelefone().getNumero())
-                        .tipoTelefone(colaboradorDto.getTelefone().getTipoTelefone())
+                        .prefixo(colaborador.getTelefone().getPrefixo())
+                        .numero(colaborador.getTelefone().getNumero())
+                        .tipoTelefone(colaborador.getTelefone().getTipoTelefone())
                         .build())
-                .expediente(colaboradorDto.getExpediente() != null
+                .expediente(colaborador.getExpediente() != null
                         ? ExpedienteEntity.builder()
-                        .horaEntrada(colaboradorDto.getExpediente().getHoraEntrada())
-                        .horaEntradaAlmoco(colaboradorDto.getExpediente().getHoraEntradaAlmoco())
-                        .horaSaidaAlmoco(colaboradorDto.getExpediente().getHoraSaidaAlmoco())
-                        .horaSaida(colaboradorDto.getExpediente().getHoraSaida())
-                        .cargaHorariaSemanal(colaboradorDto.getExpediente().getCargaHorariaSemanal())
-                        .escalaEnum(colaboradorDto.getExpediente().getEscalaEnum())
+                        .horaEntrada(colaborador.getExpediente().getHoraEntrada())
+                        .horaEntradaAlmoco(colaborador.getExpediente().getHoraEntradaAlmoco())
+                        .horaSaidaAlmoco(colaborador.getExpediente().getHoraSaidaAlmoco())
+                        .horaSaida(colaborador.getExpediente().getHoraSaida())
+                        .cargaHorariaSemanal(colaborador.getExpediente().getCargaHorariaSemanal())
+                        .escalaEnum(colaborador.getExpediente().getEscalaEnum())
                         .build()
                         : null)
                 .fotoPerfil(colaboradorEncontrado.getFotoPerfil())
@@ -200,7 +198,7 @@ public class ColaboradorService {
     }
 
     private AcessoSistemaEntity constroiObjetoAcessoSistemaParaAtualizacaoDeColaborador(ColaboradorEntity colaboradorPreAtualizacao,
-                                                                                        ColaboradorDto colaboradorNovo) {
+                                                                                        ColaboradorEntity colaboradorNovo) {
 
         if (Boolean.FALSE.equals(colaboradorNovo.getAcessoSistema().getAcessoSistemaAtivo())) return
                 AcessoSistemaEntity.builder()
@@ -241,26 +239,26 @@ public class ColaboradorService {
         }
     }
 
-    private EnderecoEntity realizaTratamentoEnderecoDoColaboradorAtualizado(EnderecoDto enderecoDto,
+    private EnderecoEntity realizaTratamentoEnderecoDoColaboradorAtualizado(EnderecoEntity endereco,
                                                                             ColaboradorEntity colaboradorEntity) {
-        if (enderecoDto == null) return null;
+        if (endereco == null) return null;
         return EnderecoEntity.builder()
                 .id(obtemIdEnderecoDoColaboradorAtualizavelSeTiver(colaboradorEntity))
-                .codigoPostal(enderecoDto.getCodigoPostal())
-                .logradouro(enderecoDto.getLogradouro() != null
-                        ? enderecoDto.getLogradouro().toUpperCase()
+                .codigoPostal(endereco.getCodigoPostal())
+                .logradouro(endereco.getLogradouro() != null
+                        ? endereco.getLogradouro().toUpperCase()
                         : null)
-                .numero(enderecoDto.getNumero())
-                .bairro(enderecoDto.getBairro() != null
-                        ? enderecoDto.getBairro().toUpperCase()
+                .numero(endereco.getNumero())
+                .bairro(endereco.getBairro() != null
+                        ? endereco.getBairro().toUpperCase()
                         : null)
-                .cidade(enderecoDto.getCidade() != null
-                        ? enderecoDto.getCidade().toUpperCase()
+                .cidade(endereco.getCidade() != null
+                        ? endereco.getCidade().toUpperCase()
                         : null)
-                .complemento(enderecoDto.getComplemento() != null
-                        ? enderecoDto.getComplemento().toUpperCase()
+                .complemento(endereco.getComplemento() != null
+                        ? endereco.getComplemento().toUpperCase()
                         : null)
-                .estado(enderecoDto.getEstado())
+                .estado(endereco.getEstado())
                 .build();
     }
 
@@ -560,8 +558,7 @@ public class ColaboradorService {
             acaoService.salvaHistoricoColaborador(colaboradorLogado, colaboradorPersistido.getId(),
                     ModulosEnum.COLABORADORES, TipoAcaoEnum.ALTERACAO, "Alteração da foto de perfil do colaborador "
                             + colaboradorPersistido.getNome());
-        }
-        else {
+        } else {
             log.debug(Constantes.INICIANDO_SALVAMENTO_HISTORICO_COLABORADOR);
             acaoService.salvaHistoricoColaborador(colaboradorLogado, colaboradorPersistido.getId(),
                     ModulosEnum.COLABORADORES, TipoAcaoEnum.REMOCAO, "Remoção da foto de perfil do colaborador "

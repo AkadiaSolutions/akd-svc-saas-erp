@@ -1,6 +1,7 @@
 package br.akd.svc.akadia.models.entities.sistema.colaboradores.mocks;
 
 import br.akd.svc.akadia.models.entities.sistema.colaboradores.AdvertenciaEntity;
+import br.akd.svc.akadia.models.enums.sistema.colaboradores.StatusAdvertenciaEnum;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -20,7 +21,8 @@ public class AdvertenciaEntityBuilder {
         builder.advertenciaEntity.setHoraCadastro(LocalTime.of(10, 44).toString());
         builder.advertenciaEntity.setMotivo("Brigou na loja");
         builder.advertenciaEntity.setDescricao("Cuspiu no cliente");
-        builder.advertenciaEntity.setAdvertenciaAssinada(new byte[]{});
+        builder.advertenciaEntity.setAdvertenciaAssinada(null);
+        builder.advertenciaEntity.setStatusAdvertenciaEnum(StatusAdvertenciaEnum.ASSINADA);
         return builder;
     }
 

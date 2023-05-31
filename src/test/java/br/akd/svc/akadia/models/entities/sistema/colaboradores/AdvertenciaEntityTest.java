@@ -1,6 +1,7 @@
 package br.akd.svc.akadia.models.entities.sistema.colaboradores;
 
 import br.akd.svc.akadia.models.entities.sistema.colaboradores.mocks.AdvertenciaEntityBuilder;
+import br.akd.svc.akadia.models.enums.sistema.colaboradores.StatusAdvertenciaEnum;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,7 +19,7 @@ class AdvertenciaEntityTest {
     void deveTestarDataBuilder() {
         Assertions.assertEquals(
                 "AdvertenciaEntity(id=1, dataCadastro=2023-02-13, horaCadastro=10:44, motivo=Brigou na loja, " +
-                        "descricao=Cuspiu no cliente, advertenciaAssinada=[])",
+                        "descricao=Cuspiu no cliente, statusAdvertenciaEnum=ASSINADA, advertenciaAssinada=null)",
                 AdvertenciaEntityBuilder.builder().build().toString()
         );
     }
@@ -32,11 +33,12 @@ class AdvertenciaEntityTest {
                 LocalTime.of(11, 17).toString(),
                 "Falta todo dia",
                 "Fica faltando no serviço toda hora",
-                new byte[]{}
+                StatusAdvertenciaEnum.ASSINADA,
+                null
         );
         Assertions.assertEquals(
-                "AdvertenciaEntity(id=1, dataCadastro=2023-02-13, horaCadastro=11:17, " +
-                        "motivo=Falta todo dia, descricao=Fica faltando no serviço toda hora, advertenciaAssinada=[])",
+                "AdvertenciaEntity(id=1, dataCadastro=2023-02-13, horaCadastro=11:17, motivo=Falta todo dia, " +
+                        "descricao=Fica faltando no serviço toda hora, statusAdvertenciaEnum=ASSINADA, advertenciaAssinada=null)",
                 advertenciaEntity.toString()
         );
     }
@@ -50,11 +52,12 @@ class AdvertenciaEntityTest {
                 .horaCadastro(LocalTime.of(11, 18).toString())
                 .motivo("Falta todo dia")
                 .descricao("Fica faltando no serviço toda hora")
-                .advertenciaAssinada(new byte[]{})
+                .statusAdvertenciaEnum(StatusAdvertenciaEnum.PENDENTE)
+                .advertenciaAssinada(null)
                 .build();
         Assertions.assertEquals(
                 "AdvertenciaEntity(id=1, dataCadastro=2023-02-13, horaCadastro=11:18, motivo=Falta todo dia, " +
-                        "descricao=Fica faltando no serviço toda hora, advertenciaAssinada=[])",
+                        "descricao=Fica faltando no serviço toda hora, statusAdvertenciaEnum=PENDENTE, advertenciaAssinada=null)",
                 advertenciaEntity.toString()
         );
     }

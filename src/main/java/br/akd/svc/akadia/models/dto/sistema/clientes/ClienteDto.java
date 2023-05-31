@@ -2,7 +2,6 @@ package br.akd.svc.akadia.models.dto.sistema.clientes;
 
 import br.akd.svc.akadia.models.dto.global.EnderecoDto;
 import br.akd.svc.akadia.models.dto.global.TelefoneDto;
-import br.akd.svc.akadia.models.dto.sistema.colaboradores.ColaboradorDto;
 import br.akd.svc.akadia.models.dto.site.empresa.EmpresaDto;
 import br.akd.svc.akadia.models.enums.sistema.clientes.StatusClienteEnum;
 import br.akd.svc.akadia.models.enums.sistema.clientes.TipoPessoaEnum;
@@ -31,6 +30,5 @@ public class ClienteDto {
     private ExclusaoClienteDto exclusaoCliente;
     private EnderecoDto endereco;
     private TelefoneDto telefone;
-    private ColaboradorDto colaboradorResponsavel;
     private EmpresaDto empresa;
 }

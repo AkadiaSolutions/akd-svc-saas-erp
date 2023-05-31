@@ -8,6 +8,7 @@ import br.akd.svc.akadia.repositories.sistema.colaboradores.impl.ColaboradorRepo
 import br.akd.svc.akadia.repositories.site.impl.ClienteSistemaRepositoryImpl;
 import br.akd.svc.akadia.repositories.site.impl.EmpresaRepositoryImpl;
 import br.akd.svc.akadia.services.exceptions.InvalidRequestException;
+import br.akd.svc.akadia.services.sistema.colaboradores.ColaboradorService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -26,6 +27,9 @@ class EmpresaServiceTest {
 
     @InjectMocks
     EmpresaService empresaService;
+
+    @Mock
+    ColaboradorService colaboradorService;
 
     @Mock
     EmpresaRepositoryImpl empresaRepositoryImpl;
@@ -154,14 +158,17 @@ class EmpresaServiceTest {
         when(colaboradorRepositoryImpl.implementaPersistencia(any()))
                 .thenReturn(ColaboradorEntityBuilder.builder().build());
 
-        Assertions.assertEquals("CriaEmpresaResponse(idClienteEmpresa=1, " +
-                        "colaboradorCriado=ColaboradorEntity(id=1, dataCadastro=2023-02-13, horaCadastro=10:44, " +
-                        "fotoPerfil=[], nome=João da Silva, dataNascimento=2021-04-11, email=joaosilva@gmail.com, " +
-                        "cpfCnpj=12345678910, ativo=true, excluido=false, salario=2000.0, entradaEmpresa=2023-02-13, " +
-                        "saidaEmpresa=null, contratoContratacao=[], ocupacao=Técnico Interno, " +
+        when(colaboradorService.geraMatriculaUnica())
+                .thenReturn("123456");
+
+        Assertions.assertEquals("CriaEmpresaResponse(idClienteEmpresa=1, colaboradorCriado=ColaboradorEntity(id=1, " +
+                        "dataCadastro=2023-02-13, horaCadastro=10:44, matricula=123456, nome=João da Silva, " +
+                        "dataNascimento=2021-04-11, email=joaosilva@gmail.com, cpfCnpj=12345678910, salario=2000.0, " +
+                        "entradaEmpresa=2023-02-13, saidaEmpresa=null, ocupacao=Técnico Interno, " +
                         "tipoOcupacaoEnum=TECNICO_INTERNO, modeloContratacaoEnum=CLT, modeloTrabalhoEnum=PRESENCIAL, " +
-                        "statusColaboradorEnum=ATIVO, acessoSistema=null, configuracaoPerfil=null, endereco=null, " +
-                        "telefone=null, expediente=null, dispensa=null, empresa=null))",
+                        "statusColaboradorEnum=ATIVO, fotoPerfil=null, contratoContratacao=null, exclusao=null, " +
+                        "acessoSistema=null, configuracaoPerfil=null, endereco=null, telefone=null, expediente=null, " +
+                        "dispensa=null, empresa=null))",
                 empresaService.criaNovaEmpresa(1L, EmpresaDtoBuilder.builder()
                         .comConfigFiscalComTodasNf()
                         .comEndereco()

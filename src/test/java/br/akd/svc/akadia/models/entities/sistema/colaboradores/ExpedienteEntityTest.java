@@ -1,6 +1,7 @@
 package br.akd.svc.akadia.models.entities.sistema.colaboradores;
 
 import br.akd.svc.akadia.models.entities.sistema.colaboradores.mocks.ExpedienteEntityBuilder;
+import br.akd.svc.akadia.models.enums.sistema.colaboradores.EscalaEnum;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,7 +18,7 @@ class ExpedienteEntityTest {
     void deveTestarDataBuilder() {
         Assertions.assertEquals(
                 "ExpedienteEntity(id=1, horaEntrada=09:00, horaSaidaAlmoco=12:00, horaEntradaAlmoco=13:00, " +
-                        "horaSaida=18:00)",
+                        "horaSaida=18:00, cargaHorariaSemanal=null, escalaEnum=null)",
                 ExpedienteEntityBuilder.builder().build().toString()
         );
     }
@@ -30,11 +31,13 @@ class ExpedienteEntityTest {
                 LocalTime.of(9, 0).toString(),
                 LocalTime.of(12, 0).toString(),
                 LocalTime.of(13, 0).toString(),
-                LocalTime.of(18, 0).toString()
+                LocalTime.of(18, 0).toString(),
+                "40h",
+                EscalaEnum.SEG_A_SEX
         );
         Assertions.assertEquals(
                 "ExpedienteEntity(id=1, horaEntrada=09:00, horaSaidaAlmoco=12:00, horaEntradaAlmoco=13:00, " +
-                        "horaSaida=18:00)",
+                        "horaSaida=18:00, cargaHorariaSemanal=40h, escalaEnum=SEG_A_SEX)",
                 expedienteEntity.toString()
         );
     }
@@ -51,7 +54,7 @@ class ExpedienteEntityTest {
                 .build();
         Assertions.assertEquals(
                 "ExpedienteEntity(id=1, horaEntrada=09:00, horaSaidaAlmoco=12:00, horaEntradaAlmoco=13:00, " +
-                        "horaSaida=18:00)",
+                        "horaSaida=18:00, cargaHorariaSemanal=null, escalaEnum=null)",
                 expedienteEntity.toString()
         );
     }
