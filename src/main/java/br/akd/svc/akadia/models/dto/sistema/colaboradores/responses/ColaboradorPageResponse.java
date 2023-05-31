@@ -7,6 +7,7 @@ import java.util.List;
 @Getter
 @Setter
 @Builder
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 public class ColaboradorPageResponse {

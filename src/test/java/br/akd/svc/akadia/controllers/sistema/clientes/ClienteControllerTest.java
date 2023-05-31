@@ -7,6 +7,7 @@ import br.akd.svc.akadia.models.dto.sistema.clientes.responses.ClienteResponse;
 import br.akd.svc.akadia.models.dto.sistema.clientes.responses.mocks.ClientePageResponseBuilder;
 import br.akd.svc.akadia.models.dto.sistema.clientes.responses.mocks.ClienteResponseBuilder;
 import br.akd.svc.akadia.models.entities.sistema.colaboradores.mocks.ColaboradorEntityBuilder;
+import br.akd.svc.akadia.services.sistema.clientes.ClienteRelatorioService;
 import br.akd.svc.akadia.services.sistema.clientes.ClienteService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -37,6 +38,9 @@ class ClienteControllerTest {
 
     @Mock
     ClienteService clienteService;
+
+    @Mock
+    ClienteRelatorioService relatorioService;
 
     @Mock
     JWTUtil jwtUtil;
@@ -168,6 +172,8 @@ class ClienteControllerTest {
         when(jwtUtil.obtemUsuarioAtivo(mockedRequest)).thenReturn(ColaboradorEntityBuilder.builder().comEmpresa().build());
         List<Long> ids = new ArrayList<>();
         ids.add(1L);
+
+        Mockito.doNothing().when(relatorioService).exportarPdf(any(), any(), any());
 
         clienteController.relatorio(mockedResponse, mockedRequest, ids);
 
