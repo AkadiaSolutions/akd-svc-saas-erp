@@ -437,7 +437,6 @@ public class ClienteService {
                 .last(clientesEntity.isLast())
                 .number(clientesEntity.getNumber())
                 .numberOfElements(clientesEntity.getNumberOfElements())
-                .offset(clientesEntity.getPageable().getOffset())
                 .pageNumber(clientesEntity.getPageable().getPageNumber())
                 .pageSize(clientesEntity.getPageable().getPageSize())
                 .paged(clientesEntity.getPageable().isPaged())
