@@ -22,6 +22,14 @@ public class ExclusaoColaboradorEntityBuilder {
         return builder;
     }
 
+    public ExclusaoColaboradorEntityBuilder semExclusao() {
+        this.exclusaoColaboradorEntity.setDataExclusao(null);
+        this.exclusaoColaboradorEntity.setHoraExclusao(null);
+        this.exclusaoColaboradorEntity.setResponsavelExclusao(null);
+        this.exclusaoColaboradorEntity.setExcluido(false);
+        return this;
+    }
+
     public ExclusaoColaboradorEntity build() {
         return exclusaoColaboradorEntity;
     }

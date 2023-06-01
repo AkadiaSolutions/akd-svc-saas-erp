@@ -197,7 +197,7 @@ public class ColaboradorService {
         return colaboradorResponse;
     }
 
-    private AcessoSistemaEntity constroiObjetoAcessoSistemaParaAtualizacaoDeColaborador(ColaboradorEntity colaboradorPreAtualizacao,
+    protected AcessoSistemaEntity constroiObjetoAcessoSistemaParaAtualizacaoDeColaborador(ColaboradorEntity colaboradorPreAtualizacao,
                                                                                         ColaboradorEntity colaboradorNovo) {
 
         if (Boolean.FALSE.equals(colaboradorNovo.getAcessoSistema().getAcessoSistemaAtivo())) return
@@ -223,7 +223,7 @@ public class ColaboradorService {
         }
     }
 
-    private TipoArquivoEnum realizaTratamentoTipoDeArquivoDoContratoColaborador(String tipoArquivo) {
+    protected TipoArquivoEnum realizaTratamentoTipoDeArquivoDoContratoColaborador(String tipoArquivo) {
 
         if (tipoArquivo == null) return TipoArquivoEnum.PDF;
 
@@ -239,7 +239,7 @@ public class ColaboradorService {
         }
     }
 
-    private EnderecoEntity realizaTratamentoEnderecoDoColaboradorAtualizado(EnderecoEntity endereco,
+    protected EnderecoEntity realizaTratamentoEnderecoDoColaboradorAtualizado(EnderecoEntity endereco,
                                                                             ColaboradorEntity colaboradorEntity) {
         if (endereco == null) return null;
         return EnderecoEntity.builder()

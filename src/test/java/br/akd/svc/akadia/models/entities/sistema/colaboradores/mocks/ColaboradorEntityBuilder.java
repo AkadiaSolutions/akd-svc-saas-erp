@@ -72,6 +72,17 @@ public class ColaboradorEntityBuilder {
         return this;
     }
 
+    public ColaboradorEntityBuilder semAcesso() {
+        colaboradorEntity.setAcessoSistema(AcessoSistemaEntity.builder()
+                .acessoSistemaAtivo(false)
+                .senha(null)
+                .senhaCriptografada(null)
+                .privilegios(null)
+                .permissaoEnum(null)
+                .build());
+        return this;
+    }
+
     public ColaboradorEntityBuilder comAdvertencia() {
         colaboradorEntity.getAdvertencias().add(AdvertenciaEntityBuilder.builder().build());
         return this;
@@ -89,6 +100,16 @@ public class ColaboradorEntityBuilder {
 
     public ColaboradorEntityBuilder comTelefone() {
         this.colaboradorEntity.setTelefone(TelefoneEntityBuilder.builder().build());
+        return this;
+    }
+
+    public ColaboradorEntityBuilder comExclusao() {
+        this.colaboradorEntity.setExclusao(ExclusaoColaboradorEntityBuilder.builder().build());
+        return this;
+    }
+
+    public ColaboradorEntityBuilder semExclusao() {
+        this.colaboradorEntity.setExclusao(ExclusaoColaboradorEntityBuilder.builder().semExclusao().build());
         return this;
     }
 
