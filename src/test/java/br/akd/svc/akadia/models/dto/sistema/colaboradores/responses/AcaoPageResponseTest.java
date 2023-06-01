@@ -34,7 +34,6 @@ class AcaoPageResponseTest {
                 true,
                 0,
                 0,
-                0L,
                 0,
                 10,
                 true,
@@ -62,7 +61,6 @@ class AcaoPageResponseTest {
                 .last(true)
                 .number(0)
                 .numberOfElements(0)
-                .offset(0L)
                 .pageNumber(0)
                 .pageSize(10)
                 .paged(true)

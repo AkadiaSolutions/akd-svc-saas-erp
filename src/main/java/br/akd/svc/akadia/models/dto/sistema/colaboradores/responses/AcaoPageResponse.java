@@ -18,7 +18,6 @@ public class AcaoPageResponse {
     Boolean last;
     Integer number;
     Integer numberOfElements;
-    Long offset;
     Integer pageNumber;
     Integer pageSize;
     Boolean paged;

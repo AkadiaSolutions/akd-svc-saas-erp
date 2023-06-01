@@ -20,7 +20,6 @@ public class AcaoPageResponseBuilder {
         builder.acaoPageResponse.setLast(true);
         builder.acaoPageResponse.setNumber(0);
         builder.acaoPageResponse.setNumberOfElements(0);
-        builder.acaoPageResponse.setOffset(0L);
         builder.acaoPageResponse.setPageNumber(0);
         builder.acaoPageResponse.setPageSize(10);
         builder.acaoPageResponse.setPaged(true);
