@@ -19,7 +19,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InvalidClassException;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,9 +37,6 @@ class ClienteRelatorioServiceTest {
 
     @Mock
     AcaoService acaoService;
-
-    @Mock
-    OutputStream outputStream;
 
     @Test
     @DisplayName("Deve testar método de construção de tabela de objetos")
@@ -104,8 +100,7 @@ class ClienteRelatorioServiceTest {
         try {
             clienteRelatorioService.exportarPdf(mockedResponse, colaboradorLogado, ids);
             Assertions.fail();
-        }
-        catch (InvalidClassException e) {
+        } catch (InvalidClassException e) {
             Assertions.assertEquals("java.lang.NullPointerException: Cannot invoke " +
                     "\"java.io.OutputStream.write(byte[], int, int)\" because \"this.out\" is null", e.getMessage());
         }
@@ -128,8 +123,7 @@ class ClienteRelatorioServiceTest {
         try {
             clienteRelatorioService.exportarPdf(mockedResponse, colaboradorLogado, new ArrayList<>());
             Assertions.fail();
-        }
-        catch (InvalidClassException e) {
+        } catch (InvalidClassException e) {
             Assertions.assertEquals("java.lang.NullPointerException: Cannot invoke " +
                     "\"java.io.OutputStream.write(byte[], int, int)\" because \"this.out\" is null", e.getMessage());
         }

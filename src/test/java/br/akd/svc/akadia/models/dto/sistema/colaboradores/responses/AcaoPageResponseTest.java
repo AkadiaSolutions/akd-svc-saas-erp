@@ -17,7 +17,7 @@ class AcaoPageResponseTest {
     void deveTestarDataBuilder() {
         Assertions.assertEquals(
                 "AcaoPageResponse(content=[], empty=true, first=true, last=true, number=0, " +
-                        "numberOfElements=0, offset=0, pageNumber=0, pageSize=10, paged=true, unpaged=false, size=10, " +
+                        "numberOfElements=0, pageNumber=0, pageSize=10, paged=true, unpaged=false, size=10, " +
                         "totalElements=0, totalPages=0)",
                 AcaoPageResponseBuilder.builder().build().toString()
         );
@@ -43,9 +43,8 @@ class AcaoPageResponseTest {
                 0
         );
         Assertions.assertEquals(
-                "AcaoPageResponse(content=[], empty=true, first=true, last=true, number=0, " +
-                        "numberOfElements=0, offset=0, pageNumber=0, pageSize=10, paged=true, unpaged=false, size=10, " +
-                        "totalElements=0, totalPages=0)",
+                "AcaoPageResponse(content=[], empty=true, first=true, last=true, number=0, numberOfElements=0, " +
+                        "pageNumber=0, pageSize=10, paged=true, unpaged=false, size=10, totalElements=0, totalPages=0)",
                 acaoPageResponse.toString()
         );
 
@@ -71,8 +70,8 @@ class AcaoPageResponseTest {
                 .build();
         Assertions.assertEquals(
                 "AcaoPageResponse(content=[], empty=true, first=true, last=true, number=0, " +
-                        "numberOfElements=0, offset=0, pageNumber=0, pageSize=10, paged=true, unpaged=false, " +
-                        "size=10, totalElements=0, totalPages=0)",
+                        "numberOfElements=0, pageNumber=0, pageSize=10, paged=true, unpaged=false, size=10, " +
+                        "totalElements=0, totalPages=0)",
                 acaoPageResponse.toString()
         );
     }
