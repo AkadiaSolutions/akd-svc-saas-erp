@@ -84,7 +84,6 @@ public class AcaoService {
                 .last(acaoEntityPage.isLast())
                 .number(acaoEntityPage.getNumber())
                 .numberOfElements(acaoEntityPage.getNumberOfElements())
-                .offset(acaoEntityPage.getPageable().getOffset())
                 .pageNumber(acaoEntityPage.getPageable().getPageNumber())
                 .pageSize(acaoEntityPage.getPageable().getPageSize())
                 .paged(acaoEntityPage.getPageable().isPaged())
