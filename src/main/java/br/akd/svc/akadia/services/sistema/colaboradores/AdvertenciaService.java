@@ -269,7 +269,7 @@ public class AdvertenciaService {
         log.info("Requisição finalizada com sucesso");
     }
 
-    private TipoArquivoEnum realizaTratamentoTipoDeArquivoDoContratoAdvertencia(String tipoArquivo) {
+    protected TipoArquivoEnum realizaTratamentoTipoDeArquivoDoContratoAdvertencia(String tipoArquivo) {
 
         if (tipoArquivo == null) return TipoArquivoEnum.PDF;
 

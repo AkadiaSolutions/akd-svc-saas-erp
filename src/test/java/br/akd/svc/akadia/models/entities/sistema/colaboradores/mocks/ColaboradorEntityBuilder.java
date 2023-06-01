@@ -1,5 +1,7 @@
 package br.akd.svc.akadia.models.entities.sistema.colaboradores.mocks;
 
+import br.akd.svc.akadia.models.entities.global.mocks.EnderecoEntityBuilder;
+import br.akd.svc.akadia.models.entities.global.mocks.TelefoneEntityBuilder;
 import br.akd.svc.akadia.models.entities.sistema.colaboradores.AcessoSistemaEntity;
 import br.akd.svc.akadia.models.entities.sistema.colaboradores.ColaboradorEntity;
 import br.akd.svc.akadia.models.entities.site.empresa.mocks.EmpresaEntityBuilder;
@@ -67,6 +69,26 @@ public class ColaboradorEntityBuilder {
                 .privilegios(new HashSet<>())
                 .permissaoEnum(PermissaoEnum.LEITURA_AVANCADA_ALTERACAO)
                 .build());
+        return this;
+    }
+
+    public ColaboradorEntityBuilder comAdvertencia() {
+        colaboradorEntity.getAdvertencias().add(AdvertenciaEntityBuilder.builder().build());
+        return this;
+    }
+
+    public ColaboradorEntityBuilder comAdvertenciaComArquivo() {
+        colaboradorEntity.getAdvertencias().add(AdvertenciaEntityBuilder.builder().comArquivo().build());
+        return this;
+    }
+
+    public ColaboradorEntityBuilder comEndereco() {
+        this.colaboradorEntity.setEndereco(EnderecoEntityBuilder.builder().build());
+        return this;
+    }
+
+    public ColaboradorEntityBuilder comTelefone() {
+        this.colaboradorEntity.setTelefone(TelefoneEntityBuilder.builder().build());
         return this;
     }
 

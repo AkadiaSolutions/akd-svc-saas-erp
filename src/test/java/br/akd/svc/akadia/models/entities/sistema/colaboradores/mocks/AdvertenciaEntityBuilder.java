@@ -1,5 +1,6 @@
 package br.akd.svc.akadia.models.entities.sistema.colaboradores.mocks;
 
+import br.akd.svc.akadia.models.entities.global.mocks.ArquivoEntityBuilder;
 import br.akd.svc.akadia.models.entities.sistema.colaboradores.AdvertenciaEntity;
 import br.akd.svc.akadia.models.enums.sistema.colaboradores.StatusAdvertenciaEnum;
 
@@ -24,6 +25,11 @@ public class AdvertenciaEntityBuilder {
         builder.advertenciaEntity.setAdvertenciaAssinada(null);
         builder.advertenciaEntity.setStatusAdvertenciaEnum(StatusAdvertenciaEnum.ASSINADA);
         return builder;
+    }
+
+    public AdvertenciaEntityBuilder comArquivo() {
+        advertenciaEntity.setAdvertenciaAssinada(ArquivoEntityBuilder.builder().build());
+        return this;
     }
 
     public AdvertenciaEntity build() {
