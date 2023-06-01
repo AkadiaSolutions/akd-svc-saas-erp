@@ -1,5 +1,7 @@
 package br.akd.svc.akadia.models.entities.sistema.colaboradores;
 
+import br.akd.svc.akadia.models.entities.sistema.colaboradores.mocks.AcessoEntityBuilder;
+import br.akd.svc.akadia.models.entities.sistema.colaboradores.mocks.AdvertenciaEntityBuilder;
 import br.akd.svc.akadia.models.entities.sistema.colaboradores.mocks.ColaboradorEntityBuilder;
 import br.akd.svc.akadia.models.enums.sistema.colaboradores.ModeloContratacaoEnum;
 import br.akd.svc.akadia.models.enums.sistema.colaboradores.ModeloTrabalhoEnum;
@@ -127,6 +129,42 @@ class ColaboradorEntityTest {
                         "endereco=null, telefone=null, expediente=null, dispensa=null, empresa=null)",
                 colaboradorEntity.toString()
         );
+    }
+
+    @Test
+    @DisplayName("Deve testar método removeAdvertencia")
+    void deveTestarRemoveAdvertencia() {
+        ColaboradorEntity colaboradorEntity = ColaboradorEntityBuilder.builder().build();
+        AdvertenciaEntity advertencia = AdvertenciaEntityBuilder.builder().build();
+        colaboradorEntity.getAdvertencias().add(advertencia);
+        colaboradorEntity.removeAdvertencia(advertencia);
+
+        Assertions.assertEquals(
+                "ColaboradorEntity(id=1, dataCadastro=2023-02-13, horaCadastro=10:44, matricula=123456, " +
+                        "nome=João da Silva, dataNascimento=2021-04-11, email=joaosilva@gmail.com, cpfCnpj=12345678910, " +
+                        "salario=2000.0, entradaEmpresa=2023-02-13, saidaEmpresa=null, ocupacao=Técnico Interno, " +
+                        "tipoOcupacaoEnum=TECNICO_INTERNO, modeloContratacaoEnum=CLT, modeloTrabalhoEnum=PRESENCIAL, " +
+                        "statusColaboradorEnum=ATIVO, fotoPerfil=null, contratoContratacao=null, exclusao=null, " +
+                        "acessoSistema=null, configuracaoPerfil=null, endereco=null, telefone=null, expediente=null, " +
+                        "dispensa=null, empresa=null)", colaboradorEntity.toString());
+    }
+
+    @Test
+    @DisplayName("Deve testar método addAcesso")
+    void deveTestarAddAcesso() {
+        ColaboradorEntity colaboradorEntity = ColaboradorEntityBuilder.builder().build();
+        AcessoEntity acesso = AcessoEntityBuilder.builder().build();
+
+        colaboradorEntity.addAcesso(acesso);
+
+        Assertions.assertEquals(
+                "ColaboradorEntity(id=1, dataCadastro=2023-02-13, horaCadastro=10:44, matricula=123456, " +
+                        "nome=João da Silva, dataNascimento=2021-04-11, email=joaosilva@gmail.com, cpfCnpj=12345678910, " +
+                        "salario=2000.0, entradaEmpresa=2023-02-13, saidaEmpresa=null, ocupacao=Técnico Interno, " +
+                        "tipoOcupacaoEnum=TECNICO_INTERNO, modeloContratacaoEnum=CLT, modeloTrabalhoEnum=PRESENCIAL, " +
+                        "statusColaboradorEnum=ATIVO, fotoPerfil=null, contratoContratacao=null, exclusao=null, " +
+                        "acessoSistema=null, configuracaoPerfil=null, endereco=null, telefone=null, expediente=null, " +
+                        "dispensa=null, empresa=null)", colaboradorEntity.toString());
     }
 
 }

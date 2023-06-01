@@ -1,9 +1,12 @@
 package br.akd.svc.akadia.services.sistema.clientes;
 
 import br.akd.svc.akadia.models.dto.sistema.clientes.mocks.ClienteDtoBuilder;
+import br.akd.svc.akadia.models.dto.sistema.clientes.responses.ClientePageResponse;
 import br.akd.svc.akadia.models.dto.sistema.clientes.responses.ClienteResponse;
+import br.akd.svc.akadia.models.entities.sistema.clientes.ClienteEntity;
 import br.akd.svc.akadia.models.entities.sistema.clientes.mocks.ClienteEntityBuilder;
 import br.akd.svc.akadia.models.entities.sistema.colaboradores.mocks.ColaboradorEntityBuilder;
+import br.akd.svc.akadia.repositories.sistema.clientes.ClienteRepository;
 import br.akd.svc.akadia.repositories.sistema.clientes.impl.ClienteRepositoryImpl;
 import br.akd.svc.akadia.services.exceptions.InvalidRequestException;
 import br.akd.svc.akadia.services.sistema.colaboradores.AcaoService;
@@ -13,6 +16,10 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +39,9 @@ class ClienteServiceTest {
 
     @Mock
     ClienteRepositoryImpl clienteRepositoryImpl;
+
+    @Mock
+    ClienteRepository clienteRepository;
 
     @Mock
     AcaoService acaoService;
@@ -237,6 +247,68 @@ class ClienteServiceTest {
                 "qtdOrdensRealizadas=null, giroTotal=null, exclusaoCliente=ExclusaoClienteResponse(dataExclusao=null, " +
                 "horaExclusao=null, excluido=false), endereco=null, telefone=null, " +
                 "nomeColaboradorResponsavel=João da Silva)", clienteResponse.toString());
+    }
+
+    @Test
+    @DisplayName("Deve testar método de busca paginada de clientes com campo de busca preenchido")
+    void deveTestarMetodoDeBuscaPaginadaDeClientesComCampoBuscaPreenchido() {
+        List<ClienteEntity> clientes = new ArrayList<>();
+        clientes.add(ClienteEntityBuilder.builder()
+                .comExclusao(true)
+                .comColaborador()
+                .build());
+        Pageable pageable = PageRequest.of(0, 10);
+
+        int start = (int)pageable.getOffset();
+        int end = Math.min((start + pageable.getPageSize()), clientes.size());
+        Page<ClienteEntity> clientesPaged = new PageImpl<>(clientes.subList(start, end), pageable, clientes.size());
+
+        when(clienteRepository.buscaPorClientesTypeAhead(any(), any(), any())).thenReturn(clientesPaged);
+
+        ClientePageResponse clientePageResponse = clienteService.realizaBuscaPaginadaPorClientes(
+                ColaboradorEntityBuilder.builder().comEmpresa().comAcessoCompleto().build(),
+                PageRequest.of(0, 10),
+                "busca");
+
+        Assertions.assertEquals("ClientePageResponse(content=[ClienteResponse(id=1, dataCadastro=2023-02-27, " +
+                "horaCadastro=17:40, dataNascimento=1998-07-21, nome=Gabriel Lagrota, cpfCnpj=582.645.389-32, " +
+                "inscricaoEstadual=145574080114, email=gabrielafonso@mail.com.br, statusCliente=null, tipoPessoa=null, " +
+                "qtdOrdensRealizadas=null, giroTotal=null, " +
+                "exclusaoCliente=ExclusaoClienteResponse(dataExclusao=2023-03-06, horaExclusao=14:29, excluido=true), " +
+                "endereco=null, telefone=null, nomeColaboradorResponsavel=João da Silva)], empty=false, first=true, " +
+                "last=true, number=0, numberOfElements=1, pageNumber=0, pageSize=10, paged=true, unpaged=false, " +
+                "size=10, totalElements=1, totalPages=1)", clientePageResponse.toString());
+    }
+
+    @Test
+    @DisplayName("Deve testar método de busca paginada de clientes com campo de busca nulo")
+    void deveTestarMetodoDeBuscaPaginadaDeClientesComCampoBuscaVazio() {
+        List<ClienteEntity> clientes = new ArrayList<>();
+        clientes.add(ClienteEntityBuilder.builder()
+                .comExclusao(true)
+                .comColaborador()
+                .build());
+        Pageable pageable = PageRequest.of(0, 10);
+
+        int start = (int)pageable.getOffset();
+        int end = Math.min((start + pageable.getPageSize()), clientes.size());
+        Page<ClienteEntity> clientesPaged = new PageImpl<>(clientes.subList(start, end), pageable, clientes.size());
+
+        when(clienteRepository.buscaPorClientes(any(), any())).thenReturn(clientesPaged);
+
+        ClientePageResponse clientePageResponse = clienteService.realizaBuscaPaginadaPorClientes(
+                ColaboradorEntityBuilder.builder().comEmpresa().comAcessoCompleto().build(),
+                PageRequest.of(0, 10),
+                null);
+
+        Assertions.assertEquals("ClientePageResponse(content=[ClienteResponse(id=1, dataCadastro=2023-02-27, " +
+                "horaCadastro=17:40, dataNascimento=1998-07-21, nome=Gabriel Lagrota, cpfCnpj=582.645.389-32, " +
+                "inscricaoEstadual=145574080114, email=gabrielafonso@mail.com.br, statusCliente=null, tipoPessoa=null, " +
+                "qtdOrdensRealizadas=null, giroTotal=null, " +
+                "exclusaoCliente=ExclusaoClienteResponse(dataExclusao=2023-03-06, horaExclusao=14:29, excluido=true), " +
+                "endereco=null, telefone=null, nomeColaboradorResponsavel=João da Silva)], empty=false, first=true, " +
+                "last=true, number=0, numberOfElements=1, pageNumber=0, pageSize=10, paged=true, unpaged=false, " +
+                "size=10, totalElements=1, totalPages=1)", clientePageResponse.toString());
     }
 
 }

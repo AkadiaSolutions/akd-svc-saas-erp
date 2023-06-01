@@ -130,8 +130,8 @@ class ClienteControllerTest {
                 clienteController.obtemClientesPaginados("busca", PageRequest.of(0, 20), mockedRequest);
 
         Assertions.assertEquals("<200 OK OK,ClientePageResponse(content=null, empty=true, first=true, " +
-                "last=true, number=0, numberOfElements=0, offset=0, pageNumber=0, pageSize=0, paged=true, " +
-                "unpaged=false, size=0, totalElements=0, totalPages=0),[]>", cliente.toString());
+                "last=true, number=0, numberOfElements=0, pageNumber=0, pageSize=0, paged=true, unpaged=false, " +
+                "size=0, totalElements=0, totalPages=0),[]>", cliente.toString());
     }
 
     @Test

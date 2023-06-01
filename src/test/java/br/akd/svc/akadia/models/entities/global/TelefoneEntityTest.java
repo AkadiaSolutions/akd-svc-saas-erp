@@ -37,8 +37,7 @@ class TelefoneEntityTest {
         String telefoneCompleto = telefoneEntity.getTelefoneCompleto();
 
         Assertions.assertEquals(
-                "TelefoneEntity(id=1, prefixo=11, numero=979815415, tipoTelefone=MOVEL_WHATSAPP)",
-                telefoneEntity.toString()
+                "(11) 979815415", telefoneCompleto
         );
     }
 

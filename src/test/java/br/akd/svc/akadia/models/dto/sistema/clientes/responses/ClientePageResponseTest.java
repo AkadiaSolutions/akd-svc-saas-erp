@@ -14,7 +14,7 @@ class ClientePageResponseTest {
     void deveTestarDataBuilder() {
         Assertions.assertEquals(
                 "ClientePageResponse(content=null, empty=true, first=true, last=true, number=0, " +
-                        "numberOfElements=0, offset=0, pageNumber=0, pageSize=0, paged=true, unpaged=false, size=0, " +
+                        "numberOfElements=0, pageNumber=0, pageSize=0, paged=true, unpaged=false, size=0, " +
                         "totalElements=0, totalPages=0)", ClientePageResponseBuilder.builder().build().toString()
         );
 
@@ -24,12 +24,12 @@ class ClientePageResponseTest {
     @DisplayName("Deve testar @AllArgsConstructor")
     void deveTestarAllArgsConstructor() {
         ClientePageResponse clientePageResponse = new ClientePageResponse(
-                null, true, true, true, 0, 0, 0L,
+                null, true, true, true, 0, 0,
                 0, 0, true, false, 0, 0L, 0);
 
         Assertions.assertEquals(
                 "ClientePageResponse(content=null, empty=true, first=true, last=true, number=0, " +
-                        "numberOfElements=0, offset=0, pageNumber=0, pageSize=0, paged=true, unpaged=false, size=0, " +
+                        "numberOfElements=0, pageNumber=0, pageSize=0, paged=true, unpaged=false, size=0, " +
                         "totalElements=0, totalPages=0)",
                 clientePageResponse.toString()
         );
@@ -46,7 +46,6 @@ class ClientePageResponseTest {
                 .last(true)
                 .number(0)
                 .numberOfElements(0)
-                .offset(0L)
                 .pageNumber(0)
                 .pageSize(0)
                 .paged(true)
@@ -58,7 +57,7 @@ class ClientePageResponseTest {
 
         Assertions.assertEquals(
                 "ClientePageResponse(content=null, empty=true, first=true, last=true, number=0, " +
-                        "numberOfElements=0, offset=0, pageNumber=0, pageSize=0, paged=true, unpaged=true, size=0, " +
+                        "numberOfElements=0, pageNumber=0, pageSize=0, paged=true, unpaged=true, size=0, " +
                         "totalElements=0, totalPages=0)",
                 clientePageResponse.toString()
         );

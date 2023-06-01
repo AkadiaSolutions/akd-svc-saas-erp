@@ -16,7 +16,6 @@ public class ClientePageResponseBuilder {
         builder.clientePageResponse.setLast(true);
         builder.clientePageResponse.setNumber(0);
         builder.clientePageResponse.setNumberOfElements(0);
-        builder.clientePageResponse.setOffset(0L);
         builder.clientePageResponse.setPageNumber(0);
         builder.clientePageResponse.setPageSize(0);
         builder.clientePageResponse.setPaged(true);
