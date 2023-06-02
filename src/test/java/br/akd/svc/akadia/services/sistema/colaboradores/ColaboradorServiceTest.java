@@ -11,6 +11,8 @@ import br.akd.svc.akadia.models.entities.sistema.colaboradores.mocks.Colaborador
 import br.akd.svc.akadia.repositories.sistema.colaboradores.ColaboradorRepository;
 import br.akd.svc.akadia.repositories.sistema.colaboradores.impl.ColaboradorRepositoryImpl;
 import br.akd.svc.akadia.services.exceptions.InvalidRequestException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -60,16 +62,72 @@ class ColaboradorServiceTest {
             .comExclusao()
             .build();
 
+    ColaboradorEntity colaboradorCompleto = ColaboradorEntityBuilder.builder()
+            .comAcessoCompleto()
+            .comEmpresa()
+            .comExpediente()
+            .comAdvertenciaComArquivo()
+            .comEndereco()
+            .semExclusao()
+            .build();
+
     @Test
     @DisplayName("Deve testar método de criação de novo colaborador")
-    void deveTestarMetodoDeCriacaoDeNovoColaborador() {
+    void deveTestarMetodoDeCriacaoDeNovoColaborador() throws IOException {
+        MultipartFile multipartFile = new MockMultipartFile(
+                "test.pdf",
+                "test.pdf",
+                "text/plain",
+                "Mock".getBytes(StandardCharsets.UTF_8));
 
+        when(colaboradorRepositoryImpl.implementaPersistencia(any()))
+                .thenReturn(colaboradorCompleto);
+        doNothing().when(acaoService).salvaHistoricoColaborador(any(), any(), any(), any(), any());
+
+        ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+        String jsonColaborador = ow.writeValueAsString(colaboradorCompleto);
+
+        String matriculaGerada =
+                colaboradorService.criaNovoColaborador(colaboradorLogado, multipartFile, jsonColaborador);
+
+        Assertions.assertNotNull(matriculaGerada);
     }
 
     @Test
     @DisplayName("Deve testar método de atualização do colaborador")
-    void deveTestarMetodoDeAtualizacaoDoColaborador() {
+    void deveTestarMetodoDeAtualizacaoDoColaborador() throws IOException {
 
+        MultipartFile multipartFile = new MockMultipartFile(
+                "test.pdf",
+                "test.pdf",
+                "text/plain",
+                "Mock".getBytes(StandardCharsets.UTF_8));
+
+        when(colaboradorRepositoryImpl.implementaPersistencia(any()))
+                .thenReturn(colaboradorCompleto);
+        when(colaboradorRepositoryImpl.implementaBuscaPorId(any(), any()))
+                .thenReturn(colaboradorCompleto);
+        doNothing().when(acaoService).salvaHistoricoColaborador(any(), any(), any(), any(), any());
+
+        ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+        String jsonColaborador = ow.writeValueAsString(colaboradorCompleto);
+
+        ColaboradorResponse colaboradorResponse =
+                colaboradorService.atualizaColaborador(colaboradorLogado, 1L, multipartFile, jsonColaborador);
+
+        Assertions.assertEquals("ColaboradorResponse(id=1, dataCadastro=2023-02-13, horaCadastro=10:44, " +
+                "matricula=123456, nome=João da Silva, dataNascimento=2021-04-11, email=joaosilva@gmail.com, " +
+                "cpfCnpj=12345678910, salario=2000.0, entradaEmpresa=2023-02-13, saidaEmpresa=null, " +
+                "ocupacao=Técnico Interno, tipoOcupacaoEnum=TECNICO_INTERNO, modeloContratacaoEnum=CLT, " +
+                "modeloTrabalhoEnum=PRESENCIAL, statusColaboradorEnum=ATIVO, fotoPerfil=null, " +
+                "exclusao=ExclusaoColaboradorResponse(dataExclusao=null, horaExclusao=null, excluido=false), " +
+                "acessoSistema=AcessoSistemaResponse(acessoSistemaAtivo=true, permissaoEnum=LEITURA_AVANCADA_ALTERACAO, " +
+                "privilegios=[]), configuracaoPerfil=null, contratoContratacao=null, endereco=EnderecoEntity(id=1, " +
+                "logradouro=Avenida Coronel Manuel Py, numero=583, bairro=Lauzane Paulista, codigoPostal=02442-090, " +
+                "cidade=São Paulo, complemento=Casa 4, estado=SP), telefone=null, expediente=ExpedienteEntity(id=1, " +
+                "horaEntrada=09:00, horaSaidaAlmoco=12:00, horaEntradaAlmoco=13:00, horaSaida=18:00, " +
+                "cargaHorariaSemanal=null, escalaEnum=null), dispensa=null, pontos=[], historicoFerias=[], " +
+                "advertencias=null)", colaboradorResponse.toString());
     }
 
     @Test

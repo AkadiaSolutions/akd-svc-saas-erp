@@ -83,6 +83,11 @@ public class ColaboradorEntityBuilder {
         return this;
     }
 
+    public ColaboradorEntityBuilder comExpediente() {
+        colaboradorEntity.setExpediente(ExpedienteEntityBuilder.builder().build());
+        return this;
+    }
+
     public ColaboradorEntityBuilder comAdvertencia() {
         colaboradorEntity.getAdvertencias().add(AdvertenciaEntityBuilder.builder().build());
         return this;
