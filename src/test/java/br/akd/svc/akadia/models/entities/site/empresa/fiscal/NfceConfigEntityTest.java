@@ -1,6 +1,5 @@
 package br.akd.svc.akadia.models.entities.site.empresa.fiscal;
 
-import br.akd.svc.akadia.models.entities.site.empresa.fiscal.NfceConfigEntity;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

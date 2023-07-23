@@ -1,7 +1,6 @@
 package br.akd.svc.akadia.proxy.asaas.responses;
 
 import br.akd.svc.akadia.models.enums.global.EstadoEnum;
-import br.akd.svc.akadia.proxy.asaas.responses.ClienteSistemaResponse;
 import br.akd.svc.akadia.proxy.asaas.responses.mocks.ClienteSistemaResponseBuilder;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
