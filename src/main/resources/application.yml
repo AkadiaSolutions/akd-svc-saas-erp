@@ -1,0 +1,27 @@
+spring:
+  sql:
+    init:
+      mode: never
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+  main:
+    allow-circular-references: true
+  profiles:
+    active: ${ACTIVE_PROFILE:default}
+  aplication:
+    name: akadion-saas-erp
+  mvc:
+    pathmatch.matching-strategy: ant-path-matcher
+  jpa:
+    show-sql: false
+    generate-ddl: true
+jwt:
+  secret: ${JWT_SECRET}
+  expiration: 604800000
+
+# ASAAS
+URL_ASAAS: {$URL_ASAAS}
+TOKEN_ASAAS: {$TOKEN_ASAAS}
+TOKEN_WEBHOOK_ASAAS: ${TOKEN_WEBHOOK_ASAAS}

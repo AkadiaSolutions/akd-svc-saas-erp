@@ -1,0 +1,23 @@
+spring:
+  jpa:
+    hibernate.ddl-auto: update
+    properties:
+      hibernate:
+        dialect=org:
+          hibernate:
+            dialect: MySQL5InnoDBDialect
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+server:
+  port: ${SERVER_PORT}
+logging:
+  config:
+    src/main/resources/logback.xml
+  level:
+    org.springframework.web: DEBUG
+    guru.springframework.controllers: DEBUG
+    org.hibernate: DEBUG
+
+log_context: DEVELOPMENT
