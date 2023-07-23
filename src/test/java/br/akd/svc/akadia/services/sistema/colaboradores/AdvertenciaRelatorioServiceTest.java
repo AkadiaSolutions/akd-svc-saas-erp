@@ -12,12 +12,14 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InvalidClassException;
 
 @SpringBootTest
+@ActiveProfiles("test")
 @DisplayName("RelatorioService: Advertencia")
 class AdvertenciaRelatorioServiceTest {
 

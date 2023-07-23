@@ -10,5 +10,5 @@ import lombok.*;
 @NoArgsConstructor
 public class AtualizacaoCobrancaWebHook {
     private EventoCobrancaEnum event;
-    PagamentoWebHook payment;
+    private PagamentoWebHook payment;
 }

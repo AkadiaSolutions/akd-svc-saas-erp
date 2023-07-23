@@ -12,6 +12,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -23,6 +24,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
+@ActiveProfiles("test")
 @DisplayName("RelatorioService: Colaborador")
 class ColaboradorRelatorioServiceTest {
 
@@ -98,8 +100,8 @@ class ColaboradorRelatorioServiceTest {
             colaboradorRelatorioService.exportarPdf(mockedResponse, colaboradorLogado, ids);
             Assertions.fail();
         } catch (InvalidClassException e) {
-            Assertions.assertEquals("java.lang.NullPointerException: Cannot invoke " +
-                    "\"java.io.OutputStream.write(byte[], int, int)\" because \"this.out\" is null", e.getMessage());
+            Assertions.assertEquals("java.lang.NullPointerException: Cannot invoke \"" +
+                    "java.io.OutputStream.write(byte[], int, int)\" because \"this.out\" is null", e.getMessage());
         }
     }
 
