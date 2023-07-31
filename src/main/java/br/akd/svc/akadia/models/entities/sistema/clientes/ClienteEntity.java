@@ -1,6 +1,7 @@
 package br.akd.svc.akadia.models.entities.sistema.clientes;
 
 import br.akd.svc.akadia.models.entities.global.EnderecoEntity;
+import br.akd.svc.akadia.models.entities.global.ExclusaoEntity;
 import br.akd.svc.akadia.models.entities.global.TelefoneEntity;
 import br.akd.svc.akadia.models.entities.sistema.colaboradores.ColaboradorEntity;
 import br.akd.svc.akadia.models.entities.site.empresa.EmpresaEntity;
@@ -41,8 +42,8 @@ public class ClienteEntity {
     private TipoPessoaEnum tipoPessoa;
     private Integer qtdOrdensRealizadas;
     private Double giroTotal;
-    @OneToOne(targetEntity = ExclusaoClienteEntity.class, orphanRemoval = true, cascade = CascadeType.ALL)
-    private ExclusaoClienteEntity exclusaoCliente;
+    @OneToOne(targetEntity = ExclusaoEntity.class, orphanRemoval = true, cascade = CascadeType.ALL)
+    private ExclusaoEntity exclusao;
     @OneToOne(targetEntity = EnderecoEntity.class, orphanRemoval = true, cascade = CascadeType.ALL)
     private EnderecoEntity endereco;
     @OneToOne(targetEntity = TelefoneEntity.class, orphanRemoval = true, cascade = CascadeType.ALL)

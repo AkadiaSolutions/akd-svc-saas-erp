@@ -1,6 +1,7 @@
 package br.akd.svc.akadia.models.dto.sistema.clientes.responses;
 
 import br.akd.svc.akadia.models.entities.global.EnderecoEntity;
+import br.akd.svc.akadia.models.entities.global.ExclusaoEntity;
 import br.akd.svc.akadia.models.entities.global.TelefoneEntity;
 import br.akd.svc.akadia.models.enums.sistema.clientes.StatusClienteEnum;
 import br.akd.svc.akadia.models.enums.sistema.clientes.TipoPessoaEnum;
@@ -25,7 +26,7 @@ public class ClienteResponse {
     private TipoPessoaEnum tipoPessoa;
     private Integer qtdOrdensRealizadas;
     private Double giroTotal;
-    private ExclusaoClienteResponse exclusaoCliente;
+    private ExclusaoEntity exclusaoEntity;
     private EnderecoEntity endereco;
     private TelefoneEntity telefone;
     private String nomeColaboradorResponsavel;

@@ -4,11 +4,9 @@ import br.akd.svc.akadia.models.dto.global.EnderecoDto;
 import br.akd.svc.akadia.models.dto.sistema.clientes.requests.ClienteRequest;
 import br.akd.svc.akadia.models.dto.sistema.clientes.responses.ClientePageResponse;
 import br.akd.svc.akadia.models.dto.sistema.clientes.responses.ClienteResponse;
-import br.akd.svc.akadia.models.dto.sistema.clientes.responses.ExclusaoClienteResponse;
 import br.akd.svc.akadia.models.entities.global.EnderecoEntity;
 import br.akd.svc.akadia.models.entities.global.TelefoneEntity;
 import br.akd.svc.akadia.models.entities.sistema.clientes.ClienteEntity;
-import br.akd.svc.akadia.models.entities.sistema.clientes.ExclusaoClienteEntity;
 import br.akd.svc.akadia.models.entities.sistema.colaboradores.ColaboradorEntity;
 import br.akd.svc.akadia.models.enums.sistema.colaboradores.ModulosEnum;
 import br.akd.svc.akadia.models.enums.sistema.colaboradores.TipoAcaoEnum;
@@ -73,9 +71,7 @@ public class ClienteService {
                 .statusCliente(clienteRequest.getStatusCliente())
                 .tipoPessoa(clienteRequest.getTipoPessoa())
                 .email(clienteRequest.getEmail() != null ? clienteRequest.getEmail().toLowerCase() : null)
-                .exclusaoCliente(ExclusaoClienteEntity.builder()
-                        .excluido(false)
-                        .build())
+                .exclusao(null)
                 .endereco(realizaTratamentoEnderecoDoNovoCliente(clienteRequest.getEndereco()))
                 .telefone(clienteRequest.getTelefone() == null
                         ? null
@@ -153,7 +149,7 @@ public class ClienteService {
                 .statusCliente(clienteRequest.getStatusCliente())
                 .tipoPessoa(clienteRequest.getTipoPessoa())
                 .email(clienteRequest.getEmail())
-                .exclusaoCliente(clienteEncontrado.getExclusaoCliente())
+                .exclusao(clienteEncontrado.getExclusao())
                 .endereco(realizaTratamentoEnderecoDoClienteAtualizado(clienteRequest.getEndereco(), clienteEncontrado))
                 .telefone(clienteRequest.getTelefone() == null
                         ? null
@@ -237,12 +233,11 @@ public class ClienteService {
         clienteValidationService.validaSeClienteEstaExcluido(clienteEncontrado,
                 "O cliente selecionado já foi excluído");
 
-        log.debug("Atualizando objeto ExclusaoCliente do cliente com dados referentes à sua exclusão...");
-        clienteEncontrado.getExclusaoCliente().setDataExclusao(LocalDate.now().toString());
-        clienteEncontrado.getExclusaoCliente().setHoraExclusao(LocalTime.now().toString());
-        clienteEncontrado.getExclusaoCliente().setExcluido(true);
-        clienteEncontrado.getExclusaoCliente().setResponsavelExclusao(colaboradorLogado);
-        log.debug("Objeto ExclusaoCliente do cliente de id {} setado com sucesso", id);
+        log.debug("Atualizando objeto Exclusao do cliente com dados referentes à sua exclusão...");
+        clienteEncontrado.getExclusao().setDataExclusao(LocalDate.now().toString());
+        clienteEncontrado.getExclusao().setHoraExclusao(LocalTime.now().toString());
+        clienteEncontrado.getExclusao().setResponsavelExclusao(colaboradorLogado);
+        log.debug("Objeto Exclusao do cliente de id {} setado com sucesso", id);
 
         log.debug("Persistindo cliente excluído no banco de dados...");
         ClienteEntity clienteExcluido = clienteRepositoryImpl.implementaPersistencia(clienteEncontrado);
@@ -252,28 +247,7 @@ public class ClienteService {
                 ModulosEnum.CLIENTES, TipoAcaoEnum.REMOCAO, null);
 
         log.info("Cliente excluído com sucesso");
-        return ClienteResponse.builder()
-                .id(clienteExcluido.getId())
-                .dataCadastro(clienteExcluido.getDataCadastro())
-                .horaCadastro(clienteExcluido.getHoraCadastro())
-                .dataNascimento(clienteExcluido.getDataNascimento())
-                .nome(clienteExcluido.getNome())
-                .cpfCnpj(clienteExcluido.getCpfCnpj())
-                .inscricaoEstadual(clienteExcluido.getInscricaoEstadual())
-                .email(clienteExcluido.getEmail())
-                .statusCliente(clienteExcluido.getStatusCliente())
-                .tipoPessoa(clienteExcluido.getTipoPessoa())
-                .qtdOrdensRealizadas(clienteExcluido.getQtdOrdensRealizadas())
-                .giroTotal(clienteExcluido.getGiroTotal())
-                .exclusaoCliente(ExclusaoClienteResponse.builder()
-                        .dataExclusao(clienteExcluido.getExclusaoCliente().getDataExclusao())
-                        .horaExclusao(clienteExcluido.getExclusaoCliente().getHoraExclusao())
-                        .excluido(clienteExcluido.getExclusaoCliente().getExcluido())
-                        .build())
-                .endereco(clienteExcluido.getEndereco())
-                .telefone(clienteExcluido.getTelefone())
-                .nomeColaboradorResponsavel(clienteExcluido.getColaboradorResponsavel().getNome())
-                .build();
+        return clienteTypeConverter.converteClienteEntityParaClienteResponse(clienteExcluido);
     }
 
     public void removeClientesEmMassa(ColaboradorEntity colaboradorLogado, List<Long> ids) {
@@ -291,12 +265,11 @@ public class ClienteService {
         for (ClienteEntity cliente : clientesEncontrados) {
             clienteValidationService.validaSeClienteEstaExcluido(cliente,
                     "O cliente selecionado já foi excluído");
-            log.debug("Atualizando objeto ExclusaoCliente do cliente com dados referentes à sua exclusão...");
-            cliente.getExclusaoCliente().setDataExclusao(LocalDate.now().toString());
-            cliente.getExclusaoCliente().setHoraExclusao(LocalTime.now().toString());
-            cliente.getExclusaoCliente().setExcluido(true);
-            cliente.getExclusaoCliente().setResponsavelExclusao(colaboradorLogado);
-            log.debug("Objeto ExclusaoCliente do cliente de id {} setado com sucesso", cliente.getId());
+            log.debug("Atualizando objeto Exclusao do cliente com dados referentes à sua exclusão...");
+            cliente.getExclusao().setDataExclusao(LocalDate.now().toString());
+            cliente.getExclusao().setHoraExclusao(LocalTime.now().toString());
+            cliente.getExclusao().setResponsavelExclusao(colaboradorLogado);
+            log.debug("Objeto Exclusao do cliente de id {} setado com sucesso", cliente.getId());
         }
 
         log.debug("Verificando se listagem de clientes encontrados está preenchida...");

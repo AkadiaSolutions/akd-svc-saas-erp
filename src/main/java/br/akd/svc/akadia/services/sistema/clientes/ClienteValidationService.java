@@ -59,7 +59,7 @@ public class ClienteValidationService {
 
     public void validaSeClienteEstaExcluido(ClienteEntity cliente, String mensagemCasoEstejaExcluido) {
         log.debug("Método de validação de cliente excluído acessado");
-        if (Boolean.TRUE.equals(cliente.getExclusaoCliente().getExcluido())) {
+        if (cliente.getExclusao() != null) {
             log.debug("Cliente de id {}: Validação de cliente já excluído falhou. Não é possível realizar operações " +
                     "em um cliente que já foi excluído.", cliente.getId());
             throw new InvalidRequestException(mensagemCasoEstejaExcluido);

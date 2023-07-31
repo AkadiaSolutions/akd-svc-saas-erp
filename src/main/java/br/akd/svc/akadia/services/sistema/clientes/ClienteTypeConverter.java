@@ -2,7 +2,7 @@ package br.akd.svc.akadia.services.sistema.clientes;
 
 import br.akd.svc.akadia.models.dto.sistema.clientes.responses.ClientePageResponse;
 import br.akd.svc.akadia.models.dto.sistema.clientes.responses.ClienteResponse;
-import br.akd.svc.akadia.models.dto.sistema.clientes.responses.ExclusaoClienteResponse;
+import br.akd.svc.akadia.models.entities.global.ExclusaoEntity;
 import br.akd.svc.akadia.models.entities.sistema.clientes.ClienteEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -37,11 +37,13 @@ public class ClienteTypeConverter {
                     .tipoPessoa(cliente.getTipoPessoa())
                     .qtdOrdensRealizadas(cliente.getQtdOrdensRealizadas())
                     .giroTotal(cliente.getGiroTotal())
-                    .exclusaoCliente(ExclusaoClienteResponse.builder()
-                            .dataExclusao(cliente.getExclusaoCliente().getDataExclusao())
-                            .horaExclusao(cliente.getExclusaoCliente().getHoraExclusao())
-                            .excluido(cliente.getExclusaoCliente().getExcluido())
-                            .build())
+                    .exclusaoEntity(cliente.getExclusao() != null
+                            ? ExclusaoEntity.builder()
+                            .dataExclusao(cliente.getExclusao().getDataExclusao())
+                            .horaExclusao(cliente.getExclusao().getHoraExclusao())
+                            .responsavelExclusao(cliente.getExclusao().getResponsavelExclusao())
+                            .build()
+                            : null)
                     .endereco(cliente.getEndereco())
                     .telefone(cliente.getTelefone())
                     .nomeColaboradorResponsavel(cliente.getColaboradorResponsavel().getNome())
@@ -90,11 +92,13 @@ public class ClienteTypeConverter {
                 .tipoPessoa(cliente.getTipoPessoa())
                 .qtdOrdensRealizadas(cliente.getQtdOrdensRealizadas())
                 .giroTotal(cliente.getGiroTotal())
-                .exclusaoCliente(ExclusaoClienteResponse.builder()
-                        .dataExclusao(cliente.getExclusaoCliente().getDataExclusao())
-                        .horaExclusao(cliente.getExclusaoCliente().getHoraExclusao())
-                        .excluido(cliente.getExclusaoCliente().getExcluido())
-                        .build())
+                .exclusaoEntity(cliente.getExclusao() != null
+                        ? ExclusaoEntity.builder()
+                        .dataExclusao(cliente.getExclusao().getDataExclusao())
+                        .horaExclusao(cliente.getExclusao().getHoraExclusao())
+                        .responsavelExclusao(cliente.getExclusao().getResponsavelExclusao())
+                        .build()
+                        : null)
                 .endereco(cliente.getEndereco())
                 .telefone(cliente.getTelefone())
                 .nomeColaboradorResponsavel(cliente.getColaboradorResponsavel().getNome())
