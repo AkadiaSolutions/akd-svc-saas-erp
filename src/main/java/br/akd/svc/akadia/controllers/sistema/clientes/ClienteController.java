@@ -1,7 +1,7 @@
 package br.akd.svc.akadia.controllers.sistema.clientes;
 
 import br.akd.svc.akadia.config.security.JWTUtil;
-import br.akd.svc.akadia.models.dto.sistema.clientes.ClienteDto;
+import br.akd.svc.akadia.models.dto.sistema.clientes.requests.ClienteRequest;
 import br.akd.svc.akadia.models.dto.sistema.clientes.responses.ClientePageResponse;
 import br.akd.svc.akadia.models.dto.sistema.clientes.responses.ClienteResponse;
 import br.akd.svc.akadia.models.entities.sistema.colaboradores.ColaboradorEntity;
@@ -9,6 +9,7 @@ import br.akd.svc.akadia.services.exceptions.InvalidRequestException;
 import br.akd.svc.akadia.services.exceptions.ObjectNotFoundException;
 import br.akd.svc.akadia.services.sistema.clientes.ClienteRelatorioService;
 import br.akd.svc.akadia.services.sistema.clientes.ClienteService;
+import br.akd.svc.akadia.services.sistema.clientes.ClienteValidationService;
 import com.lowagie.text.DocumentException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -43,6 +44,9 @@ public class ClienteController {
 
     @Autowired
     ClienteService clienteService;
+
+    @Autowired
+    ClienteValidationService clienteValidationService;
 
     @Autowired
     ClienteRelatorioService relatorioService;
@@ -89,7 +93,7 @@ public class ClienteController {
     public ResponseEntity<?> verificaDuplicidadeInscricaoEstadual(HttpServletRequest req,
                                                                   @RequestBody String inscricaoEstadual) {
         log.info("Endpoint de validação de duplicidade de inscrição estadual acessado. IE: " + inscricaoEstadual);
-        clienteService.validaSeInscricaoEstadualJaExiste(inscricaoEstadual, jwtUtil.obtemUsuarioAtivo(req).getEmpresa().getId());
+        clienteValidationService.validaSeInscricaoEstadualJaExiste(inscricaoEstadual, jwtUtil.obtemUsuarioAtivo(req).getEmpresa().getId());
         return ResponseEntity.ok().build();
     }
 
@@ -112,7 +116,7 @@ public class ClienteController {
     public ResponseEntity<?> verificaDuplicidadeCpfCnpj(HttpServletRequest req,
                                                         @RequestBody String cpfCnpj) {
         log.info("Endpoint de validação de duplicidade de CPF/CNPJ acessado. CPF/CNPJ: " + cpfCnpj);
-        clienteService.validaSeCpfCnpjJaExiste(cpfCnpj, jwtUtil.obtemUsuarioAtivo(req).getEmpresa().getId());
+        clienteValidationService.validaSeCpfCnpjJaExiste(cpfCnpj, jwtUtil.obtemUsuarioAtivo(req).getEmpresa().getId());
         return ResponseEntity.ok().build();
     }
 
@@ -154,11 +158,11 @@ public class ClienteController {
     })
     @PreAuthorize("hasAnyRole('CLIENTES')")
     public ResponseEntity<ClienteResponse> criaNovoCliente(HttpServletRequest req,
-                                                           @RequestBody ClienteDto clienteDto) {
+                                                           @RequestBody ClienteRequest clienteRequest) {
         log.info("Método controlador de criação de novo cliente acessado");
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(clienteService.criaNovoCliente(jwtUtil.obtemUsuarioAtivo(req), clienteDto));
+                .body(clienteService.criaNovoCliente(jwtUtil.obtemUsuarioAtivo(req), clienteRequest));
     }
 
     @PutMapping("/{id}")
@@ -176,12 +180,12 @@ public class ClienteController {
     })
     @PreAuthorize("hasAnyRole('CLIENTES')")
     public ResponseEntity<ClienteResponse> atualizaCliente(HttpServletRequest req,
-                                                           @RequestBody ClienteDto clienteDto,
+                                                           @RequestBody ClienteRequest clienteRequest,
                                                            @PathVariable Long id) {
         log.info("Método controlador de atualização de cliente acessado");
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(clienteService.atualizaCliente(jwtUtil.obtemUsuarioAtivo(req), id, clienteDto));
+                .body(clienteService.atualizaCliente(jwtUtil.obtemUsuarioAtivo(req), id, clienteRequest));
     }
 
     @DeleteMapping

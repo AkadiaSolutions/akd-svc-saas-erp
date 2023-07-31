@@ -13,7 +13,6 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ClienteResponse {
-
     private Long id;
     private String dataCadastro;
     private String horaCadastro;

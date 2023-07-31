@@ -1,7 +1,7 @@
 package br.akd.svc.akadia.services.sistema.clientes;
 
 import br.akd.svc.akadia.models.dto.global.EnderecoDto;
-import br.akd.svc.akadia.models.dto.sistema.clientes.ClienteDto;
+import br.akd.svc.akadia.models.dto.sistema.clientes.requests.ClienteRequest;
 import br.akd.svc.akadia.models.dto.sistema.clientes.responses.ClientePageResponse;
 import br.akd.svc.akadia.models.dto.sistema.clientes.responses.ClienteResponse;
 import br.akd.svc.akadia.models.dto.sistema.clientes.responses.ExclusaoClienteResponse;
@@ -37,6 +37,12 @@ public class ClienteService {
     AcaoService acaoService;
 
     @Autowired
+    ClienteValidationService clienteValidationService;
+
+    @Autowired
+    ClienteTypeConverter clienteTypeConverter;
+
+    @Autowired
     ClienteRepositoryImpl clienteRepositoryImpl;
 
     @Autowired
@@ -44,48 +50,7 @@ public class ClienteService {
 
     String BUSCA_CLIENTE_POR_ID = "Iniciando acesso ao método de implementação de busca pelo cliente por id...";
 
-    public void validaSeChavesUnicasJaExistemParaNovoCliente(ClienteDto clienteDto, ColaboradorEntity colaboradorLogado) {
-        log.debug("Método de validação de chave única de cliente acessado...");
-        if (clienteDto.getCpfCnpj() != null)
-            validaSeCpfCnpjJaExiste(clienteDto.getCpfCnpj(), colaboradorLogado.getEmpresa().getId());
-        if (clienteDto.getInscricaoEstadual() != null)
-            validaSeInscricaoEstadualJaExiste(clienteDto.getInscricaoEstadual(), colaboradorLogado.getEmpresa().getId());
-    }
-
-    public void validaSeChavesUnicasJaExistemParaClienteAtualizado(ClienteDto clienteDto,
-                                                                   ClienteEntity clienteEntity,
-                                                                   ColaboradorEntity colaboradorLogado) {
-        log.debug("Método de validação de chave única para atualização de cliente acessado...");
-        if (clienteDto.getCpfCnpj() != null && clienteEntity.getCpfCnpj() == null
-                || clienteDto.getCpfCnpj() != null
-                && !clienteEntity.getCpfCnpj().equals(clienteDto.getCpfCnpj()))
-            validaSeCpfCnpjJaExiste(clienteDto.getCpfCnpj(), colaboradorLogado.getEmpresa().getId());
-        if (clienteDto.getInscricaoEstadual() != null && clienteEntity.getInscricaoEstadual() == null
-                || clienteDto.getInscricaoEstadual() != null
-                && !clienteEntity.getInscricaoEstadual().equalsIgnoreCase(clienteDto.getInscricaoEstadual()))
-            validaSeInscricaoEstadualJaExiste(clienteDto.getInscricaoEstadual(), colaboradorLogado.getEmpresa().getId());
-    }
-
-    public void validaSeCpfCnpjJaExiste(String cpfCnpj, Long idEmpresa) {
-        log.debug("Método de validação de chave única de CPF/CNPJ acessado");
-        if (clienteRepositoryImpl.implementaBuscaPorCpfCnpjIdentico(cpfCnpj, idEmpresa).isPresent()) {
-            String mensagemErro = cpfCnpj.length() == 11 ? "O CPF informado já existe" : "O CNPJ informado já existe";
-            log.warn(mensagemErro + ": {}", cpfCnpj);
-            throw new InvalidRequestException(mensagemErro);
-        }
-        log.debug("Validação de chave única de CPF/CNPJ... OK");
-    }
-
-    public void validaSeInscricaoEstadualJaExiste(String inscricaoEstadual, Long idEmpresa) {
-        log.debug("Método de validação de chave única de EMAIL acessado");
-        if (clienteRepositoryImpl.implementaBuscaPorInscricaoEstadualIdentica(inscricaoEstadual, idEmpresa).isPresent()) {
-            log.warn("A inscrição estadual informada já existe");
-            throw new InvalidRequestException("A inscrição estadual informada já existe");
-        }
-        log.debug("Validação de chave única de INSCRIÇÃO ESTADUAL... OK");
-    }
-
-    public ClienteResponse criaNovoCliente(ColaboradorEntity colaboradorLogado, ClienteDto clienteDto) {
+    public ClienteResponse criaNovoCliente(ColaboradorEntity colaboradorLogado, ClienteRequest clienteRequest) {
 
         log.debug("Método de serviço de criação de novo cliente acessado");
 
@@ -93,31 +58,31 @@ public class ClienteService {
         SecurityUtil.verificaSePodeRealizarAlteracoes(colaboradorLogado.getAcessoSistema());
 
         log.debug("Iniciando acesso ao método de validação de chave única...");
-        validaSeChavesUnicasJaExistemParaNovoCliente(clienteDto, colaboradorLogado);
+        clienteValidationService.validaSeChavesUnicasJaExistemParaNovoCliente(clienteRequest, colaboradorLogado);
 
         log.debug("Iniciando criação do objeto ClienteEntity...");
         ClienteEntity clienteEntity = ClienteEntity.builder()
                 .dataCadastro(LocalDate.now().toString())
                 .horaCadastro(LocalTime.now().toString())
-                .dataNascimento(clienteDto.getDataNascimento())
-                .nome(clienteDto.getNome() != null ? clienteDto.getNome().toUpperCase() : null)
-                .cpfCnpj(clienteDto.getCpfCnpj())
-                .inscricaoEstadual(clienteDto.getInscricaoEstadual())
+                .dataNascimento(clienteRequest.getDataNascimento())
+                .nome(clienteRequest.getNome() != null ? clienteRequest.getNome().toUpperCase() : null)
+                .cpfCnpj(clienteRequest.getCpfCnpj())
+                .inscricaoEstadual(clienteRequest.getInscricaoEstadual())
                 .qtdOrdensRealizadas(0)
                 .giroTotal(0.0)
-                .statusCliente(clienteDto.getStatusCliente())
-                .tipoPessoa(clienteDto.getTipoPessoa())
-                .email(clienteDto.getEmail() != null ? clienteDto.getEmail().toLowerCase() : null)
+                .statusCliente(clienteRequest.getStatusCliente())
+                .tipoPessoa(clienteRequest.getTipoPessoa())
+                .email(clienteRequest.getEmail() != null ? clienteRequest.getEmail().toLowerCase() : null)
                 .exclusaoCliente(ExclusaoClienteEntity.builder()
                         .excluido(false)
                         .build())
-                .endereco(realizaTratamentoEnderecoDoNovoCliente(clienteDto.getEndereco()))
-                .telefone(clienteDto.getTelefone() == null
+                .endereco(realizaTratamentoEnderecoDoNovoCliente(clienteRequest.getEndereco()))
+                .telefone(clienteRequest.getTelefone() == null
                         ? null
                         : TelefoneEntity.builder()
-                        .prefixo(clienteDto.getTelefone().getPrefixo())
-                        .numero(clienteDto.getTelefone().getNumero())
-                        .tipoTelefone(clienteDto.getTelefone().getTipoTelefone())
+                        .prefixo(clienteRequest.getTelefone().getPrefixo())
+                        .numero(clienteRequest.getTelefone().getNumero())
+                        .tipoTelefone(clienteRequest.getTelefone().getTipoTelefone())
                         .build())
                 .colaboradorResponsavel(colaboradorLogado)
                 .empresa(colaboradorLogado.getEmpresa())
@@ -132,7 +97,7 @@ public class ClienteService {
                 ModulosEnum.CLIENTES, TipoAcaoEnum.CRIACAO, null);
 
         log.debug("Cliente persistido com sucesso. Convertendo clienteEntity para clienteResponse...");
-        ClienteResponse clienteResponse = converteClienteEntityParaClienteResponse(clientePersistido);
+        ClienteResponse clienteResponse = clienteTypeConverter.converteClienteEntityParaClienteResponse(clientePersistido);
 
         log.info("Cliente criado com sucesso");
         return clienteResponse;
@@ -159,7 +124,7 @@ public class ClienteService {
                 .build();
     }
 
-    public ClienteResponse atualizaCliente(ColaboradorEntity colaboradorLogado, Long id, ClienteDto clienteDto) {
+    public ClienteResponse atualizaCliente(ColaboradorEntity colaboradorLogado, Long id, ClienteRequest clienteRequest) {
         log.debug("Método de serviço de atualização de cliente acessado");
 
         log.debug(Constantes.VERIFICANDO_SE_COLABORADOR_PODE_ALTERAR_DADOS);
@@ -169,34 +134,34 @@ public class ClienteService {
         ClienteEntity clienteEncontrado = clienteRepositoryImpl.implementaBuscaPorId(id, colaboradorLogado.getEmpresa().getId());
 
         log.debug("Iniciando acesso ao método de validação de alteração de dados de cliente excluído...");
-        validaSeClienteEstaExcluido(clienteEncontrado, "Não é possível atualizar um cliente excluído");
+        clienteValidationService.validaSeClienteEstaExcluido(clienteEncontrado, "Não é possível atualizar um cliente excluído");
 
         log.debug("Iniciando acesso ao método de validação de chave única...");
-        validaSeChavesUnicasJaExistemParaClienteAtualizado(clienteDto, clienteEncontrado, colaboradorLogado);
+        clienteValidationService.validaSeChavesUnicasJaExistemParaClienteAtualizado(clienteRequest, clienteEncontrado, colaboradorLogado);
 
         log.debug("Iniciando criação do objeto ClienteEntity...");
         ClienteEntity novoClienteAtualizado = ClienteEntity.builder()
                 .id(clienteEncontrado.getId())
                 .dataCadastro(clienteEncontrado.getDataCadastro())
                 .horaCadastro(clienteEncontrado.getHoraCadastro())
-                .dataNascimento(clienteDto.getDataNascimento())
-                .nome(clienteDto.getNome())
-                .cpfCnpj(clienteDto.getCpfCnpj())
-                .inscricaoEstadual(clienteDto.getInscricaoEstadual())
+                .dataNascimento(clienteRequest.getDataNascimento())
+                .nome(clienteRequest.getNome())
+                .cpfCnpj(clienteRequest.getCpfCnpj())
+                .inscricaoEstadual(clienteRequest.getInscricaoEstadual())
                 .qtdOrdensRealizadas(clienteEncontrado.getQtdOrdensRealizadas())
                 .giroTotal(clienteEncontrado.getGiroTotal())
-                .statusCliente(clienteDto.getStatusCliente())
-                .tipoPessoa(clienteDto.getTipoPessoa())
-                .email(clienteDto.getEmail())
+                .statusCliente(clienteRequest.getStatusCliente())
+                .tipoPessoa(clienteRequest.getTipoPessoa())
+                .email(clienteRequest.getEmail())
                 .exclusaoCliente(clienteEncontrado.getExclusaoCliente())
-                .endereco(realizaTratamentoEnderecoDoClienteAtualizado(clienteDto.getEndereco(), clienteEncontrado))
-                .telefone(clienteDto.getTelefone() == null
+                .endereco(realizaTratamentoEnderecoDoClienteAtualizado(clienteRequest.getEndereco(), clienteEncontrado))
+                .telefone(clienteRequest.getTelefone() == null
                         ? null
                         : TelefoneEntity.builder()
                         .id(obtemIdTelefoneDoClienteAtualizavelSeTiver(clienteEncontrado))
-                        .prefixo(clienteDto.getTelefone().getPrefixo())
-                        .numero(clienteDto.getTelefone().getNumero())
-                        .tipoTelefone(clienteDto.getTelefone().getTipoTelefone())
+                        .prefixo(clienteRequest.getTelefone().getPrefixo())
+                        .numero(clienteRequest.getTelefone().getNumero())
+                        .tipoTelefone(clienteRequest.getTelefone().getTipoTelefone())
                         .build())
                 .colaboradorResponsavel(colaboradorLogado)
                 .empresa(colaboradorLogado.getEmpresa())
@@ -211,7 +176,7 @@ public class ClienteService {
                 ModulosEnum.CLIENTES, TipoAcaoEnum.ALTERACAO, null);
 
         log.debug("Cliente persistido com sucesso. Convertendo clienteEntity para clienteResponse...");
-        ClienteResponse clienteResponse = converteClienteEntityParaClienteResponse(clientePersistido);
+        ClienteResponse clienteResponse = clienteTypeConverter.converteClienteEntityParaClienteResponse(clientePersistido);
 
         log.info("Cliente criado com sucesso");
         return clienteResponse;
@@ -269,7 +234,7 @@ public class ClienteService {
         ClienteEntity clienteEncontrado = clienteRepositoryImpl.implementaBuscaPorId(id, colaboradorLogado.getEmpresa().getId());
 
         log.debug("Iniciando acesso ao método de validação de exclusão de cliente que já foi excluído...");
-        validaSeClienteEstaExcluido(clienteEncontrado,
+        clienteValidationService.validaSeClienteEstaExcluido(clienteEncontrado,
                 "O cliente selecionado já foi excluído");
 
         log.debug("Atualizando objeto ExclusaoCliente do cliente com dados referentes à sua exclusão...");
@@ -324,7 +289,7 @@ public class ClienteService {
 
         log.debug("Iniciando acesso ao método de validação de exclusão de cliente que já foi excluído...");
         for (ClienteEntity cliente : clientesEncontrados) {
-            validaSeClienteEstaExcluido(cliente,
+            clienteValidationService.validaSeClienteEstaExcluido(cliente,
                     "O cliente selecionado já foi excluído");
             log.debug("Atualizando objeto ExclusaoCliente do cliente com dados referentes à sua exclusão...");
             cliente.getExclusaoCliente().setDataExclusao(LocalDate.now().toString());
@@ -347,16 +312,6 @@ public class ClienteService {
         log.info("Clientes excluídos com sucesso");
     }
 
-    public void validaSeClienteEstaExcluido(ClienteEntity cliente, String mensagemCasoEstejaExcluido) {
-        log.debug("Método de validação de cliente excluído acessado");
-        if (Boolean.TRUE.equals(cliente.getExclusaoCliente().getExcluido())) {
-            log.debug("Cliente de id {}: Validação de cliente já excluído falhou. Não é possível realizar operações " +
-                    "em um cliente que já foi excluído.", cliente.getId());
-            throw new InvalidRequestException(mensagemCasoEstejaExcluido);
-        }
-        log.debug("O cliente de id {} não está excluído", cliente.getId());
-    }
-
     public ClienteResponse realizaBuscaDeClientePorId(ColaboradorEntity colaboradorLogado, Long id) {
         log.debug("Método de serviço de obtenção de cliente por id. ID recebido: {}", id);
 
@@ -365,7 +320,7 @@ public class ClienteService {
 
         log.debug("Busca de clientes por id realizada com sucesso. Acessando método de conversão dos objeto do tipo " +
                 "Entity para objeto do tipo Response...");
-        ClienteResponse clienteResponse = converteClienteEntityParaClienteResponse(cliente);
+        ClienteResponse clienteResponse = clienteTypeConverter.converteClienteEntityParaClienteResponse(cliente);
         log.debug("Conversão de tipagem realizada com sucesso");
 
         log.info("A busca de cliente por id foi realizada com sucesso");
@@ -385,99 +340,11 @@ public class ClienteService {
 
         log.debug("Busca de clientes por paginação realizada com sucesso. Acessando método de conversão dos objetos do tipo " +
                 "Entity para objetos do tipo Response...");
-        ClientePageResponse clientePageResponse = converteListaDeClientesEntityParaClientesResponse(clientePage);
+        ClientePageResponse clientePageResponse = clienteTypeConverter.converteListaDeClientesEntityParaClientesResponse(clientePage);
         log.debug("Conversão de tipagem realizada com sucesso");
 
         log.info("A busca paginada de clientes foi realizada com sucesso");
         return clientePageResponse;
-    }
-
-    public ClientePageResponse converteListaDeClientesEntityParaClientesResponse(Page<ClienteEntity> clientesEntity) {
-        log.debug("Método de conversão de clientes do tipo Entity para clientes do tipo Response acessado");
-
-        log.debug("Criando lista vazia de objetos do tipo ClienteResponse...");
-        List<ClienteResponse> clientesResponse = new ArrayList<>();
-
-        log.debug("Iniciando iteração da lista de ClienteEntity obtida na busca para conversão para objetos do tipo " +
-                "ClienteResponse...");
-        for (ClienteEntity cliente : clientesEntity.getContent()) {
-            ClienteResponse clienteResponse = ClienteResponse.builder()
-                    .id(cliente.getId())
-                    .dataCadastro(cliente.getDataCadastro())
-                    .horaCadastro(cliente.getHoraCadastro())
-                    .dataNascimento(cliente.getDataNascimento())
-                    .nome(cliente.getNome())
-                    .cpfCnpj(cliente.getCpfCnpj())
-                    .inscricaoEstadual(cliente.getInscricaoEstadual())
-                    .email(cliente.getEmail())
-                    .statusCliente(cliente.getStatusCliente())
-                    .tipoPessoa(cliente.getTipoPessoa())
-                    .qtdOrdensRealizadas(cliente.getQtdOrdensRealizadas())
-                    .giroTotal(cliente.getGiroTotal())
-                    .exclusaoCliente(ExclusaoClienteResponse.builder()
-                            .dataExclusao(cliente.getExclusaoCliente().getDataExclusao())
-                            .horaExclusao(cliente.getExclusaoCliente().getHoraExclusao())
-                            .excluido(cliente.getExclusaoCliente().getExcluido())
-                            .build())
-                    .endereco(cliente.getEndereco())
-                    .telefone(cliente.getTelefone())
-                    .nomeColaboradorResponsavel(cliente.getColaboradorResponsavel().getNome())
-                    .build();
-            clientesResponse.add(clienteResponse);
-        }
-        log.debug("Iteração finalizada com sucesso. Listagem de objetos do tipo ClienteResponse preenchida");
-
-        log.debug("Iniciando criação de objeto do tipo ClientePageResponse, que possui todas as informações referentes " +
-                "ao conteúdo da página e à paginação...");
-        clientesEntity.getPageable();
-        ClientePageResponse clientePageResponse = ClientePageResponse.builder()
-                .content(clientesResponse)
-                .empty(clientesEntity.isEmpty())
-                .first(clientesEntity.isFirst())
-                .last(clientesEntity.isLast())
-                .number(clientesEntity.getNumber())
-                .numberOfElements(clientesEntity.getNumberOfElements())
-                .pageNumber(clientesEntity.getPageable().getPageNumber())
-                .pageSize(clientesEntity.getPageable().getPageSize())
-                .paged(clientesEntity.getPageable().isPaged())
-                .unpaged(clientesEntity.getPageable().isUnpaged())
-                .size(clientesEntity.getSize())
-                .totalElements(clientesEntity.getTotalElements())
-                .totalPages(clientesEntity.getTotalPages())
-                .build();
-
-        log.debug("Objeto do tipo ClientePageResponse criado com sucesso. Retornando objeto...");
-        return clientePageResponse;
-    }
-
-    public ClienteResponse converteClienteEntityParaClienteResponse(ClienteEntity cliente) {
-        log.debug("Método de conversão de objeto do tipo ClienteEntity para objeto do tipo ClienteResponse acessado");
-
-        log.debug("Iniciando construção do objeto ClienteResponse...");
-        ClienteResponse clienteResponse = ClienteResponse.builder()
-                .id(cliente.getId())
-                .dataCadastro(cliente.getDataCadastro())
-                .horaCadastro(cliente.getHoraCadastro())
-                .dataNascimento(cliente.getDataNascimento())
-                .nome(cliente.getNome())
-                .cpfCnpj(cliente.getCpfCnpj())
-                .inscricaoEstadual(cliente.getInscricaoEstadual())
-                .email(cliente.getEmail())
-                .statusCliente(cliente.getStatusCliente())
-                .tipoPessoa(cliente.getTipoPessoa())
-                .qtdOrdensRealizadas(cliente.getQtdOrdensRealizadas())
-                .giroTotal(cliente.getGiroTotal())
-                .exclusaoCliente(ExclusaoClienteResponse.builder()
-                        .dataExclusao(cliente.getExclusaoCliente().getDataExclusao())
-                        .horaExclusao(cliente.getExclusaoCliente().getHoraExclusao())
-                        .excluido(cliente.getExclusaoCliente().getExcluido())
-                        .build())
-                .endereco(cliente.getEndereco())
-                .telefone(cliente.getTelefone())
-                .nomeColaboradorResponsavel(cliente.getColaboradorResponsavel().getNome())
-                .build();
-        log.debug("Objeto ClienteResponse buildado com sucesso. Retornando...");
-        return clienteResponse;
     }
 
 }
