@@ -13,7 +13,7 @@ import br.akd.svc.akadia.models.enums.sistema.colaboradores.TipoAcaoEnum;
 import br.akd.svc.akadia.repositories.sistema.clientes.ClienteRepository;
 import br.akd.svc.akadia.repositories.sistema.clientes.impl.ClienteRepositoryImpl;
 import br.akd.svc.akadia.services.exceptions.InvalidRequestException;
-import br.akd.svc.akadia.services.sistema.colaboradores.AcaoService;
+import br.akd.svc.akadia.services.sistema.colaboradores.acao.AcaoService;
 import br.akd.svc.akadia.utils.Constantes;
 import br.akd.svc.akadia.utils.SecurityUtil;
 import lombok.extern.slf4j.Slf4j;

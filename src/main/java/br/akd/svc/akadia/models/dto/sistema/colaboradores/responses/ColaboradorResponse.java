@@ -1,7 +1,9 @@
 package br.akd.svc.akadia.models.dto.sistema.colaboradores.responses;
 
+import br.akd.svc.akadia.models.dto.sistema.colaboradores.responses.acesso.AcessoSistemaResponse;
 import br.akd.svc.akadia.models.entities.global.ArquivoEntity;
 import br.akd.svc.akadia.models.entities.global.EnderecoEntity;
+import br.akd.svc.akadia.models.entities.global.ExclusaoEntity;
 import br.akd.svc.akadia.models.entities.global.TelefoneEntity;
 import br.akd.svc.akadia.models.entities.sistema.colaboradores.*;
 import br.akd.svc.akadia.models.enums.sistema.colaboradores.ModeloContratacaoEnum;
@@ -13,8 +15,7 @@ import lombok.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Getter
-@Setter
+@Data
 @Builder
 @ToString
 @NoArgsConstructor
@@ -37,7 +38,7 @@ public class ColaboradorResponse {
     private ModeloTrabalhoEnum modeloTrabalhoEnum;
     private StatusColaboradorEnum statusColaboradorEnum;
     private ArquivoEntity fotoPerfil;
-    private ExclusaoColaboradorResponse exclusao;
+    private ExclusaoEntity exclusao;
     private AcessoSistemaResponse acessoSistema;
     private ConfiguracaoPerfilEntity configuracaoPerfil;
     private ArquivoEntity contratoContratacao;
@@ -45,7 +46,10 @@ public class ColaboradorResponse {
     private TelefoneEntity telefone;
     private ExpedienteEntity expediente;
     private DispensaEntity dispensa;
+    @Builder.Default
     private List<PontoEntity> pontos = new ArrayList<>();
+    @Builder.Default
     private List<FeriasEntity> historicoFerias = new ArrayList<>();
+    @Builder.Default
     private List<AdvertenciaEntity> advertencias = new ArrayList<>();
 }

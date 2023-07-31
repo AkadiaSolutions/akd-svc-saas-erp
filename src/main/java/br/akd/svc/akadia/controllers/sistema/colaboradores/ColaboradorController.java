@@ -1,18 +1,18 @@
 package br.akd.svc.akadia.controllers.sistema.colaboradores;
 
 import br.akd.svc.akadia.config.security.JWTUtil;
-import br.akd.svc.akadia.models.dto.sistema.colaboradores.responses.AcaoPageResponse;
-import br.akd.svc.akadia.models.dto.sistema.colaboradores.responses.AcessoPageResponse;
+import br.akd.svc.akadia.models.dto.sistema.colaboradores.responses.acao.AcaoPageResponse;
+import br.akd.svc.akadia.models.dto.sistema.colaboradores.responses.acesso.AcessoPageResponse;
 import br.akd.svc.akadia.models.dto.sistema.colaboradores.responses.ColaboradorPageResponse;
 import br.akd.svc.akadia.models.dto.sistema.colaboradores.responses.ColaboradorResponse;
 import br.akd.svc.akadia.models.entities.sistema.colaboradores.ColaboradorEntity;
 import br.akd.svc.akadia.repositories.sistema.colaboradores.ColaboradorRepository;
 import br.akd.svc.akadia.services.exceptions.InvalidRequestException;
 import br.akd.svc.akadia.services.exceptions.ObjectNotFoundException;
-import br.akd.svc.akadia.services.sistema.colaboradores.AcaoService;
-import br.akd.svc.akadia.services.sistema.colaboradores.AcessoService;
-import br.akd.svc.akadia.services.sistema.colaboradores.ColaboradorRelatorioService;
-import br.akd.svc.akadia.services.sistema.colaboradores.ColaboradorService;
+import br.akd.svc.akadia.services.sistema.colaboradores.acao.AcaoService;
+import br.akd.svc.akadia.services.sistema.colaboradores.acesso.AcessoService;
+import br.akd.svc.akadia.services.sistema.colaboradores.colaborador.ColaboradorRelatorioService;
+import br.akd.svc.akadia.services.sistema.colaboradores.colaborador.ColaboradorService;
 import com.lowagie.text.DocumentException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

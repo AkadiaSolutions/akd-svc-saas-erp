@@ -1,4 +1,4 @@
-package br.akd.svc.akadia.models.dto.sistema.colaboradores.responses;
+package br.akd.svc.akadia.models.dto.sistema.colaboradores.responses.acesso;
 
 import br.akd.svc.akadia.models.enums.sistema.colaboradores.ModulosEnum;
 import br.akd.svc.akadia.models.enums.sistema.colaboradores.PermissaoEnum;
@@ -16,5 +16,8 @@ import java.util.Set;
 public class AcessoSistemaResponse {
     private Boolean acessoSistemaAtivo;
     private PermissaoEnum permissaoEnum;
+
+    @ToString.Exclude
+    @Builder.Default
     private Set<ModulosEnum> privilegios = new HashSet<>();
 }

@@ -1,6 +1,6 @@
-package br.akd.svc.akadia.services.sistema.colaboradores;
+package br.akd.svc.akadia.services.sistema.colaboradores.acao;
 
-import br.akd.svc.akadia.models.dto.sistema.colaboradores.responses.AcaoPageResponse;
+import br.akd.svc.akadia.models.dto.sistema.colaboradores.responses.acao.AcaoPageResponse;
 import br.akd.svc.akadia.models.entities.sistema.colaboradores.AcaoEntity;
 import br.akd.svc.akadia.models.entities.sistema.colaboradores.ColaboradorEntity;
 import br.akd.svc.akadia.models.enums.sistema.colaboradores.ModulosEnum;

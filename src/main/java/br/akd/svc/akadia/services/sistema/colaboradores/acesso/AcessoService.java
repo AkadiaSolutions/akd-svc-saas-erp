@@ -1,6 +1,6 @@
-package br.akd.svc.akadia.services.sistema.colaboradores;
+package br.akd.svc.akadia.services.sistema.colaboradores.acesso;
 
-import br.akd.svc.akadia.models.dto.sistema.colaboradores.responses.AcessoPageResponse;
+import br.akd.svc.akadia.models.dto.sistema.colaboradores.responses.acesso.AcessoPageResponse;
 import br.akd.svc.akadia.models.entities.sistema.colaboradores.AcessoEntity;
 import br.akd.svc.akadia.models.entities.sistema.colaboradores.ColaboradorEntity;
 import br.akd.svc.akadia.repositories.sistema.colaboradores.ColaboradorRepository;

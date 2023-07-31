@@ -1,6 +1,6 @@
-package br.akd.svc.akadia.services.sistema.colaboradores;
+package br.akd.svc.akadia.services.sistema.colaboradores.advertencia;
 
-import br.akd.svc.akadia.models.dto.sistema.colaboradores.responses.AdvertenciaPageResponse;
+import br.akd.svc.akadia.models.dto.sistema.colaboradores.responses.advertencia.AdvertenciaPageResponse;
 import br.akd.svc.akadia.models.entities.global.ArquivoEntity;
 import br.akd.svc.akadia.models.entities.sistema.colaboradores.AdvertenciaEntity;
 import br.akd.svc.akadia.models.entities.sistema.colaboradores.ColaboradorEntity;
@@ -11,6 +11,7 @@ import br.akd.svc.akadia.models.enums.sistema.colaboradores.TipoAcaoEnum;
 import br.akd.svc.akadia.repositories.sistema.colaboradores.ColaboradorRepository;
 import br.akd.svc.akadia.repositories.sistema.colaboradores.impl.ColaboradorRepositoryImpl;
 import br.akd.svc.akadia.services.exceptions.ObjectNotFoundException;
+import br.akd.svc.akadia.services.sistema.colaboradores.acao.AcaoService;
 import br.akd.svc.akadia.utils.Constantes;
 import br.akd.svc.akadia.utils.SecurityUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -269,7 +270,7 @@ public class AdvertenciaService {
         log.info("Requisição finalizada com sucesso");
     }
 
-    protected TipoArquivoEnum realizaTratamentoTipoDeArquivoDoContratoAdvertencia(String tipoArquivo) {
+    public TipoArquivoEnum realizaTratamentoTipoDeArquivoDoContratoAdvertencia(String tipoArquivo) {
 
         if (tipoArquivo == null) return TipoArquivoEnum.PDF;
 

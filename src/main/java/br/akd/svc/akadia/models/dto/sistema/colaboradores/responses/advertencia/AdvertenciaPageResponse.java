@@ -1,4 +1,4 @@
-package br.akd.svc.akadia.models.dto.sistema.colaboradores.responses;
+package br.akd.svc.akadia.models.dto.sistema.colaboradores.responses.advertencia;
 
 import br.akd.svc.akadia.models.entities.sistema.colaboradores.AdvertenciaEntity;
 import lombok.*;

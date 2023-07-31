@@ -1,13 +1,15 @@
-package br.akd.svc.akadia.services.sistema.colaboradores;
+package br.akd.svc.akadia.services.sistema.colaboradores.colaborador;
 
-import br.akd.svc.akadia.models.dto.sistema.colaboradores.responses.AcessoSistemaResponse;
 import br.akd.svc.akadia.models.dto.sistema.colaboradores.responses.ColaboradorPageResponse;
 import br.akd.svc.akadia.models.dto.sistema.colaboradores.responses.ColaboradorResponse;
-import br.akd.svc.akadia.models.dto.sistema.colaboradores.responses.ExclusaoColaboradorResponse;
 import br.akd.svc.akadia.models.entities.global.ArquivoEntity;
 import br.akd.svc.akadia.models.entities.global.EnderecoEntity;
+import br.akd.svc.akadia.models.entities.global.ExclusaoEntity;
 import br.akd.svc.akadia.models.entities.global.TelefoneEntity;
-import br.akd.svc.akadia.models.entities.sistema.colaboradores.*;
+import br.akd.svc.akadia.models.entities.sistema.colaboradores.AcessoSistemaEntity;
+import br.akd.svc.akadia.models.entities.sistema.colaboradores.ColaboradorEntity;
+import br.akd.svc.akadia.models.entities.sistema.colaboradores.ConfiguracaoPerfilEntity;
+import br.akd.svc.akadia.models.entities.sistema.colaboradores.ExpedienteEntity;
 import br.akd.svc.akadia.models.enums.global.TipoArquivoEnum;
 import br.akd.svc.akadia.models.enums.sistema.colaboradores.ModulosEnum;
 import br.akd.svc.akadia.models.enums.sistema.colaboradores.PermissaoEnum;
@@ -16,6 +18,7 @@ import br.akd.svc.akadia.models.enums.sistema.colaboradores.TipoAcaoEnum;
 import br.akd.svc.akadia.repositories.sistema.colaboradores.ColaboradorRepository;
 import br.akd.svc.akadia.repositories.sistema.colaboradores.impl.ColaboradorRepositoryImpl;
 import br.akd.svc.akadia.services.exceptions.InvalidRequestException;
+import br.akd.svc.akadia.services.sistema.colaboradores.acao.AcaoService;
 import br.akd.svc.akadia.utils.Constantes;
 import br.akd.svc.akadia.utils.ConversorDeDados;
 import br.akd.svc.akadia.utils.SecurityUtil;
@@ -41,6 +44,9 @@ public class ColaboradorService {
 
     @Autowired
     AcaoService acaoService;
+
+    @Autowired
+    ColaboradorTypeConverter colaboradorTypeConverter;
 
     @Autowired
     ColaboradorRepositoryImpl colaboradorRepositoryImpl;
@@ -74,12 +80,7 @@ public class ColaboradorService {
                 .arquivo(contratoColaborador.getBytes())
                 .build()
                 : null);
-        colaboradorEntity.setExclusao(ExclusaoColaboradorEntity.builder()
-                .excluido(false)
-                .dataExclusao(null)
-                .horaExclusao(null)
-                .responsavelExclusao(null)
-                .build());
+        colaboradorEntity.setExclusao(null);
         colaboradorEntity.getAcessoSistema().setSenhaCriptografada(
                 Boolean.TRUE.equals(colaboradorEntity.getAcessoSistema().getAcessoSistemaAtivo())
                         ? new BCryptPasswordEncoder().encode(colaboradorEntity.getAcessoSistema().getSenha())
@@ -191,14 +192,15 @@ public class ColaboradorService {
                 ModulosEnum.COLABORADORES, TipoAcaoEnum.ALTERACAO, null);
 
         log.debug("Colaborador persistido com sucesso. Convertendo colaboradorEntity para colaboradorResponse...");
-        ColaboradorResponse colaboradorResponse = converteColaboradorEntityParaColaboradorResponse(colaboradorPersistido);
+        ColaboradorResponse colaboradorResponse = colaboradorTypeConverter.
+                converteColaboradorEntityParaColaboradorResponse(colaboradorPersistido);
 
         log.info("Colaborador criado com sucesso");
         return colaboradorResponse;
     }
 
-    protected AcessoSistemaEntity constroiObjetoAcessoSistemaParaAtualizacaoDeColaborador(ColaboradorEntity colaboradorPreAtualizacao,
-                                                                                        ColaboradorEntity colaboradorNovo) {
+    public AcessoSistemaEntity constroiObjetoAcessoSistemaParaAtualizacaoDeColaborador(ColaboradorEntity colaboradorPreAtualizacao,
+                                                                                       ColaboradorEntity colaboradorNovo) {
 
         if (Boolean.FALSE.equals(colaboradorNovo.getAcessoSistema().getAcessoSistemaAtivo())) return
                 AcessoSistemaEntity.builder()
@@ -223,7 +225,7 @@ public class ColaboradorService {
         }
     }
 
-    protected TipoArquivoEnum realizaTratamentoTipoDeArquivoDoContratoColaborador(String tipoArquivo) {
+    public TipoArquivoEnum realizaTratamentoTipoDeArquivoDoContratoColaborador(String tipoArquivo) {
 
         if (tipoArquivo == null) return TipoArquivoEnum.PDF;
 
@@ -239,8 +241,8 @@ public class ColaboradorService {
         }
     }
 
-    protected EnderecoEntity realizaTratamentoEnderecoDoColaboradorAtualizado(EnderecoEntity endereco,
-                                                                            ColaboradorEntity colaboradorEntity) {
+    public EnderecoEntity realizaTratamentoEnderecoDoColaboradorAtualizado(EnderecoEntity endereco,
+                                                                           ColaboradorEntity colaboradorEntity) {
         if (endereco == null) return null;
         return EnderecoEntity.builder()
                 .id(obtemIdEnderecoDoColaboradorAtualizavelSeTiver(colaboradorEntity))
@@ -296,11 +298,15 @@ public class ColaboradorService {
                 "O colaborador selecionado já foi excluído");
 
         log.debug("Atualizando objeto ExclusaoColaborador do colaborador com dados referentes à sua exclusão...");
-        colaboradorEncontrado.getExclusao().setDataExclusao(LocalDate.now().toString());
-        colaboradorEncontrado.getExclusao().setHoraExclusao(LocalTime.now().toString());
-        colaboradorEncontrado.getExclusao().setExcluido(true);
-        colaboradorEncontrado.getExclusao().setResponsavelExclusao(colaboradorLogado);
-        log.debug("Objeto ExclusaoColaborador do colaborador de id {} setado com sucesso", id);
+        ExclusaoEntity exclusao = ExclusaoEntity.builder()
+                .dataExclusao(LocalDate.now().toString())
+                .horaExclusao(LocalTime.now().toString())
+                .responsavelExclusao(colaboradorLogado)
+                .build();
+        log.debug("Objeto Exclusao do colaborador de id {} setado com sucesso", id);
+
+        log.debug("Setando objeto exclusão criado no colaborador encontrado...");
+        colaboradorEncontrado.setExclusao(exclusao);
 
         log.debug("Persistindo colaborador excluído no banco de dados...");
         ColaboradorEntity colaboradorExcluido = colaboradorRepositoryImpl.implementaPersistencia(colaboradorEncontrado);
@@ -336,10 +342,13 @@ public class ColaboradorService {
             validaSeColaboradorEstaExcluido(colaborador,
                     "O Colaborador selecionado já foi excluído");
             log.debug("Atualizando objeto ExclusaoColaborador do colaborador com dados referentes à sua exclusão...");
-            colaborador.getExclusao().setDataExclusao(LocalDate.now().toString());
-            colaborador.getExclusao().setHoraExclusao(LocalTime.now().toString());
-            colaborador.getExclusao().setExcluido(true);
-            colaborador.getExclusao().setResponsavelExclusao(colaboradorLogado);
+            ExclusaoEntity exclusao = ExclusaoEntity.builder()
+                    .dataExclusao(LocalDate.now().toString())
+                    .horaExclusao(LocalTime.now().toString())
+                    .responsavelExclusao(colaboradorLogado)
+                    .build();
+
+            colaborador.setExclusao(exclusao);
             log.debug("Objeto ExclusaoColaborador do colaborador de id {} setado com sucesso", colaborador.getId());
         }
 
@@ -358,7 +367,7 @@ public class ColaboradorService {
 
     public void validaSeColaboradorEstaExcluido(ColaboradorEntity colaborador, String mensagemCasoEstejaExcluido) {
         log.debug("Método de validação de colaborador excluído acessado");
-        if (Boolean.TRUE.equals(colaborador.getExclusao().getExcluido())) {
+        if (colaborador.getExclusao() != null) {
             log.debug("colaborador de id {}: Validação de colaborador já excluído falhou. Não é possível realizar operações " +
                     "em um colaborador que já foi excluído.", colaborador.getId());
             throw new InvalidRequestException(mensagemCasoEstejaExcluido);
@@ -375,7 +384,8 @@ public class ColaboradorService {
 
         log.debug("Busca de colaboradores por id realizada com sucesso. Acessando método de conversão dos objeto do tipo " +
                 "Entity para objeto do tipo Response...");
-        ColaboradorResponse colaboradorResponse = converteColaboradorEntityParaColaboradorResponse(colaborador);
+        ColaboradorResponse colaboradorResponse = colaboradorTypeConverter.
+                converteColaboradorEntityParaColaboradorResponse(colaborador);
         log.debug("Conversão de tipagem realizada com sucesso");
 
         log.info("A busca de colaborador por id foi realizada com sucesso");
@@ -396,132 +406,12 @@ public class ColaboradorService {
         log.debug("Busca de colaboradores por paginação realizada com sucesso. Acessando método de conversão dos objetos do tipo " +
                 "Entity para objetos do tipo Response...");
         ColaboradorPageResponse colaboradorPageResponse =
-                converteListaDeColaboradoresEntityParaColaboradoresResponse(colaboradorPage);
+                colaboradorTypeConverter.converteListaDeColaboradoresEntityParaColaboradoresResponse(colaboradorPage);
 
         log.debug("Conversão de tipagem realizada com sucesso");
 
         log.info("A busca paginada de colaboradores foi realizada com sucesso");
         return colaboradorPageResponse;
-    }
-
-    public ColaboradorPageResponse converteListaDeColaboradoresEntityParaColaboradoresResponse(Page<ColaboradorEntity> colaboradoresEntity) {
-        log.debug("Método de conversão de colaboradores do tipo Entity para colaboradores do tipo Response acessado");
-
-        log.debug("Criando lista vazia de objetos do tipo ColaboradorResponse...");
-        List<ColaboradorResponse> colaboradoresResponse = new ArrayList<>();
-
-        log.debug("Iniciando iteração da lista de ColaboradorEntity obtida na busca para conversão para objetos do tipo " +
-                "ColaboradorResponse...");
-        for (ColaboradorEntity colaborador : colaboradoresEntity.getContent()) {
-            ColaboradorResponse colaboradorResponse = ColaboradorResponse.builder()
-                    .id(colaborador.getId())
-                    .dataCadastro(colaborador.getDataCadastro())
-                    .horaCadastro(colaborador.getHoraCadastro())
-                    .matricula(colaborador.getMatricula())
-                    .nome(colaborador.getNome())
-                    .dataNascimento(colaborador.getDataNascimento())
-                    .email(colaborador.getEmail())
-                    .cpfCnpj(colaborador.getCpfCnpj())
-                    .salario(colaborador.getSalario())
-                    .entradaEmpresa(colaborador.getEntradaEmpresa())
-                    .saidaEmpresa(colaborador.getSaidaEmpresa())
-                    .contratoContratacao(colaborador.getContratoContratacao())
-                    .ocupacao(colaborador.getOcupacao())
-                    .tipoOcupacaoEnum(colaborador.getTipoOcupacaoEnum())
-                    .modeloContratacaoEnum(colaborador.getModeloContratacaoEnum())
-                    .modeloTrabalhoEnum(colaborador.getModeloTrabalhoEnum())
-                    .statusColaboradorEnum(colaborador.getStatusColaboradorEnum())
-                    .acessoSistema(AcessoSistemaResponse.builder()
-                            .acessoSistemaAtivo(colaborador.getAcessoSistema().getAcessoSistemaAtivo())
-                            .permissaoEnum(colaborador.getAcessoSistema().getPermissaoEnum())
-                            .privilegios(colaborador.getAcessoSistema().getPrivilegios())
-                            .build())
-                    .configuracaoPerfil(colaborador.getConfiguracaoPerfil())
-                    .exclusao(ExclusaoColaboradorResponse.builder()
-                            .dataExclusao(colaborador.getExclusao().getDataExclusao())
-                            .horaExclusao(colaborador.getExclusao().getHoraExclusao())
-                            .excluido(colaborador.getExclusao().getExcluido())
-                            .build())
-                    .fotoPerfil(colaborador.getFotoPerfil())
-                    .endereco(colaborador.getEndereco())
-                    .telefone(colaborador.getTelefone())
-                    .expediente(colaborador.getExpediente())
-                    .dispensa(colaborador.getDispensa())
-                    .pontos(colaborador.getPontos())
-                    .historicoFerias(colaborador.getHistoricoFerias())
-                    .advertencias(colaborador.getAdvertencias())
-                    .build();
-            colaboradoresResponse.add(colaboradorResponse);
-        }
-        log.debug("Iteração finalizada com sucesso. Listagem de objetos do tipo ColaboradorResponse preenchida");
-
-        log.debug("Iniciando criação de objeto do tipo ColaboradorPageResponse, que possui todas as informações referentes " +
-                "ao conteúdo da página e à paginação...");
-        colaboradoresEntity.getPageable();
-        ColaboradorPageResponse colaboradorPageResponse = ColaboradorPageResponse.builder()
-                .content(colaboradoresResponse)
-                .empty(colaboradoresEntity.isEmpty())
-                .first(colaboradoresEntity.isFirst())
-                .last(colaboradoresEntity.isLast())
-                .number(colaboradoresEntity.getNumber())
-                .numberOfElements(colaboradoresEntity.getNumberOfElements())
-                .offset(colaboradoresEntity.getPageable().getOffset())
-                .pageNumber(colaboradoresEntity.getPageable().getPageNumber())
-                .pageSize(colaboradoresEntity.getPageable().getPageSize())
-                .paged(colaboradoresEntity.getPageable().isPaged())
-                .unpaged(colaboradoresEntity.getPageable().isUnpaged())
-                .size(colaboradoresEntity.getSize())
-                .totalElements(colaboradoresEntity.getTotalElements())
-                .totalPages(colaboradoresEntity.getTotalPages())
-                .build();
-
-        log.debug("Objeto do tipo ColaboradorPageResponse criado com sucesso. Retornando objeto...");
-        return colaboradorPageResponse;
-    }
-
-    public ColaboradorResponse converteColaboradorEntityParaColaboradorResponse(ColaboradorEntity colaborador) {
-        log.debug("Método de conversão de objeto do tipo ColaboradorEntity para objeto do tipo ColaboradorResponse acessado");
-
-        log.debug("Iniciando construção do objeto ColaboradorResponse...");
-        ColaboradorResponse colaboradorResponse = ColaboradorResponse.builder()
-                .id(colaborador.getId())
-                .dataCadastro(colaborador.getDataCadastro())
-                .horaCadastro(colaborador.getHoraCadastro())
-                .nome(colaborador.getNome())
-                .matricula(colaborador.getMatricula())
-                .dataNascimento(colaborador.getDataNascimento())
-                .email(colaborador.getEmail())
-                .cpfCnpj(colaborador.getCpfCnpj())
-                .salario(colaborador.getSalario())
-                .entradaEmpresa(colaborador.getEntradaEmpresa())
-                .saidaEmpresa(colaborador.getSaidaEmpresa())
-                .contratoContratacao(colaborador.getContratoContratacao())
-                .ocupacao(colaborador.getOcupacao())
-                .tipoOcupacaoEnum(colaborador.getTipoOcupacaoEnum())
-                .modeloTrabalhoEnum(colaborador.getModeloTrabalhoEnum())
-                .modeloContratacaoEnum(colaborador.getModeloContratacaoEnum())
-                .statusColaboradorEnum(colaborador.getStatusColaboradorEnum())
-                .acessoSistema(AcessoSistemaResponse.builder()
-                        .acessoSistemaAtivo(colaborador.getAcessoSistema().getAcessoSistemaAtivo())
-                        .permissaoEnum(colaborador.getAcessoSistema().getPermissaoEnum())
-                        .privilegios(colaborador.getAcessoSistema().getPrivilegios())
-                        .build())
-                .fotoPerfil(colaborador.getFotoPerfil())
-                .configuracaoPerfil(colaborador.getConfiguracaoPerfil())
-                .expediente(colaborador.getExpediente())
-                .dispensa(colaborador.getDispensa())
-                .pontos(colaborador.getPontos())
-                .historicoFerias(colaborador.getHistoricoFerias())
-                .exclusao(ExclusaoColaboradorResponse.builder()
-                        .dataExclusao(colaborador.getExclusao().getDataExclusao())
-                        .horaExclusao(colaborador.getExclusao().getHoraExclusao())
-                        .excluido(colaborador.getExclusao().getExcluido())
-                        .build())
-                .endereco(colaborador.getEndereco())
-                .telefone(colaborador.getTelefone())
-                .build();
-        log.debug("Objeto ColaboradorResponse buildado com sucesso. Retornando...");
-        return colaboradorResponse;
     }
 
     public ColaboradorResponse atualizaImagemPerfilColaborador(ColaboradorEntity colaboradorLogado,
@@ -565,7 +455,7 @@ public class ColaboradorService {
                             + colaboradorPersistido.getNome());
         }
 
-        return converteColaboradorEntityParaColaboradorResponse(colaboradorPersistido);
+        return colaboradorTypeConverter.converteColaboradorEntityParaColaboradorResponse(colaboradorPersistido);
     }
 
     public byte[] obtemImagemPerfilColaborador(ColaboradorEntity colaboradorLogado, Long id) {

@@ -2,6 +2,7 @@ package br.akd.svc.akadia.models.entities.sistema.colaboradores;
 
 import br.akd.svc.akadia.models.entities.global.ArquivoEntity;
 import br.akd.svc.akadia.models.entities.global.EnderecoEntity;
+import br.akd.svc.akadia.models.entities.global.ExclusaoEntity;
 import br.akd.svc.akadia.models.entities.global.TelefoneEntity;
 import br.akd.svc.akadia.models.entities.site.empresa.EmpresaEntity;
 import br.akd.svc.akadia.models.enums.sistema.colaboradores.ModeloContratacaoEnum;
@@ -69,8 +70,8 @@ public class ColaboradorEntity {
     @OneToOne(targetEntity = ArquivoEntity.class, orphanRemoval = true, cascade = CascadeType.ALL)
     private ArquivoEntity contratoContratacao;
 
-    @OneToOne(targetEntity = ExclusaoColaboradorEntity.class, orphanRemoval = true, cascade = CascadeType.ALL)
-    private ExclusaoColaboradorEntity exclusao;
+    @OneToOne(targetEntity = ExclusaoEntity.class, orphanRemoval = true, cascade = CascadeType.ALL)
+    private ExclusaoEntity exclusao;
 
     @OneToOne(targetEntity = AcessoSistemaEntity.class, orphanRemoval = true, cascade = CascadeType.ALL)
     private AcessoSistemaEntity acessoSistema;
@@ -90,24 +91,29 @@ public class ColaboradorEntity {
     @OneToOne(targetEntity = DispensaEntity.class, orphanRemoval = true, cascade = CascadeType.ALL)
     private DispensaEntity dispensa;
 
-    @OneToMany(targetEntity = PontoEntity.class, orphanRemoval = true, cascade = CascadeType.ALL)
     @ToString.Exclude
+    @Builder.Default
+    @OneToMany(targetEntity = PontoEntity.class, orphanRemoval = true, cascade = CascadeType.ALL)
     private List<PontoEntity> pontos = new ArrayList<>();
 
-    @OneToMany(targetEntity = FeriasEntity.class, orphanRemoval = true, cascade = CascadeType.ALL)
     @ToString.Exclude
+    @Builder.Default
+    @OneToMany(targetEntity = FeriasEntity.class, orphanRemoval = true, cascade = CascadeType.ALL)
     private List<FeriasEntity> historicoFerias = new ArrayList<>();
 
-    @OneToMany(targetEntity = AdvertenciaEntity.class, orphanRemoval = true, cascade = CascadeType.ALL)
     @ToString.Exclude
+    @Builder.Default
+    @OneToMany(targetEntity = AdvertenciaEntity.class, orphanRemoval = true, cascade = CascadeType.ALL)
     private List<AdvertenciaEntity> advertencias = new ArrayList<>();
 
-    @OneToMany(targetEntity = AcessoEntity.class, orphanRemoval = true, cascade = CascadeType.ALL)
     @ToString.Exclude
+    @Builder.Default
+    @OneToMany(targetEntity = AcessoEntity.class, orphanRemoval = true, cascade = CascadeType.ALL)
     private List<AcessoEntity> acessos = new ArrayList<>();
 
-    @OneToMany(targetEntity = AcaoEntity.class, orphanRemoval = true, cascade = CascadeType.ALL)
     @ToString.Exclude
+    @Builder.Default
+    @OneToMany(targetEntity = AcaoEntity.class, orphanRemoval = true, cascade = CascadeType.ALL)
     private List<AcaoEntity> acoes = new ArrayList<>();
 
     @ManyToOne(targetEntity = EmpresaEntity.class)

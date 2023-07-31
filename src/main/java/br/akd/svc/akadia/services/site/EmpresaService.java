@@ -6,7 +6,6 @@ import br.akd.svc.akadia.models.entities.global.TelefoneEntity;
 import br.akd.svc.akadia.models.entities.sistema.colaboradores.AcessoSistemaEntity;
 import br.akd.svc.akadia.models.entities.sistema.colaboradores.ColaboradorEntity;
 import br.akd.svc.akadia.models.entities.sistema.colaboradores.ConfiguracaoPerfilEntity;
-import br.akd.svc.akadia.models.entities.sistema.colaboradores.ExclusaoColaboradorEntity;
 import br.akd.svc.akadia.models.entities.site.ClienteSistemaEntity;
 import br.akd.svc.akadia.models.entities.site.empresa.CriaEmpresaResponse;
 import br.akd.svc.akadia.models.entities.site.empresa.DadosEmpresaDeletadaEntity;
@@ -20,7 +19,7 @@ import br.akd.svc.akadia.repositories.sistema.colaboradores.impl.ColaboradorRepo
 import br.akd.svc.akadia.repositories.site.impl.ClienteSistemaRepositoryImpl;
 import br.akd.svc.akadia.repositories.site.impl.EmpresaRepositoryImpl;
 import br.akd.svc.akadia.services.exceptions.InvalidRequestException;
-import br.akd.svc.akadia.services.sistema.colaboradores.ColaboradorService;
+import br.akd.svc.akadia.services.sistema.colaboradores.colaborador.ColaboradorService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -309,12 +308,7 @@ public class EmpresaService {
                         .horaUltimaAtualizacao(LocalTime.now().toString())
                         .temaTelaEnum(TemaTelaEnum.TELA_CLARA)
                         .build())
-                .exclusao(ExclusaoColaboradorEntity.builder()
-                        .excluido(false)
-                        .dataExclusao(null)
-                        .horaExclusao(null)
-                        .responsavelExclusao(null)
-                        .build())
+                .exclusao(null)
                 .endereco(null)
                 .telefone(null)
                 .expediente(null)
