@@ -1,6 +1,6 @@
-package br.akd.svc.akadia.services.sistema.colaboradores;
+package br.akd.svc.akadia.services.sistema.colaboradores.acesso;
 
-import br.akd.svc.akadia.models.dto.sistema.colaboradores.responses.AcessoPageResponse;
+import br.akd.svc.akadia.models.dto.sistema.colaboradores.responses.acesso.AcessoPageResponse;
 import br.akd.svc.akadia.models.entities.sistema.colaboradores.AcessoEntity;
 import br.akd.svc.akadia.models.entities.sistema.colaboradores.ColaboradorEntity;
 import br.akd.svc.akadia.models.entities.sistema.colaboradores.mocks.AcessoEntityBuilder;
@@ -8,6 +8,7 @@ import br.akd.svc.akadia.models.entities.sistema.colaboradores.mocks.Colaborador
 import br.akd.svc.akadia.repositories.sistema.colaboradores.ColaboradorRepository;
 import br.akd.svc.akadia.repositories.sistema.colaboradores.impl.ColaboradorRepositoryImpl;
 import br.akd.svc.akadia.services.exceptions.UnauthorizedAccessException;
+import br.akd.svc.akadia.services.sistema.colaboradores.acesso.AcessoService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

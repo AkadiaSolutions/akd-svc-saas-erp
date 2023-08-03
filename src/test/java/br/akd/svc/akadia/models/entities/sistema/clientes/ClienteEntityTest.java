@@ -24,8 +24,8 @@ class ClienteEntityTest {
                 "ClienteEntity(id=1, dataCadastro=2023-02-27, horaCadastro=17:40, dataNascimento=1998-07-21, " +
                         "nome=Gabriel Lagrota, cpfCnpj=582.645.389-32, inscricaoEstadual=145574080114, " +
                         "email=gabrielafonso@mail.com.br, statusCliente=null, tipoPessoa=null, " +
-                        "qtdOrdensRealizadas=null, giroTotal=null, exclusaoCliente=null, endereco=null, " +
-                        "telefone=null, colaboradorResponsavel=null, empresa=null)",
+                        "qtdOrdensRealizadas=null, giroTotal=null, exclusao=null, endereco=null, telefone=null, " +
+                        "colaboradorResponsavel=null, empresa=null)",
                 ClienteEntityBuilder.builder().build().toString()
         );
 
@@ -57,7 +57,7 @@ class ClienteEntityTest {
                 "ClienteEntity(id=1, dataCadastro=2023-02-27, horaCadastro=17:40, dataNascimento=1998-07-21, " +
                         "nome=Gabriel Lagrota, cpfCnpj=582.645.389-32, inscricaoEstadual=145574080114, " +
                         "email=gabrielafonso@mail.com.br, statusCliente=COMUM, tipoPessoa=FISICA, " +
-                        "qtdOrdensRealizadas=0, giroTotal=0.0, exclusaoCliente=null, endereco=null, telefone=null, " +
+                        "qtdOrdensRealizadas=0, giroTotal=0.0, exclusao=null, endereco=null, telefone=null, " +
                         "colaboradorResponsavel=null, empresa=null)",
                 clienteEntity.toString()
         );
@@ -85,8 +85,8 @@ class ClienteEntityTest {
                 "ClienteEntity(id=1, dataCadastro=2023-02-27, horaCadastro=17:40, dataNascimento=1998-07-21, " +
                         "nome=Gabriel Lagrota, cpfCnpj=582.645.389-32, inscricaoEstadual=145574080114, " +
                         "email=gabrielafonso@mail.com.br, statusCliente=null, tipoPessoa=null, " +
-                        "qtdOrdensRealizadas=null, giroTotal=null, exclusaoCliente=null, endereco=null, " +
-                        "telefone=null, colaboradorResponsavel=null, empresa=null)",
+                        "qtdOrdensRealizadas=null, giroTotal=null, exclusao=null, endereco=null, telefone=null, " +
+                        "colaboradorResponsavel=null, empresa=null)",
                 clienteEntity.toString()
         );
     }

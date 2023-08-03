@@ -38,7 +38,7 @@ class ClienteRepositoryImplTest {
         Assertions.assertEquals("ClienteEntity(id=null, dataCadastro=null, horaCadastro=null, " +
                         "dataNascimento=null, nome=null, cpfCnpj=null, inscricaoEstadual=null, email=null, " +
                         "statusCliente=null, tipoPessoa=null, qtdOrdensRealizadas=null, giroTotal=null, " +
-                        "exclusaoCliente=null, endereco=null, telefone=null, colaboradorResponsavel=null, empresa=null)",
+                        "exclusao=null, endereco=null, telefone=null, colaboradorResponsavel=null, empresa=null)",
                 cliente.toString());
     }
 
@@ -66,8 +66,8 @@ class ClienteRepositoryImplTest {
         Assertions.assertEquals("ClienteEntity(id=1, dataCadastro=2023-02-27, horaCadastro=17:40, " +
                         "dataNascimento=1998-07-21, nome=Gabriel Lagrota, cpfCnpj=582.645.389-32, " +
                         "inscricaoEstadual=145574080114, email=gabrielafonso@mail.com.br, statusCliente=null, " +
-                        "tipoPessoa=null, qtdOrdensRealizadas=null, giroTotal=null, exclusaoCliente=null, " +
-                        "endereco=null, telefone=null, colaboradorResponsavel=null, empresa=null)",
+                        "tipoPessoa=null, qtdOrdensRealizadas=null, giroTotal=null, exclusao=null, endereco=null, " +
+                        "telefone=null, colaboradorResponsavel=null, empresa=null)",
                 cliente.toString());
     }
 
@@ -79,8 +79,8 @@ class ClienteRepositoryImplTest {
         Assertions.assertEquals("Optional[ClienteEntity(id=1, dataCadastro=2023-02-27, horaCadastro=17:40, " +
                         "dataNascimento=1998-07-21, nome=Gabriel Lagrota, cpfCnpj=582.645.389-32, " +
                         "inscricaoEstadual=145574080114, email=gabrielafonso@mail.com.br, statusCliente=null, " +
-                        "tipoPessoa=null, qtdOrdensRealizadas=null, giroTotal=null, exclusaoCliente=null, " +
-                        "endereco=null, telefone=null, colaboradorResponsavel=null, empresa=null)]",
+                        "tipoPessoa=null, qtdOrdensRealizadas=null, giroTotal=null, exclusao=null, endereco=null, " +
+                        "telefone=null, colaboradorResponsavel=null, empresa=null)]",
                 clienteRepositoryImpl.implementaBuscaPorCpfCnpjIdentico("47253227822", 1L).toString());
     }
 
@@ -90,10 +90,10 @@ class ClienteRepositoryImplTest {
         when(clienteRepository.buscaPorInscricaoEstadualIdenticaNaEmpresaDaSessaoAtual(anyString(), anyLong()))
                 .thenReturn(Optional.of(ClienteEntityBuilder.builder().build()));
         Assertions.assertEquals("Optional[ClienteEntity(id=1, dataCadastro=2023-02-27, horaCadastro=17:40, " +
-                "dataNascimento=1998-07-21, nome=Gabriel Lagrota, cpfCnpj=582.645.389-32, " +
-                "inscricaoEstadual=145574080114, email=gabrielafonso@mail.com.br, statusCliente=null, " +
-                "tipoPessoa=null, qtdOrdensRealizadas=null, giroTotal=null, exclusaoCliente=null, endereco=null, " +
-                "telefone=null, colaboradorResponsavel=null, empresa=null)]",
+                        "dataNascimento=1998-07-21, nome=Gabriel Lagrota, cpfCnpj=582.645.389-32, " +
+                        "inscricaoEstadual=145574080114, email=gabrielafonso@mail.com.br, statusCliente=null, " +
+                        "tipoPessoa=null, qtdOrdensRealizadas=null, giroTotal=null, exclusao=null, endereco=null, " +
+                        "telefone=null, colaboradorResponsavel=null, empresa=null)]",
                 clienteRepositoryImpl.implementaBuscaPorInscricaoEstadualIdentica(
                 "111111111111", 1L).toString());
     }
@@ -108,7 +108,7 @@ class ClienteRepositoryImplTest {
         Assertions.assertEquals("[ClienteEntity(id=1, dataCadastro=2023-02-27, horaCadastro=17:40, " +
                         "dataNascimento=1998-07-21, nome=Gabriel Lagrota, cpfCnpj=582.645.389-32, " +
                         "inscricaoEstadual=145574080114, email=gabrielafonso@mail.com.br, statusCliente=null, " +
-                        "tipoPessoa=null, qtdOrdensRealizadas=null, giroTotal=null, exclusaoCliente=null, endereco=null, " +
+                        "tipoPessoa=null, qtdOrdensRealizadas=null, giroTotal=null, exclusao=null, endereco=null, " +
                         "telefone=null, colaboradorResponsavel=null, empresa=null)]",
                 clienteRepositoryImpl.implementaBuscaPorIdEmMassa(listaIds).toString());
     }

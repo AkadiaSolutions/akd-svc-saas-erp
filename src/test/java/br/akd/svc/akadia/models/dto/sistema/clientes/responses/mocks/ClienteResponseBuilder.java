@@ -28,7 +28,7 @@ public class ClienteResponseBuilder {
         builder.clienteResponse.setTipoPessoa(TipoPessoaEnum.FISICA);
         builder.clienteResponse.setQtdOrdensRealizadas(0);
         builder.clienteResponse.setGiroTotal(0.0);
-        builder.clienteResponse.setExclusaoCliente(null);
+        builder.clienteResponse.setExclusaoEntity(null);
         builder.clienteResponse.setEndereco(null);
         builder.clienteResponse.setTelefone(null);
         builder.clienteResponse.setNomeColaboradorResponsavel("Fulano");

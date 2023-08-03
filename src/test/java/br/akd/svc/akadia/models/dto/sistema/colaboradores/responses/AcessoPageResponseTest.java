@@ -1,5 +1,6 @@
 package br.akd.svc.akadia.models.dto.sistema.colaboradores.responses;
 
+import br.akd.svc.akadia.models.dto.sistema.colaboradores.responses.acesso.AcessoPageResponse;
 import br.akd.svc.akadia.models.dto.sistema.colaboradores.responses.mocks.AcessoPageResponseBuilder;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;

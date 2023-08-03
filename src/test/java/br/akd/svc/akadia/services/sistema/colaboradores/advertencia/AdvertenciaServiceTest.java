@@ -1,6 +1,6 @@
-package br.akd.svc.akadia.services.sistema.colaboradores;
+package br.akd.svc.akadia.services.sistema.colaboradores.advertencia;
 
-import br.akd.svc.akadia.models.dto.sistema.colaboradores.responses.AdvertenciaPageResponse;
+import br.akd.svc.akadia.models.dto.sistema.colaboradores.responses.advertencia.AdvertenciaPageResponse;
 import br.akd.svc.akadia.models.entities.global.ArquivoEntity;
 import br.akd.svc.akadia.models.entities.sistema.colaboradores.AdvertenciaEntity;
 import br.akd.svc.akadia.models.entities.sistema.colaboradores.ColaboradorEntity;
@@ -10,6 +10,9 @@ import br.akd.svc.akadia.models.enums.global.TipoArquivoEnum;
 import br.akd.svc.akadia.models.enums.sistema.colaboradores.StatusAdvertenciaEnum;
 import br.akd.svc.akadia.repositories.sistema.colaboradores.ColaboradorRepository;
 import br.akd.svc.akadia.repositories.sistema.colaboradores.impl.ColaboradorRepositoryImpl;
+import br.akd.svc.akadia.services.sistema.colaboradores.acao.AcaoService;
+import br.akd.svc.akadia.services.sistema.colaboradores.advertencia.AdvertenciaRelatorioService;
+import br.akd.svc.akadia.services.sistema.colaboradores.advertencia.AdvertenciaService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

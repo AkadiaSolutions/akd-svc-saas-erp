@@ -1,5 +1,6 @@
 package br.akd.svc.akadia.models.dto.sistema.colaboradores.responses;
 
+import br.akd.svc.akadia.models.dto.sistema.colaboradores.responses.acesso.AcessoSistemaResponse;
 import br.akd.svc.akadia.models.dto.sistema.colaboradores.responses.mocks.AcessoSistemaResponseBuilder;
 import br.akd.svc.akadia.models.enums.sistema.colaboradores.PermissaoEnum;
 import org.junit.jupiter.api.Assertions;
@@ -18,7 +19,7 @@ class AcessoSistemaResponseTest {
     @DisplayName("Deve testar dataBuilder")
     void deveTestarDataBuilder() {
         Assertions.assertEquals(
-                "AcessoSistemaResponse(acessoSistemaAtivo=true, permissaoEnum=LEITURA_AVANCADA_ALTERACAO, privilegios=[])",
+                "AcessoSistemaResponse(acessoSistemaAtivo=true, permissaoEnum=LEITURA_AVANCADA_ALTERACAO)",
                 AcessoSistemaResponseBuilder.builder().build().toString()
         );
 
@@ -33,8 +34,7 @@ class AcessoSistemaResponseTest {
                 new HashSet<>()
         );
         Assertions.assertEquals(
-                "AcessoSistemaResponse(acessoSistemaAtivo=true, permissaoEnum=LEITURA_AVANCADA_ALTERACAO, " +
-                        "privilegios=[])",
+                "AcessoSistemaResponse(acessoSistemaAtivo=true, permissaoEnum=LEITURA_AVANCADA_ALTERACAO)",
                 acessoSistemaResponse.toString()
         );
 
@@ -49,7 +49,7 @@ class AcessoSistemaResponseTest {
                 .privilegios(new HashSet<>())
                 .build();
         Assertions.assertEquals(
-                "AcessoSistemaResponse(acessoSistemaAtivo=true, permissaoEnum=LEITURA_BASICA, privilegios=[])",
+                "AcessoSistemaResponse(acessoSistemaAtivo=true, permissaoEnum=LEITURA_BASICA)",
                 acessoSistemaResponse.toString()
         );
     }

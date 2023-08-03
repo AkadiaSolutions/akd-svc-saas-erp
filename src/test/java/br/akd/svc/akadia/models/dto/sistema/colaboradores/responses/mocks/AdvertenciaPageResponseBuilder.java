@@ -1,6 +1,6 @@
 package br.akd.svc.akadia.models.dto.sistema.colaboradores.responses.mocks;
 
-import br.akd.svc.akadia.models.dto.sistema.colaboradores.responses.AdvertenciaPageResponse;
+import br.akd.svc.akadia.models.dto.sistema.colaboradores.responses.advertencia.AdvertenciaPageResponse;
 
 import java.util.ArrayList;
 

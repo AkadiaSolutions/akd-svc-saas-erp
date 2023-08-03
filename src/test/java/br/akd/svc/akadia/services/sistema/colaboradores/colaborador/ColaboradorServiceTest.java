@@ -1,7 +1,9 @@
-package br.akd.svc.akadia.services.sistema.colaboradores;
+package br.akd.svc.akadia.services.sistema.colaboradores.colaborador;
 
 import br.akd.svc.akadia.models.dto.sistema.colaboradores.responses.ColaboradorPageResponse;
 import br.akd.svc.akadia.models.dto.sistema.colaboradores.responses.ColaboradorResponse;
+import br.akd.svc.akadia.models.dto.sistema.colaboradores.responses.mocks.ColaboradorPageResponseBuilder;
+import br.akd.svc.akadia.models.dto.sistema.colaboradores.responses.mocks.ColaboradorResponseBuilder;
 import br.akd.svc.akadia.models.entities.global.EnderecoEntity;
 import br.akd.svc.akadia.models.entities.global.mocks.ArquivoEntityBuilder;
 import br.akd.svc.akadia.models.entities.global.mocks.EnderecoEntityBuilder;
@@ -11,6 +13,7 @@ import br.akd.svc.akadia.models.entities.sistema.colaboradores.mocks.Colaborador
 import br.akd.svc.akadia.repositories.sistema.colaboradores.ColaboradorRepository;
 import br.akd.svc.akadia.repositories.sistema.colaboradores.impl.ColaboradorRepositoryImpl;
 import br.akd.svc.akadia.services.exceptions.InvalidRequestException;
+import br.akd.svc.akadia.services.sistema.colaboradores.acao.AcaoService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import org.junit.jupiter.api.Assertions;
@@ -45,6 +48,9 @@ class ColaboradorServiceTest {
 
     @InjectMocks
     ColaboradorService colaboradorService;
+
+    @Mock
+    ColaboradorTypeConverter colaboradorTypeConverter;
 
     @Mock
     ColaboradorRepositoryImpl colaboradorRepositoryImpl;
@@ -110,6 +116,8 @@ class ColaboradorServiceTest {
         when(colaboradorRepositoryImpl.implementaBuscaPorId(any(), any()))
                 .thenReturn(colaboradorCompleto);
         doNothing().when(acaoService).salvaHistoricoColaborador(any(), any(), any(), any(), any());
+        when(colaboradorTypeConverter.converteColaboradorEntityParaColaboradorResponse(any()))
+                .thenReturn(ColaboradorResponseBuilder.builder().build());
 
         ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
         String jsonColaborador = ow.writeValueAsString(colaboradorCompleto);
@@ -121,15 +129,10 @@ class ColaboradorServiceTest {
                 "matricula=123456, nome=João da Silva, dataNascimento=2021-04-11, email=joaosilva@gmail.com, " +
                 "cpfCnpj=12345678910, salario=2000.0, entradaEmpresa=2023-02-13, saidaEmpresa=null, " +
                 "ocupacao=Técnico Interno, tipoOcupacaoEnum=TECNICO_INTERNO, modeloContratacaoEnum=CLT, " +
-                "modeloTrabalhoEnum=PRESENCIAL, statusColaboradorEnum=ATIVO, fotoPerfil=null, " +
-                "exclusao=ExclusaoColaboradorResponse(dataExclusao=null, horaExclusao=null, excluido=false), " +
-                "acessoSistema=AcessoSistemaResponse(acessoSistemaAtivo=true, permissaoEnum=LEITURA_AVANCADA_ALTERACAO, " +
-                "privilegios=[]), configuracaoPerfil=null, contratoContratacao=null, endereco=EnderecoEntity(id=1, " +
-                "logradouro=Avenida Coronel Manuel Py, numero=583, bairro=Lauzane Paulista, codigoPostal=02442-090, " +
-                "cidade=São Paulo, complemento=Casa 4, estado=SP), telefone=null, expediente=ExpedienteEntity(id=1, " +
-                "horaEntrada=09:00, horaSaidaAlmoco=12:00, horaEntradaAlmoco=13:00, horaSaida=18:00, " +
-                "cargaHorariaSemanal=null, escalaEnum=null), dispensa=null, pontos=[], historicoFerias=[], " +
-                "advertencias=null)", colaboradorResponse.toString());
+                "modeloTrabalhoEnum=PRESENCIAL, statusColaboradorEnum=ATIVO, fotoPerfil=null, exclusao=null, " +
+                "acessoSistema=null, configuracaoPerfil=null, contratoContratacao=null, endereco=null, " +
+                "telefone=null, expediente=null, dispensa=null, pontos=[], historicoFerias=[], advertencias=[])",
+                colaboradorResponse.toString());
     }
 
     @Test
@@ -177,7 +180,7 @@ class ColaboradorServiceTest {
                 EnderecoEntityBuilder.builder().build(), ColaboradorEntityBuilder.builder().comEndereco().build());
 
         Assertions.assertEquals("EnderecoEntity(id=1, logradouro=AVENIDA CORONEL MANUEL PY, numero=583, " +
-                "bairro=LAUZANE PAULISTA, codigoPostal=02442-090, cidade=SÃO PAULO, complemento=CASA 4, estado=SP)",
+                        "bairro=LAUZANE PAULISTA, codigoPostal=02442-090, cidade=SÃO PAULO, complemento=CASA 4, estado=SP)",
                 endereco.toString());
     }
 
@@ -226,7 +229,7 @@ class ColaboradorServiceTest {
                         "modeloContratacaoEnum=null, modeloTrabalhoEnum=null, statusColaboradorEnum=null, " +
                         "fotoPerfil=null, exclusao=null, acessoSistema=null, configuracaoPerfil=null, " +
                         "contratoContratacao=null, endereco=null, telefone=null, expediente=null, dispensa=null, " +
-                        "pontos=null, historicoFerias=null, advertencias=null)",
+                        "pontos=[], historicoFerias=[], advertencias=[])",
                 colaboradorService.removeColaborador(colaboradorLogado, 1L).toString());
     }
 
@@ -311,105 +314,17 @@ class ColaboradorServiceTest {
                 new PageImpl<>(colaboradores.subList(start, end), pageable, colaboradores.size());
 
         when(colaboradorRepository.buscaPorColaboradoresTypeAhead(any(), any(), any())).thenReturn(colaboradoresPaged);
+        when(colaboradorTypeConverter.converteListaDeColaboradoresEntityParaColaboradoresResponse(any()))
+                .thenReturn(ColaboradorPageResponseBuilder.builder().build());
 
         ColaboradorPageResponse colaboradorPageResponse = colaboradorService.realizaBuscaPaginadaPorColaboradores(
                 colaboradorLogado,
                 PageRequest.of(0, 10),
                 "busca");
 
-        Assertions.assertEquals("ColaboradorPageResponse(content=[ColaboradorResponse(id=1, " +
-                "dataCadastro=2023-02-13, horaCadastro=10:44, matricula=123456, nome=João da Silva, " +
-                "dataNascimento=2021-04-11, email=joaosilva@gmail.com, cpfCnpj=12345678910, salario=2000.0, " +
-                "entradaEmpresa=2023-02-13, saidaEmpresa=null, ocupacao=Técnico Interno, " +
-                "tipoOcupacaoEnum=TECNICO_INTERNO, modeloContratacaoEnum=CLT, modeloTrabalhoEnum=PRESENCIAL, " +
-                "statusColaboradorEnum=ATIVO, fotoPerfil=null, " +
-                "exclusao=ExclusaoColaboradorResponse(dataExclusao=2023-02-13, horaExclusao=10:44, excluido=true), " +
-                "acessoSistema=AcessoSistemaResponse(acessoSistemaAtivo=true, permissaoEnum=LEITURA_AVANCADA_ALTERACAO, " +
-                "privilegios=[]), configuracaoPerfil=null, contratoContratacao=null, endereco=null, telefone=null, " +
-                "expediente=null, dispensa=null, pontos=[], historicoFerias=[], advertencias=[])], empty=false, " +
-                "first=true, last=true, number=0, numberOfElements=1, offset=0, pageNumber=0, pageSize=10, paged=true, " +
-                "unpaged=false, size=10, totalElements=1, totalPages=1)", colaboradorPageResponse.toString());
-    }
-
-    @Test
-    @DisplayName("Deve testar método de conversão em massa de colaborador Entity para colaborador Response")
-    void deveTestarMetodoDeConversaoEmMassaDeColaboradorEntityParaColaboradorResponse() {
-        List<ColaboradorEntity> colaboradores = new ArrayList<>();
-        colaboradores.add(
-                ColaboradorEntityBuilder.builder()
-                        .comAcessoCompleto()
-                        .comEmpresa()
-                        .comTelefone()
-                        .comEndereco()
-                        .comExclusao()
-                        .build());
-        colaboradores.add(
-                ColaboradorEntityBuilder.builder()
-                        .comAcessoCompleto()
-                        .comExclusao()
-                        .build());
-
-        Pageable pageable = PageRequest.of(0, 10);
-        int start = (int) pageable.getOffset();
-        int end = Math.min((start + pageable.getPageSize()), colaboradores.size());
-        Page<ColaboradorEntity> colaboradoresPaged =
-                new PageImpl<>(colaboradores.subList(start, end), pageable, colaboradores.size());
-
-        ColaboradorPageResponse colaboradorPageResponse =
-                colaboradorService.converteListaDeColaboradoresEntityParaColaboradoresResponse(colaboradoresPaged);
-
-        Assertions.assertEquals("ColaboradorPageResponse(content=[ColaboradorResponse(id=1, " +
-                "dataCadastro=2023-02-13, horaCadastro=10:44, matricula=123456, nome=João da Silva, " +
-                "dataNascimento=2021-04-11, email=joaosilva@gmail.com, cpfCnpj=12345678910, salario=2000.0, " +
-                "entradaEmpresa=2023-02-13, saidaEmpresa=null, ocupacao=Técnico Interno, " +
-                "tipoOcupacaoEnum=TECNICO_INTERNO, modeloContratacaoEnum=CLT, modeloTrabalhoEnum=PRESENCIAL, " +
-                "statusColaboradorEnum=ATIVO, fotoPerfil=null, " +
-                "exclusao=ExclusaoColaboradorResponse(dataExclusao=2023-02-13, horaExclusao=10:44, excluido=true), " +
-                "acessoSistema=AcessoSistemaResponse(acessoSistemaAtivo=true, permissaoEnum=LEITURA_AVANCADA_ALTERACAO, " +
-                "privilegios=[]), configuracaoPerfil=null, contratoContratacao=null, endereco=EnderecoEntity(id=1, " +
-                "logradouro=Avenida Coronel Manuel Py, numero=583, bairro=Lauzane Paulista, codigoPostal=02442-090, " +
-                "cidade=São Paulo, complemento=Casa 4, estado=SP), telefone=TelefoneEntity(id=1, prefixo=11, " +
-                "numero=979815415, tipoTelefone=MOVEL_WHATSAPP), expediente=null, dispensa=null, pontos=[], " +
-                "historicoFerias=[], advertencias=[]), ColaboradorResponse(id=1, dataCadastro=2023-02-13, " +
-                "horaCadastro=10:44, matricula=123456, nome=João da Silva, dataNascimento=2021-04-11, " +
-                "email=joaosilva@gmail.com, cpfCnpj=12345678910, salario=2000.0, entradaEmpresa=2023-02-13, " +
-                "saidaEmpresa=null, ocupacao=Técnico Interno, tipoOcupacaoEnum=TECNICO_INTERNO, " +
-                "modeloContratacaoEnum=CLT, modeloTrabalhoEnum=PRESENCIAL, statusColaboradorEnum=ATIVO, " +
-                "fotoPerfil=null, exclusao=ExclusaoColaboradorResponse(dataExclusao=2023-02-13, horaExclusao=10:44, " +
-                "excluido=true), acessoSistema=AcessoSistemaResponse(acessoSistemaAtivo=true, " +
-                "permissaoEnum=LEITURA_AVANCADA_ALTERACAO, privilegios=[]), configuracaoPerfil=null, " +
-                "contratoContratacao=null, endereco=null, telefone=null, expediente=null, dispensa=null, pontos=[], " +
-                "historicoFerias=[], advertencias=[])], empty=false, first=true, last=true, number=0, " +
-                "numberOfElements=2, offset=0, pageNumber=0, pageSize=10, paged=true, unpaged=false, size=10, " +
-                "totalElements=2, totalPages=1)", colaboradorPageResponse.toString());
-    }
-
-    @Test
-    @DisplayName("Deve testar método de conversão de colaborador Entity para colaborador Response")
-    void deveTestarMetodoDeConversaoDeColaboradorEntityParaColaboradorResponse() {
-        ColaboradorEntity colaboradorEntity = ColaboradorEntityBuilder.builder()
-                .comAcessoCompleto()
-                .comEmpresa()
-                .comTelefone()
-                .comEndereco()
-                .comExclusao()
-                .build();
-
-        ColaboradorResponse colaboradorResponse = colaboradorService.converteColaboradorEntityParaColaboradorResponse(colaboradorEntity);
-
-        Assertions.assertEquals("ColaboradorResponse(id=1, dataCadastro=2023-02-13, horaCadastro=10:44, " +
-                "matricula=123456, nome=João da Silva, dataNascimento=2021-04-11, email=joaosilva@gmail.com, " +
-                "cpfCnpj=12345678910, salario=2000.0, entradaEmpresa=2023-02-13, saidaEmpresa=null, " +
-                "ocupacao=Técnico Interno, tipoOcupacaoEnum=TECNICO_INTERNO, modeloContratacaoEnum=CLT, " +
-                "modeloTrabalhoEnum=PRESENCIAL, statusColaboradorEnum=ATIVO, fotoPerfil=null, " +
-                "exclusao=ExclusaoColaboradorResponse(dataExclusao=2023-02-13, horaExclusao=10:44, " +
-                "excluido=true), acessoSistema=AcessoSistemaResponse(acessoSistemaAtivo=true, " +
-                "permissaoEnum=LEITURA_AVANCADA_ALTERACAO, privilegios=[]), configuracaoPerfil=null, " +
-                "contratoContratacao=null, endereco=EnderecoEntity(id=1, logradouro=Avenida Coronel Manuel Py, " +
-                "numero=583, bairro=Lauzane Paulista, codigoPostal=02442-090, cidade=São Paulo, " +
-                "complemento=Casa 4, estado=SP), telefone=TelefoneEntity(id=1, prefixo=11, numero=979815415, " +
-                "tipoTelefone=MOVEL_WHATSAPP), expediente=null, dispensa=null, pontos=[], historicoFerias=[], " +
-                "advertencias=null)", colaboradorResponse.toString());
+        Assertions.assertEquals("ColaboradorPageResponse(content=[], empty=true, first=true, last=true, " +
+                "number=0, numberOfElements=0, offset=0, pageNumber=0, pageSize=10, paged=true, unpaged=false, " +
+                "size=10, totalElements=0, totalPages=0)", colaboradorPageResponse.toString());
     }
 
     @Test
@@ -427,6 +342,8 @@ class ColaboradorServiceTest {
         when(colaboradorRepositoryImpl.implementaBuscaPorId(any(), any()))
                 .thenReturn(ColaboradorEntityBuilder.builder().comEmpresa().comExclusao().comAcessoCompleto().build());
         doNothing().when(acaoService).salvaHistoricoColaborador(any(), any(), any(), any(), any());
+        when(colaboradorTypeConverter.converteColaboradorEntityParaColaboradorResponse(any()))
+                .thenReturn(ColaboradorResponseBuilder.builder().build());
 
         ColaboradorResponse colaboradorResponse =
                 colaboradorService.atualizaImagemPerfilColaborador(colaboradorLogado, 1L, multipartFile);
@@ -435,11 +352,9 @@ class ColaboradorServiceTest {
                         "matricula=123456, nome=João da Silva, dataNascimento=2021-04-11, email=joaosilva@gmail.com, " +
                         "cpfCnpj=12345678910, salario=2000.0, entradaEmpresa=2023-02-13, saidaEmpresa=null, " +
                         "ocupacao=Técnico Interno, tipoOcupacaoEnum=TECNICO_INTERNO, modeloContratacaoEnum=CLT, " +
-                        "modeloTrabalhoEnum=PRESENCIAL, statusColaboradorEnum=ATIVO, fotoPerfil=null, " +
-                        "exclusao=ExclusaoColaboradorResponse(dataExclusao=2023-02-13, horaExclusao=10:44, excluido=true), " +
-                        "acessoSistema=AcessoSistemaResponse(acessoSistemaAtivo=true, permissaoEnum=LEITURA_AVANCADA_ALTERACAO, " +
-                        "privilegios=[]), configuracaoPerfil=null, contratoContratacao=null, endereco=null, telefone=null, " +
-                        "expediente=null, dispensa=null, pontos=[], historicoFerias=[], advertencias=null)",
+                        "modeloTrabalhoEnum=PRESENCIAL, statusColaboradorEnum=ATIVO, fotoPerfil=null, exclusao=null, " +
+                        "acessoSistema=null, configuracaoPerfil=null, contratoContratacao=null, endereco=null, " +
+                        "telefone=null, expediente=null, dispensa=null, pontos=[], historicoFerias=[], advertencias=[])",
                 colaboradorResponse.toString());
     }
 

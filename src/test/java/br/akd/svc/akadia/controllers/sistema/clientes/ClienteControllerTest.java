@@ -1,7 +1,7 @@
 package br.akd.svc.akadia.controllers.sistema.clientes;
 
 import br.akd.svc.akadia.config.security.JWTUtil;
-import br.akd.svc.akadia.models.dto.sistema.clientes.mocks.ClienteDtoBuilder;
+import br.akd.svc.akadia.models.dto.sistema.clientes.requests.mocks.ClienteRequestBuilder;
 import br.akd.svc.akadia.models.dto.sistema.clientes.responses.ClientePageResponse;
 import br.akd.svc.akadia.models.dto.sistema.clientes.responses.ClienteResponse;
 import br.akd.svc.akadia.models.dto.sistema.clientes.responses.mocks.ClientePageResponseBuilder;
@@ -9,6 +9,7 @@ import br.akd.svc.akadia.models.dto.sistema.clientes.responses.mocks.ClienteResp
 import br.akd.svc.akadia.models.entities.sistema.colaboradores.mocks.ColaboradorEntityBuilder;
 import br.akd.svc.akadia.services.sistema.clientes.ClienteRelatorioService;
 import br.akd.svc.akadia.services.sistema.clientes.ClienteService;
+import br.akd.svc.akadia.services.sistema.clientes.ClienteValidationService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -42,6 +43,9 @@ class ClienteControllerTest {
     ClienteService clienteService;
 
     @Mock
+    ClienteValidationService clienteValidationService;
+
+    @Mock
     ClienteRelatorioService relatorioService;
 
     @Mock
@@ -56,12 +60,12 @@ class ClienteControllerTest {
         when(jwtUtil.obtemUsuarioAtivo(mockedRequest)).thenReturn(ColaboradorEntityBuilder.builder().comEmpresa().build());
 
         ResponseEntity<ClienteResponse> cliente =
-                clienteController.criaNovoCliente(mockedRequest, ClienteDtoBuilder.builder().build());
+                clienteController.criaNovoCliente(mockedRequest, ClienteRequestBuilder.builder().build());
 
         Assertions.assertEquals("<201 CREATED Created,ClienteResponse(id=null, dataCadastro=null, " +
                         "horaCadastro=null, dataNascimento=null, nome=null, cpfCnpj=null, inscricaoEstadual=null, " +
                         "email=null, statusCliente=null, tipoPessoa=null, qtdOrdensRealizadas=null, giroTotal=null, " +
-                        "exclusaoCliente=null, endereco=null, telefone=null, nomeColaboradorResponsavel=null),[]>",
+                        "exclusaoEntity=null, endereco=null, telefone=null, nomeColaboradorResponsavel=null),[]>",
                 cliente.toString());
     }
 
@@ -74,12 +78,12 @@ class ClienteControllerTest {
         when(jwtUtil.obtemUsuarioAtivo(mockedRequest)).thenReturn(ColaboradorEntityBuilder.builder().comEmpresa().build());
 
         ResponseEntity<ClienteResponse> cliente =
-                clienteController.atualizaCliente(mockedRequest, ClienteDtoBuilder.builder().build(), 1L);
+                clienteController.atualizaCliente(mockedRequest, ClienteRequestBuilder.builder().build(), 1L);
 
         Assertions.assertEquals("<200 OK OK,ClienteResponse(id=null, dataCadastro=null, horaCadastro=null, " +
-                "dataNascimento=null, nome=null, cpfCnpj=null, inscricaoEstadual=null, email=null, " +
-                "statusCliente=null, tipoPessoa=null, qtdOrdensRealizadas=null, giroTotal=null, exclusaoCliente=null, " +
-                "endereco=null, telefone=null, nomeColaboradorResponsavel=null),[]>", cliente.toString());
+                "dataNascimento=null, nome=null, cpfCnpj=null, inscricaoEstadual=null, email=null, statusCliente=null, " +
+                "tipoPessoa=null, qtdOrdensRealizadas=null, giroTotal=null, exclusaoEntity=null, endereco=null, " +
+                "telefone=null, nomeColaboradorResponsavel=null),[]>", cliente.toString());
     }
 
     @Test
@@ -100,6 +104,8 @@ class ClienteControllerTest {
 
         HttpServletRequest mockedRequest = Mockito.mock(HttpServletRequest.class);
         when(jwtUtil.obtemUsuarioAtivo(mockedRequest)).thenReturn(ColaboradorEntityBuilder.builder().comEmpresa().build());
+
+
 
         ResponseEntity<?> cliente =
                 clienteController.verificaDuplicidadeInscricaoEstadual(mockedRequest, "111111111111");
@@ -146,10 +152,10 @@ class ClienteControllerTest {
         ResponseEntity<ClienteResponse> cliente =
                 clienteController.removeCliente(mockedRequest, 1L);
 
-        Assertions.assertEquals("<200 OK OK,ClienteResponse(id=1, dataCadastro=2023-02-27, " +
-                "horaCadastro=17:40, dataNascimento=1998-07-21, nome=Gabriel Lagrota, cpfCnpj=582.645.389-32, " +
+        Assertions.assertEquals("<200 OK OK,ClienteResponse(id=1, dataCadastro=2023-02-27, horaCadastro=17:40, " +
+                "dataNascimento=1998-07-21, nome=Gabriel Lagrota, cpfCnpj=582.645.389-32, " +
                 "inscricaoEstadual=145574080114, email=gabrielafonso@mail.com.br, statusCliente=COMUM, " +
-                "tipoPessoa=FISICA, qtdOrdensRealizadas=0, giroTotal=0.0, exclusaoCliente=null, endereco=null, " +
+                "tipoPessoa=FISICA, qtdOrdensRealizadas=0, giroTotal=0.0, exclusaoEntity=null, endereco=null, " +
                 "telefone=null, nomeColaboradorResponsavel=Fulano),[]>", cliente.toString());
     }
 

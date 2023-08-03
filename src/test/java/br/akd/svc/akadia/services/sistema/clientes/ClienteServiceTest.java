@@ -1,20 +1,23 @@
 package br.akd.svc.akadia.services.sistema.clientes;
 
-import br.akd.svc.akadia.models.dto.sistema.clientes.mocks.ClienteDtoBuilder;
+import br.akd.svc.akadia.models.dto.sistema.clientes.requests.mocks.ClienteRequestBuilder;
 import br.akd.svc.akadia.models.dto.sistema.clientes.responses.ClientePageResponse;
 import br.akd.svc.akadia.models.dto.sistema.clientes.responses.ClienteResponse;
+import br.akd.svc.akadia.models.dto.sistema.clientes.responses.mocks.ClientePageResponseBuilder;
+import br.akd.svc.akadia.models.dto.sistema.clientes.responses.mocks.ClienteResponseBuilder;
 import br.akd.svc.akadia.models.entities.sistema.clientes.ClienteEntity;
 import br.akd.svc.akadia.models.entities.sistema.clientes.mocks.ClienteEntityBuilder;
 import br.akd.svc.akadia.models.entities.sistema.colaboradores.mocks.ColaboradorEntityBuilder;
 import br.akd.svc.akadia.repositories.sistema.clientes.ClienteRepository;
 import br.akd.svc.akadia.repositories.sistema.clientes.impl.ClienteRepositoryImpl;
 import br.akd.svc.akadia.services.exceptions.InvalidRequestException;
-import br.akd.svc.akadia.services.sistema.colaboradores.AcaoService;
+import br.akd.svc.akadia.services.sistema.colaboradores.acao.AcaoService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -28,8 +31,7 @@ import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -38,6 +40,12 @@ class ClienteServiceTest {
 
     @InjectMocks
     ClienteService clienteService;
+
+    @Mock
+    ClienteValidationService clienteValidationService;
+
+    @Mock
+    ClienteTypeConverter clienteTypeConverter;
 
     @Mock
     ClienteRepositoryImpl clienteRepositoryImpl;
@@ -60,22 +68,27 @@ class ClienteServiceTest {
 
         doNothing().when(acaoService).salvaHistoricoColaborador(any(), any(), any(), any(), any());
 
+        when(clienteTypeConverter.converteClienteEntityParaClienteResponse(any()))
+                .thenReturn(ClienteResponseBuilder.builder().build());
+
+        when(clienteTypeConverter.converteClienteEntityParaClienteResponse(any()))
+                .thenReturn(ClienteResponseBuilder.builder().build());
+
         ClienteResponse clienteResponse = clienteService.criaNovoCliente(
                 ColaboradorEntityBuilder.builder()
                         .comEmpresa()
                         .comAcessoCompleto()
                         .build(),
-                ClienteDtoBuilder.builder()
-                        .comObjetoExclusaoFalse()
+                ClienteRequestBuilder.builder()
                         .comEndereco()
                         .comTelefone()
                         .build());
 
         Assertions.assertEquals("ClienteResponse(id=1, dataCadastro=2023-02-27, horaCadastro=17:40, " +
-                "dataNascimento=1998-07-21, nome=Gabriel Lagrota, cpfCnpj=582.645.389-32, inscricaoEstadual=145574080114, " +
-                "email=gabrielafonso@mail.com.br, statusCliente=null, tipoPessoa=null, qtdOrdensRealizadas=null, " +
-                "giroTotal=null, exclusaoCliente=ExclusaoClienteResponse(dataExclusao=null, horaExclusao=null, " +
-                "excluido=false), endereco=null, telefone=null, nomeColaboradorResponsavel=João da Silva)", clienteResponse.toString());
+                "dataNascimento=1998-07-21, nome=Gabriel Lagrota, cpfCnpj=582.645.389-32, " +
+                "inscricaoEstadual=145574080114, email=gabrielafonso@mail.com.br, statusCliente=COMUM, " +
+                "tipoPessoa=FISICA, qtdOrdensRealizadas=0, giroTotal=0.0, exclusaoEntity=null, endereco=null, " +
+                "telefone=null, nomeColaboradorResponsavel=Fulano)", clienteResponse.toString());
     }
 
     @Test
@@ -90,24 +103,25 @@ class ClienteServiceTest {
 
         doNothing().when(acaoService).salvaHistoricoColaborador(any(), any(), any(), any(), any());
 
+        when(clienteTypeConverter.converteClienteEntityParaClienteResponse(any()))
+                .thenReturn(ClienteResponseBuilder.builder().build());
+
         ClienteResponse cliente = clienteService.atualizaCliente(
                 ColaboradorEntityBuilder.builder()
                         .comEmpresa()
                         .comAcessoCompleto()
                         .build(),
                 1L,
-                ClienteDtoBuilder.builder()
-                        .comObjetoExclusaoFalse()
+                ClienteRequestBuilder.builder()
                         .comTelefone()
                         .comEndereco()
                         .build());
 
         Assertions.assertEquals("ClienteResponse(id=1, dataCadastro=2023-02-27, horaCadastro=17:40, " +
                         "dataNascimento=1998-07-21, nome=Gabriel Lagrota, cpfCnpj=582.645.389-32, " +
-                        "inscricaoEstadual=145574080114, email=gabrielafonso@mail.com.br, statusCliente=null, " +
-                        "tipoPessoa=null, qtdOrdensRealizadas=null, giroTotal=null, " +
-                        "exclusaoCliente=ExclusaoClienteResponse(dataExclusao=null, horaExclusao=null, excluido=false), " +
-                        "endereco=null, telefone=null, nomeColaboradorResponsavel=João da Silva)",
+                        "inscricaoEstadual=145574080114, email=gabrielafonso@mail.com.br, statusCliente=COMUM, " +
+                        "tipoPessoa=FISICA, qtdOrdensRealizadas=0, giroTotal=0.0, exclusaoEntity=null, endereco=null, " +
+                        "telefone=null, nomeColaboradorResponsavel=Fulano)",
                 cliente.toString());
     }
 
@@ -117,8 +131,11 @@ class ClienteServiceTest {
         when(clienteRepositoryImpl.implementaBuscaPorCpfCnpjIdentico(any(), any()))
                 .thenReturn(Optional.of(ClienteEntityBuilder.builder().build()));
 
+        doThrow(new InvalidRequestException("O CPF informado já existe"))
+                .when(clienteValidationService).validaSeCpfCnpjJaExiste(any(), any());
+
         try {
-            clienteService.validaSeCpfCnpjJaExiste("12345678910", 1L);
+            clienteValidationService.validaSeCpfCnpjJaExiste("12345678910", 1L);
             Assertions.fail();
         } catch (InvalidRequestException invalidRequestException) {
             Assertions.assertEquals("O CPF informado já existe",
@@ -132,8 +149,11 @@ class ClienteServiceTest {
         when(clienteRepositoryImpl.implementaBuscaPorCpfCnpjIdentico(any(), any()))
                 .thenReturn(Optional.of(ClienteEntityBuilder.builder().build()));
 
+        doThrow(new InvalidRequestException("O CNPJ informado já existe"))
+                .when(clienteValidationService).validaSeCpfCnpjJaExiste(any(), any());
+
         try {
-            clienteService.validaSeCpfCnpjJaExiste("72381189000110", 1L);
+            clienteValidationService.validaSeCpfCnpjJaExiste("72381189000110", 1L);
             Assertions.fail();
         } catch (InvalidRequestException invalidRequestException) {
             Assertions.assertEquals("O CNPJ informado já existe",
@@ -147,8 +167,11 @@ class ClienteServiceTest {
         when(clienteRepositoryImpl.implementaBuscaPorInscricaoEstadualIdentica(any(), any()))
                 .thenReturn(Optional.of(ClienteEntityBuilder.builder().build()));
 
+        doThrow(new InvalidRequestException("A inscrição estadual informada já existe"))
+                .when(clienteValidationService).validaSeInscricaoEstadualJaExiste(any(), any());
+
         try {
-            clienteService.validaSeInscricaoEstadualJaExiste("12.123.123.12", 1L);
+            clienteValidationService.validaSeInscricaoEstadualJaExiste("12.123.123.12", 1L);
             Assertions.fail();
         } catch (InvalidRequestException invalidRequestException) {
             Assertions.assertEquals("A inscrição estadual informada já existe",
@@ -180,12 +203,14 @@ class ClienteServiceTest {
         when(clienteRepositoryImpl.implementaPersistencia(any()))
                 .thenReturn(ClienteEntityBuilder.builder().comColaborador().comExclusao(false).build());
 
+        when(clienteTypeConverter.converteClienteEntityParaClienteResponse(any()))
+                .thenReturn(ClienteResponseBuilder.builder().build());
+
         Assertions.assertEquals("ClienteResponse(id=1, dataCadastro=2023-02-27, horaCadastro=17:40, " +
                         "dataNascimento=1998-07-21, nome=Gabriel Lagrota, cpfCnpj=582.645.389-32, " +
-                        "inscricaoEstadual=145574080114, email=gabrielafonso@mail.com.br, statusCliente=null, " +
-                        "tipoPessoa=null, qtdOrdensRealizadas=null, giroTotal=null, " +
-                        "exclusaoCliente=ExclusaoClienteResponse(dataExclusao=null, horaExclusao=null, excluido=false), " +
-                        "endereco=null, telefone=null, nomeColaboradorResponsavel=João da Silva)",
+                        "inscricaoEstadual=145574080114, email=gabrielafonso@mail.com.br, statusCliente=COMUM, " +
+                        "tipoPessoa=FISICA, qtdOrdensRealizadas=0, giroTotal=0.0, exclusaoEntity=null, " +
+                        "endereco=null, telefone=null, nomeColaboradorResponsavel=Fulano)",
                 clienteService.removeCliente(ColaboradorEntityBuilder.builder().comEmpresa().build(), 1L).toString());
     }
 
@@ -194,6 +219,10 @@ class ClienteServiceTest {
     void deveTestarMetodoDeRemocaoDeClienteComClienteJaExcluido() {
         when(clienteRepositoryImpl.implementaBuscaPorId(anyLong(), anyLong()))
                 .thenReturn(ClienteEntityBuilder.builder().comExclusao(true).build());
+
+        Mockito.doThrow(new InvalidRequestException("O cliente selecionado já foi excluído"))
+                .when(clienteValidationService).validaSeClienteEstaExcluido(any(), any());
+
         try {
             clienteService.removeCliente(ColaboradorEntityBuilder.builder().comEmpresa().build(), 1L);
             Assertions.fail();
@@ -239,16 +268,18 @@ class ClienteServiceTest {
         when(clienteRepositoryImpl.implementaBuscaPorId(any(), any()))
                 .thenReturn(ClienteEntityBuilder.builder().comColaborador().comExclusao(false).build());
 
+        when(clienteTypeConverter.converteClienteEntityParaClienteResponse(any()))
+                .thenReturn(ClienteResponseBuilder.builder().build());
+
         ClienteResponse clienteResponse = clienteService.realizaBuscaDeClientePorId(
                 ColaboradorEntityBuilder.builder().comEmpresa().build(),
                 1L);
 
         Assertions.assertEquals("ClienteResponse(id=1, dataCadastro=2023-02-27, horaCadastro=17:40, " +
                 "dataNascimento=1998-07-21, nome=Gabriel Lagrota, cpfCnpj=582.645.389-32, " +
-                "inscricaoEstadual=145574080114, email=gabrielafonso@mail.com.br, statusCliente=null, tipoPessoa=null, " +
-                "qtdOrdensRealizadas=null, giroTotal=null, exclusaoCliente=ExclusaoClienteResponse(dataExclusao=null, " +
-                "horaExclusao=null, excluido=false), endereco=null, telefone=null, " +
-                "nomeColaboradorResponsavel=João da Silva)", clienteResponse.toString());
+                "inscricaoEstadual=145574080114, email=gabrielafonso@mail.com.br, statusCliente=COMUM, " +
+                "tipoPessoa=FISICA, qtdOrdensRealizadas=0, giroTotal=0.0, exclusaoEntity=null, endereco=null, " +
+                "telefone=null, nomeColaboradorResponsavel=Fulano)", clienteResponse.toString());
     }
 
     @Test
@@ -261,25 +292,23 @@ class ClienteServiceTest {
                 .build());
         Pageable pageable = PageRequest.of(0, 10);
 
-        int start = (int)pageable.getOffset();
+        int start = (int) pageable.getOffset();
         int end = Math.min((start + pageable.getPageSize()), clientes.size());
         Page<ClienteEntity> clientesPaged = new PageImpl<>(clientes.subList(start, end), pageable, clientes.size());
 
         when(clienteRepository.buscaPorClientesTypeAhead(any(), any(), any())).thenReturn(clientesPaged);
+
+        when(clienteTypeConverter.converteListaDeClientesEntityParaClientesResponse(any()))
+                .thenReturn(ClientePageResponseBuilder.builder().build());
 
         ClientePageResponse clientePageResponse = clienteService.realizaBuscaPaginadaPorClientes(
                 ColaboradorEntityBuilder.builder().comEmpresa().comAcessoCompleto().build(),
                 PageRequest.of(0, 10),
                 "busca");
 
-        Assertions.assertEquals("ClientePageResponse(content=[ClienteResponse(id=1, dataCadastro=2023-02-27, " +
-                "horaCadastro=17:40, dataNascimento=1998-07-21, nome=Gabriel Lagrota, cpfCnpj=582.645.389-32, " +
-                "inscricaoEstadual=145574080114, email=gabrielafonso@mail.com.br, statusCliente=null, tipoPessoa=null, " +
-                "qtdOrdensRealizadas=null, giroTotal=null, " +
-                "exclusaoCliente=ExclusaoClienteResponse(dataExclusao=2023-03-06, horaExclusao=14:29, excluido=true), " +
-                "endereco=null, telefone=null, nomeColaboradorResponsavel=João da Silva)], empty=false, first=true, " +
-                "last=true, number=0, numberOfElements=1, pageNumber=0, pageSize=10, paged=true, unpaged=false, " +
-                "size=10, totalElements=1, totalPages=1)", clientePageResponse.toString());
+        Assertions.assertEquals("ClientePageResponse(content=null, empty=true, first=true, last=true, " +
+                "number=0, numberOfElements=0, pageNumber=0, pageSize=0, paged=true, unpaged=false, size=0, " +
+                "totalElements=0, totalPages=0)", clientePageResponse.toString());
     }
 
     @Test
@@ -292,25 +321,23 @@ class ClienteServiceTest {
                 .build());
         Pageable pageable = PageRequest.of(0, 10);
 
-        int start = (int)pageable.getOffset();
+        int start = (int) pageable.getOffset();
         int end = Math.min((start + pageable.getPageSize()), clientes.size());
         Page<ClienteEntity> clientesPaged = new PageImpl<>(clientes.subList(start, end), pageable, clientes.size());
 
         when(clienteRepository.buscaPorClientes(any(), any())).thenReturn(clientesPaged);
+
+        when(clienteTypeConverter.converteListaDeClientesEntityParaClientesResponse(any()))
+                .thenReturn(ClientePageResponseBuilder.builder().build());
 
         ClientePageResponse clientePageResponse = clienteService.realizaBuscaPaginadaPorClientes(
                 ColaboradorEntityBuilder.builder().comEmpresa().comAcessoCompleto().build(),
                 PageRequest.of(0, 10),
                 null);
 
-        Assertions.assertEquals("ClientePageResponse(content=[ClienteResponse(id=1, dataCadastro=2023-02-27, " +
-                "horaCadastro=17:40, dataNascimento=1998-07-21, nome=Gabriel Lagrota, cpfCnpj=582.645.389-32, " +
-                "inscricaoEstadual=145574080114, email=gabrielafonso@mail.com.br, statusCliente=null, tipoPessoa=null, " +
-                "qtdOrdensRealizadas=null, giroTotal=null, " +
-                "exclusaoCliente=ExclusaoClienteResponse(dataExclusao=2023-03-06, horaExclusao=14:29, excluido=true), " +
-                "endereco=null, telefone=null, nomeColaboradorResponsavel=João da Silva)], empty=false, first=true, " +
-                "last=true, number=0, numberOfElements=1, pageNumber=0, pageSize=10, paged=true, unpaged=false, " +
-                "size=10, totalElements=1, totalPages=1)", clientePageResponse.toString());
+        Assertions.assertEquals("ClientePageResponse(content=null, empty=true, first=true, last=true, " +
+                "number=0, numberOfElements=0, pageNumber=0, pageSize=0, paged=true, unpaged=false, size=0, " +
+                "totalElements=0, totalPages=0)", clientePageResponse.toString());
     }
 
 }

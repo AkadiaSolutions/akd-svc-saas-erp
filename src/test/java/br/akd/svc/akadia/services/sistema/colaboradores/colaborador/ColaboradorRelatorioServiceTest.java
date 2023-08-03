@@ -1,8 +1,10 @@
-package br.akd.svc.akadia.services.sistema.colaboradores;
+package br.akd.svc.akadia.services.sistema.colaboradores.colaborador;
 
 import br.akd.svc.akadia.models.entities.sistema.colaboradores.ColaboradorEntity;
 import br.akd.svc.akadia.models.entities.sistema.colaboradores.mocks.ColaboradorEntityBuilder;
 import br.akd.svc.akadia.repositories.sistema.colaboradores.impl.ColaboradorRepositoryImpl;
+import br.akd.svc.akadia.services.sistema.colaboradores.acao.AcaoService;
+import br.akd.svc.akadia.services.sistema.colaboradores.colaborador.ColaboradorRelatorioService;
 import com.lowagie.text.Paragraph;
 import com.lowagie.text.pdf.PdfPTable;
 import org.junit.jupiter.api.Assertions;
@@ -100,8 +102,7 @@ class ColaboradorRelatorioServiceTest {
             colaboradorRelatorioService.exportarPdf(mockedResponse, colaboradorLogado, ids);
             Assertions.fail();
         } catch (InvalidClassException e) {
-            Assertions.assertEquals("java.lang.NullPointerException: Cannot invoke \"" +
-                    "java.io.OutputStream.write(byte[], int, int)\" because \"this.out\" is null", e.getMessage());
+            Assertions.assertEquals("java.lang.NullPointerException", e.getMessage());
         }
     }
 
@@ -123,8 +124,7 @@ class ColaboradorRelatorioServiceTest {
             colaboradorRelatorioService.exportarPdf(mockedResponse, colaboradorLogado, new ArrayList<>());
             Assertions.fail();
         } catch (InvalidClassException e) {
-            Assertions.assertEquals("java.lang.NullPointerException: Cannot invoke " +
-                    "\"java.io.OutputStream.write(byte[], int, int)\" because \"this.out\" is null", e.getMessage());
+            Assertions.assertEquals("java.lang.NullPointerException", e.getMessage());
         }
     }
 

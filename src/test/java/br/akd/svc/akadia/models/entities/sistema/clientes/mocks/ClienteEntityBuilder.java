@@ -1,6 +1,7 @@
 package br.akd.svc.akadia.models.entities.sistema.clientes.mocks;
 
 import br.akd.svc.akadia.models.entities.global.mocks.EnderecoEntityBuilder;
+import br.akd.svc.akadia.models.entities.global.mocks.ExclusaoEntityBuilder;
 import br.akd.svc.akadia.models.entities.global.mocks.TelefoneEntityBuilder;
 import br.akd.svc.akadia.models.entities.sistema.clientes.ClienteEntity;
 import br.akd.svc.akadia.models.entities.sistema.colaboradores.mocks.ColaboradorEntityBuilder;
@@ -26,7 +27,7 @@ public class ClienteEntityBuilder {
         builder.clienteEntity.setCpfCnpj("582.645.389-32");
         builder.clienteEntity.setInscricaoEstadual("145574080114");
         builder.clienteEntity.setEmail("gabrielafonso@mail.com.br");
-        builder.clienteEntity.setExclusaoCliente(null);
+        builder.clienteEntity.setExclusao(null);
         builder.clienteEntity.setEndereco(null);
         builder.clienteEntity.setTelefone(null);
         builder.clienteEntity.setColaboradorResponsavel(null);
@@ -40,8 +41,8 @@ public class ClienteEntityBuilder {
     }
 
     public ClienteEntityBuilder comExclusao(Boolean excluido) {
-        if (excluido) this.clienteEntity.setExclusaoCliente(ExclusaoClienteEntityBuilder.builder().comExclusao().build());
-        else this.clienteEntity.setExclusaoCliente(ExclusaoClienteEntityBuilder.builder().build());
+        if (excluido) this.clienteEntity.setExclusao(ExclusaoEntityBuilder.builder().comExclusao().build());
+        else this.clienteEntity.setExclusao(null);
         return this;
     }
 

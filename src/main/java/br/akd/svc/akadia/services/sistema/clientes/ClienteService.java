@@ -5,6 +5,7 @@ import br.akd.svc.akadia.models.dto.sistema.clientes.requests.ClienteRequest;
 import br.akd.svc.akadia.models.dto.sistema.clientes.responses.ClientePageResponse;
 import br.akd.svc.akadia.models.dto.sistema.clientes.responses.ClienteResponse;
 import br.akd.svc.akadia.models.entities.global.EnderecoEntity;
+import br.akd.svc.akadia.models.entities.global.ExclusaoEntity;
 import br.akd.svc.akadia.models.entities.global.TelefoneEntity;
 import br.akd.svc.akadia.models.entities.sistema.clientes.ClienteEntity;
 import br.akd.svc.akadia.models.entities.sistema.colaboradores.ColaboradorEntity;
@@ -234,9 +235,13 @@ public class ClienteService {
                 "O cliente selecionado já foi excluído");
 
         log.debug("Atualizando objeto Exclusao do cliente com dados referentes à sua exclusão...");
-        clienteEncontrado.getExclusao().setDataExclusao(LocalDate.now().toString());
-        clienteEncontrado.getExclusao().setHoraExclusao(LocalTime.now().toString());
-        clienteEncontrado.getExclusao().setResponsavelExclusao(colaboradorLogado);
+        ExclusaoEntity exclusaoEntity = ExclusaoEntity.builder()
+                .dataExclusao(LocalDate.now().toString())
+                .horaExclusao(LocalTime.now().toString())
+                .responsavelExclusao(colaboradorLogado)
+                .build();
+
+        clienteEncontrado.setExclusao(exclusaoEntity);
         log.debug("Objeto Exclusao do cliente de id {} setado com sucesso", id);
 
         log.debug("Persistindo cliente excluído no banco de dados...");
@@ -266,9 +271,13 @@ public class ClienteService {
             clienteValidationService.validaSeClienteEstaExcluido(cliente,
                     "O cliente selecionado já foi excluído");
             log.debug("Atualizando objeto Exclusao do cliente com dados referentes à sua exclusão...");
-            cliente.getExclusao().setDataExclusao(LocalDate.now().toString());
-            cliente.getExclusao().setHoraExclusao(LocalTime.now().toString());
-            cliente.getExclusao().setResponsavelExclusao(colaboradorLogado);
+            ExclusaoEntity exclusao = ExclusaoEntity.builder()
+                    .dataExclusao(LocalDate.now().toString())
+                    .horaExclusao(LocalTime.now().toString())
+                    .responsavelExclusao(colaboradorLogado)
+                    .build();
+
+            cliente.setExclusao(exclusao);
             log.debug("Objeto Exclusao do cliente de id {} setado com sucesso", cliente.getId());
         }
 

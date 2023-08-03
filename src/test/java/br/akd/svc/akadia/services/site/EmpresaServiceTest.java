@@ -8,7 +8,7 @@ import br.akd.svc.akadia.repositories.sistema.colaboradores.impl.ColaboradorRepo
 import br.akd.svc.akadia.repositories.site.impl.ClienteSistemaRepositoryImpl;
 import br.akd.svc.akadia.repositories.site.impl.EmpresaRepositoryImpl;
 import br.akd.svc.akadia.services.exceptions.InvalidRequestException;
-import br.akd.svc.akadia.services.sistema.colaboradores.ColaboradorService;
+import br.akd.svc.akadia.services.sistema.colaboradores.colaborador.ColaboradorService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

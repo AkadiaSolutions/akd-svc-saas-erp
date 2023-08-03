@@ -1,6 +1,7 @@
 package br.akd.svc.akadia.models.entities.sistema.colaboradores.mocks;
 
 import br.akd.svc.akadia.models.entities.global.mocks.EnderecoEntityBuilder;
+import br.akd.svc.akadia.models.entities.global.mocks.ExclusaoEntityBuilder;
 import br.akd.svc.akadia.models.entities.global.mocks.TelefoneEntityBuilder;
 import br.akd.svc.akadia.models.entities.sistema.colaboradores.AcessoSistemaEntity;
 import br.akd.svc.akadia.models.entities.sistema.colaboradores.ColaboradorEntity;
@@ -109,12 +110,12 @@ public class ColaboradorEntityBuilder {
     }
 
     public ColaboradorEntityBuilder comExclusao() {
-        this.colaboradorEntity.setExclusao(ExclusaoColaboradorEntityBuilder.builder().build());
+        this.colaboradorEntity.setExclusao(ExclusaoEntityBuilder.builder().build());
         return this;
     }
 
     public ColaboradorEntityBuilder semExclusao() {
-        this.colaboradorEntity.setExclusao(ExclusaoColaboradorEntityBuilder.builder().semExclusao().build());
+        this.colaboradorEntity.setExclusao(ExclusaoEntityBuilder.builder().semExclusao().build());
         return this;
     }
 

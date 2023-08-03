@@ -1,5 +1,6 @@
 package br.akd.svc.akadia.models.dto.sistema.colaboradores.responses;
 
+import br.akd.svc.akadia.models.dto.sistema.colaboradores.responses.advertencia.AdvertenciaPageResponse;
 import br.akd.svc.akadia.models.dto.sistema.colaboradores.responses.mocks.AdvertenciaPageResponseBuilder;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
