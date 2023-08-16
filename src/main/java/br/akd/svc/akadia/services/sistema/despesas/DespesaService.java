@@ -46,6 +46,8 @@ public class DespesaService {
     @Autowired
     DespesaRepository despesaRepository;
 
+    String AGENDADO = "Agendado";
+
     String BUSCA_DESPESA_POR_ID = "Iniciando acesso ao método de implementação de busca de despesa por id...";
 
     public DespesaResponse criaNovaDespesa(ColaboradorEntity colaboradorLogado, DespesaRequest despesaRequest) {
@@ -59,8 +61,12 @@ public class DespesaService {
         DespesaEntity despesaEntity = DespesaEntity.builder()
                 .dataCadastro(LocalDate.now().toString())
                 .horaCadastro(LocalTime.now().toString())
-                .dataPagamento(despesaRequest.getDataPagamento())
-                .dataAgendamento(despesaRequest.getDataAgendamento())
+                .dataPagamento(despesaRequest.getDataPagamento() == null
+                        ? AGENDADO
+                        : despesaRequest.getDataPagamento())
+                .dataAgendamento(despesaRequest.getDataAgendamento() == null
+                        ? "Pago"
+                        : despesaRequest.getDataAgendamento())
                 .descricao(despesaRequest.getDescricao())
                 .valor(despesaRequest.getValor())
                 .observacao(despesaRequest.getQtdRecorrencias() > 0
@@ -109,7 +115,7 @@ public class DespesaService {
             DespesaEntity despesa = DespesaEntity.builder()
                     .dataCadastro(LocalDate.now().toString())
                     .horaCadastro(LocalTime.now().toString())
-                    .dataPagamento(null)
+                    .dataPagamento(AGENDADO)
                     .dataAgendamento(dataDespesa.toString())
                     .descricao(despesaRequest.getDescricao())
                     .valor(despesaRequest.getValor())
@@ -170,8 +176,6 @@ public class DespesaService {
 
         log.debug("Iniciando acesso ao método de validação de exclusão de despesa que já foi excluída...");
         for (DespesaEntity despesa : despesas) {
-            despesaValidationService.validaSeDespesaEstaExcluida(despesa,
-                    Constantes.DESPESA_JA_EXCLUIDA);
             log.debug(Constantes.ATUALIZANDO_EXCLUSAO_DESPESA);
             ExclusaoEntity exclusao = ExclusaoEntity.builder()
                     .dataExclusao(LocalDate.now().toString())
@@ -250,8 +254,12 @@ public class DespesaService {
                 .id(despesaEncontrada.getId())
                 .dataCadastro(despesaEncontrada.getDataCadastro())
                 .horaCadastro(despesaEncontrada.getHoraCadastro())
-                .dataPagamento(despesaRequest.getDataPagamento())
-                .dataAgendamento(despesaRequest.getDataAgendamento())
+                .dataPagamento(despesaRequest.getDataPagamento() == null
+                        ? AGENDADO
+                        : despesaRequest.getDataPagamento())
+                .dataAgendamento(despesaRequest.getDataAgendamento() == null
+                        ? "Pago"
+                        : despesaRequest.getDataAgendamento())
                 .descricao(despesaRequest.getDescricao())
                 .valor(despesaRequest.getValor())
                 .observacao(despesaEncontrada.getObservacao())

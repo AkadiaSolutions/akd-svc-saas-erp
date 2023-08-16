@@ -5,9 +5,12 @@ import br.akd.svc.akadia.models.dto.sistema.clientes.responses.ClienteResponse;
 import br.akd.svc.akadia.models.dto.sistema.despesas.request.DespesaRequest;
 import br.akd.svc.akadia.models.dto.sistema.despesas.response.DespesaPageResponse;
 import br.akd.svc.akadia.models.dto.sistema.despesas.response.DespesaResponse;
+import br.akd.svc.akadia.models.entities.sistema.colaboradores.ColaboradorEntity;
 import br.akd.svc.akadia.services.exceptions.InvalidRequestException;
 import br.akd.svc.akadia.services.exceptions.ObjectNotFoundException;
+import br.akd.svc.akadia.services.sistema.despesas.DespesaRelatorioService;
 import br.akd.svc.akadia.services.sistema.despesas.DespesaService;
+import com.lowagie.text.DocumentException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -21,9 +24,13 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @Slf4j
@@ -37,6 +44,9 @@ public class DespesasController {
 
     @Autowired
     DespesaService despesaService;
+
+    @Autowired
+    DespesaRelatorioService despesaRelatorioService;
 
     @Autowired
     JWTUtil jwtUtil;
@@ -183,6 +193,38 @@ public class DespesasController {
                 busca == null ? "Nulo" : busca);
         return ResponseEntity.ok().body(despesaService.realizaBuscaPaginadaPorDespesas(
                 jwtUtil.obtemUsuarioAtivo(req), pageable, mesAno, busca));
+    }
+
+    @PostMapping("/relatorio")
+    @ApiOperation(
+            value = "Gerar relatório em PDF",
+            notes = "Esse endpoint tem como objetivo realizar a criação de um relatório em PDF com a listagem de despesas " +
+                    "solicitada",
+            produces = MediaType.APPLICATION_OCTET_STREAM,
+            consumes = MediaType.APPLICATION_JSON
+    )
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "PDF gerado com sucesso"),
+            @ApiResponse(code = 400, message = "Ocorreu um erro na criação do PDF", response = Exception.class),
+    })
+    @PreAuthorize("hasAnyRole('DESPESAS')")
+    public void relatorio(HttpServletResponse res,
+                          HttpServletRequest req,
+                          @RequestBody List<Long> ids) throws DocumentException, IOException {
+        log.info("Método controlador de obtenção de relatório de despesas em PDF acessado. IDs: {}", ids);
+
+        ColaboradorEntity usuarioAtivo = jwtUtil.obtemUsuarioAtivo(req);
+
+        res.setContentType("application/pdf");
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachement; filename=akadion_"
+                + usuarioAtivo.getEmpresa().getNome().replace(" ", "-").toLowerCase()
+                + "_despesas_"
+                + new SimpleDateFormat("dd.MM.yyyy_HHmmss").format(new Date())
+                + ".pdf";
+        res.setHeader(headerKey, headerValue);
+
+        despesaRelatorioService.exportarPdf(res, usuarioAtivo, ids);
     }
 
 }

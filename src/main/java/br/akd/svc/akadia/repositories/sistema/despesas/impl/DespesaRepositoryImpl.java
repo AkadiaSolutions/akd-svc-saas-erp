@@ -1,5 +1,6 @@
 package br.akd.svc.akadia.repositories.sistema.despesas.impl;
 
+import br.akd.svc.akadia.models.entities.sistema.clientes.ClienteEntity;
 import br.akd.svc.akadia.models.entities.sistema.despesas.DespesaEntity;
 import br.akd.svc.akadia.repositories.sistema.despesas.DespesaRepository;
 import br.akd.svc.akadia.services.exceptions.ObjectNotFoundException;
@@ -45,6 +46,26 @@ public class DespesaRepositoryImpl {
         }
         log.debug("Retornando a despesa encontrada...");
         return despesaEntity;
+    }
+
+    public List<DespesaEntity> implementaBuscaPorTodos(Long idEmpresa) {
+        log.debug("Método que implementa busca por todas as despesas acessado");
+        return despesaRepository.buscaTodos(idEmpresa);
+    }
+
+    public List<DespesaEntity> implementaBuscaPorIdEmMassa(List<Long> ids) {
+        log.debug("Método que implementa busca de despesa por id em massa acessado. Ids: {}", ids.toString());
+
+        List<DespesaEntity> despesas = despesaRepository.findAllById(ids);
+
+        if (!despesas.isEmpty()) {
+            log.debug("{} Despesas encontradas", despesas.size());
+        } else {
+            log.warn("Nenhuma despesa foi encontrada");
+            throw new ObjectNotFoundException("Nenhuma despesa foi encontrada com os ids informados");
+        }
+        log.debug("Retornando as despesas encontradas...");
+        return despesas;
     }
 
 }
