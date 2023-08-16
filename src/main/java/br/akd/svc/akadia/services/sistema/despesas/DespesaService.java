@@ -232,6 +232,53 @@ public class DespesaService {
         log.info("Despesas excluídas com sucesso");
     }
 
+    public DespesaResponse atualizaDespesa(ColaboradorEntity colaboradorLogado, Long id, DespesaRequest despesaRequest) {
+        log.debug("Método de serviço de atualização de despesa acessado");
+
+        log.debug(Constantes.VERIFICANDO_SE_COLABORADOR_PODE_ALTERAR_DADOS);
+        SecurityUtil.verificaSePodeRealizarAlteracoes(colaboradorLogado.getAcessoSistema());
+
+        log.debug(BUSCA_DESPESA_POR_ID);
+        DespesaEntity despesaEncontrada = despesaRepositoryImpl.implementaBuscaPorId(id, colaboradorLogado.getEmpresa().getId());
+
+        log.debug("Iniciando acesso ao método de validação de alteração de dados de despesa excluída...");
+        despesaValidationService.validaSeDespesaEstaExcluida(despesaEncontrada,
+                "Não é possível atualizar um despesa excluída");
+
+        log.debug("Iniciando criação do objeto DespesaEntity...");
+        DespesaEntity novaDespesaAtualizada = DespesaEntity.builder()
+                .id(despesaEncontrada.getId())
+                .dataCadastro(despesaEncontrada.getDataCadastro())
+                .horaCadastro(despesaEncontrada.getHoraCadastro())
+                .dataPagamento(despesaRequest.getDataPagamento())
+                .dataAgendamento(despesaRequest.getDataAgendamento())
+                .descricao(despesaRequest.getDescricao())
+                .valor(despesaRequest.getValor())
+                .observacao(despesaEncontrada.getObservacao())
+                .tipoRecorrencia(despesaEncontrada.getTipoRecorrencia())
+                .statusDespesa(despesaRequest.getStatusDespesa())
+                .tipoDespesa(despesaRequest.getTipoDespesa())
+                .exclusao(null)
+                .colaboradorResponsavel(despesaEncontrada.getColaboradorResponsavel())
+                .empresa(despesaEncontrada.getEmpresa())
+                .recorrencias(despesaEncontrada.getRecorrencias())
+                .build();
+        log.debug("Objeto despesa construído com sucesso");
+
+        log.debug("Iniciando acesso ao método de implementação da persistência da despesa...");
+        DespesaEntity despesaPersistida = despesaRepositoryImpl.implementaPersistencia(novaDespesaAtualizada);
+
+        log.debug(Constantes.INICIANDO_SALVAMENTO_HISTORICO_COLABORADOR);
+        acaoService.salvaHistoricoColaborador(colaboradorLogado, despesaPersistida.getId(),
+                ModulosEnum.DESPESAS, TipoAcaoEnum.ALTERACAO, null);
+
+        log.debug("Despesa persistida com sucesso. Convertendo DespesaEntity para DespesaResponse...");
+        DespesaResponse despesaResponse = despesaTypeConverter.converteDespesaEntityParaDespesaResponse(despesaPersistida);
+
+        log.info("Despesa atualizada com sucesso");
+        return despesaResponse;
+    }
+
     public DespesaResponse realizaBuscaDeDespesaPorId(ColaboradorEntity colaboradorLogado, Long id) {
         log.debug("Método de serviço de obtenção de despesa por id. ID recebido: {}", id);
 

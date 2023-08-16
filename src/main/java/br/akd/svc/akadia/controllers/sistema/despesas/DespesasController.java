@@ -138,6 +138,29 @@ public class DespesasController {
                 .body(despesaService.removeDespesa(jwtUtil.obtemUsuarioAtivo(req), id, removeRecorrencia));
     }
 
+    @PutMapping("/{id}")
+    @ApiOperation(
+            value = "Atualização de despesa",
+            notes = "Esse endpoint tem como objetivo realizar a atualização de uma despesa na base de dados da empresa",
+            produces = MediaType.APPLICATION_JSON,
+            consumes = MediaType.APPLICATION_JSON
+    )
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Despesa atualizada com sucesso",
+                    response = DespesaResponse.class),
+            @ApiResponse(code = 400, message = "Nenhuma despesa foi encontrada com o id informado",
+                    response = ObjectNotFoundException.class)
+    })
+    @PreAuthorize("hasAnyRole('DESPESAS')")
+    public ResponseEntity<DespesaResponse> atualizaDespesa(HttpServletRequest req,
+                                                           @RequestBody DespesaRequest despesaRequest,
+                                                           @PathVariable Long id) {
+        log.info("Método controlador de atualização de despesa acessado");
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(despesaService.atualizaDespesa(jwtUtil.obtemUsuarioAtivo(req), id, despesaRequest));
+    }
+
     @GetMapping
     @ApiOperation(
             value = "Busca paginada por despesas cadastradas",
