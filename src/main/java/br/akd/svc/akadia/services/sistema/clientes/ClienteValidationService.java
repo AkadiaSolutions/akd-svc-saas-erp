@@ -41,7 +41,7 @@ public class ClienteValidationService {
     public void validaSeCpfCnpjJaExiste(String cpfCnpj, Long idEmpresa) {
         log.debug("Método de validação de chave única de CPF/CNPJ acessado");
         if (clienteRepositoryImpl.implementaBuscaPorCpfCnpjIdentico(cpfCnpj, idEmpresa).isPresent()) {
-            String mensagemErro = cpfCnpj.length() == 11 ? "O CPF informado já existe" : "O CNPJ informado já existe";
+            String mensagemErro = cpfCnpj.length() == 14 ? "O CPF informado já existe" : "O CNPJ informado já existe";
             log.warn(mensagemErro + ": {}", cpfCnpj);
             throw new InvalidRequestException(mensagemErro);
         }
