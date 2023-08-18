@@ -77,9 +77,9 @@ class DespesasControllerTest {
                 despesasController.criaNovaDespesa(mockedRequest, DespesaRequestBuilder.builder().build());
 
         Assertions.assertEquals("<201 CREATED Created,DespesaResponse(id=1, dataCadastro=2023-08-18, " +
-                        "horaCadastro=07:55, dataPagamento=2023-08-18, dataAgendamento=null, " +
-                        "descricao=Gasolina carro, valor=100.0, observacao=Sem recorrências, qtdRecorrencias=0, " +
-                        "statusDespesa=PAGO, tipoDespesa=VARIAVEL, tipoRecorrencia=SEM_RECORRENCIA),[]>",
+                        "horaCadastro=07:55, dataPagamento=2023-08-18, dataAgendamento=Pago, descricao=Gasolina " +
+                        "carro, valor=100.0, observacao=Sem recorrências, qtdRecorrencias=0, statusDespesa=PAGO, " +
+                        "tipoDespesa=VARIAVEL, tipoRecorrencia=SEM_RECORRENCIA),[]>",
                 despesa.toString());
     }
 
@@ -103,10 +103,10 @@ class DespesasControllerTest {
         ResponseEntity<DespesaResponse> despesa =
                 despesasController.removeDespesa(mockedRequest, false, 1L);
 
-        Assertions.assertEquals("<200 OK OK,DespesaResponse(id=1, dataCadastro=2023-08-18, horaCadastro=07:55, " +
-                "dataPagamento=2023-08-18, dataAgendamento=null, descricao=Gasolina carro, valor=100.0, " +
-                "observacao=Sem recorrências, qtdRecorrencias=0, statusDespesa=PAGO, tipoDespesa=VARIAVEL, " +
-                "tipoRecorrencia=SEM_RECORRENCIA),[]>",
+        Assertions.assertEquals("<200 OK OK,DespesaResponse(id=1, dataCadastro=2023-08-18, " +
+                        "horaCadastro=07:55, dataPagamento=2023-08-18, dataAgendamento=Pago, descricao=Gasolina carro, " +
+                        "valor=100.0, observacao=Sem recorrências, qtdRecorrencias=0, statusDespesa=PAGO, " +
+                        "tipoDespesa=VARIAVEL, tipoRecorrencia=SEM_RECORRENCIA),[]>",
                 despesa.toString());
     }
 
@@ -121,7 +121,7 @@ class DespesasControllerTest {
                 despesasController.atualizaDespesa(mockedRequest, DespesaRequestBuilder.builder().build(), 1L);
 
         Assertions.assertEquals("<200 OK OK,DespesaResponse(id=1, dataCadastro=2023-08-18, horaCadastro=07:55, " +
-                "dataPagamento=2023-08-18, dataAgendamento=null, descricao=Gasolina carro, valor=100.0, " +
+                "dataPagamento=2023-08-18, dataAgendamento=Pago, descricao=Gasolina carro, valor=100.0, " +
                 "observacao=Sem recorrências, qtdRecorrencias=0, statusDespesa=PAGO, tipoDespesa=VARIAVEL, " +
                 "tipoRecorrencia=SEM_RECORRENCIA),[]>", despesa.toString());
     }

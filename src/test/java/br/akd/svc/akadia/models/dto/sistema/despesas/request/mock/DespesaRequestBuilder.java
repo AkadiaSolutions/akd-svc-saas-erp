@@ -17,7 +17,7 @@ public class DespesaRequestBuilder {
         DespesaRequestBuilder builder = new DespesaRequestBuilder();
         builder.despesaRequest = new DespesaRequest();
         builder.despesaRequest.setDataPagamento(LocalDate.of(2023, 8, 18).toString());
-        builder.despesaRequest.setDataAgendamento(null);
+        builder.despesaRequest.setDataAgendamento("Pago");
         builder.despesaRequest.setDescricao("Gasolina carro");
         builder.despesaRequest.setValor(100.0);
         builder.despesaRequest.setQtdRecorrencias(0);

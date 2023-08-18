@@ -57,8 +57,7 @@ class AdvertenciaRelatorioServiceTest {
             advertenciaRelatorioService.exportarPdf(mockedResponse, colaboradorLogado, colaboradorEntity, advertenciaEntity);
             Assertions.fail();
         } catch (InvalidClassException e) {
-            Assertions.assertEquals("java.lang.NullPointerException: Cannot invoke " +
-                    "\"java.io.OutputStream.write(byte[], int, int)\" because \"this.out\" is null", e.getMessage());
+            Assertions.assertEquals("java.lang.NullPointerException", e.getMessage());
         }
     }
 

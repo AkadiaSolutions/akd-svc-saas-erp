@@ -22,7 +22,7 @@ class DespesaResponseTest {
     void deveTestarDataBuilder() {
         Assertions.assertEquals(
                 "DespesaResponse(id=1, dataCadastro=2023-08-18, horaCadastro=07:55, dataPagamento=2023-08-18, " +
-                        "dataAgendamento=null, descricao=Gasolina carro, valor=100.0, observacao=Sem recorrências, " +
+                        "dataAgendamento=Pago, descricao=Gasolina carro, valor=100.0, observacao=Sem recorrências, " +
                         "qtdRecorrencias=0, statusDespesa=PAGO, tipoDespesa=VARIAVEL, tipoRecorrencia=SEM_RECORRENCIA)",
                 DespesaResponseBuilder.builder().build().toString()
         );

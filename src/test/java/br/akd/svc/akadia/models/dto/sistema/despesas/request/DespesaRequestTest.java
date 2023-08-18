@@ -19,7 +19,7 @@ class DespesaRequestTest {
     @DisplayName("Deve testar dataBuilder")
     void deveTestarDataBuilder() {
         Assertions.assertEquals(
-                "DespesaRequest(dataPagamento=2023-08-18, dataAgendamento=null, descricao=Gasolina carro, " +
+                "DespesaRequest(dataPagamento=2023-08-18, dataAgendamento=Pago, descricao=Gasolina carro, " +
                         "valor=100.0, qtdRecorrencias=0, statusDespesa=PAGO, tipoDespesa=VARIAVEL)",
                 DespesaRequestBuilder.builder().build().toString()
         );

@@ -22,7 +22,7 @@ public class DespesaResponseBuilder {
         builder.despesaResponse.setDataCadastro(LocalDate.of(2023, 8, 18).toString());
         builder.despesaResponse.setHoraCadastro(LocalTime.of(7, 55).toString());
         builder.despesaResponse.setDataPagamento(LocalDate.of(2023, 8, 18).toString());
-        builder.despesaResponse.setDataAgendamento(null);
+        builder.despesaResponse.setDataAgendamento("Pago");
         builder.despesaResponse.setDescricao("Gasolina carro");
         builder.despesaResponse.setValor(100.0);
         builder.despesaResponse.setObservacao("Sem recorrências");

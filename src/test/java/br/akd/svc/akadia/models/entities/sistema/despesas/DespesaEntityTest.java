@@ -24,7 +24,7 @@ class DespesaEntityTest {
     void deveTestarDataBuilder() {
         Assertions.assertEquals(
                 "DespesaEntity(id=1, dataCadastro=2023-08-18, horaCadastro=07:55, dataPagamento=2023-08-18, " +
-                        "dataAgendamento=null, descricao=Gasolina carro, valor=100.0, observacao=Sem recorrências, " +
+                        "dataAgendamento=Pago, descricao=Gasolina carro, valor=100.0, observacao=Sem recorrências, " +
                         "tipoRecorrencia=SEM_RECORRENCIA, statusDespesa=PAGO, tipoDespesa=VARIAVEL, exclusao=null, " +
                         "colaboradorResponsavel=null, empresa=null)",
                 DespesaEntityBuilder.builder().build().toString()

@@ -1,5 +1,6 @@
 package br.akd.svc.akadia.models.entities.sistema.despesas.mocks;
 
+import br.akd.svc.akadia.models.entities.global.mocks.ExclusaoEntityBuilder;
 import br.akd.svc.akadia.models.entities.sistema.despesas.DespesaEntity;
 import br.akd.svc.akadia.models.enums.sistema.despesas.StatusDespesaEnum;
 import br.akd.svc.akadia.models.enums.sistema.despesas.TipoDespesaEnum;
@@ -23,7 +24,7 @@ public class DespesaEntityBuilder {
         builder.despesaEntity.setDataCadastro(LocalDate.of(2023, 8, 18).toString());
         builder.despesaEntity.setHoraCadastro(LocalTime.of(7, 55).toString());
         builder.despesaEntity.setDataPagamento(LocalDate.of(2023, 8, 18).toString());
-        builder.despesaEntity.setDataAgendamento(null);
+        builder.despesaEntity.setDataAgendamento("Pago");
         builder.despesaEntity.setDescricao("Gasolina carro");
         builder.despesaEntity.setValor(100.0);
         builder.despesaEntity.setObservacao("Sem recorrências");
@@ -35,6 +36,11 @@ public class DespesaEntityBuilder {
         builder.despesaEntity.setEmpresa(null);
         builder.despesaEntity.setRecorrencias(new ArrayList<>());
         return builder;
+    }
+
+    public DespesaEntityBuilder comExclusao() {
+        despesaEntity.setExclusao(ExclusaoEntityBuilder.builder().build());
+        return this;
     }
 
     public DespesaEntity build() {
