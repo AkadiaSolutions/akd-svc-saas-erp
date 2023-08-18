@@ -34,7 +34,6 @@ public class DespesaEntity {
     private String observacao;
 
     @Enumerated(EnumType.STRING)
-
     private TipoRecorrenciaDespesaEnum tipoRecorrencia;
 
     @Enumerated(EnumType.STRING)
