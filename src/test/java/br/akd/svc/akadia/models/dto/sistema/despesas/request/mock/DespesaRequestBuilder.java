@@ -26,6 +26,11 @@ public class DespesaRequestBuilder {
         return builder;
     }
 
+    public DespesaRequestBuilder comRecorrencia() {
+        despesaRequest.setQtdRecorrencias(1);
+        return this;
+    }
+
     public DespesaRequest build() {
         return despesaRequest;
     }

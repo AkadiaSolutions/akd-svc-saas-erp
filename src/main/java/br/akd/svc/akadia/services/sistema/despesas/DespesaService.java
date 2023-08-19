@@ -100,7 +100,7 @@ public class DespesaService {
         return despesaResponse;
     }
 
-    private List<DespesaEntity> geraRecorrencias(ColaboradorEntity colaboradorLogado, DespesaRequest despesaRequest) {
+    protected List<DespesaEntity> geraRecorrencias(ColaboradorEntity colaboradorLogado, DespesaRequest despesaRequest) {
 
         List<DespesaEntity> despesas = new ArrayList<>();
         for (int i = 1; i <= despesaRequest.getQtdRecorrencias(); i++) {
@@ -158,7 +158,8 @@ public class DespesaService {
         log.debug(Constantes.OBJETO_EXCLUSAO_DESPESA_SETADO_COM_SUCESSO, id);
 
         log.debug(Constantes.PERSISTINDO_DESPESA_EXCLUIDA);
-        DespesaEntity despesaExcluida = despesaRepositoryImpl.implementaPersistencia(despesaEncontrada);
+        DespesaEntity despesaExcluida = despesaRepositoryImpl
+                .implementaPersistencia(despesaEncontrada);
 
         if (Boolean.TRUE.equals(removeRecorrencia))
             removeRecorrenciasEmMassa(colaboradorLogado, despesaExcluida.getRecorrencias());
@@ -210,8 +211,10 @@ public class DespesaService {
 
         log.debug("Iniciando acesso ao método de validação de exclusão de despesa que já foi excluída...");
         for (DespesaEntity despesa : despesasEncontradas) {
+
             despesaValidationService.validaSeDespesaEstaExcluida(despesa,
                     Constantes.DESPESA_JA_EXCLUIDA);
+
             log.debug(Constantes.ATUALIZANDO_EXCLUSAO_DESPESA);
             ExclusaoEntity exclusao = ExclusaoEntity.builder()
                     .dataExclusao(LocalDate.now().toString())
