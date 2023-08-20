@@ -1,6 +1,5 @@
 package br.akd.svc.akadia.repositories.sistema.despesas.impl;
 
-import br.akd.svc.akadia.models.entities.sistema.clientes.ClienteEntity;
 import br.akd.svc.akadia.models.entities.sistema.despesas.DespesaEntity;
 import br.akd.svc.akadia.repositories.sistema.despesas.DespesaRepository;
 import br.akd.svc.akadia.services.exceptions.ObjectNotFoundException;
