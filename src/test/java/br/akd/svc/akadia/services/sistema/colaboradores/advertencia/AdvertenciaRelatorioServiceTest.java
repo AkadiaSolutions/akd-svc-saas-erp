@@ -4,7 +4,6 @@ import br.akd.svc.akadia.models.entities.sistema.colaboradores.AdvertenciaEntity
 import br.akd.svc.akadia.models.entities.sistema.colaboradores.ColaboradorEntity;
 import br.akd.svc.akadia.models.entities.sistema.colaboradores.mocks.AdvertenciaEntityBuilder;
 import br.akd.svc.akadia.models.entities.sistema.colaboradores.mocks.ColaboradorEntityBuilder;
-import br.akd.svc.akadia.services.sistema.colaboradores.advertencia.AdvertenciaRelatorioService;
 import com.lowagie.text.Document;
 import com.lowagie.text.Paragraph;
 import org.junit.jupiter.api.Assertions;
@@ -16,7 +15,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.io.InvalidClassException;
 
 @SpringBootTest
@@ -47,18 +45,15 @@ class AdvertenciaRelatorioServiceTest {
 
     @Test
     @DisplayName("Deve testar método de exportação de PDF")
-    void deveTestarMetodoDeExportacaoDePdf() throws IOException {
+    void deveTestarMetodoDeExportacaoDePdf() {
         HttpServletResponse mockedResponse = Mockito.mock(HttpServletResponse.class);
         ColaboradorEntity colaboradorLogado = ColaboradorEntityBuilder.builder().comEmpresa().build();
         ColaboradorEntity colaboradorEntity = ColaboradorEntityBuilder.builder().comEmpresa().build();
         AdvertenciaEntity advertenciaEntity = AdvertenciaEntityBuilder.builder().build();
 
-        try {
-            advertenciaRelatorioService.exportarPdf(mockedResponse, colaboradorLogado, colaboradorEntity, advertenciaEntity);
-            Assertions.fail();
-        } catch (InvalidClassException e) {
-            Assertions.assertEquals("java.lang.NullPointerException", e.getMessage());
-        }
+        Assertions.assertThrows(InvalidClassException.class,
+                () -> advertenciaRelatorioService
+                        .exportarPdf(mockedResponse, colaboradorLogado, colaboradorEntity, advertenciaEntity));
     }
 
 }

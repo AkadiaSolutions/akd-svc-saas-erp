@@ -18,6 +18,8 @@ import io.swagger.annotations.ApiResponses;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -187,7 +189,7 @@ public class DespesasController {
     public ResponseEntity<DespesaPageResponse> obtemDespesasPaginadas(
             @RequestParam(value = "busca", required = false) String busca,
             @RequestParam(value = "mesAno") String mesAno,
-            Pageable pageable,
+            @PageableDefault(sort = {"dataAgendamento", "dataPagamento"}, direction = Sort.Direction.ASC) Pageable pageable,
             HttpServletRequest req) {
         log.info("Endpoint de busca paginada por despesas acessado. Filtros de busca: {}",
                 busca == null ? "Nulo" : busca);
