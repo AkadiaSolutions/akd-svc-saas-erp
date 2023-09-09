@@ -70,7 +70,7 @@ class PatrimonioControllerTest {
 
         Assertions.assertEquals("<201 CREATED Created,PatrimonioResponse(id=1, dataCadastro=2023-08-21, " +
                         "horaCadastro=10:20, dataEntrada=2023-08-21, descricao=Dinheiro, valor=100.0, " +
-                        "tipoPatrimonio=ATIVO),[]>",
+                        "tipoPatrimonio=Ativo),[]>",
                 patrimonio.toString());
     }
 
@@ -134,7 +134,7 @@ class PatrimonioControllerTest {
 
         Assertions.assertEquals("<200 OK OK,PatrimonioResponse(id=1, dataCadastro=2023-08-21, " +
                         "horaCadastro=10:20, dataEntrada=2023-08-21, descricao=Dinheiro, valor=100.0, " +
-                        "tipoPatrimonio=ATIVO),[]>",
+                        "tipoPatrimonio=Ativo),[]>",
                 patrimonio.toString());
     }
 

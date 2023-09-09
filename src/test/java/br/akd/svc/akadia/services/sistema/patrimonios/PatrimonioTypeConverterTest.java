@@ -44,7 +44,7 @@ class PatrimonioTypeConverterTest {
 
         Assertions.assertEquals("PatrimonioPageResponse(content=[PatrimonioResponse(id=1, " +
                         "dataCadastro=2023-08-21, horaCadastro=10:20, dataEntrada=2023-08-21, descricao=Dinheiro, " +
-                        "valor=100.0, tipoPatrimonio=ATIVO)], empty=false, first=true, last=true, number=0, " +
+                        "valor=100.0, tipoPatrimonio=Ativo)], empty=false, first=true, last=true, number=0, " +
                         "numberOfElements=1, pageNumber=0, pageSize=10, paged=true, unpaged=false, size=10, " +
                         "totalElements=1, totalPages=1)",
                 patrimonioPageResponse.toString());
@@ -60,7 +60,7 @@ class PatrimonioTypeConverterTest {
                 .converteEntityParaResponse(patrimonioEntity);
 
         Assertions.assertEquals("PatrimonioResponse(id=1, dataCadastro=2023-08-21, horaCadastro=10:20, " +
-                        "dataEntrada=2023-08-21, descricao=Dinheiro, valor=100.0, tipoPatrimonio=ATIVO)",
+                        "dataEntrada=2023-08-21, descricao=Dinheiro, valor=100.0, tipoPatrimonio=Ativo)",
                 patrimonioResponse.toString());
     }
 

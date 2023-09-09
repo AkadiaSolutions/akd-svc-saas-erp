@@ -1,6 +1,5 @@
 package br.akd.svc.akadia.models.dto.sistema.patrimonios.response;
 
-import br.akd.svc.akadia.models.enums.sistema.patrimonios.TipoPatrimonioEnum;
 import lombok.*;
 
 @Data
@@ -15,5 +14,5 @@ public class PatrimonioResponse {
     private String dataEntrada;
     private String descricao;
     private Double valor;
-    private TipoPatrimonioEnum tipoPatrimonio;
+    private String tipoPatrimonio;
 }

@@ -23,7 +23,7 @@ public class PatrimonioResponseBuilder {
         builder.patrimonioResponse.setDataEntrada(LocalDate.of(2023, 8, 21).toString());
         builder.patrimonioResponse.setDescricao("Dinheiro");
         builder.patrimonioResponse.setValor(100.0);
-        builder.patrimonioResponse.setTipoPatrimonio(TipoPatrimonioEnum.ATIVO);
+        builder.patrimonioResponse.setTipoPatrimonio(TipoPatrimonioEnum.ATIVO.getDesc());
         return builder;
     }
 

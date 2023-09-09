@@ -20,7 +20,7 @@ class PatrimonioResponseTest {
     void deveTestarDataBuilder() {
         Assertions.assertEquals(
                 "PatrimonioResponse(id=1, dataCadastro=2023-08-21, horaCadastro=10:20, dataEntrada=2023-08-21, " +
-                        "descricao=Dinheiro, valor=100.0, tipoPatrimonio=ATIVO)",
+                        "descricao=Dinheiro, valor=100.0, tipoPatrimonio=Ativo)",
                 PatrimonioResponseBuilder.builder().build().toString()
         );
 
@@ -36,11 +36,11 @@ class PatrimonioResponseTest {
                 LocalDate.of(2023, 8, 18).toString(),
                 "Dinheiro",
                 100.0,
-                TipoPatrimonioEnum.ATIVO
+                TipoPatrimonioEnum.ATIVO.getDesc()
         );
         Assertions.assertEquals(
                 "PatrimonioResponse(id=1, dataCadastro=2023-08-18, horaCadastro=07:55, " +
-                        "dataEntrada=2023-08-18, descricao=Dinheiro, valor=100.0, tipoPatrimonio=ATIVO)",
+                        "dataEntrada=2023-08-18, descricao=Dinheiro, valor=100.0, tipoPatrimonio=Ativo)",
                 patrimonioResponse.toString()
         );
 
@@ -56,11 +56,11 @@ class PatrimonioResponseTest {
                 .dataEntrada(LocalDate.of(2023, 8, 18).toString())
                 .descricao("Dinheiro")
                 .valor(100.0)
-                .tipoPatrimonio(TipoPatrimonioEnum.ATIVO)
+                .tipoPatrimonio(TipoPatrimonioEnum.ATIVO.getDesc())
                 .build();
         Assertions.assertEquals(
                 "PatrimonioResponse(id=1, dataCadastro=2023-08-18, horaCadastro=07:55, dataEntrada=2023-08-18, " +
-                        "descricao=Dinheiro, valor=100.0, tipoPatrimonio=ATIVO)",
+                        "descricao=Dinheiro, valor=100.0, tipoPatrimonio=Ativo)",
                 patrimonioResponse.toString()
         );
     }

@@ -74,8 +74,8 @@ class PatrimonioServiceTest {
                 ColaboradorEntityBuilder.builder().comEmpresa().comAcessoCompleto().build(),
                 PatrimonioRequestBuilder.builder().build());
 
-        assertEquals("PatrimonioResponse(id=1, dataCadastro=2023-08-21, horaCadastro=10:20, dataEntrada=2023-08-21, " +
-                        "descricao=Dinheiro, valor=100.0, tipoPatrimonio=ATIVO)",
+        assertEquals("PatrimonioResponse(id=1, dataCadastro=2023-08-21, horaCadastro=10:20, " +
+                        "dataEntrada=2023-08-21, descricao=Dinheiro, valor=100.0, tipoPatrimonio=Ativo)",
                 patrimonioResponse.toString());
     }
 
@@ -94,7 +94,7 @@ class PatrimonioServiceTest {
                 .thenReturn(PatrimonioResponseBuilder.builder().build());
 
         Assertions.assertEquals("PatrimonioResponse(id=1, dataCadastro=2023-08-21, horaCadastro=10:20, " +
-                        "dataEntrada=2023-08-21, descricao=Dinheiro, valor=100.0, tipoPatrimonio=ATIVO)",
+                        "dataEntrada=2023-08-21, descricao=Dinheiro, valor=100.0, tipoPatrimonio=Ativo)",
                 patrimonioService.removeObjeto(
                         ColaboradorEntityBuilder.builder().comEmpresa().build(), 1L).toString());
     }
@@ -161,7 +161,7 @@ class PatrimonioServiceTest {
                 1L);
 
         Assertions.assertEquals("PatrimonioResponse(id=1, dataCadastro=2023-08-21, horaCadastro=10:20, " +
-                        "dataEntrada=2023-08-21, descricao=Dinheiro, valor=100.0, tipoPatrimonio=ATIVO)",
+                        "dataEntrada=2023-08-21, descricao=Dinheiro, valor=100.0, tipoPatrimonio=Ativo)",
                 patrimonioResponse.toString());
     }
 
@@ -249,7 +249,7 @@ class PatrimonioServiceTest {
                         .build());
 
         Assertions.assertEquals("PatrimonioResponse(id=1, dataCadastro=2023-08-21, horaCadastro=10:20, " +
-                        "dataEntrada=2023-08-21, descricao=Dinheiro, valor=100.0, tipoPatrimonio=ATIVO)",
+                        "dataEntrada=2023-08-21, descricao=Dinheiro, valor=100.0, tipoPatrimonio=Ativo)",
                 patrimonio.toString());
     }
 
