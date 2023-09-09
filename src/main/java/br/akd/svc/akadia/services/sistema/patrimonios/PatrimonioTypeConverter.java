@@ -30,7 +30,7 @@ public class PatrimonioTypeConverter {
                     .dataEntrada(patrimonio.getDataEntrada())
                     .descricao(patrimonio.getDescricao())
                     .valor(patrimonio.getValor())
-                    .tipoPatrimonio(patrimonio.getTipoPatrimonio())
+                    .tipoPatrimonio(patrimonio.getTipoPatrimonio().getDesc())
                     .build();
             patrimonioResponses.add(patrimonioResponse);
         }
@@ -70,7 +70,7 @@ public class PatrimonioTypeConverter {
                 .dataEntrada(patrimonioEntity.getDataEntrada())
                 .descricao(patrimonioEntity.getDescricao())
                 .valor(patrimonioEntity.getValor())
-                .tipoPatrimonio(patrimonioEntity.getTipoPatrimonio())
+                .tipoPatrimonio(patrimonioEntity.getTipoPatrimonio().getDesc())
                 .build();
 
         log.debug("Objeto PatrimonioResponse buildado com sucesso. Retornando...");
