@@ -11,6 +11,12 @@ public class Constantes {
     public static final String INICIANDO_SALVAMENTO_HISTORICO_DESPESA =
             "Iniciando acesso ao método de salvamento de histórico de ações da despesa... ";
 
+    public static final String INICIANDO_SALVAMENTO_HISTORICO_PATRIMONIO =
+            "Iniciando acesso ao método de salvamento de histórico de ações do patrimônio... ";
+
+    public static final String INICIANDO_SALVAMENTO_HISTORICO_PRODUTO =
+            "Iniciando acesso ao método de salvamento de histórico de ações do produto... ";
+
     public static final String VERIFICANDO_SE_COLABORADOR_PODE_ALTERAR_DADOS =
             "Iniciando acesso ao método de verificação se colaborador logado possui nível de permissão " +
                     "suficiente para realizar alterações";

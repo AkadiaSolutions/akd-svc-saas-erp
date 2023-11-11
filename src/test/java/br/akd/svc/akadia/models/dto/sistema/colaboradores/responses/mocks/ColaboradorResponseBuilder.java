@@ -1,10 +1,10 @@
 package br.akd.svc.akadia.models.dto.sistema.colaboradores.responses.mocks;
 
-import br.akd.svc.akadia.models.dto.sistema.colaboradores.responses.ColaboradorResponse;
-import br.akd.svc.akadia.models.enums.sistema.colaboradores.ModeloContratacaoEnum;
-import br.akd.svc.akadia.models.enums.sistema.colaboradores.ModeloTrabalhoEnum;
-import br.akd.svc.akadia.models.enums.sistema.colaboradores.StatusColaboradorEnum;
-import br.akd.svc.akadia.models.enums.sistema.colaboradores.TipoOcupacaoEnum;
+import br.akd.svc.akadia.modules.erp.colaboradores.colaborador.models.dto.response.ColaboradorResponse;
+import br.akd.svc.akadia.modules.erp.colaboradores.colaborador.models.enums.ModeloContratacaoEnum;
+import br.akd.svc.akadia.modules.erp.colaboradores.colaborador.models.enums.ModeloTrabalhoEnum;
+import br.akd.svc.akadia.modules.erp.colaboradores.colaborador.models.enums.StatusColaboradorEnum;
+import br.akd.svc.akadia.modules.erp.colaboradores.colaborador.models.enums.TipoOcupacaoEnum;
 
 import java.time.LocalDate;
 import java.time.LocalTime;

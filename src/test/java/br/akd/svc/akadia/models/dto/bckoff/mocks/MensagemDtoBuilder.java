@@ -1,7 +1,7 @@
 package br.akd.svc.akadia.models.dto.bckoff.mocks;
 
-import br.akd.svc.akadia.models.dto.bckoff.MensagemDto;
-import br.akd.svc.akadia.models.enums.bckoff.CaminhoMensagemEnum;
+import br.akd.svc.akadia.modules.backoffice.models.dto.MensagemDto;
+import br.akd.svc.akadia.modules.backoffice.models.enums.CaminhoMensagemEnum;
 
 import java.time.LocalDate;
 import java.time.LocalTime;

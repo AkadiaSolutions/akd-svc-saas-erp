@@ -1,6 +1,6 @@
 package br.akd.svc.akadia.config.security;
 
-import br.akd.svc.akadia.services.exceptions.UnauthorizedAccessException;
+import br.akd.svc.akadia.exceptions.UnauthorizedAccessException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

@@ -1,6 +1,6 @@
 package br.akd.svc.akadia.proxy.asaas.requests.mocks;
 
-import br.akd.svc.akadia.proxy.asaas.requests.CreditCardRequest;
+import br.akd.svc.akadia.modules.web.proxy.asaas.requests.CreditCardRequest;
 
 public class CreditCardRequestBuilder {
 

@@ -1,9 +1,10 @@
 package br.akd.svc.akadia.repositories.sistema.clientes;
 
-import br.akd.svc.akadia.models.entities.sistema.clientes.ClienteEntity;
+import br.akd.svc.akadia.modules.erp.clientes.models.entity.ClienteEntity;
 import br.akd.svc.akadia.models.entities.sistema.clientes.mocks.ClienteEntityBuilder;
-import br.akd.svc.akadia.repositories.sistema.clientes.impl.ClienteRepositoryImpl;
-import br.akd.svc.akadia.services.exceptions.ObjectNotFoundException;
+import br.akd.svc.akadia.modules.erp.clientes.repository.ClienteRepository;
+import br.akd.svc.akadia.modules.erp.clientes.repository.impl.ClienteRepositoryImpl;
+import br.akd.svc.akadia.exceptions.ObjectNotFoundException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

@@ -1,6 +1,7 @@
 package br.akd.svc.akadia.models.entities.bckoff;
 
 import br.akd.svc.akadia.models.entities.bckoff.mocks.AnexoMensagemEntityBuilder;
+import br.akd.svc.akadia.modules.backoffice.models.entity.AnexoMensagemEntity;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

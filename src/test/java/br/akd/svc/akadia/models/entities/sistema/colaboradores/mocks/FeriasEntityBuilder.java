@@ -1,6 +1,6 @@
 package br.akd.svc.akadia.models.entities.sistema.colaboradores.mocks;
 
-import br.akd.svc.akadia.models.entities.sistema.colaboradores.FeriasEntity;
+import br.akd.svc.akadia.modules.erp.colaboradores.colaborador.models.entity.FeriasEntity;
 
 import java.time.LocalDate;
 import java.time.LocalTime;

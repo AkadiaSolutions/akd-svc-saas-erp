@@ -1,6 +1,6 @@
 package br.akd.svc.akadia.proxy.asaas.webhooks.cobranca.mocks;
 
-import br.akd.svc.akadia.proxy.asaas.webhooks.cobranca.CreditCardWebHook;
+import br.akd.svc.akadia.modules.web.proxy.asaas.webhooks.cobranca.CreditCardWebHook;
 
 public class CreditCardWebHookBuilder {
 

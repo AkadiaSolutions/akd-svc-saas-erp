@@ -1,5 +1,6 @@
 package br.akd.svc.akadia.proxy.asaas.webhooks.fiscal;
 
+import br.akd.svc.akadia.modules.web.proxy.asaas.webhooks.fiscal.InvoiceWebHook;
 import br.akd.svc.akadia.proxy.asaas.webhooks.fiscal.mocks.InvoiceWebHookBuilder;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;

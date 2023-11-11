@@ -1,7 +1,7 @@
 package br.akd.svc.akadia.models.entities.site.mocks;
 
-import br.akd.svc.akadia.models.entities.site.CartaoEntity;
-import br.akd.svc.akadia.models.enums.site.BandeiraCartaoEnum;
+import br.akd.svc.akadia.modules.web.models.entity.CartaoEntity;
+import br.akd.svc.akadia.modules.web.models.enums.BandeiraCartaoEnum;
 
 public class CartaoEntityBuilder {
 

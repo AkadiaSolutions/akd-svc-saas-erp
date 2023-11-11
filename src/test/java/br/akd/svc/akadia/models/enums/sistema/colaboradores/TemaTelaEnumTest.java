@@ -1,5 +1,6 @@
 package br.akd.svc.akadia.models.enums.sistema.colaboradores;
 
+import br.akd.svc.akadia.modules.erp.colaboradores.colaborador.models.enums.TemaTelaEnum;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

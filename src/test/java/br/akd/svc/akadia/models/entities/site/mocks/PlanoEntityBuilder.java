@@ -1,9 +1,9 @@
 package br.akd.svc.akadia.models.entities.site.mocks;
 
-import br.akd.svc.akadia.models.entities.site.PlanoEntity;
-import br.akd.svc.akadia.models.enums.site.FormaPagamentoSistemaEnum;
-import br.akd.svc.akadia.models.enums.site.StatusPlanoEnum;
-import br.akd.svc.akadia.models.enums.site.TipoPlanoEnum;
+import br.akd.svc.akadia.modules.web.models.entity.PlanoEntity;
+import br.akd.svc.akadia.modules.web.models.enums.FormaPagamentoSistemaEnum;
+import br.akd.svc.akadia.modules.web.models.enums.StatusPlanoEnum;
+import br.akd.svc.akadia.modules.web.models.enums.TipoPlanoEnum;
 
 import java.time.LocalDate;
 import java.time.LocalTime;

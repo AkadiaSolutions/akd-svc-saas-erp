@@ -1,7 +1,8 @@
 package br.akd.svc.akadia.models.entities.site;
 
 import br.akd.svc.akadia.models.entities.site.mocks.CartaoEntityBuilder;
-import br.akd.svc.akadia.models.enums.site.BandeiraCartaoEnum;
+import br.akd.svc.akadia.modules.web.models.enums.BandeiraCartaoEnum;
+import br.akd.svc.akadia.modules.web.models.entity.CartaoEntity;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

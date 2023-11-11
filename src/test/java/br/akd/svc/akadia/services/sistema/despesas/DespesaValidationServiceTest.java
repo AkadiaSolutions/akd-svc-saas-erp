@@ -1,7 +1,8 @@
 package br.akd.svc.akadia.services.sistema.despesas;
 
 import br.akd.svc.akadia.models.entities.sistema.despesas.mocks.DespesaEntityBuilder;
-import br.akd.svc.akadia.services.exceptions.InvalidRequestException;
+import br.akd.svc.akadia.modules.erp.despesas.services.DespesaValidationService;
+import br.akd.svc.akadia.exceptions.InvalidRequestException;
 import br.akd.svc.akadia.utils.Constantes;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;

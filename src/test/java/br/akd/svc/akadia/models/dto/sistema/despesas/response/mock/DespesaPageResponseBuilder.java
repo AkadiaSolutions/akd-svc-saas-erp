@@ -1,6 +1,6 @@
 package br.akd.svc.akadia.models.dto.sistema.despesas.response.mock;
 
-import br.akd.svc.akadia.models.dto.sistema.despesas.response.DespesaPageResponse;
+import br.akd.svc.akadia.modules.erp.despesas.models.dto.response.page.DespesaPageResponse;
 
 public class DespesaPageResponseBuilder {
     DespesaPageResponseBuilder() {

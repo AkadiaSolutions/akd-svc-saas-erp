@@ -1,13 +1,14 @@
 package br.akd.svc.akadia.services.sistema.clientes;
 
-import br.akd.svc.akadia.models.dto.sistema.clientes.requests.ClienteRequest;
+import br.akd.svc.akadia.modules.erp.clientes.models.dto.request.ClienteRequest;
 import br.akd.svc.akadia.models.dto.sistema.clientes.requests.mocks.ClienteRequestBuilder;
-import br.akd.svc.akadia.models.entities.sistema.clientes.ClienteEntity;
+import br.akd.svc.akadia.modules.erp.clientes.models.entity.ClienteEntity;
 import br.akd.svc.akadia.models.entities.sistema.clientes.mocks.ClienteEntityBuilder;
-import br.akd.svc.akadia.models.entities.sistema.colaboradores.ColaboradorEntity;
+import br.akd.svc.akadia.modules.erp.colaboradores.colaborador.models.entity.ColaboradorEntity;
 import br.akd.svc.akadia.models.entities.sistema.colaboradores.mocks.ColaboradorEntityBuilder;
-import br.akd.svc.akadia.repositories.sistema.clientes.impl.ClienteRepositoryImpl;
-import br.akd.svc.akadia.services.exceptions.InvalidRequestException;
+import br.akd.svc.akadia.modules.erp.clientes.repository.impl.ClienteRepositoryImpl;
+import br.akd.svc.akadia.modules.erp.clientes.services.ClienteValidationService;
+import br.akd.svc.akadia.exceptions.InvalidRequestException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

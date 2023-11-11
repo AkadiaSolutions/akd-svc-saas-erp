@@ -1,6 +1,6 @@
 package br.akd.svc.akadia.proxy.asaas.responses.assinatura.consulta.mocks;
 
-import br.akd.svc.akadia.proxy.asaas.responses.assinatura.consulta.ConsultaAssinaturaResponse;
+import br.akd.svc.akadia.modules.web.proxy.asaas.responses.assinatura.consulta.ConsultaAssinaturaResponse;
 
 import java.time.LocalDate;
 import java.util.ArrayList;

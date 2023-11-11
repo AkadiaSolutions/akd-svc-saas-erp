@@ -1,7 +1,7 @@
 package br.akd.svc.akadia.config.security;
 
-import br.akd.svc.akadia.models.entities.sistema.colaboradores.ColaboradorEntity;
-import br.akd.svc.akadia.repositories.sistema.colaboradores.ColaboradorRepository;
+import br.akd.svc.akadia.modules.erp.colaboradores.colaborador.models.entity.ColaboradorEntity;
+import br.akd.svc.akadia.modules.erp.colaboradores.colaborador.repository.ColaboradorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

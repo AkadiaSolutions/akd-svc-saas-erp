@@ -1,6 +1,6 @@
 package br.akd.svc.akadia.models.entities.sistema.colaboradores.mocks;
 
-import br.akd.svc.akadia.models.entities.sistema.colaboradores.AcessoEntity;
+import br.akd.svc.akadia.modules.erp.colaboradores.acesso.models.entity.AcessoEntity;
 
 import java.time.LocalDate;
 import java.time.LocalTime;

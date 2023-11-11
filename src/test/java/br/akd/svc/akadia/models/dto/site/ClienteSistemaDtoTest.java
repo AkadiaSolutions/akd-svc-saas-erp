@@ -1,6 +1,7 @@
 package br.akd.svc.akadia.models.dto.site;
 
 import br.akd.svc.akadia.models.dto.site.mocks.ClienteSistemaDtoBuilder;
+import br.akd.svc.akadia.modules.web.models.dto.ClienteSistemaDto;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

@@ -1,6 +1,6 @@
 package br.akd.svc.akadia.models.dto.bckoff.mocks;
 
-import br.akd.svc.akadia.models.dto.bckoff.AnexoMensagemDto;
+import br.akd.svc.akadia.modules.backoffice.models.dto.AnexoMensagemDto;
 
 public class AnexoMensagemDtoBuilder {
 

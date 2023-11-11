@@ -1,6 +1,6 @@
 package br.akd.svc.akadia.models.dto.sistema.clientes.responses.mocks;
 
-import br.akd.svc.akadia.models.dto.sistema.clientes.responses.ClientePageResponse;
+import br.akd.svc.akadia.modules.erp.clientes.models.dto.response.page.ClientePageResponse;
 
 public class ClientePageResponseBuilder {
     ClientePageResponseBuilder() {

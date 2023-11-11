@@ -1,11 +1,12 @@
 package br.akd.svc.akadia.repositories.sistema.colaboradores;
 
-import br.akd.svc.akadia.models.entities.global.ArquivoEntity;
+import br.akd.svc.akadia.modules.global.entity.ArquivoEntity;
 import br.akd.svc.akadia.models.entities.global.mocks.ArquivoEntityBuilder;
-import br.akd.svc.akadia.models.entities.sistema.colaboradores.ColaboradorEntity;
+import br.akd.svc.akadia.modules.erp.colaboradores.colaborador.models.entity.ColaboradorEntity;
 import br.akd.svc.akadia.models.entities.sistema.colaboradores.mocks.ColaboradorEntityBuilder;
-import br.akd.svc.akadia.repositories.sistema.colaboradores.impl.ColaboradorRepositoryImpl;
-import br.akd.svc.akadia.services.exceptions.ObjectNotFoundException;
+import br.akd.svc.akadia.modules.erp.colaboradores.colaborador.repository.ColaboradorRepository;
+import br.akd.svc.akadia.modules.erp.colaboradores.colaborador.repository.impl.ColaboradorRepositoryImpl;
+import br.akd.svc.akadia.exceptions.ObjectNotFoundException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

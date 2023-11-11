@@ -1,7 +1,8 @@
 package br.akd.svc.akadia.models.entities.sistema.colaboradores;
 
 import br.akd.svc.akadia.models.entities.sistema.colaboradores.mocks.ExpedienteEntityBuilder;
-import br.akd.svc.akadia.models.enums.sistema.colaboradores.EscalaEnum;
+import br.akd.svc.akadia.modules.erp.colaboradores.colaborador.models.enums.EscalaEnum;
+import br.akd.svc.akadia.modules.erp.colaboradores.colaborador.models.entity.ExpedienteEntity;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

@@ -1,8 +1,9 @@
 package br.akd.svc.akadia.models.entities.site;
 
 import br.akd.svc.akadia.models.entities.site.mocks.PagamentoSistemaEntityBuilder;
-import br.akd.svc.akadia.models.enums.site.FormaPagamentoSistemaEnum;
-import br.akd.svc.akadia.models.enums.site.StatusPagamentoSistemaEnum;
+import br.akd.svc.akadia.modules.web.models.enums.FormaPagamentoSistemaEnum;
+import br.akd.svc.akadia.modules.web.models.enums.StatusPagamentoSistemaEnum;
+import br.akd.svc.akadia.modules.web.models.entity.PagamentoSistemaEntity;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

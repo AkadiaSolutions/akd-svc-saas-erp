@@ -1,11 +1,12 @@
 package br.akd.svc.akadia.services.sistema.despesas;
 
-import br.akd.svc.akadia.models.entities.sistema.colaboradores.ColaboradorEntity;
+import br.akd.svc.akadia.modules.erp.colaboradores.colaborador.models.entity.ColaboradorEntity;
 import br.akd.svc.akadia.models.entities.sistema.colaboradores.mocks.ColaboradorEntityBuilder;
-import br.akd.svc.akadia.models.entities.sistema.despesas.DespesaEntity;
+import br.akd.svc.akadia.modules.erp.despesas.models.entity.DespesaEntity;
 import br.akd.svc.akadia.models.entities.sistema.despesas.mocks.DespesaEntityBuilder;
-import br.akd.svc.akadia.repositories.sistema.despesas.impl.DespesaRepositoryImpl;
-import br.akd.svc.akadia.services.sistema.colaboradores.acao.AcaoService;
+import br.akd.svc.akadia.modules.erp.despesas.repository.impl.DespesaRepositoryImpl;
+import br.akd.svc.akadia.modules.erp.colaboradores.acao.services.AcaoService;
+import br.akd.svc.akadia.modules.erp.despesas.services.DespesaRelatorioService;
 import com.lowagie.text.Paragraph;
 import com.lowagie.text.pdf.PdfPTable;
 import org.junit.jupiter.api.Assertions;

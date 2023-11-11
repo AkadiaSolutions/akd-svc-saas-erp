@@ -1,9 +1,10 @@
 package br.akd.svc.akadia.services.sistema.clientes;
 
-import br.akd.svc.akadia.models.dto.sistema.clientes.responses.ClientePageResponse;
-import br.akd.svc.akadia.models.dto.sistema.clientes.responses.ClienteResponse;
-import br.akd.svc.akadia.models.entities.sistema.clientes.ClienteEntity;
+import br.akd.svc.akadia.modules.erp.clientes.models.dto.response.page.ClientePageResponse;
+import br.akd.svc.akadia.modules.erp.clientes.models.dto.response.ClienteResponse;
+import br.akd.svc.akadia.modules.erp.clientes.models.entity.ClienteEntity;
 import br.akd.svc.akadia.models.entities.sistema.clientes.mocks.ClienteEntityBuilder;
+import br.akd.svc.akadia.modules.erp.clientes.services.ClienteTypeConverter;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

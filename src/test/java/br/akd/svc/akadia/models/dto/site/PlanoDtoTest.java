@@ -1,9 +1,10 @@
 package br.akd.svc.akadia.models.dto.site;
 
 import br.akd.svc.akadia.models.dto.site.mocks.PlanoDtoBuilder;
-import br.akd.svc.akadia.models.enums.site.FormaPagamentoSistemaEnum;
-import br.akd.svc.akadia.models.enums.site.StatusPlanoEnum;
-import br.akd.svc.akadia.models.enums.site.TipoPlanoEnum;
+import br.akd.svc.akadia.modules.web.models.enums.FormaPagamentoSistemaEnum;
+import br.akd.svc.akadia.modules.web.models.enums.StatusPlanoEnum;
+import br.akd.svc.akadia.modules.web.models.enums.TipoPlanoEnum;
+import br.akd.svc.akadia.modules.web.models.dto.PlanoDto;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

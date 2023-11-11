@@ -1,8 +1,9 @@
 package br.akd.svc.akadia.models.dto.sistema.clientes.responses;
 
 import br.akd.svc.akadia.models.dto.sistema.clientes.responses.mocks.ClienteResponseBuilder;
-import br.akd.svc.akadia.models.enums.sistema.clientes.StatusClienteEnum;
-import br.akd.svc.akadia.models.enums.sistema.clientes.TipoPessoaEnum;
+import br.akd.svc.akadia.modules.erp.clientes.models.enums.StatusClienteEnum;
+import br.akd.svc.akadia.modules.erp.clientes.models.enums.TipoPessoaEnum;
+import br.akd.svc.akadia.modules.erp.clientes.models.dto.response.ClienteResponse;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

@@ -1,6 +1,7 @@
 package br.akd.svc.akadia.models.entities.bckoff;
 
 import br.akd.svc.akadia.models.entities.bckoff.mocks.AvaliacaoEntityBuilder;
+import br.akd.svc.akadia.modules.backoffice.models.entity.AvaliacaoEntity;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

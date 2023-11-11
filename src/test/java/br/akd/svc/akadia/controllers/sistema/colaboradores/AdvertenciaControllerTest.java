@@ -1,12 +1,13 @@
 package br.akd.svc.akadia.controllers.sistema.colaboradores;
 
 import br.akd.svc.akadia.config.security.JWTUtil;
-import br.akd.svc.akadia.models.dto.sistema.colaboradores.responses.advertencia.AdvertenciaPageResponse;
+import br.akd.svc.akadia.modules.erp.colaboradores.advertencia.models.dto.response.AdvertenciaPageResponse;
 import br.akd.svc.akadia.models.dto.sistema.colaboradores.responses.mocks.AdvertenciaPageResponseBuilder;
 import br.akd.svc.akadia.models.entities.global.mocks.ArquivoEntityBuilder;
 import br.akd.svc.akadia.models.entities.sistema.colaboradores.mocks.ColaboradorEntityBuilder;
-import br.akd.svc.akadia.models.enums.sistema.colaboradores.StatusAdvertenciaEnum;
-import br.akd.svc.akadia.services.sistema.colaboradores.advertencia.AdvertenciaService;
+import br.akd.svc.akadia.modules.erp.colaboradores.advertencia.models.enums.StatusAdvertenciaEnum;
+import br.akd.svc.akadia.modules.erp.colaboradores.advertencia.controllers.AdvertenciaController;
+import br.akd.svc.akadia.modules.erp.colaboradores.advertencia.services.AdvertenciaService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

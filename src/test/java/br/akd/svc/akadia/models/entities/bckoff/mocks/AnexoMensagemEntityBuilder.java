@@ -1,6 +1,6 @@
 package br.akd.svc.akadia.models.entities.bckoff.mocks;
 
-import br.akd.svc.akadia.models.entities.bckoff.AnexoMensagemEntity;
+import br.akd.svc.akadia.modules.backoffice.models.entity.AnexoMensagemEntity;
 
 public class AnexoMensagemEntityBuilder {
 

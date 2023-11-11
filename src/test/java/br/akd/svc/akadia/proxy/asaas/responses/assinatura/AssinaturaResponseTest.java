@@ -1,5 +1,6 @@
 package br.akd.svc.akadia.proxy.asaas.responses.assinatura;
 
+import br.akd.svc.akadia.modules.web.proxy.asaas.responses.assinatura.AssinaturaResponse;
 import br.akd.svc.akadia.proxy.asaas.responses.assinatura.mocks.AssinaturaResponseBuilder;
 import br.akd.svc.akadia.proxy.asaas.responses.mocks.CreditCardResponseBuilder;
 import br.akd.svc.akadia.proxy.asaas.responses.assinatura.mocks.FineResponseBuilder;

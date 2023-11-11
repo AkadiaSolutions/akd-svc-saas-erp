@@ -1,7 +1,7 @@
 package br.akd.svc.akadia.proxy.asaas.webhooks.fiscal.mocks;
 
-import br.akd.svc.akadia.proxy.asaas.webhooks.fiscal.AtualizacaoFiscalWebHook;
-import br.akd.svc.akadia.proxy.asaas.webhooks.fiscal.enums.EventoFiscalEnum;
+import br.akd.svc.akadia.modules.web.proxy.asaas.webhooks.fiscal.AtualizacaoFiscalWebHook;
+import br.akd.svc.akadia.modules.web.proxy.asaas.webhooks.fiscal.enums.EventoFiscalEnum;
 
 public class AtualizacaoFiscalWebHookBuilder {
 

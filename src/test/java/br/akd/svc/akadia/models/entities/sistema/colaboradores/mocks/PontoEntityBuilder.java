@@ -1,6 +1,6 @@
 package br.akd.svc.akadia.models.entities.sistema.colaboradores.mocks;
 
-import br.akd.svc.akadia.models.entities.sistema.colaboradores.PontoEntity;
+import br.akd.svc.akadia.modules.erp.colaboradores.colaborador.models.entity.PontoEntity;
 
 import java.time.LocalTime;
 

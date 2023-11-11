@@ -1,8 +1,9 @@
 package br.akd.svc.akadia.models.entities.sistema.clientes;
 
 import br.akd.svc.akadia.models.entities.sistema.clientes.mocks.ClienteEntityBuilder;
-import br.akd.svc.akadia.models.enums.sistema.clientes.StatusClienteEnum;
-import br.akd.svc.akadia.models.enums.sistema.clientes.TipoPessoaEnum;
+import br.akd.svc.akadia.modules.erp.clientes.models.enums.StatusClienteEnum;
+import br.akd.svc.akadia.modules.erp.clientes.models.enums.TipoPessoaEnum;
+import br.akd.svc.akadia.modules.erp.clientes.models.entity.ClienteEntity;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

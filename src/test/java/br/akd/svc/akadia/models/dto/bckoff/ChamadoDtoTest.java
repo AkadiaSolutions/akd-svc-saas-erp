@@ -1,8 +1,9 @@
 package br.akd.svc.akadia.models.dto.bckoff;
 
 import br.akd.svc.akadia.models.dto.bckoff.mocks.ChamadoDtoBuilder;
-import br.akd.svc.akadia.models.enums.bckoff.CategoriaChamadoEnum;
-import br.akd.svc.akadia.models.enums.bckoff.StatusChamadoEnum;
+import br.akd.svc.akadia.modules.backoffice.models.enums.CategoriaChamadoEnum;
+import br.akd.svc.akadia.modules.backoffice.models.enums.StatusChamadoEnum;
+import br.akd.svc.akadia.modules.backoffice.models.dto.ChamadoDto;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

@@ -1,7 +1,7 @@
 package br.akd.svc.akadia.proxy.asaas.responses.mocks;
 
-import br.akd.svc.akadia.models.enums.global.EstadoEnum;
-import br.akd.svc.akadia.proxy.asaas.responses.ClienteSistemaResponse;
+import br.akd.svc.akadia.modules.global.enums.EstadoEnum;
+import br.akd.svc.akadia.modules.web.proxy.asaas.responses.ClienteSistemaResponse;
 
 import java.time.LocalDate;
 

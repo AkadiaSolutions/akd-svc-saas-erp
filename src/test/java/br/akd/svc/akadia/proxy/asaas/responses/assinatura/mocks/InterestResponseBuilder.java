@@ -1,6 +1,6 @@
 package br.akd.svc.akadia.proxy.asaas.responses.assinatura.mocks;
 
-import br.akd.svc.akadia.proxy.asaas.responses.assinatura.InterestResponse;
+import br.akd.svc.akadia.modules.web.proxy.asaas.responses.assinatura.InterestResponse;
 
 public class InterestResponseBuilder {
 

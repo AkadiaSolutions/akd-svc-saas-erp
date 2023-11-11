@@ -1,6 +1,6 @@
 package br.akd.svc.akadia.proxy.asaas.webhooks.fiscal.mocks;
 
-import br.akd.svc.akadia.proxy.asaas.webhooks.fiscal.TaxesWebHook;
+import br.akd.svc.akadia.modules.web.proxy.asaas.webhooks.fiscal.TaxesWebHook;
 
 public class TaxesWebHookBuilder {
     TaxesWebHookBuilder() {

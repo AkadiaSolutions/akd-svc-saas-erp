@@ -1,11 +1,11 @@
 package br.akd.svc.akadia.models.entities.bckoff.mocks;
 
-import br.akd.svc.akadia.models.entities.bckoff.ChamadoEntity;
-import br.akd.svc.akadia.models.entities.bckoff.ColaboradorInternoEntity;
+import br.akd.svc.akadia.modules.backoffice.models.entity.ChamadoEntity;
+import br.akd.svc.akadia.modules.backoffice.models.entity.ColaboradorInternoEntity;
 import br.akd.svc.akadia.models.entities.global.mocks.ParentescoEntityBuilder;
 import br.akd.svc.akadia.models.entities.global.mocks.TelefoneEntityBuilder;
-import br.akd.svc.akadia.models.enums.bckoff.CargoInternoEnum;
-import br.akd.svc.akadia.models.enums.bckoff.StatusAtividadeEnum;
+import br.akd.svc.akadia.modules.backoffice.models.enums.CargoInternoEnum;
+import br.akd.svc.akadia.modules.backoffice.models.enums.StatusAtividadeEnum;
 
 import java.time.LocalDate;
 import java.time.LocalTime;

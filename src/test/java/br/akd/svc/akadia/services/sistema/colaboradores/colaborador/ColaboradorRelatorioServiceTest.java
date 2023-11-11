@@ -1,10 +1,10 @@
 package br.akd.svc.akadia.services.sistema.colaboradores.colaborador;
 
-import br.akd.svc.akadia.models.entities.sistema.colaboradores.ColaboradorEntity;
+import br.akd.svc.akadia.modules.erp.colaboradores.colaborador.models.entity.ColaboradorEntity;
 import br.akd.svc.akadia.models.entities.sistema.colaboradores.mocks.ColaboradorEntityBuilder;
-import br.akd.svc.akadia.repositories.sistema.colaboradores.impl.ColaboradorRepositoryImpl;
-import br.akd.svc.akadia.services.sistema.colaboradores.acao.AcaoService;
-import br.akd.svc.akadia.services.sistema.colaboradores.colaborador.ColaboradorRelatorioService;
+import br.akd.svc.akadia.modules.erp.colaboradores.colaborador.repository.impl.ColaboradorRepositoryImpl;
+import br.akd.svc.akadia.modules.erp.colaboradores.acao.services.AcaoService;
+import br.akd.svc.akadia.modules.erp.colaboradores.colaborador.services.ColaboradorRelatorioService;
 import com.lowagie.text.Paragraph;
 import com.lowagie.text.pdf.PdfPTable;
 import org.junit.jupiter.api.Assertions;
@@ -17,7 +17,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.io.InvalidClassException;
 import java.util.ArrayList;
 import java.util.List;
@@ -83,7 +82,7 @@ class ColaboradorRelatorioServiceTest {
 
     @Test
     @DisplayName("Deve testar método de exportação de PDF com ids preenchidos")
-    void deveTestarMetodoDeExportacaoDePdfComIdsPreenchidos() throws IOException {
+    void deveTestarMetodoDeExportacaoDePdfComIdsPreenchidos() {
         HttpServletResponse mockedResponse = Mockito.mock(HttpServletResponse.class);
         ColaboradorEntity colaboradorLogado = ColaboradorEntityBuilder.builder().build();
 
@@ -98,17 +97,13 @@ class ColaboradorRelatorioServiceTest {
         when(colaboradorRepositoryImpl.implementaBuscaPorIdEmMassa(any())).thenReturn(colaboradoresRetornados);
         Mockito.doNothing().when(acaoService).salvaHistoricoColaborador(any(), any(), any(), any(), any());
 
-        try {
-            colaboradorRelatorioService.exportarPdf(mockedResponse, colaboradorLogado, ids);
-            Assertions.fail();
-        } catch (InvalidClassException e) {
-            Assertions.assertEquals("java.lang.NullPointerException", e.getMessage());
-        }
+        Assertions.assertThrows(InvalidClassException.class,
+                () -> colaboradorRelatorioService.exportarPdf(mockedResponse, colaboradorLogado, ids));
     }
 
     @Test
     @DisplayName("Deve testar método de exportação de PDF sem nenhum preenchido")
-    void deveTestarMetodoDeExportacaoDePdfSemIdsPreenchidos() throws IOException {
+    void deveTestarMetodoDeExportacaoDePdfSemIdsPreenchidos() {
         HttpServletResponse mockedResponse = Mockito.mock(HttpServletResponse.class);
         ColaboradorEntity colaboradorLogado = ColaboradorEntityBuilder.builder()
                 .comEmpresa()
@@ -120,12 +115,8 @@ class ColaboradorRelatorioServiceTest {
         when(colaboradorRepositoryImpl.implementaBuscaPorTodos(any())).thenReturn(colaboradoresRetornados);
         Mockito.doNothing().when(acaoService).salvaHistoricoColaborador(any(), any(), any(), any(), any());
 
-        try {
-            colaboradorRelatorioService.exportarPdf(mockedResponse, colaboradorLogado, new ArrayList<>());
-            Assertions.fail();
-        } catch (InvalidClassException e) {
-            Assertions.assertEquals("java.lang.NullPointerException", e.getMessage());
-        }
+        Assertions.assertThrows(InvalidClassException.class,
+                () -> colaboradorRelatorioService.exportarPdf(mockedResponse, colaboradorLogado, new ArrayList<>()));
     }
 
 }

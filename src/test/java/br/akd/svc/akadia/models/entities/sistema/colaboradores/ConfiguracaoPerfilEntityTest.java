@@ -1,7 +1,8 @@
 package br.akd.svc.akadia.models.entities.sistema.colaboradores;
 
 import br.akd.svc.akadia.models.entities.sistema.colaboradores.mocks.ConfiguracaoPerfilEntityBuilder;
-import br.akd.svc.akadia.models.enums.sistema.colaboradores.TemaTelaEnum;
+import br.akd.svc.akadia.modules.erp.colaboradores.colaborador.models.enums.TemaTelaEnum;
+import br.akd.svc.akadia.modules.erp.colaboradores.colaborador.models.entity.ConfiguracaoPerfilEntity;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

@@ -1,8 +1,8 @@
 package br.akd.svc.akadia.models.dto.bckoff.mocks;
 
-import br.akd.svc.akadia.models.dto.bckoff.LeadDto;
+import br.akd.svc.akadia.modules.backoffice.models.dto.LeadDto;
 import br.akd.svc.akadia.models.dto.global.mocks.TelefoneDtoBuilder;
-import br.akd.svc.akadia.models.enums.bckoff.OrigemLeadEnum;
+import br.akd.svc.akadia.modules.backoffice.models.enums.OrigemLeadEnum;
 
 public class LeadDtoBuilder {
 

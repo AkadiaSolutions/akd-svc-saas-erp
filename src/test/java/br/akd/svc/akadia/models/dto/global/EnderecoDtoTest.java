@@ -1,7 +1,8 @@
 package br.akd.svc.akadia.models.dto.global;
 
 import br.akd.svc.akadia.models.dto.global.mocks.EnderecoDtoBuilder;
-import br.akd.svc.akadia.models.enums.global.EstadoEnum;
+import br.akd.svc.akadia.modules.global.enums.EstadoEnum;
+import br.akd.svc.akadia.modules.global.dto.EnderecoDto;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

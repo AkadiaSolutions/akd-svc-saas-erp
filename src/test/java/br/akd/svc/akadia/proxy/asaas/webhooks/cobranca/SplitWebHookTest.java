@@ -1,5 +1,6 @@
 package br.akd.svc.akadia.proxy.asaas.webhooks.cobranca;
 
+import br.akd.svc.akadia.modules.web.proxy.asaas.webhooks.cobranca.SplitWebHook;
 import br.akd.svc.akadia.proxy.asaas.webhooks.cobranca.mocks.SplitWebHookBuilder;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;

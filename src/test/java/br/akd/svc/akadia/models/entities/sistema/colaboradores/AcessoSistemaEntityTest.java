@@ -1,8 +1,9 @@
 package br.akd.svc.akadia.models.entities.sistema.colaboradores;
 
-import br.akd.svc.akadia.models.enums.sistema.colaboradores.ModulosEnum;
+import br.akd.svc.akadia.modules.global.entity.AcessoSistemaEntity;
+import br.akd.svc.akadia.modules.erp.colaboradores.colaborador.models.enums.ModulosEnum;
 import br.akd.svc.akadia.models.entities.sistema.colaboradores.mocks.AcessoSistemaEntityBuilder;
-import br.akd.svc.akadia.models.enums.sistema.colaboradores.PermissaoEnum;
+import br.akd.svc.akadia.modules.erp.colaboradores.colaborador.models.enums.PermissaoEnum;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

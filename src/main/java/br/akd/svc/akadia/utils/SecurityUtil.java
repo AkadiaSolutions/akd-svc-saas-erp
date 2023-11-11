@@ -1,8 +1,8 @@
 package br.akd.svc.akadia.utils;
 
-import br.akd.svc.akadia.models.entities.sistema.colaboradores.AcessoSistemaEntity;
-import br.akd.svc.akadia.models.enums.sistema.colaboradores.PermissaoEnum;
-import br.akd.svc.akadia.services.exceptions.UnauthorizedAccessException;
+import br.akd.svc.akadia.modules.global.entity.AcessoSistemaEntity;
+import br.akd.svc.akadia.modules.erp.colaboradores.colaborador.models.enums.PermissaoEnum;
+import br.akd.svc.akadia.exceptions.UnauthorizedAccessException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 

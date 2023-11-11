@@ -1,7 +1,8 @@
 package br.akd.svc.akadia.models.dto.site;
 
 import br.akd.svc.akadia.models.dto.site.mocks.CartaoDtoBuilder;
-import br.akd.svc.akadia.models.enums.site.BandeiraCartaoEnum;
+import br.akd.svc.akadia.modules.web.models.enums.BandeiraCartaoEnum;
+import br.akd.svc.akadia.modules.web.models.dto.CartaoDto;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

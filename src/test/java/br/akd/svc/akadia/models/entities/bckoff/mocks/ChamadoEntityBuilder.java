@@ -1,8 +1,8 @@
 package br.akd.svc.akadia.models.entities.bckoff.mocks;
 
-import br.akd.svc.akadia.models.entities.bckoff.ChamadoEntity;
-import br.akd.svc.akadia.models.enums.bckoff.CategoriaChamadoEnum;
-import br.akd.svc.akadia.models.enums.bckoff.StatusChamadoEnum;
+import br.akd.svc.akadia.modules.backoffice.models.entity.ChamadoEntity;
+import br.akd.svc.akadia.modules.backoffice.models.enums.CategoriaChamadoEnum;
+import br.akd.svc.akadia.modules.backoffice.models.enums.StatusChamadoEnum;
 
 import java.time.LocalDate;
 import java.time.LocalTime;

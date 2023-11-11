@@ -1,5 +1,6 @@
 package br.akd.svc.akadia.proxy.asaas.webhooks.cobranca;
 
+import br.akd.svc.akadia.modules.web.proxy.asaas.webhooks.cobranca.CreditCardWebHook;
 import br.akd.svc.akadia.proxy.asaas.webhooks.cobranca.mocks.CreditCardWebHookBuilder;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;

@@ -1,5 +1,6 @@
 package br.akd.svc.akadia.models.enums.global;
 
+import br.akd.svc.akadia.modules.global.enums.TipoTelefoneEnum;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

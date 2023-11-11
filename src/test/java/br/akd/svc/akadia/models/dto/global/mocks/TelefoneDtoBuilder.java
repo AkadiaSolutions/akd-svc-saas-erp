@@ -1,7 +1,7 @@
 package br.akd.svc.akadia.models.dto.global.mocks;
 
-import br.akd.svc.akadia.models.dto.global.TelefoneDto;
-import br.akd.svc.akadia.models.enums.global.TipoTelefoneEnum;
+import br.akd.svc.akadia.modules.global.dto.TelefoneDto;
+import br.akd.svc.akadia.modules.global.enums.TipoTelefoneEnum;
 
 public class TelefoneDtoBuilder {
 

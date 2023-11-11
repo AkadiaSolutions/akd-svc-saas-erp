@@ -1,14 +1,15 @@
 package br.akd.svc.akadia.services.site;
 
-import br.akd.svc.akadia.models.dto.site.empresa.mocks.EmpresaDtoBuilder;
+import br.akd.svc.akadia.modules.web.models.dto.empresa.mocks.EmpresaDtoBuilder;
 import br.akd.svc.akadia.models.entities.sistema.colaboradores.mocks.ColaboradorEntityBuilder;
-import br.akd.svc.akadia.models.entities.site.empresa.mocks.EmpresaEntityBuilder;
+import br.akd.svc.akadia.modules.web.models.entity.empresa.mocks.EmpresaEntityBuilder;
 import br.akd.svc.akadia.models.entities.site.mocks.ClienteSistemaEntityBuilder;
-import br.akd.svc.akadia.repositories.sistema.colaboradores.impl.ColaboradorRepositoryImpl;
-import br.akd.svc.akadia.repositories.site.impl.ClienteSistemaRepositoryImpl;
-import br.akd.svc.akadia.repositories.site.impl.EmpresaRepositoryImpl;
-import br.akd.svc.akadia.services.exceptions.InvalidRequestException;
-import br.akd.svc.akadia.services.sistema.colaboradores.colaborador.ColaboradorService;
+import br.akd.svc.akadia.modules.erp.colaboradores.colaborador.repository.impl.ColaboradorRepositoryImpl;
+import br.akd.svc.akadia.modules.web.repository.impl.ClienteSistemaRepositoryImpl;
+import br.akd.svc.akadia.modules.web.repository.impl.EmpresaRepositoryImpl;
+import br.akd.svc.akadia.modules.web.services.EmpresaService;
+import br.akd.svc.akadia.exceptions.InvalidRequestException;
+import br.akd.svc.akadia.modules.erp.colaboradores.colaborador.services.ColaboradorService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

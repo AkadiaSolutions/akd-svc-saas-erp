@@ -1,6 +1,6 @@
 package br.akd.svc.akadia.proxy.asaas.responses.mocks;
 
-import br.akd.svc.akadia.proxy.asaas.responses.CreditCardResponse;
+import br.akd.svc.akadia.modules.web.proxy.asaas.responses.CreditCardResponse;
 
 public class CreditCardResponseBuilder {
 

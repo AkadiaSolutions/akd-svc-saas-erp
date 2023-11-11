@@ -1,5 +1,6 @@
 package br.akd.svc.akadia.proxy.asaas.requests.assinatura;
 
+import br.akd.svc.akadia.modules.web.proxy.asaas.requests.assinatura.DiscountRequest;
 import br.akd.svc.akadia.proxy.asaas.requests.assinatura.mocks.DiscountRequestBuilder;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;

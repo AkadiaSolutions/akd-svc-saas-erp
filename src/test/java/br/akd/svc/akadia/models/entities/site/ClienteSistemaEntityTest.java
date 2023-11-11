@@ -1,6 +1,7 @@
 package br.akd.svc.akadia.models.entities.site;
 
 import br.akd.svc.akadia.models.entities.site.mocks.ClienteSistemaEntityBuilder;
+import br.akd.svc.akadia.modules.web.models.entity.ClienteSistemaEntity;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

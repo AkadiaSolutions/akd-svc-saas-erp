@@ -1,5 +1,6 @@
 package br.akd.svc.akadia.proxy.asaas.responses.fiscal;
 
+import br.akd.svc.akadia.modules.web.proxy.asaas.responses.fiscal.CriaConfigFiscalResponse;
 import br.akd.svc.akadia.proxy.asaas.responses.fiscal.mocks.CriaConfigFiscalResponseBuilder;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;

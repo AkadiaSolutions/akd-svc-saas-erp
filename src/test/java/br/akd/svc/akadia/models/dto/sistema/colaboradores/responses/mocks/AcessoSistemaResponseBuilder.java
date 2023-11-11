@@ -1,7 +1,7 @@
 package br.akd.svc.akadia.models.dto.sistema.colaboradores.responses.mocks;
 
-import br.akd.svc.akadia.models.dto.sistema.colaboradores.responses.acesso.AcessoSistemaResponse;
-import br.akd.svc.akadia.models.enums.sistema.colaboradores.PermissaoEnum;
+import br.akd.svc.akadia.modules.erp.colaboradores.acesso.models.dto.response.AcessoSistemaResponse;
+import br.akd.svc.akadia.modules.erp.colaboradores.colaborador.models.enums.PermissaoEnum;
 
 import java.util.HashSet;
 

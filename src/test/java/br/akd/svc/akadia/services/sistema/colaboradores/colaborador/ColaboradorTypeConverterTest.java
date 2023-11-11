@@ -1,9 +1,10 @@
 package br.akd.svc.akadia.services.sistema.colaboradores.colaborador;
 
-import br.akd.svc.akadia.models.dto.sistema.colaboradores.responses.ColaboradorPageResponse;
-import br.akd.svc.akadia.models.dto.sistema.colaboradores.responses.ColaboradorResponse;
-import br.akd.svc.akadia.models.entities.sistema.colaboradores.ColaboradorEntity;
+import br.akd.svc.akadia.modules.erp.colaboradores.colaborador.models.dto.response.page.ColaboradorPageResponse;
+import br.akd.svc.akadia.modules.erp.colaboradores.colaborador.models.dto.response.ColaboradorResponse;
+import br.akd.svc.akadia.modules.erp.colaboradores.colaborador.models.entity.ColaboradorEntity;
 import br.akd.svc.akadia.models.entities.sistema.colaboradores.mocks.ColaboradorEntityBuilder;
+import br.akd.svc.akadia.modules.erp.colaboradores.colaborador.services.ColaboradorTypeConverter;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

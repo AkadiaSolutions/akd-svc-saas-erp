@@ -1,9 +1,9 @@
 package br.akd.svc.akadia.config.security;
 
-import br.akd.svc.akadia.models.entities.sistema.colaboradores.ColaboradorEntity;
-import br.akd.svc.akadia.repositories.sistema.colaboradores.ColaboradorRepository;
-import br.akd.svc.akadia.services.exceptions.ObjectNotFoundException;
-import br.akd.svc.akadia.services.sistema.colaboradores.acesso.AcessoService;
+import br.akd.svc.akadia.modules.erp.colaboradores.colaborador.models.entity.ColaboradorEntity;
+import br.akd.svc.akadia.modules.erp.colaboradores.colaborador.repository.ColaboradorRepository;
+import br.akd.svc.akadia.exceptions.ObjectNotFoundException;
+import br.akd.svc.akadia.modules.erp.colaboradores.acesso.services.AcessoService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;

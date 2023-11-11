@@ -1,5 +1,6 @@
 package br.akd.svc.akadia.proxy.asaas.requests.assinatura;
 
+import br.akd.svc.akadia.modules.web.proxy.asaas.requests.assinatura.AtualizaAssinaturaRequest;
 import br.akd.svc.akadia.proxy.asaas.requests.assinatura.mocks.AtualizaAssinaturaRequestBuilder;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;

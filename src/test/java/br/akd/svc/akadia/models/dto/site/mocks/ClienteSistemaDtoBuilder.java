@@ -2,7 +2,7 @@ package br.akd.svc.akadia.models.dto.site.mocks;
 
 import br.akd.svc.akadia.models.dto.global.mocks.EnderecoDtoBuilder;
 import br.akd.svc.akadia.models.dto.global.mocks.TelefoneDtoBuilder;
-import br.akd.svc.akadia.models.dto.site.ClienteSistemaDto;
+import br.akd.svc.akadia.modules.web.models.dto.ClienteSistemaDto;
 
 import java.time.LocalDate;
 import java.time.LocalTime;

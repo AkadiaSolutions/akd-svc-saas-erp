@@ -1,11 +1,12 @@
 package br.akd.svc.akadia.services.sistema.clientes;
 
-import br.akd.svc.akadia.models.entities.sistema.clientes.ClienteEntity;
+import br.akd.svc.akadia.modules.erp.clientes.models.entity.ClienteEntity;
 import br.akd.svc.akadia.models.entities.sistema.clientes.mocks.ClienteEntityBuilder;
-import br.akd.svc.akadia.models.entities.sistema.colaboradores.ColaboradorEntity;
+import br.akd.svc.akadia.modules.erp.colaboradores.colaborador.models.entity.ColaboradorEntity;
 import br.akd.svc.akadia.models.entities.sistema.colaboradores.mocks.ColaboradorEntityBuilder;
-import br.akd.svc.akadia.repositories.sistema.clientes.impl.ClienteRepositoryImpl;
-import br.akd.svc.akadia.services.sistema.colaboradores.acao.AcaoService;
+import br.akd.svc.akadia.modules.erp.clientes.repository.impl.ClienteRepositoryImpl;
+import br.akd.svc.akadia.modules.erp.clientes.services.ClienteRelatorioService;
+import br.akd.svc.akadia.modules.erp.colaboradores.acao.services.AcaoService;
 import com.lowagie.text.Paragraph;
 import com.lowagie.text.pdf.PdfPTable;
 import org.junit.jupiter.api.Assertions;

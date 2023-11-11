@@ -1,6 +1,6 @@
 package br.akd.svc.akadia.proxy.asaas.webhooks.cobranca.mocks;
 
-import br.akd.svc.akadia.proxy.asaas.webhooks.cobranca.SplitWebHook;
+import br.akd.svc.akadia.modules.web.proxy.asaas.webhooks.cobranca.SplitWebHook;
 
 public class SplitWebHookBuilder {
 
