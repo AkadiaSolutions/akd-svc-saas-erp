@@ -1,9 +1,10 @@
 package br.akd.svc.akadia.repositories.sistema.despesas;
 
-import br.akd.svc.akadia.models.entities.sistema.despesas.DespesaEntity;
+import br.akd.svc.akadia.modules.erp.despesas.models.entity.DespesaEntity;
 import br.akd.svc.akadia.models.entities.sistema.despesas.mocks.DespesaEntityBuilder;
-import br.akd.svc.akadia.repositories.sistema.despesas.impl.DespesaRepositoryImpl;
-import br.akd.svc.akadia.services.exceptions.ObjectNotFoundException;
+import br.akd.svc.akadia.modules.erp.despesas.repository.DespesaRepository;
+import br.akd.svc.akadia.modules.erp.despesas.repository.impl.DespesaRepositoryImpl;
+import br.akd.svc.akadia.exceptions.ObjectNotFoundException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

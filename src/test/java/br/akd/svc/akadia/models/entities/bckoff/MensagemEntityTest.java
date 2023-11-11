@@ -1,7 +1,8 @@
 package br.akd.svc.akadia.models.entities.bckoff;
 
 import br.akd.svc.akadia.models.entities.bckoff.mocks.MensagemEntityBuilder;
-import br.akd.svc.akadia.models.enums.bckoff.CaminhoMensagemEnum;
+import br.akd.svc.akadia.modules.backoffice.models.enums.CaminhoMensagemEnum;
+import br.akd.svc.akadia.modules.backoffice.models.entity.MensagemEntity;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

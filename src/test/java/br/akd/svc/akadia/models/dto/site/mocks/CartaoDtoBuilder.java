@@ -1,7 +1,7 @@
 package br.akd.svc.akadia.models.dto.site.mocks;
 
-import br.akd.svc.akadia.models.dto.site.CartaoDto;
-import br.akd.svc.akadia.models.enums.site.BandeiraCartaoEnum;
+import br.akd.svc.akadia.modules.web.models.dto.CartaoDto;
+import br.akd.svc.akadia.modules.web.models.enums.BandeiraCartaoEnum;
 
 public class CartaoDtoBuilder {
 

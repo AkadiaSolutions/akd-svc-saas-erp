@@ -1,8 +1,8 @@
 package br.akd.svc.akadia.models.entities.sistema.patrimonios.mocks;
 
 import br.akd.svc.akadia.models.entities.global.mocks.ExclusaoEntityBuilder;
-import br.akd.svc.akadia.models.entities.sistema.patrimonios.PatrimonioEntity;
-import br.akd.svc.akadia.models.enums.sistema.patrimonios.TipoPatrimonioEnum;
+import br.akd.svc.akadia.modules.erp.patrimonios.models.entity.PatrimonioEntity;
+import br.akd.svc.akadia.modules.erp.patrimonios.models.enums.TipoPatrimonioEnum;
 
 import java.time.LocalDate;
 import java.time.LocalTime;

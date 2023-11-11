@@ -1,9 +1,10 @@
 package br.akd.svc.akadia.services.sistema.despesas;
 
-import br.akd.svc.akadia.models.dto.sistema.despesas.response.DespesaPageResponse;
-import br.akd.svc.akadia.models.dto.sistema.despesas.response.DespesaResponse;
-import br.akd.svc.akadia.models.entities.sistema.despesas.DespesaEntity;
+import br.akd.svc.akadia.modules.erp.despesas.models.dto.response.page.DespesaPageResponse;
+import br.akd.svc.akadia.modules.erp.despesas.models.dto.response.DespesaResponse;
+import br.akd.svc.akadia.modules.erp.despesas.models.entity.DespesaEntity;
 import br.akd.svc.akadia.models.entities.sistema.despesas.mocks.DespesaEntityBuilder;
+import br.akd.svc.akadia.modules.erp.despesas.services.DespesaTypeConverter;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

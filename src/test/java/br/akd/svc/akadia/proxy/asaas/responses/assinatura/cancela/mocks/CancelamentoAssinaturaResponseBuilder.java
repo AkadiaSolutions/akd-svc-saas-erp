@@ -1,6 +1,6 @@
 package br.akd.svc.akadia.proxy.asaas.responses.assinatura.cancela.mocks;
 
-import br.akd.svc.akadia.proxy.asaas.responses.assinatura.cancela.CancelamentoAssinaturaResponse;
+import br.akd.svc.akadia.modules.web.proxy.asaas.responses.assinatura.cancela.CancelamentoAssinaturaResponse;
 
 public class CancelamentoAssinaturaResponseBuilder {
 

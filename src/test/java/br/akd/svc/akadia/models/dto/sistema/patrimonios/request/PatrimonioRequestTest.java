@@ -1,7 +1,8 @@
 package br.akd.svc.akadia.models.dto.sistema.patrimonios.request;
 
 import br.akd.svc.akadia.models.dto.sistema.patrimonios.request.mock.PatrimonioRequestBuilder;
-import br.akd.svc.akadia.models.enums.sistema.patrimonios.TipoPatrimonioEnum;
+import br.akd.svc.akadia.modules.erp.patrimonios.models.enums.TipoPatrimonioEnum;
+import br.akd.svc.akadia.modules.erp.patrimonios.models.dto.request.PatrimonioRequest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

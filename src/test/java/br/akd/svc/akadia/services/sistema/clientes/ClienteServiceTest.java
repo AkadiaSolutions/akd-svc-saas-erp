@@ -1,17 +1,20 @@
 package br.akd.svc.akadia.services.sistema.clientes;
 
 import br.akd.svc.akadia.models.dto.sistema.clientes.requests.mocks.ClienteRequestBuilder;
-import br.akd.svc.akadia.models.dto.sistema.clientes.responses.ClientePageResponse;
-import br.akd.svc.akadia.models.dto.sistema.clientes.responses.ClienteResponse;
+import br.akd.svc.akadia.modules.erp.clientes.models.dto.response.page.ClientePageResponse;
+import br.akd.svc.akadia.modules.erp.clientes.models.dto.response.ClienteResponse;
 import br.akd.svc.akadia.models.dto.sistema.clientes.responses.mocks.ClientePageResponseBuilder;
 import br.akd.svc.akadia.models.dto.sistema.clientes.responses.mocks.ClienteResponseBuilder;
-import br.akd.svc.akadia.models.entities.sistema.clientes.ClienteEntity;
+import br.akd.svc.akadia.modules.erp.clientes.models.entity.ClienteEntity;
 import br.akd.svc.akadia.models.entities.sistema.clientes.mocks.ClienteEntityBuilder;
 import br.akd.svc.akadia.models.entities.sistema.colaboradores.mocks.ColaboradorEntityBuilder;
-import br.akd.svc.akadia.repositories.sistema.clientes.ClienteRepository;
-import br.akd.svc.akadia.repositories.sistema.clientes.impl.ClienteRepositoryImpl;
-import br.akd.svc.akadia.services.exceptions.InvalidRequestException;
-import br.akd.svc.akadia.services.sistema.colaboradores.acao.AcaoService;
+import br.akd.svc.akadia.modules.erp.clientes.repository.ClienteRepository;
+import br.akd.svc.akadia.modules.erp.clientes.repository.impl.ClienteRepositoryImpl;
+import br.akd.svc.akadia.modules.erp.clientes.services.ClienteService;
+import br.akd.svc.akadia.modules.erp.clientes.services.ClienteTypeConverter;
+import br.akd.svc.akadia.modules.erp.clientes.services.ClienteValidationService;
+import br.akd.svc.akadia.exceptions.InvalidRequestException;
+import br.akd.svc.akadia.modules.erp.colaboradores.acao.services.AcaoService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

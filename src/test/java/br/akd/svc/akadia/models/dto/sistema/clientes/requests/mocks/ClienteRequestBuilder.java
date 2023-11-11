@@ -2,9 +2,9 @@ package br.akd.svc.akadia.models.dto.sistema.clientes.requests.mocks;
 
 import br.akd.svc.akadia.models.dto.global.mocks.EnderecoDtoBuilder;
 import br.akd.svc.akadia.models.dto.global.mocks.TelefoneDtoBuilder;
-import br.akd.svc.akadia.models.dto.sistema.clientes.requests.ClienteRequest;
-import br.akd.svc.akadia.models.enums.sistema.clientes.StatusClienteEnum;
-import br.akd.svc.akadia.models.enums.sistema.clientes.TipoPessoaEnum;
+import br.akd.svc.akadia.modules.erp.clientes.models.dto.request.ClienteRequest;
+import br.akd.svc.akadia.modules.erp.clientes.models.enums.StatusClienteEnum;
+import br.akd.svc.akadia.modules.erp.clientes.models.enums.TipoPessoaEnum;
 
 public class ClienteRequestBuilder {
 

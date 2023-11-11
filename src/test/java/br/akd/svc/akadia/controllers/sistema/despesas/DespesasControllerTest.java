@@ -2,13 +2,14 @@ package br.akd.svc.akadia.controllers.sistema.despesas;
 
 import br.akd.svc.akadia.config.security.JWTUtil;
 import br.akd.svc.akadia.models.dto.sistema.despesas.request.mock.DespesaRequestBuilder;
-import br.akd.svc.akadia.models.dto.sistema.despesas.response.DespesaPageResponse;
-import br.akd.svc.akadia.models.dto.sistema.despesas.response.DespesaResponse;
+import br.akd.svc.akadia.modules.erp.despesas.controllers.DespesasController;
+import br.akd.svc.akadia.modules.erp.despesas.models.dto.response.page.DespesaPageResponse;
+import br.akd.svc.akadia.modules.erp.despesas.models.dto.response.DespesaResponse;
 import br.akd.svc.akadia.models.dto.sistema.despesas.response.mock.DespesaPageResponseBuilder;
 import br.akd.svc.akadia.models.dto.sistema.despesas.response.mock.DespesaResponseBuilder;
 import br.akd.svc.akadia.models.entities.sistema.colaboradores.mocks.ColaboradorEntityBuilder;
-import br.akd.svc.akadia.services.sistema.despesas.DespesaRelatorioService;
-import br.akd.svc.akadia.services.sistema.despesas.DespesaService;
+import br.akd.svc.akadia.modules.erp.despesas.services.DespesaRelatorioService;
+import br.akd.svc.akadia.modules.erp.despesas.services.DespesaService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

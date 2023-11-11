@@ -1,5 +1,6 @@
 package br.akd.svc.akadia.proxy.asaas.requests.fiscal;
 
+import br.akd.svc.akadia.modules.web.proxy.asaas.requests.fiscal.EffectiveDatePeriodEnum;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

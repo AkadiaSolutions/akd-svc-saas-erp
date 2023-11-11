@@ -1,7 +1,7 @@
 package br.akd.svc.akadia.proxy.asaas.requests.fiscal.mocks;
 
-import br.akd.svc.akadia.proxy.asaas.requests.fiscal.CriaConfigFiscalRequest;
-import br.akd.svc.akadia.proxy.asaas.requests.fiscal.EffectiveDatePeriodEnum;
+import br.akd.svc.akadia.modules.web.proxy.asaas.requests.fiscal.CriaConfigFiscalRequest;
+import br.akd.svc.akadia.modules.web.proxy.asaas.requests.fiscal.EffectiveDatePeriodEnum;
 
 public class CriaConfigFiscalRequestBuilder {
     CriaConfigFiscalRequestBuilder() {

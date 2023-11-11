@@ -1,6 +1,7 @@
 package br.akd.svc.akadia.models.dto.sistema.clientes.responses;
 
 import br.akd.svc.akadia.models.dto.sistema.clientes.responses.mocks.ClientePageResponseBuilder;
+import br.akd.svc.akadia.modules.erp.clientes.models.dto.response.page.ClientePageResponse;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

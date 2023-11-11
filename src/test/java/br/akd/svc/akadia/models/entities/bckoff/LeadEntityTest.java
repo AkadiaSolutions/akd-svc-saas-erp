@@ -2,7 +2,8 @@ package br.akd.svc.akadia.models.entities.bckoff;
 
 import br.akd.svc.akadia.models.entities.bckoff.mocks.LeadEntityBuilder;
 import br.akd.svc.akadia.models.entities.global.mocks.TelefoneEntityBuilder;
-import br.akd.svc.akadia.models.enums.bckoff.OrigemLeadEnum;
+import br.akd.svc.akadia.modules.backoffice.models.enums.OrigemLeadEnum;
+import br.akd.svc.akadia.modules.backoffice.models.entity.LeadEntity;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

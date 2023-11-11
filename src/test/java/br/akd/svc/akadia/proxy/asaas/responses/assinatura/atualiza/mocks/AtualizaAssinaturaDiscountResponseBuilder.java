@@ -1,6 +1,6 @@
 package br.akd.svc.akadia.proxy.asaas.responses.assinatura.atualiza.mocks;
 
-import br.akd.svc.akadia.proxy.asaas.responses.assinatura.atualiza.AtualizaAssinaturaDiscountResponse;
+import br.akd.svc.akadia.modules.web.proxy.asaas.responses.assinatura.atualiza.AtualizaAssinaturaDiscountResponse;
 
 public class AtualizaAssinaturaDiscountResponseBuilder {
 

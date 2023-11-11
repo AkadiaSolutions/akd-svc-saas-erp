@@ -1,6 +1,6 @@
 package br.akd.svc.akadia.models.entities.global.mocks;
 
-import br.akd.svc.akadia.models.entities.global.ExclusaoEntity;
+import br.akd.svc.akadia.modules.global.entity.ExclusaoEntity;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -10,7 +10,7 @@ public class ExclusaoEntityBuilder {
     ExclusaoEntityBuilder() {
     }
 
-    br.akd.svc.akadia.models.entities.global.ExclusaoEntity exclusaoEntity;
+    ExclusaoEntity exclusaoEntity;
 
     public static ExclusaoEntityBuilder builder() {
         ExclusaoEntityBuilder builder = new ExclusaoEntityBuilder();

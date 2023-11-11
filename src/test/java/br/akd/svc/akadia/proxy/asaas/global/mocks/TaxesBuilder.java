@@ -1,6 +1,6 @@
 package br.akd.svc.akadia.proxy.asaas.global.mocks;
 
-import br.akd.svc.akadia.proxy.asaas.global.Taxes;
+import br.akd.svc.akadia.modules.web.proxy.asaas.global.Taxes;
 
 public class TaxesBuilder {
     TaxesBuilder() {

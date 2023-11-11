@@ -1,6 +1,6 @@
 package br.akd.svc.akadia.proxy.asaas.requests.assinatura.mocks;
 
-import br.akd.svc.akadia.proxy.asaas.requests.assinatura.FineRequest;
+import br.akd.svc.akadia.modules.web.proxy.asaas.requests.assinatura.FineRequest;
 
 public class FineRequestBuilder {
 

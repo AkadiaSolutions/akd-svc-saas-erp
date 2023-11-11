@@ -1,7 +1,7 @@
 package br.akd.svc.akadia.models.dto.global.mocks;
 
-import br.akd.svc.akadia.models.dto.global.ParentescoDto;
-import br.akd.svc.akadia.models.enums.global.GrauParentescoEnum;
+import br.akd.svc.akadia.modules.global.dto.ParentescoDto;
+import br.akd.svc.akadia.modules.global.enums.GrauParentescoEnum;
 
 public class ParentescoDtoBuilder {
 

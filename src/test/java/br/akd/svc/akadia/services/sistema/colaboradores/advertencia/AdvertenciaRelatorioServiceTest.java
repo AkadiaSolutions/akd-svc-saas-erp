@@ -1,7 +1,8 @@
 package br.akd.svc.akadia.services.sistema.colaboradores.advertencia;
 
-import br.akd.svc.akadia.models.entities.sistema.colaboradores.AdvertenciaEntity;
-import br.akd.svc.akadia.models.entities.sistema.colaboradores.ColaboradorEntity;
+import br.akd.svc.akadia.modules.erp.colaboradores.advertencia.models.entity.AdvertenciaEntity;
+import br.akd.svc.akadia.modules.erp.colaboradores.advertencia.services.AdvertenciaRelatorioService;
+import br.akd.svc.akadia.modules.erp.colaboradores.colaborador.models.entity.ColaboradorEntity;
 import br.akd.svc.akadia.models.entities.sistema.colaboradores.mocks.AdvertenciaEntityBuilder;
 import br.akd.svc.akadia.models.entities.sistema.colaboradores.mocks.ColaboradorEntityBuilder;
 import com.lowagie.text.Document;

@@ -1,11 +1,12 @@
 package br.akd.svc.akadia.services.sistema.patrimonios;
 
-import br.akd.svc.akadia.models.entities.sistema.colaboradores.ColaboradorEntity;
+import br.akd.svc.akadia.modules.erp.colaboradores.colaborador.models.entity.ColaboradorEntity;
 import br.akd.svc.akadia.models.entities.sistema.colaboradores.mocks.ColaboradorEntityBuilder;
-import br.akd.svc.akadia.models.entities.sistema.patrimonios.PatrimonioEntity;
+import br.akd.svc.akadia.modules.erp.patrimonios.models.entity.PatrimonioEntity;
 import br.akd.svc.akadia.models.entities.sistema.patrimonios.mocks.PatrimonioEntityBuilder;
-import br.akd.svc.akadia.repositories.sistema.patrimonios.impl.PatrimonioRepositoryImpl;
-import br.akd.svc.akadia.services.sistema.colaboradores.acao.AcaoService;
+import br.akd.svc.akadia.modules.erp.patrimonios.repository.impl.PatrimonioRepositoryImpl;
+import br.akd.svc.akadia.modules.erp.colaboradores.acao.services.AcaoService;
+import br.akd.svc.akadia.modules.erp.patrimonios.services.PatrimonioRelatorioService;
 import com.lowagie.text.Paragraph;
 import com.lowagie.text.pdf.PdfPTable;
 import org.junit.jupiter.api.Assertions;

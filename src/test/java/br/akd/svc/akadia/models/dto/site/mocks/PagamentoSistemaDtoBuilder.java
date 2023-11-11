@@ -1,8 +1,8 @@
 package br.akd.svc.akadia.models.dto.site.mocks;
 
-import br.akd.svc.akadia.models.dto.site.PagamentoSistemaDto;
-import br.akd.svc.akadia.models.enums.site.FormaPagamentoSistemaEnum;
-import br.akd.svc.akadia.models.enums.site.StatusPagamentoSistemaEnum;
+import br.akd.svc.akadia.modules.web.models.dto.PagamentoSistemaDto;
+import br.akd.svc.akadia.modules.web.models.enums.FormaPagamentoSistemaEnum;
+import br.akd.svc.akadia.modules.web.models.enums.StatusPagamentoSistemaEnum;
 
 import java.time.LocalDate;
 import java.time.LocalTime;

@@ -1,8 +1,9 @@
 package br.akd.svc.akadia.services.sistema.patrimonios;
 
-import br.akd.svc.akadia.models.entities.sistema.patrimonios.PatrimonioEntity;
+import br.akd.svc.akadia.modules.erp.patrimonios.models.entity.PatrimonioEntity;
 import br.akd.svc.akadia.models.entities.sistema.patrimonios.mocks.PatrimonioEntityBuilder;
-import br.akd.svc.akadia.services.exceptions.InvalidRequestException;
+import br.akd.svc.akadia.modules.erp.patrimonios.services.PatrimonioValidationService;
+import br.akd.svc.akadia.exceptions.InvalidRequestException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

@@ -2,8 +2,9 @@ package br.akd.svc.akadia.services.bckoff;
 
 import br.akd.svc.akadia.models.dto.site.mocks.ClienteSistemaDtoBuilder;
 import br.akd.svc.akadia.models.entities.bckoff.mocks.LeadEntityBuilder;
-import br.akd.svc.akadia.repositories.bckoff.impl.LeadRepositoryImpl;
-import br.akd.svc.akadia.services.site.ClienteSistemaService;
+import br.akd.svc.akadia.modules.backoffice.repository.impl.LeadRepositoryImpl;
+import br.akd.svc.akadia.modules.backoffice.services.LeadService;
+import br.akd.svc.akadia.modules.web.services.ClienteSistemaService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;

@@ -1,9 +1,10 @@
 package br.akd.svc.akadia.services.sistema.patrimonios;
 
-import br.akd.svc.akadia.models.dto.sistema.patrimonios.response.PatrimonioPageResponse;
-import br.akd.svc.akadia.models.dto.sistema.patrimonios.response.PatrimonioResponse;
-import br.akd.svc.akadia.models.entities.sistema.patrimonios.PatrimonioEntity;
+import br.akd.svc.akadia.modules.erp.patrimonios.models.dto.response.page.PatrimonioPageResponse;
+import br.akd.svc.akadia.modules.erp.patrimonios.models.dto.response.PatrimonioResponse;
+import br.akd.svc.akadia.modules.erp.patrimonios.models.entity.PatrimonioEntity;
 import br.akd.svc.akadia.models.entities.sistema.patrimonios.mocks.PatrimonioEntityBuilder;
+import br.akd.svc.akadia.modules.erp.patrimonios.services.PatrimonioTypeConverter;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

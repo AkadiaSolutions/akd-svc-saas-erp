@@ -2,13 +2,15 @@ package br.akd.svc.akadia.services.site;
 
 import br.akd.svc.akadia.models.dto.site.mocks.ClienteSistemaDtoBuilder;
 import br.akd.svc.akadia.models.entities.site.mocks.ClienteSistemaEntityBuilder;
-import br.akd.svc.akadia.proxy.asaas.AsaasProxy;
+import br.akd.svc.akadia.modules.web.services.AssinaturaService;
+import br.akd.svc.akadia.modules.web.services.ClienteSistemaService;
+import br.akd.svc.akadia.modules.web.proxy.asaas.AsaasProxy;
 import br.akd.svc.akadia.proxy.asaas.responses.assinatura.atualiza.mocks.AtualizaAssinaturaResponseBuilder;
 import br.akd.svc.akadia.proxy.asaas.responses.assinatura.cancela.mocks.CancelamentoAssinaturaResponseBuilder;
 import br.akd.svc.akadia.proxy.asaas.responses.assinatura.consulta.mocks.ConsultaAssinaturaResponseBuilder;
 import br.akd.svc.akadia.proxy.asaas.responses.assinatura.mocks.AssinaturaResponseBuilder;
-import br.akd.svc.akadia.repositories.site.impl.ClienteSistemaRepositoryImpl;
-import br.akd.svc.akadia.services.exceptions.FeignConnectionException;
+import br.akd.svc.akadia.modules.web.repository.impl.ClienteSistemaRepositoryImpl;
+import br.akd.svc.akadia.exceptions.FeignConnectionException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

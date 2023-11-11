@@ -1,9 +1,10 @@
 package br.akd.svc.akadia.services.sistema.colaboradores.colaborador;
 
-import br.akd.svc.akadia.models.entities.sistema.colaboradores.ColaboradorEntity;
+import br.akd.svc.akadia.modules.erp.colaboradores.colaborador.models.entity.ColaboradorEntity;
 import br.akd.svc.akadia.models.entities.sistema.colaboradores.mocks.ColaboradorEntityBuilder;
-import br.akd.svc.akadia.repositories.sistema.colaboradores.impl.ColaboradorRepositoryImpl;
-import br.akd.svc.akadia.services.sistema.colaboradores.acao.AcaoService;
+import br.akd.svc.akadia.modules.erp.colaboradores.colaborador.repository.impl.ColaboradorRepositoryImpl;
+import br.akd.svc.akadia.modules.erp.colaboradores.acao.services.AcaoService;
+import br.akd.svc.akadia.modules.erp.colaboradores.colaborador.services.ColaboradorRelatorioService;
 import com.lowagie.text.Paragraph;
 import com.lowagie.text.pdf.PdfPTable;
 import org.junit.jupiter.api.Assertions;

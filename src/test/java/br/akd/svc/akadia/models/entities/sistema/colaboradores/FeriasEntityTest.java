@@ -1,6 +1,7 @@
 package br.akd.svc.akadia.models.entities.sistema.colaboradores;
 
 import br.akd.svc.akadia.models.entities.sistema.colaboradores.mocks.FeriasEntityBuilder;
+import br.akd.svc.akadia.modules.erp.colaboradores.colaborador.models.entity.FeriasEntity;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

@@ -1,8 +1,8 @@
 package br.akd.svc.akadia.models.entities.bckoff.mocks;
 
-import br.akd.svc.akadia.models.entities.bckoff.LeadEntity;
+import br.akd.svc.akadia.modules.backoffice.models.entity.LeadEntity;
 import br.akd.svc.akadia.models.entities.global.mocks.TelefoneEntityBuilder;
-import br.akd.svc.akadia.models.enums.bckoff.OrigemLeadEnum;
+import br.akd.svc.akadia.modules.backoffice.models.enums.OrigemLeadEnum;
 
 public class LeadEntityBuilder {
 

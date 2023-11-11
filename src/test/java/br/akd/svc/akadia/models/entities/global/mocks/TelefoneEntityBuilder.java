@@ -1,7 +1,7 @@
 package br.akd.svc.akadia.models.entities.global.mocks;
 
-import br.akd.svc.akadia.models.entities.global.TelefoneEntity;
-import br.akd.svc.akadia.models.enums.global.TipoTelefoneEnum;
+import br.akd.svc.akadia.modules.global.entity.TelefoneEntity;
+import br.akd.svc.akadia.modules.global.enums.TipoTelefoneEnum;
 
 public class TelefoneEntityBuilder {
 

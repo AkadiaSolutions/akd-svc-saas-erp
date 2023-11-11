@@ -1,15 +1,15 @@
 package br.akd.svc.akadia.services.sistema.colaboradores.acao;
 
-import br.akd.svc.akadia.models.dto.sistema.colaboradores.responses.acao.AcaoPageResponse;
-import br.akd.svc.akadia.models.entities.sistema.colaboradores.AcaoEntity;
-import br.akd.svc.akadia.models.entities.sistema.colaboradores.ColaboradorEntity;
+import br.akd.svc.akadia.modules.erp.colaboradores.acao.models.dto.response.page.AcaoPageResponse;
+import br.akd.svc.akadia.modules.erp.colaboradores.acao.models.entity.AcaoEntity;
+import br.akd.svc.akadia.modules.erp.colaboradores.colaborador.models.entity.ColaboradorEntity;
 import br.akd.svc.akadia.models.entities.sistema.colaboradores.mocks.AcaoEntityBuilder;
 import br.akd.svc.akadia.models.entities.sistema.colaboradores.mocks.ColaboradorEntityBuilder;
-import br.akd.svc.akadia.models.enums.sistema.colaboradores.ModulosEnum;
-import br.akd.svc.akadia.models.enums.sistema.colaboradores.TipoAcaoEnum;
-import br.akd.svc.akadia.repositories.sistema.colaboradores.ColaboradorRepository;
-import br.akd.svc.akadia.repositories.sistema.colaboradores.impl.ColaboradorRepositoryImpl;
-import br.akd.svc.akadia.services.sistema.colaboradores.acao.AcaoService;
+import br.akd.svc.akadia.modules.erp.colaboradores.colaborador.models.enums.ModulosEnum;
+import br.akd.svc.akadia.modules.erp.colaboradores.acao.models.enums.TipoAcaoEnum;
+import br.akd.svc.akadia.modules.erp.colaboradores.colaborador.repository.ColaboradorRepository;
+import br.akd.svc.akadia.modules.erp.colaboradores.colaborador.repository.impl.ColaboradorRepositoryImpl;
+import br.akd.svc.akadia.modules.erp.colaboradores.acao.services.AcaoService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

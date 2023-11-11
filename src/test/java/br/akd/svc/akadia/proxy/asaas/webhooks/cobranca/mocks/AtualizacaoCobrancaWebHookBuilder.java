@@ -1,7 +1,7 @@
 package br.akd.svc.akadia.proxy.asaas.webhooks.cobranca.mocks;
 
-import br.akd.svc.akadia.proxy.asaas.webhooks.cobranca.AtualizacaoCobrancaWebHook;
-import br.akd.svc.akadia.proxy.asaas.webhooks.cobranca.enums.EventoCobrancaEnum;
+import br.akd.svc.akadia.modules.web.proxy.asaas.webhooks.cobranca.AtualizacaoCobrancaWebHook;
+import br.akd.svc.akadia.modules.web.proxy.asaas.webhooks.cobranca.enums.EventoCobrancaEnum;
 
 public class AtualizacaoCobrancaWebHookBuilder {
     AtualizacaoCobrancaWebHookBuilder() {

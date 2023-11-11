@@ -1,5 +1,6 @@
 package br.akd.svc.akadia.proxy.asaas.responses.assinatura.cancela;
 
+import br.akd.svc.akadia.modules.web.proxy.asaas.responses.assinatura.cancela.CancelamentoAssinaturaResponse;
 import br.akd.svc.akadia.proxy.asaas.responses.assinatura.cancela.mocks.CancelamentoAssinaturaResponseBuilder;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;

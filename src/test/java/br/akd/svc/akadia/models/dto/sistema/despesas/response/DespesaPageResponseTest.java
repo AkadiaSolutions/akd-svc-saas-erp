@@ -1,6 +1,7 @@
 package br.akd.svc.akadia.models.dto.sistema.despesas.response;
 
 import br.akd.svc.akadia.models.dto.sistema.despesas.response.mock.DespesaPageResponseBuilder;
+import br.akd.svc.akadia.modules.erp.despesas.models.dto.response.page.DespesaPageResponse;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

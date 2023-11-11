@@ -1,8 +1,8 @@
 package br.akd.svc.akadia.models.dto.sistema.despesas.request.mock;
 
-import br.akd.svc.akadia.models.dto.sistema.despesas.request.DespesaRequest;
-import br.akd.svc.akadia.models.enums.sistema.despesas.StatusDespesaEnum;
-import br.akd.svc.akadia.models.enums.sistema.despesas.TipoDespesaEnum;
+import br.akd.svc.akadia.modules.erp.despesas.models.dto.request.DespesaRequest;
+import br.akd.svc.akadia.modules.erp.despesas.models.enums.StatusDespesaEnum;
+import br.akd.svc.akadia.modules.erp.despesas.models.enums.TipoDespesaEnum;
 
 import java.time.LocalDate;
 

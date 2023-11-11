@@ -1,6 +1,6 @@
 package br.akd.svc.akadia.models.dto.bckoff.mocks;
 
-import br.akd.svc.akadia.models.dto.bckoff.AvaliacaoDto;
+import br.akd.svc.akadia.modules.backoffice.models.dto.AvaliacaoDto;
 
 public class AvaliacaoDtoBuilder {
 

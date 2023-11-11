@@ -1,9 +1,10 @@
 package br.akd.svc.akadia.models.dto.sistema.despesas.response;
 
 import br.akd.svc.akadia.models.dto.sistema.despesas.response.mock.DespesaResponseBuilder;
-import br.akd.svc.akadia.models.enums.sistema.despesas.StatusDespesaEnum;
-import br.akd.svc.akadia.models.enums.sistema.despesas.TipoDespesaEnum;
-import br.akd.svc.akadia.models.enums.sistema.despesas.TipoRecorrenciaDespesaEnum;
+import br.akd.svc.akadia.modules.erp.despesas.models.enums.StatusDespesaEnum;
+import br.akd.svc.akadia.modules.erp.despesas.models.enums.TipoDespesaEnum;
+import br.akd.svc.akadia.modules.erp.despesas.models.enums.TipoRecorrenciaDespesaEnum;
+import br.akd.svc.akadia.modules.erp.despesas.models.dto.response.DespesaResponse;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

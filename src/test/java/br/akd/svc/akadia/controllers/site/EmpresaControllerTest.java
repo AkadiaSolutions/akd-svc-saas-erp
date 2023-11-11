@@ -1,10 +1,11 @@
 package br.akd.svc.akadia.controllers.site;
 
-import br.akd.svc.akadia.models.dto.site.empresa.mocks.EmpresaDtoBuilder;
-import br.akd.svc.akadia.models.entities.site.empresa.mocks.CriaEmpresaResponseBuilder;
-import br.akd.svc.akadia.models.entities.site.empresa.mocks.EmpresaEntityBuilder;
-import br.akd.svc.akadia.repositories.site.impl.EmpresaRepositoryImpl;
-import br.akd.svc.akadia.services.site.EmpresaService;
+import br.akd.svc.akadia.modules.web.models.dto.empresa.mocks.EmpresaDtoBuilder;
+import br.akd.svc.akadia.modules.web.models.entity.empresa.mocks.CriaEmpresaResponseBuilder;
+import br.akd.svc.akadia.modules.web.models.entity.empresa.mocks.EmpresaEntityBuilder;
+import br.akd.svc.akadia.modules.web.controller.EmpresaController;
+import br.akd.svc.akadia.modules.web.repository.impl.EmpresaRepositoryImpl;
+import br.akd.svc.akadia.modules.web.services.EmpresaService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

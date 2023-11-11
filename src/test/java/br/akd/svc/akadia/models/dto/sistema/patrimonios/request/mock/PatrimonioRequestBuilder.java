@@ -1,7 +1,7 @@
 package br.akd.svc.akadia.models.dto.sistema.patrimonios.request.mock;
 
-import br.akd.svc.akadia.models.dto.sistema.patrimonios.request.PatrimonioRequest;
-import br.akd.svc.akadia.models.enums.sistema.patrimonios.TipoPatrimonioEnum;
+import br.akd.svc.akadia.modules.erp.patrimonios.models.dto.request.PatrimonioRequest;
+import br.akd.svc.akadia.modules.erp.patrimonios.models.enums.TipoPatrimonioEnum;
 
 import java.time.LocalDate;
 

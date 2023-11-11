@@ -2,8 +2,9 @@ package br.akd.svc.akadia.models.entities.bckoff;
 
 import br.akd.svc.akadia.models.entities.bckoff.mocks.ColaboradorInternoEntityBuilder;
 import br.akd.svc.akadia.models.entities.global.mocks.TelefoneEntityBuilder;
-import br.akd.svc.akadia.models.enums.bckoff.CargoInternoEnum;
-import br.akd.svc.akadia.models.enums.bckoff.StatusAtividadeEnum;
+import br.akd.svc.akadia.modules.backoffice.models.enums.CargoInternoEnum;
+import br.akd.svc.akadia.modules.backoffice.models.enums.StatusAtividadeEnum;
+import br.akd.svc.akadia.modules.backoffice.models.entity.ColaboradorInternoEntity;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

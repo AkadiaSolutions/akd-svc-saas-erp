@@ -1,6 +1,6 @@
 package br.akd.svc.akadia.models.entities.bckoff.mocks;
 
-import br.akd.svc.akadia.models.entities.bckoff.AvaliacaoEntity;
+import br.akd.svc.akadia.modules.backoffice.models.entity.AvaliacaoEntity;
 
 public class AvaliacaoEntityBuilder {
 

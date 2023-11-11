@@ -2,7 +2,8 @@ package br.akd.svc.akadia.models.dto.global;
 
 import br.akd.svc.akadia.models.dto.global.mocks.ParentescoDtoBuilder;
 import br.akd.svc.akadia.models.dto.global.mocks.TelefoneDtoBuilder;
-import br.akd.svc.akadia.models.enums.global.GrauParentescoEnum;
+import br.akd.svc.akadia.modules.global.enums.GrauParentescoEnum;
+import br.akd.svc.akadia.modules.global.dto.ParentescoDto;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

@@ -1,6 +1,7 @@
 package br.akd.svc.akadia.models.dto.bckoff;
 
 import br.akd.svc.akadia.models.dto.bckoff.mocks.AnexoMensagemDtoBuilder;
+import br.akd.svc.akadia.modules.backoffice.models.dto.AnexoMensagemDto;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

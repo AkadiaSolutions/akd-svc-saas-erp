@@ -1,6 +1,6 @@
 package br.akd.svc.akadia.proxy.asaas.responses.fiscal.mocks;
 
-import br.akd.svc.akadia.proxy.asaas.responses.fiscal.CriaConfigFiscalResponse;
+import br.akd.svc.akadia.modules.web.proxy.asaas.responses.fiscal.CriaConfigFiscalResponse;
 
 public class CriaConfigFiscalResponseBuilder {
     CriaConfigFiscalResponseBuilder() {

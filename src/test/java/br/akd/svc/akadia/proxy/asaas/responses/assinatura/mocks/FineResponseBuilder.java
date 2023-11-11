@@ -1,6 +1,6 @@
 package br.akd.svc.akadia.proxy.asaas.responses.assinatura.mocks;
 
-import br.akd.svc.akadia.proxy.asaas.responses.assinatura.FineResponse;
+import br.akd.svc.akadia.modules.web.proxy.asaas.responses.assinatura.FineResponse;
 
 public class FineResponseBuilder {
 

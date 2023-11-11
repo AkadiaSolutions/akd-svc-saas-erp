@@ -1,6 +1,6 @@
 package br.akd.svc.akadia.models.dto.sistema.patrimonios.response.mock;
 
-import br.akd.svc.akadia.models.dto.sistema.patrimonios.response.PatrimonioPageResponse;
+import br.akd.svc.akadia.modules.erp.patrimonios.models.dto.response.page.PatrimonioPageResponse;
 
 public class PatrimonioPageResponseBuilder {
     PatrimonioPageResponseBuilder() {

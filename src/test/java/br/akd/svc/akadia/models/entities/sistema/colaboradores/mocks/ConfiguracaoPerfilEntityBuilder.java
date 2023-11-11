@@ -1,7 +1,7 @@
 package br.akd.svc.akadia.models.entities.sistema.colaboradores.mocks;
 
-import br.akd.svc.akadia.models.entities.sistema.colaboradores.ConfiguracaoPerfilEntity;
-import br.akd.svc.akadia.models.enums.sistema.colaboradores.TemaTelaEnum;
+import br.akd.svc.akadia.modules.erp.colaboradores.colaborador.models.entity.ConfiguracaoPerfilEntity;
+import br.akd.svc.akadia.modules.erp.colaboradores.colaborador.models.enums.TemaTelaEnum;
 
 import java.time.LocalDate;
 import java.time.LocalTime;

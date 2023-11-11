@@ -1,17 +1,20 @@
 package br.akd.svc.akadia.services.sistema.despesas;
 
 import br.akd.svc.akadia.models.dto.sistema.despesas.request.mock.DespesaRequestBuilder;
-import br.akd.svc.akadia.models.dto.sistema.despesas.response.DespesaPageResponse;
-import br.akd.svc.akadia.models.dto.sistema.despesas.response.DespesaResponse;
+import br.akd.svc.akadia.modules.erp.despesas.models.dto.response.page.DespesaPageResponse;
+import br.akd.svc.akadia.modules.erp.despesas.models.dto.response.DespesaResponse;
 import br.akd.svc.akadia.models.dto.sistema.despesas.response.mock.DespesaPageResponseBuilder;
 import br.akd.svc.akadia.models.dto.sistema.despesas.response.mock.DespesaResponseBuilder;
 import br.akd.svc.akadia.models.entities.sistema.colaboradores.mocks.ColaboradorEntityBuilder;
-import br.akd.svc.akadia.models.entities.sistema.despesas.DespesaEntity;
+import br.akd.svc.akadia.modules.erp.despesas.models.entity.DespesaEntity;
 import br.akd.svc.akadia.models.entities.sistema.despesas.mocks.DespesaEntityBuilder;
-import br.akd.svc.akadia.repositories.sistema.despesas.DespesaRepository;
-import br.akd.svc.akadia.repositories.sistema.despesas.impl.DespesaRepositoryImpl;
-import br.akd.svc.akadia.services.exceptions.InvalidRequestException;
-import br.akd.svc.akadia.services.sistema.colaboradores.acao.AcaoService;
+import br.akd.svc.akadia.modules.erp.despesas.repository.DespesaRepository;
+import br.akd.svc.akadia.modules.erp.despesas.repository.impl.DespesaRepositoryImpl;
+import br.akd.svc.akadia.modules.erp.despesas.services.DespesaService;
+import br.akd.svc.akadia.modules.erp.despesas.services.DespesaTypeConverter;
+import br.akd.svc.akadia.modules.erp.despesas.services.DespesaValidationService;
+import br.akd.svc.akadia.exceptions.InvalidRequestException;
+import br.akd.svc.akadia.modules.erp.colaboradores.acao.services.AcaoService;
 import br.akd.svc.akadia.utils.SecurityUtil;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;

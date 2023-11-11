@@ -2,13 +2,14 @@ package br.akd.svc.akadia.controllers.sistema.patrimonios;
 
 import br.akd.svc.akadia.config.security.JWTUtil;
 import br.akd.svc.akadia.models.dto.sistema.patrimonios.request.mock.PatrimonioRequestBuilder;
-import br.akd.svc.akadia.models.dto.sistema.patrimonios.response.PatrimonioPageResponse;
-import br.akd.svc.akadia.models.dto.sistema.patrimonios.response.PatrimonioResponse;
+import br.akd.svc.akadia.modules.erp.patrimonios.models.dto.response.page.PatrimonioPageResponse;
+import br.akd.svc.akadia.modules.erp.patrimonios.models.dto.response.PatrimonioResponse;
 import br.akd.svc.akadia.models.dto.sistema.patrimonios.response.mock.PatrimonioPageResponseBuilder;
 import br.akd.svc.akadia.models.dto.sistema.patrimonios.response.mock.PatrimonioResponseBuilder;
 import br.akd.svc.akadia.models.entities.sistema.colaboradores.mocks.ColaboradorEntityBuilder;
-import br.akd.svc.akadia.services.sistema.patrimonios.PatrimonioRelatorioService;
-import br.akd.svc.akadia.services.sistema.patrimonios.PatrimonioService;
+import br.akd.svc.akadia.modules.erp.patrimonios.controllers.PatrimonioController;
+import br.akd.svc.akadia.modules.erp.patrimonios.services.PatrimonioRelatorioService;
+import br.akd.svc.akadia.modules.erp.patrimonios.services.PatrimonioService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

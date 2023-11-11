@@ -1,5 +1,6 @@
 package br.akd.svc.akadia.models.enums.bckoff;
 
+import br.akd.svc.akadia.modules.backoffice.models.enums.StatusAtividadeEnum;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

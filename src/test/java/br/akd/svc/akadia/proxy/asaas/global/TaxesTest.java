@@ -1,5 +1,6 @@
 package br.akd.svc.akadia.proxy.asaas.global;
 
+import br.akd.svc.akadia.modules.web.proxy.asaas.global.Taxes;
 import br.akd.svc.akadia.proxy.asaas.global.mocks.TaxesBuilder;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;

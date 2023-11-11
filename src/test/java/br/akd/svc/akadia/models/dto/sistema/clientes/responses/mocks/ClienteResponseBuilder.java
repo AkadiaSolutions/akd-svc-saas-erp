@@ -1,8 +1,8 @@
 package br.akd.svc.akadia.models.dto.sistema.clientes.responses.mocks;
 
-import br.akd.svc.akadia.models.dto.sistema.clientes.responses.ClienteResponse;
-import br.akd.svc.akadia.models.enums.sistema.clientes.StatusClienteEnum;
-import br.akd.svc.akadia.models.enums.sistema.clientes.TipoPessoaEnum;
+import br.akd.svc.akadia.modules.erp.clientes.models.dto.response.ClienteResponse;
+import br.akd.svc.akadia.modules.erp.clientes.models.enums.StatusClienteEnum;
+import br.akd.svc.akadia.modules.erp.clientes.models.enums.TipoPessoaEnum;
 
 import java.time.LocalDate;
 import java.time.LocalTime;

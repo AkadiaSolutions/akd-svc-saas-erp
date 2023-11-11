@@ -1,7 +1,7 @@
 package br.akd.svc.akadia.models.entities.bckoff.mocks;
 
-import br.akd.svc.akadia.models.entities.bckoff.MensagemEntity;
-import br.akd.svc.akadia.models.enums.bckoff.CaminhoMensagemEnum;
+import br.akd.svc.akadia.modules.backoffice.models.entity.MensagemEntity;
+import br.akd.svc.akadia.modules.backoffice.models.enums.CaminhoMensagemEnum;
 
 import java.time.LocalDate;
 import java.time.LocalTime;

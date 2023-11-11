@@ -1,5 +1,6 @@
 package br.akd.svc.akadia.proxy.asaas.responses.assinatura.consulta;
 
+import br.akd.svc.akadia.modules.web.proxy.asaas.responses.assinatura.consulta.ConsultaSplitResponse;
 import br.akd.svc.akadia.proxy.asaas.responses.assinatura.consulta.mocks.ConsultaSplitResponseBuilder;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;

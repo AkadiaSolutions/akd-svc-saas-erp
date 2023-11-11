@@ -1,7 +1,7 @@
 package br.akd.svc.akadia.models.dto.global.mocks;
 
-import br.akd.svc.akadia.models.dto.global.EnderecoDto;
-import br.akd.svc.akadia.models.enums.global.EstadoEnum;
+import br.akd.svc.akadia.modules.global.dto.EnderecoDto;
+import br.akd.svc.akadia.modules.global.enums.EstadoEnum;
 
 public class EnderecoDtoBuilder {
 

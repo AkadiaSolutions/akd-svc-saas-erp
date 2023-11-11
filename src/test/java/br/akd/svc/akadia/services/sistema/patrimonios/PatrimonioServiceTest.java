@@ -1,17 +1,20 @@
 package br.akd.svc.akadia.services.sistema.patrimonios;
 
 import br.akd.svc.akadia.models.dto.sistema.patrimonios.request.mock.PatrimonioRequestBuilder;
-import br.akd.svc.akadia.models.dto.sistema.patrimonios.response.PatrimonioPageResponse;
-import br.akd.svc.akadia.models.dto.sistema.patrimonios.response.PatrimonioResponse;
+import br.akd.svc.akadia.modules.erp.patrimonios.models.dto.response.page.PatrimonioPageResponse;
+import br.akd.svc.akadia.modules.erp.patrimonios.models.dto.response.PatrimonioResponse;
 import br.akd.svc.akadia.models.dto.sistema.patrimonios.response.mock.PatrimonioPageResponseBuilder;
 import br.akd.svc.akadia.models.dto.sistema.patrimonios.response.mock.PatrimonioResponseBuilder;
 import br.akd.svc.akadia.models.entities.sistema.colaboradores.mocks.ColaboradorEntityBuilder;
-import br.akd.svc.akadia.models.entities.sistema.patrimonios.PatrimonioEntity;
+import br.akd.svc.akadia.modules.erp.patrimonios.models.entity.PatrimonioEntity;
 import br.akd.svc.akadia.models.entities.sistema.patrimonios.mocks.PatrimonioEntityBuilder;
-import br.akd.svc.akadia.repositories.sistema.patrimonios.PatrimonioRepository;
-import br.akd.svc.akadia.repositories.sistema.patrimonios.impl.PatrimonioRepositoryImpl;
-import br.akd.svc.akadia.services.exceptions.InvalidRequestException;
-import br.akd.svc.akadia.services.sistema.colaboradores.acao.AcaoService;
+import br.akd.svc.akadia.modules.erp.patrimonios.repository.PatrimonioRepository;
+import br.akd.svc.akadia.modules.erp.patrimonios.repository.impl.PatrimonioRepositoryImpl;
+import br.akd.svc.akadia.modules.erp.patrimonios.services.PatrimonioService;
+import br.akd.svc.akadia.modules.erp.patrimonios.services.PatrimonioTypeConverter;
+import br.akd.svc.akadia.modules.erp.patrimonios.services.PatrimonioValidationService;
+import br.akd.svc.akadia.exceptions.InvalidRequestException;
+import br.akd.svc.akadia.modules.erp.colaboradores.acao.services.AcaoService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

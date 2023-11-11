@@ -1,6 +1,6 @@
 package br.akd.svc.akadia.models.dto.sistema.colaboradores.responses.mocks;
 
-import br.akd.svc.akadia.models.dto.sistema.colaboradores.responses.acao.AcaoPageResponse;
+import br.akd.svc.akadia.modules.erp.colaboradores.acao.models.dto.response.page.AcaoPageResponse;
 
 import java.util.ArrayList;
 
